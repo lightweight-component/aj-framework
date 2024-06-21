@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -103,5 +104,14 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
     @Bean
     DataBaseConnection db() {
         return new DataBaseConnection();
+    }
+
+    /**
+     * 允许跨域
+     *
+     * @param registry 注册跨域
+     */
+    public static void allowCrossDomain(CorsRegistry registry) {
+        registry.addMapping("/**").allowedHeaders("*").allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").allowedOrigins("*").allowCredentials(false);
     }
 }

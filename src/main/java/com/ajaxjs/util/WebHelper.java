@@ -1,5 +1,6 @@
 package com.ajaxjs.util;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.StreamHelper;

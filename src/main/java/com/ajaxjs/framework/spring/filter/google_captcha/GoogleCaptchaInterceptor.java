@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.spring.filter.google_captcha;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.net.http.Post;
 import lombok.Data;
 import org.springframework.util.StringUtils;
