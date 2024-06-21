@@ -175,7 +175,6 @@ public class DiContextUtil implements ApplicationContextAware {
         return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
-
     /**
      * 获取当前请求的响应对象
      *

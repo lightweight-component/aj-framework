@@ -1,6 +1,5 @@
 package com.ajaxjs.data.jdbc_helper;
 
-import com.ajaxjs.Version;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.util.ObjectUtils;
