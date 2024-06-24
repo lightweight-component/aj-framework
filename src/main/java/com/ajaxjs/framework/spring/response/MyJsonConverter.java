@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.spring.response;
 
+import com.ajaxjs.data.PageResult;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.convert.ConvertToJson;

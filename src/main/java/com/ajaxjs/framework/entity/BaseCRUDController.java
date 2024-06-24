@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.data.PageResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
