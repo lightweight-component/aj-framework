@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;

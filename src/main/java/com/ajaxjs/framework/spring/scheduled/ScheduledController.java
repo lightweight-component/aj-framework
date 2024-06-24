@@ -1,6 +1,8 @@
 package com.ajaxjs.framework.spring.scheduled;
 
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.PageResult;
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
@@ -21,8 +23,13 @@ import java.util.TimeZone;
 @RequestMapping("/scheduled")
 @Slf4j
 public class ScheduledController {
+
     @Autowired
+
     ScheduleHandler scheduleHandler;
+
+    @Autowired
+    private JdbcWriter jdbcWriter;
 
     final static String SQL = "SELECT * FROM `schedule_job`";
 
@@ -83,7 +90,7 @@ public class ScheduledController {
         scheduleHandler.getScheduledTasks().add(scheduleHandler.getScheduledTaskRegistrar().scheduleCronTask(cronTask));
         scheduleHandler.getScheduledTaskRegistrar().addCronTask(cronTask);
 
-        CRUD.jdbcWriterFactory().write(updateStatus, JobInfo.ScheduledConstant.NORMAL_STATUS, id);
+        jdbcWriter.write(updateStatus, JobInfo.ScheduledConstant.NORMAL_STATUS, id);
 
         return true;
     }
@@ -112,7 +119,7 @@ public class ScheduledController {
     public boolean remove(@PathVariable Integer id) {
         JobInfo info = getJobInfo(id);
         scheduleHandler.cancel(info.getExpress(), info.getClassName(), id, false);
-        CRUD.jdbcWriterFactory().write(updateStatus, JobInfo.ScheduledConstant.DELETE_STATUS, id);
+        jdbcWriter.write(updateStatus, JobInfo.ScheduledConstant.DELETE_STATUS, id);
 
         return true;
     }

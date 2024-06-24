@@ -1,6 +1,7 @@
 package com.ajaxjs.framework;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.convert.ConvertBasicValue;
@@ -8,6 +9,7 @@ import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.StreamHelper;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
 import javax.management.MBeanServer;
@@ -314,5 +316,19 @@ public class WebHelper {
         }
 
         return map;
+    }
+
+    /**
+     * 在 Web 环境中上传文件到指定目录
+     *
+     * @param file          要上传的文件
+     * @param uploadDir     上传目录
+     * @param isNewAutoName 是否自动为文件生成新名称
+     * @return 上传后的文件路径
+     */
+    public static String uploadInWeb(MultipartFile file, String uploadDir, boolean isNewAutoName) {
+        String _uploadDir = WebHelper.mapPath(DiContextUtil.getRequest(), uploadDir);
+
+        return FileUploadHelper.upload(file, _uploadDir, isNewAutoName);
     }
 }
