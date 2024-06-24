@@ -6,7 +6,6 @@ import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.jdbc_helper.common.IdField;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.reflect.Methods;

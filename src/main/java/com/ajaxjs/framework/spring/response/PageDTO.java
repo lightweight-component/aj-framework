@@ -1,7 +1,6 @@
 package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.PageResult;
 import lombok.Data;
 
 @Data

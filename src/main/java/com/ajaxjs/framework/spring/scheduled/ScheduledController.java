@@ -2,7 +2,6 @@ package com.ajaxjs.framework.spring.scheduled;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.extern.slf4j.Slf4j;

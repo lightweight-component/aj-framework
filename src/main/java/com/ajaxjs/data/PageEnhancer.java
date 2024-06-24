@@ -1,7 +1,6 @@
 package com.ajaxjs.data;
 
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
