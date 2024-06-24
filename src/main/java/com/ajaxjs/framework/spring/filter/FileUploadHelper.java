@@ -15,7 +15,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.framework.WebHelper;
 
 /**
  * 文件上传的辅助类

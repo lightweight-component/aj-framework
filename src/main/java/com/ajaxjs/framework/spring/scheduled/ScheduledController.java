@@ -1,6 +1,5 @@
 package com.ajaxjs.framework.spring.scheduled;
 
-import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.reflect.Clazz;
@@ -33,7 +32,8 @@ public class ScheduledController {
     public PageResult<JobInfo> list(@RequestParam(required = false) String name) {
         String sql = SQL;
 
-        if (StringUtils.hasText(name)) sql += " WHERE job_name LIKE '%" + name + "%'";
+        if (StringUtils.hasText(name))
+            sql += " WHERE job_name LIKE '%" + name + "%'";
 
         return CRUD.page(JobInfo.class, sql, null);
     }

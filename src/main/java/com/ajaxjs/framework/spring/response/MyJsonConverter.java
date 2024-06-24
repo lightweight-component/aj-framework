@@ -2,7 +2,7 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.framework.WebHelper;
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.convert.MapTool;

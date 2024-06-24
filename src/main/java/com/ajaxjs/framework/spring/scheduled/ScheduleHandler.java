@@ -2,6 +2,7 @@ package com.ajaxjs.framework.spring.scheduled;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.*;
@@ -41,6 +43,9 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      * ScheduledTaskRegistrar 是 Spring 框架中用于注册和管理定时任务的类。它是 Spring 内部的一个调度器，负责管理和执行定时任务。
      */
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
+
+    @Autowired
+    JdbcWriter jdbcWriter;
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -144,7 +149,7 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
                 scheduledTasks0.add(scheduledTask);
 
                 if (isUpdate)
-                    CRUD.jdbcWriterFactory().write(ScheduledController.updateStatus, JobInfo.ScheduledConstant.CANCEL_STATUS, id);
+                    jdbcWriter.write(ScheduledController.updateStatus, JobInfo.ScheduledConstant.CANCEL_STATUS, id);
             }
         }
 

@@ -1,6 +1,8 @@
-package com.ajaxjs.util;
+package com.ajaxjs.framework;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.StreamHelper;

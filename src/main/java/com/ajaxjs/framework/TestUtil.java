@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.framework;
 
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.map_traveler.MapUtils;
