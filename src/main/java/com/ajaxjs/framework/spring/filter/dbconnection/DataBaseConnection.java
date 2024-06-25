@@ -98,7 +98,6 @@ public class DataBaseConnection implements HandlerInterceptor {
         return conn;
     }
 
-
     /**
      * 为方便单测，设一个开关
      */
@@ -110,7 +109,7 @@ public class DataBaseConnection implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
 
-            if (method != null && method.getAnnotation(IgnoreDataBaseConnect.class) == null) {// 有注解
+            if (method.getAnnotation(IgnoreDataBaseConnect.class) == null) {// 有注解
                 try {
                     if (method.getAnnotation(EnableTransaction.class) != null) {
                         Object obj = req.getAttribute(GlobalExceptionHandler.EXCEPTION_CXT_KEY);
@@ -127,7 +126,6 @@ public class DataBaseConnection implements HandlerInterceptor {
                         JdbcConn.closeDb();
                 }
             }
-
         }
     }
 
@@ -154,5 +152,4 @@ public class DataBaseConnection implements HandlerInterceptor {
 
         conn.setAutoCommit(true);
     }
-
 }

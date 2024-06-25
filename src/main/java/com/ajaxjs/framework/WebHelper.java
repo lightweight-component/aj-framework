@@ -2,7 +2,7 @@ package com.ajaxjs.framework;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.framework.embeded_tomcat.filter.FileUploadHelper;
+import com.ajaxjs.embeded_tomcat.filter.FileUploadHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.convert.ConvertBasicValue;

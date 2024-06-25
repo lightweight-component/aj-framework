@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.spring;
 
-import com.ajaxjs.framework.embeded_tomcat.filter.ShowControllerInterceptor;
+import com.ajaxjs.embeded_tomcat.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;

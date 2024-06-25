@@ -199,6 +199,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     public static Object getCurrentUser() {
         // 从请求中获取名为"USER_KEY_IN_REQUEST"的属性，确保该属性不为空
         Object simpleUser = Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
+
         if (simpleUser == null)
             throw new NullPointerException("上下文的用户不存在"); // 如果用户对象为空，则抛出异常
 
@@ -247,11 +248,11 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     /**
      * 执行对象上的指定方法，并返回方法的执行结果。
      *
-     * @param obj        要执行方法的对象实例。
-     * @param methodName 要执行的方法的名称。
-     * @param clz        期望的返回类型。
-     * @return 方法执行的结果，其类型为参数 clz 指定的类型。
-     * @throws RuntimeException 如果无法找到方法、访问方法失败或方法调用抛出异常，则抛出此运行时异常。
+     * @param obj        要执行方法的对象实例
+     * @param methodName 要执行的方法的名称
+     * @param clz        期望的返回类型
+     * @return 方法执行的结果，其类型为参数 clz 指定的类型
+     * @throws RuntimeException 如果无法找到方法、访问方法失败或方法调用抛出异常，则抛出此运行时异常
      */
     @SuppressWarnings("unchecked")
     public static <T> T executeMethod(Object obj, String methodName, Class<T> clz) {
@@ -279,20 +280,20 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     @SuppressWarnings("unchecked")
     public K create(Map<String, Object> params) {
         if (idType != null) { // auto increment by default
-            if (idType == 2) {
+            if (idType == 2)
                 params.put(getIdField(), SnowflakeId.get());
-            }
 
-            if (idType == 3) {
+            if (idType == 3)
                 params.put(getIdField(), StrUtil.uuid());
-            }
         }
 
-        if (beforeCreate != null) beforeCreate.accept(params);
+        if (beforeCreate != null)
+            beforeCreate.accept(params);
 
         Integer tenantId = TenantService.getTenantId();
 
-        if (tenantId != null) params.put("tenant_id", tenantId);
+        if (tenantId != null)
+            params.put("tenant_id", tenantId);
 
         if (isCurrentUserOnly())
             params.put("user_id", getCurrentUserId());
@@ -325,7 +326,8 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
                 throw new SecurityException("不能修改实体，id：" + id);
         }
 
-        if (beforeUpdate != null) beforeUpdate.accept(params);
+        if (beforeUpdate != null)
+            beforeUpdate.accept(params);
 
         return CRUD.update(tableName, params, idField);// 执行更新操作
     }

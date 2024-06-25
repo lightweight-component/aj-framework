@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -51,18 +52,34 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
         return getCRUD(namespace, crud -> CRUD.listMap(crud.getSql()), BaseCRUD::listMap);
     }
 
+    /**
+     * 根据命名空间获取特定的BaseCRUD实例。
+     * 这个方法用于通过两个命名空间标识来获取一个特定的BaseCRUD实例，首先从一个全局映射中根据第一个命名空间获取一个BaseCRUD实例，
+     * 然后从这个实例的子实例映射中根据第二个命名空间获取具体的BaseCRUD实例。
+     *
+     * @param namespace 第一个命名空间标识，用于查找到对应的BaseCRUD实例。
+     * @param namespace2 第二个命名空间标识，用于从第一个命名空间的子实例中找到对应的 BaseCRUD 实例。
+     * @return 返回根据两个命名空间标识找到的 BaseCRUD 实例
+     * @throws IllegalStateException 如果第一个命名空间不存在于映射中，或者第二个命名空间不存在于第一个命名空间的子实例映射中，抛出此异常。
+     */
     private BaseCRUD<?, Long> getCrudChild(String namespace, String namespace2) {
+        // 检查第一个命名空间是否配置了BaseCRUD，如果没有配置则抛出异常
         if (!namespaces.containsKey(namespace))
             throw new IllegalStateException("命名空间 " + namespace + " 没有配置 BaseCRUD");
 
+        // 通过第一个命名空间获取BaseCRUD实例
         BaseCRUD<?, Long> parentCrud = namespaces.get(namespace);
+        // 通过第二个命名空间从父实例的子实例映射中获取特定的BaseCRUD实例
         BaseCRUD<?, Long> crud = parentCrud.getChildren().get(namespace2);
 
+        // 检查第二个命名空间是否配置了BaseCRUD，如果没有配置则抛出异常
         if (crud == null)
             throw new IllegalStateException("命名空间 " + namespace2 + " 没有配置 BaseCRUD");
 
+        // 返回找到的BaseCRUD实例
         return crud;
     }
+
 
     @Override
     public List<Map<String, Object>> list(String namespace, String namespace2) {
