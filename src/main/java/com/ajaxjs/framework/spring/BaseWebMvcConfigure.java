@@ -49,13 +49,13 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
     }
 
     @Bean
-    public ValidatorInitializing ValidatorContextAware() {
-        return new ValidatorInitializing();
+    MyResponseBodyAdvice MyResponseBodyAdvice() {
+        return new MyResponseBodyAdvice();
     }
 
     @Bean
-    MyResponseBodyAdvice MyResponseBodyAdvice() {
-        return new MyResponseBodyAdvice();
+    public ValidatorInitializing ValidatorContextAware() {
+        return new ValidatorInitializing();
     }
 
     /**

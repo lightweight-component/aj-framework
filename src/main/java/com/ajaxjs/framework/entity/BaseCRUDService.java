@@ -6,6 +6,7 @@ import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.BusinessException;
+import com.ajaxjs.framework.entity.model.ConfigPO;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.convert.ConvertBasicValue;
@@ -24,6 +25,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ *
+ */
 @Slf4j
 public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityConstants {
     private JdbcWriter jdbcWriter;
@@ -206,18 +210,14 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
      * @return SQL Where 语句
      */
     public static String getWhereClause(HttpServletRequest request) {
-        // 获取所有 QueryString 参数
-        Map<String, String[]> parameters = request.getParameterMap();
-
-        // 创建一个用于存储 SQL 查询的 StringBuilder
-        StringBuilder whereClause = new StringBuilder();
+        Map<String, String[]> parameters = request.getParameterMap();   // 获取所有 QueryString 参数
+        StringBuilder whereClause = new StringBuilder(); // 创建一个用于存储 SQL 查询的 StringBuilder
 
         // 遍历所有参数
         for (String parameterName : parameters.keySet()) {
             // 跳过不符合条件的参数
-            if (!parameterName.startsWith("q_")) {
+            if (!parameterName.startsWith("q_"))
                 continue;
-            }
 
             // 获取参数值
             String[] parameterValues = parameters.get(parameterName);
@@ -238,6 +238,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
                     whereClause.append(parameterValue);
                     whereClause.append("',");
                 }
+
                 whereClause.deleteCharAt(whereClause.length() - 1);
                 whereClause.append(")");
             }
@@ -326,5 +327,4 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
             DataBaseConnection.closeDb(); // 执行完毕后关闭数据库连接
         }
     }
-
 }

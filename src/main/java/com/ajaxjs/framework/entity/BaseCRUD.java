@@ -53,17 +53,26 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
 
     private JdbcWriter jdbcWriter;
 
+    /**
+     * 根据当前的业务上下文，构造用于查询托管信息的 SQL 语句。
+     * 此方法主要用于处理动态 SQL 的生成，根据不同的条件拼接适合当前业务场景的查询语句。
+     *
+     * @return 返回构造好的 SQL 查询语句
+     */
     private String getManagedInfoSql() {
-        String sql = getInfoSql();
+        String sql = getInfoSql();// 尝试获取已经定义好的 SQL 语句
 
+        // 如果已经定义了 SQL 语句且不为空，则处理查询参数的动态替换
         if (StringUtils.hasText(sql)) {
-            Map<String, Object> queryStringParams = DataServiceUtils.getQueryStringParams();
-            sql = SmallMyBatis.handleSql(sql, queryStringParams);
-        } else sql = String.format(SELECT_SQL, getTableName()).replace(DUMMY_STR, DUMMY_STR + " AND " + getIdField() + " = ?");
+            Map<String, Object> queryStringParams = DataServiceUtils.getQueryStringParams();// 获取查询字符串中的参数
+            sql = SmallMyBatis.handleSql(sql, queryStringParams);   // 使用 SmallMyBatis 框架处理 SQL中的参数替换
+        } else
+            // 如果没有预定义SQL，则根据表名和ID字段生成一个默认的查询 SQL
+            sql = String.format(SELECT_SQL, getTableName()).replace(DUMMY_STR, DUMMY_STR + " AND " + getIdField() + " = ?");
 
-        sql = limitToCurrentUser(sql);
+        sql = limitToCurrentUser(sql);// 限制查询结果只包含当前用户的数据
 
-        return isTenantIsolation() ? TenantService.addTenantIdQuery(sql) : sql;
+        return isTenantIsolation() ? TenantService.addTenantIdQuery(sql) : sql;// 根据是否启用了租户隔离，动态添加租户ID查询条件
     }
 
     /**
@@ -103,17 +112,21 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     private String getListSql(String where) {
         String sql = getListSql();
 
-        if (StringUtils.hasText(sql)) {
+        if (StringUtils.hasText(sql))
             sql = SmallMyBatis.handleSql(sql, DataServiceUtils.getQueryStringParams());
-        } else sql = String.format(SELECT_SQL, getTableName());
+         else
+            sql = String.format(SELECT_SQL, getTableName());
 
-        if (isHasIsDeleted()) sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " != 1");
+        if (isHasIsDeleted())
+            sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " != 1");
 
         sql = limitToCurrentUser(sql);
 
-        if (isTenantIsolation()) sql = TenantService.addTenantIdQuery(sql);
+        if (isTenantIsolation())
+            sql = TenantService.addTenantIdQuery(sql);
 
-        if (where != null) sql = sql.replace(DUMMY_STR, DUMMY_STR + where);
+        if (where != null)
+            sql = sql.replace(DUMMY_STR, DUMMY_STR + where);
 
         return sql;
     }
@@ -186,7 +199,8 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     public static Object getCurrentUser() {
         // 从请求中获取名为"USER_KEY_IN_REQUEST"的属性，确保该属性不为空
         Object simpleUser = Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
-        if (simpleUser == null) throw new NullPointerException("上下文的用户不存在"); // 如果用户对象为空，则抛出异常
+        if (simpleUser == null)
+            throw new NullPointerException("上下文的用户不存在"); // 如果用户对象为空，则抛出异常
 
         return simpleUser;
     }
@@ -212,11 +226,10 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     /**
      * 对给定的 SQL 查询语句进行限制，确保只查询当前用户的数据。
      * 如果当前配置为只查询当前用户的数据，将在 SQL 语句中添加条件“user_id = 当前用户 ID”。
-     * 如果提供的 SQL 语句中已包含特定的占位符（DUMMY_STR），则会将条件追加到该占位符之后，
-     * 否则，将条件直接追加到 SQL 语句末尾。
+     * 如果提供的 SQL 语句中已包含特定的占位符（DUMMY_STR），则会将条件追加到该占位符之后，否则，将条件直接追加到 SQL 语句末尾。
      *
-     * @param sql 初始的 SQL 查询语句。
-     * @return 经过限制条件添加后的 SQL 查询语句。
+     * @param sql 初始的 SQL 查询语句
+     * @return 经过限制条件添加后的 SQL 查询语句
      */
     private String limitToCurrentUser(String sql) {
         if (isCurrentUserOnly()) { // 检查是否配置为只查询当前用户的数据

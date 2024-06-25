@@ -1,6 +1,5 @@
-package com.ajaxjs.framework.entity;
+package com.ajaxjs.framework.entity.model;
 
-import com.ajaxjs.framework.entity.model.BaseDataServiceConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,8 +8,8 @@ import java.util.Date;
 /**
  * 通用接口的数据库配置 PO
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ConfigPO extends BaseDataServiceConfig {
     private Date createDate;
 }

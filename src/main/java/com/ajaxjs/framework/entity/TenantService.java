@@ -2,15 +2,10 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.TestHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * 租户管理
