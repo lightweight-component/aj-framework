@@ -40,21 +40,19 @@ public class DataBaseConnection implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             Method method = ((HandlerMethod) handler).getMethod();
 
-            if (method != null) {
-                Connection connection = null;
+            Connection connection = null;
 
-                // 默认所有控制器方法，要连接数据库，除了带 IgnoreDataBaseConnect 注解的
-                if (method.getAnnotation(IgnoreDataBaseConnect.class) == null)
-                    connection = initDb();
+            // 默认所有控制器方法，要连接数据库，除了带 IgnoreDataBaseConnect 注解的
+            if (method.getAnnotation(IgnoreDataBaseConnect.class) == null)
+                connection = initDb();
 
-                if (connection != null && method.getAnnotation(EnableTransaction.class) != null) {
-                    log.info("开启数据库事务……");
+            if (connection != null && method.getAnnotation(EnableTransaction.class) != null) {
+                log.info("开启数据库事务……");
 
-                    try {
-                        connection.setAutoCommit(false);
-                    } catch (SQLException e) {
-                        log.warn("ERROR>>", e);
-                    }
+                try {
+                    connection.setAutoCommit(false);
+                } catch (SQLException e) {
+                    log.warn("ERROR>>", e);
                 }
             }
         }

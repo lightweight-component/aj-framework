@@ -4,6 +4,7 @@ import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
@@ -25,6 +26,8 @@ import java.util.function.Function;
 
 @Slf4j
 public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityConstants {
+    private JdbcWriter jdbcWriter;
+
     public final Map<String, BaseCRUD<?, Long>> namespaces = new HashMap<>();
 
     @Override
@@ -90,11 +93,11 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
 
         return (Long) getCRUD(namespace, crud -> {
             String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
-            return CRUD.jdbcWriterFactory().insert(sql);
+            return jdbcWriter.insert(sql);
         }, crud -> {
             if (StringUtils.hasText(crud.getCreateSql())) {
                 String _sql = SmallMyBatis.handleSql(crud.getCreateSql(), _params);
-                return CRUD.jdbcWriterFactory().insert(_sql);
+                return jdbcWriter.insert(_sql);
             } else
                 return crud.create(_params);
         });
@@ -111,7 +114,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
 
         return getCRUD(namespace, crud -> {
             String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
-            return CRUD.jdbcWriterFactory().write(sql) > 0;
+            return jdbcWriter.write(sql) > 0;
         }, crud -> crud.update(_params));
     }
 

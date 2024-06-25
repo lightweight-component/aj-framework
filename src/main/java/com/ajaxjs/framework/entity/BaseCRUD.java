@@ -3,6 +3,7 @@ package com.ajaxjs.framework.entity;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.framework.entity.model.BaseDataServiceConfig;
 import com.ajaxjs.framework.spring.DiContextUtil;
@@ -49,6 +50,8 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     public final static String DUMMY_STR = "1=1";
 
     private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ORDER BY create_date DESC"; // 日期暂时写死
+
+    private JdbcWriter jdbcWriter;
 
     private String getManagedInfoSql() {
         String sql = getInfoSql();
@@ -166,7 +169,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
         if (beforeDelete != null)
             sql = beforeDelete.apply(isHasIsDeleted(), sql);
 
-        CRUD.jdbcWriterFactory().write(sql, id);// 执行 SQL 语句
+        jdbcWriter.write(sql, id);// 执行 SQL 语句
 
         return true;
     }
