@@ -1,4 +1,4 @@
-package com.ajaxjs.spring;
+package com.ajaxjs.framework.spring;
 
 import org.junit.Test;
 
