@@ -62,5 +62,4 @@ public class MyResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         // 返回消息体
         return body;
     }
-
 }
