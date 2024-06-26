@@ -1,5 +1,7 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.data.data_service.BaseCRUD;
+
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
