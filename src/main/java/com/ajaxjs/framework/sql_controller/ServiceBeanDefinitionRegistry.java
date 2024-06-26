@@ -1,4 +1,4 @@
-package com.ajaxjs.data.sql_controller;
+package com.ajaxjs.framework.sql_controller;
 
 import com.ajaxjs.util.reflect.Clazz;
 import lombok.extern.slf4j.Slf4j;

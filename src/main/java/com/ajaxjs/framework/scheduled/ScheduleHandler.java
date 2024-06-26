@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.scheduled;
 
-import com.ajaxjs.data.CRUD;
+import com.ajaxjs.framework.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.filter.dbconnection.DataBaseConnection;

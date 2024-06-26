@@ -1,6 +1,6 @@
-package com.ajaxjs.data.sql_controller;
+package com.ajaxjs.framework.sql_controller;
 
-import com.ajaxjs.data.CRUD;
+import com.ajaxjs.framework.CRUD;
 import com.ajaxjs.data.DataAccessException;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.framework.IBaseModel;

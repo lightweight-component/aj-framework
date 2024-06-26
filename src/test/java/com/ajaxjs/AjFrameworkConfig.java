@@ -1,4 +1,4 @@
-package com.ajaxjs.test;
+package com.ajaxjs;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.BaseWebMvcConfigure;

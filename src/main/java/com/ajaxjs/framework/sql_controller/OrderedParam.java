@@ -1,4 +1,4 @@
-package com.ajaxjs.data.sql_controller;
+package com.ajaxjs.framework.sql_controller;
 
 
 import java.lang.annotation.ElementType;

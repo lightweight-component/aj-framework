@@ -1,4 +1,4 @@
-package com.ajaxjs.data.sql_controller;
+package com.ajaxjs.framework.sql_controller;
 
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.web.bind.annotation.RestController;
