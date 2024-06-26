@@ -5,11 +5,10 @@ import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.data.data_service.DataServiceController;
+import com.ajaxjs.data.data_service.DataServiceException;
+import com.ajaxjs.data.data_service.DataServiceUtils;
 import com.ajaxjs.data.data_service.model.ConfigPO;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.framework.DiContextUtil;
-import com.ajaxjs.framework.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -64,23 +62,17 @@ public abstract class BaseCRUDService implements DataServiceController {
      * @throws IllegalStateException 如果第一个命名空间不存在于映射中，或者第二个命名空间不存在于第一个命名空间的子实例映射中，抛出此异常。
      */
     private BaseCRUD<?, Long> getCrudChild(String namespace, String namespace2) {
-        // 检查第一个命名空间是否配置了BaseCRUD，如果没有配置则抛出异常
-        if (!namespaces.containsKey(namespace))
+        if (!namespaces.containsKey(namespace)) // 检查第一个命名空间是否配置了 BaseCRUD，如果没有配置则抛出异常
             throw new IllegalStateException("命名空间 " + namespace + " 没有配置 BaseCRUD");
 
-        // 通过第一个命名空间获取BaseCRUD实例
-        BaseCRUD<?, Long> parentCrud = namespaces.get(namespace);
-        // 通过第二个命名空间从父实例的子实例映射中获取特定的BaseCRUD实例
-        BaseCRUD<?, Long> crud = parentCrud.getChildren().get(namespace2);
+        BaseCRUD<?, Long> parentCrud = namespaces.get(namespace); // 通过第一个命名空间获取 BaseCRUD 实例
+        BaseCRUD<?, Long> crud = parentCrud.getChildren().get(namespace2);     // 通过第二个命名空间从父实例的子实例映射中获取特定的 BaseCRUD 实例
 
-        // 检查第二个命名空间是否配置了BaseCRUD，如果没有配置则抛出异常
-        if (crud == null)
+        if (crud == null) // 检查第二个命名空间是否配置了 BaseCRUD，如果没有配置则抛出异常
             throw new IllegalStateException("命名空间 " + namespace2 + " 没有配置 BaseCRUD");
 
-        // 返回找到的BaseCRUD实例
         return crud;
     }
-
 
     @Override
     public List<Map<String, Object>> list(String namespace, String namespace2) {
@@ -102,7 +94,7 @@ public abstract class BaseCRUDService implements DataServiceController {
     @Override
     @SuppressWarnings("unchecked")
     public PageResult<Map<String, Object>> page(String namespace) {
-        String where = getWhereClause(Objects.requireNonNull(DiContextUtil.getRequest()));
+        String where = getWhereClause(Objects.requireNonNull(DataServiceUtils.getRequest()));
 
         return (PageResult<Map<String, Object>>) getCRUD(namespace, crud -> {
             // TODO, handle WHERE
@@ -191,7 +183,7 @@ public abstract class BaseCRUDService implements DataServiceController {
      */
     private Map<String, Object> initParams(String namespace, Map<String, Object> params, boolean isFormSubmitOnly) {
         if (isFormSubmitOnly) {
-            HttpServletRequest req = DiContextUtil.getRequest();
+            HttpServletRequest req = DataServiceUtils.getRequest();
             assert req != null;
             String queryString = req.getQueryString(); // 获取查询字符串
 
@@ -217,7 +209,7 @@ public abstract class BaseCRUDService implements DataServiceController {
     @Override
     public Boolean delete(String namespace, Long id) {
         if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
+            throw new DataServiceException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).delete(id);
     }
@@ -308,46 +300,42 @@ public abstract class BaseCRUDService implements DataServiceController {
      * 在整个过程完成后，会关闭数据库连接。
      */
     public void loadConfigFromDatabase() {
-        DataBaseConnection.initDb();
         namespaces.clear();
 
-        try {
-            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");// 从数据库中查询所有状态不为1的配置项
-            list.sort(Comparator.comparingInt(ConfigPO::getPid)); // 根据pid对配置项进行排序
-            Map<Integer, BaseCRUD<Map<String, Object>, Long>> configMap = new HashMap<>();
+        List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");// 从数据库中查询所有状态不为1的配置项
+        list.sort(Comparator.comparingInt(ConfigPO::getPid)); // 根据pid对配置项进行排序
+        Map<Integer, BaseCRUD<Map<String, Object>, Long>> configMap = new HashMap<>();
 
-            if (!CollectionUtils.isEmpty(list)) {
-                for (ConfigPO config : list) {
-                    BaseCRUD<Map<String, Object>, Long> crud = new BaseCRUD<>(); // 为每个配置项创建CRUD对象，并复制配置项的属性到CRUD对象中
-                    BeanUtils.copyProperties(config, crud);
+        if (!CollectionUtils.isEmpty(list)) {
+            for (ConfigPO config : list) {
+                BaseCRUD<Map<String, Object>, Long> crud = new BaseCRUD<>(); // 为每个配置项创建CRUD对象，并复制配置项的属性到CRUD对象中
+                BeanUtils.copyProperties(config, crud);
 
-                    if (beforeCreate != null)  // 如果存在 beforeCreate 回调，则设置到 CRUD 对象中
-                        crud.setBeforeCreate(beforeCreate);
+                if (beforeCreate != null)  // 如果存在 beforeCreate 回调，则设置到 CRUD 对象中
+                    crud.setBeforeCreate(beforeCreate);
 
-                    if (beforeUpdate != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
-                        crud.setBeforeCreate(beforeUpdate);
+                if (beforeUpdate != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
+                    crud.setBeforeCreate(beforeUpdate);
 
-                    if (beforeDelete != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
-                        crud.setBeforeDelete(beforeDelete);
+                if (beforeDelete != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
+                    crud.setBeforeDelete(beforeDelete);
 
-                    // 如果 pid 为 -1，表示为顶级配置，将其添加到 namespaces 中，并初始化其 children 属性
-                    if (crud.getPid() == -1) {
-                        namespaces.put(config.getNamespace(), crud);
+                // 如果 pid 为 -1，表示为顶级配置，将其添加到 namespaces 中，并初始化其 children 属性
+                if (crud.getPid() == -1) {
+                    namespaces.put(config.getNamespace(), crud);
 
-                        configMap.put(crud.getId(), crud);
-                        crud.setChildren(new HashMap<>());
-                    } else {
-                        BaseCRUD<Map<String, Object>, Long> _crud = configMap.get(crud.getPid()); // 查找并添加父级配置项的子配置项
+                    configMap.put(crud.getId(), crud);
+                    crud.setChildren(new HashMap<>());
+                } else {
+                    BaseCRUD<Map<String, Object>, Long> _crud = configMap.get(crud.getPid()); // 查找并添加父级配置项的子配置项
 
-                        if (_crud == null)
-                            throw new IllegalStateException("程序错误：没有找到父级");
+                    if (_crud == null)
+                        throw new IllegalStateException("程序错误：没有找到父级");
 
-                        _crud.getChildren().put(crud.getNamespace(), crud);
-                    }
+                    _crud.getChildren().put(crud.getNamespace(), crud);
                 }
             }
-        } finally {
-            DataBaseConnection.closeDb(); // 执行完毕后关闭数据库连接
         }
+
     }
 }

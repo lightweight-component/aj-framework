@@ -159,6 +159,7 @@ public class DiContextUtil implements ApplicationContextAware {
     /**
      * 获取当前请求的 HttpServletRequest 对象
      * 如果当前没有请求上下文，则根据是否正在运行测试来返回对应的请求对象
+     *
      * @return 当前请求的 HttpServletRequest 对象，如果不存在请求上下文则返回 null
      */
     public static HttpServletRequest getRequest() {

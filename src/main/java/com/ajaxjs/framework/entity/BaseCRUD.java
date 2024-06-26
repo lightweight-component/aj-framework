@@ -3,10 +3,10 @@ package com.ajaxjs.framework.entity;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
+import com.ajaxjs.data.data_service.DataServiceUtils;
 import com.ajaxjs.data.data_service.model.BaseDataServiceConfig;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.util.SnowflakeId;
-import com.ajaxjs.framework.DiContextUtil;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -198,7 +198,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
      */
     public static Object getCurrentUser() {
         // 从请求中获取名为"USER_KEY_IN_REQUEST"的属性，确保该属性不为空
-        Object simpleUser = Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
+        Object simpleUser = Objects.requireNonNull(DataServiceUtils.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
 
         if (simpleUser == null)
             throw new NullPointerException("上下文的用户不存在"); // 如果用户对象为空，则抛出异常
