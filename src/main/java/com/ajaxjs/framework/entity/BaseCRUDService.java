@@ -5,9 +5,9 @@ import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.data.data_service.DataServiceController;
-import com.ajaxjs.data.data_service.DataServiceException;
 import com.ajaxjs.data.data_service.model.ConfigPO;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.DiContextUtil;
 import com.ajaxjs.framework.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.convert.ConvertBasicValue;
@@ -217,7 +217,7 @@ public abstract class BaseCRUDService implements DataServiceController {
     @Override
     public Boolean delete(String namespace, Long id) {
         if (!namespaces.containsKey(namespace))
-            throw new DataServiceException("没有配置 BaseCRUD");
+            throw new BusinessException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).delete(id);
     }
