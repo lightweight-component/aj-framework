@@ -4,11 +4,12 @@ import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
+import com.ajaxjs.data.data_service.DataServiceController;
+import com.ajaxjs.data.data_service.DataServiceException;
+import com.ajaxjs.data.data_service.model.ConfigPO;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.framework.entity.model.ConfigPO;
-import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
+import com.ajaxjs.framework.DiContextUtil;
+import com.ajaxjs.framework.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +31,7 @@ import java.util.function.Function;
  *
  */
 @Slf4j
-public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityConstants {
+public abstract class BaseCRUDService implements DataServiceController {
     private JdbcWriter jdbcWriter;
 
     public final Map<String, BaseCRUD<?, Long>> namespaces = new HashMap<>();
@@ -57,7 +58,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
      * 这个方法用于通过两个命名空间标识来获取一个特定的BaseCRUD实例，首先从一个全局映射中根据第一个命名空间获取一个BaseCRUD实例，
      * 然后从这个实例的子实例映射中根据第二个命名空间获取具体的BaseCRUD实例。
      *
-     * @param namespace 第一个命名空间标识，用于查找到对应的BaseCRUD实例。
+     * @param namespace  第一个命名空间标识，用于查找到对应的BaseCRUD实例。
      * @param namespace2 第二个命名空间标识，用于从第一个命名空间的子实例中找到对应的 BaseCRUD 实例。
      * @return 返回根据两个命名空间标识找到的 BaseCRUD 实例
      * @throws IllegalStateException 如果第一个命名空间不存在于映射中，或者第二个命名空间不存在于第一个命名空间的子实例映射中，抛出此异常。
@@ -86,6 +87,12 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
         BaseCRUD<?, Long> crud = getCrudChild(namespace, namespace2);
 
         return isSingle(crud) ? CRUD.listMap(crud.getSql()) : crud.listMap();
+    }
+
+    public interface CMD_TYPE {
+        String SINGLE = "SINGLE";
+
+        String CRUD = "CRUD";
     }
 
     private static boolean isSingle(BaseCRUD<?, Long> crud) {
@@ -210,7 +217,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
     @Override
     public Boolean delete(String namespace, Long id) {
         if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
+            throw new DataServiceException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).delete(id);
     }
@@ -261,8 +268,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
             }
         }
 
-        // 返回 SQL 查询
-        return whereClause.toString();
+        return whereClause.toString();// 返回 SQL 查询
     }
 
     @Override

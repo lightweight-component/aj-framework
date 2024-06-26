@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.entity;
 
-import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.framework.DiContextUtil;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import org.springframework.util.ObjectUtils;
 

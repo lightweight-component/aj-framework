@@ -1,7 +1,6 @@
 package com.ajaxjs.framework;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.embeded_tomcat.filter.FileUploadHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.TestHelper;
@@ -28,8 +27,6 @@ import java.util.Set;
 
 /**
  * Web 工具类
- *
- * @author Frank Cheung
  */
 public class WebHelper {
     /**

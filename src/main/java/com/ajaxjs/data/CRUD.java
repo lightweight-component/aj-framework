@@ -2,7 +2,7 @@ package com.ajaxjs.data;
 
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.framework.DiContextUtil;
 import com.ajaxjs.util.reflect.Methods;
 import org.springframework.util.StringUtils;
 
@@ -134,6 +134,7 @@ public class CRUD {
      * @param beanClz 实体 Bean 类型
      * @param sql     SQL 语句
      * @param params  SQL 参数列表（选填项，能对应 SQL 里面的`?`的插值符）
+     * @param <T>     实体类引用
      * @return 查询结果，如果没数据返回一个空 List
      */
     public static <T> List<T> list(Class<T> beanClz, String sql, Object... params) {

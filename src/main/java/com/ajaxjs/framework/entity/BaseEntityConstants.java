@@ -55,10 +55,4 @@ public interface BaseEntityConstants {
          */
         int UUID = 3;
     }
-
-    interface CMD_TYPE {
-        String SINGLE = "SINGLE";
-
-        String CRUD = "CRUD";
-    }
 }
