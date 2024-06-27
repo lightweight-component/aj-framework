@@ -1,6 +1,7 @@
 package com.ajaxjs.framework.entity;
 
-import com.ajaxjs.data.data_service.BaseCRUD;
+import com.ajaxjs.data.data_service.DataServiceUtils;
+import com.ajaxjs.data.data_service.FastCRUD;
 
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -14,9 +15,9 @@ public class BaseCrudPlugins {
      * 可以设置 createDate, createBy 等字段
      */
     public static final Consumer<Map<String, Object>> beforeCreate = params -> {
-        Object user = BaseCRUD.getCurrentUser();
-        long userId = BaseCRUD.executeMethod(user, "getId", long.class);
-        String userName = BaseCRUD.executeMethod(user, "getName", String.class);
+        Object user = DataServiceUtils.getCurrentUser();
+        long userId = DataServiceUtils.executeMethod(user, "getId", long.class);
+        String userName = DataServiceUtils.executeMethod(user, "getName", String.class);
 
         params.put("creator_id", userId);
         params.put("creator", userName);
@@ -28,9 +29,9 @@ public class BaseCrudPlugins {
      * 可以设置 updateDate, updateBy 等字段
      */
     public static final Consumer<Map<String, Object>> beforeUpdate = params -> {
-        Object user = BaseCRUD.getCurrentUser();
-        long userId = BaseCRUD.executeMethod(user, "getId", long.class);
-        String userName = BaseCRUD.executeMethod(user, "getName", String.class);
+        Object user = DataServiceUtils.getCurrentUser();
+        long userId = DataServiceUtils.executeMethod(user, "getId", long.class);
+        String userName = DataServiceUtils.executeMethod(user, "getName", String.class);
 
         params.put("updater_id", userId);
         params.put("updater", userName);
@@ -43,9 +44,9 @@ public class BaseCrudPlugins {
      */
     public static final BiFunction<Boolean, String, String> beforeDelete = (Boolean isHasIsDeleted, String sql) -> {
         if (isHasIsDeleted) {
-            Object user = BaseCRUD.getCurrentUser();
-            long userId = BaseCRUD.executeMethod(user, "getId", long.class);
-            String userName = BaseCRUD.executeMethod(user, "getName", String.class);
+            Object user = DataServiceUtils.getCurrentUser();
+            long userId = DataServiceUtils.executeMethod(user, "getId", long.class);
+            String userName = DataServiceUtils.executeMethod(user, "getName", String.class);
 
             String s = "SET updater_id = " + userId + "," + " updater = '" + userName + "', ";
             sql = sql.replace("SET", s);
