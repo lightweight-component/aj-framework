@@ -1,11 +1,10 @@
 package com.ajaxjs.framework;
 
-import com.ajaxjs.data.CRUD_Service;
+import com.ajaxjs.data.crud.CRUD_Service;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.DiContextUtil;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.data_service.DataServiceUtils;
-import com.ajaxjs.data.data_service.FastCRUD;
 
 import java.util.Map;
 import java.util.function.BiFunction;
