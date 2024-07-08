@@ -15,7 +15,7 @@ public class ValidatorHelper {
      * 1、密码必须由数字、字符、特殊字符三种中的两种组成
      * 2、密码长度不能少于8个字符
      */
-    public static final String REGEX_PASSWORD = "^(?![\\d]+$)(?![a-zA-Z]+$)(?![^\\da-zA-Z]+$)(?=[^\\s]+$).{8,16}$";
+    public static final String REGEX_PASSWORD = "^(?!\\d+$)(?![a-zA-Z]+$)(?![^\\da-zA-Z]+$)(?=[^\\s]+$).{8,16}$";
 
     /**
      * 正则表达式：验证手机号
@@ -52,7 +52,7 @@ public class ValidatorHelper {
     /**
      * 校验用户名
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isUsername(String username) {
         return Pattern.matches(REGEX_USERNAME, username);
@@ -61,7 +61,7 @@ public class ValidatorHelper {
     /**
      * 校验密码
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isPassword(String password) {
         return Pattern.matches(REGEX_PASSWORD, password);
@@ -70,7 +70,7 @@ public class ValidatorHelper {
     /**
      * 校验手机号
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isMobile(String mobile) {
         if (!StringUtils.hasText(mobile))
@@ -82,7 +82,7 @@ public class ValidatorHelper {
     /**
      * 校验邮箱
      *
-     * @return 校验通过返回true，否则返回false
+     *@return 校验通过返回 true，否则返回 false
      */
     public static boolean isEmail(String email) {
         return Pattern.matches(REGEX_EMAIL, email);
@@ -91,7 +91,7 @@ public class ValidatorHelper {
     /**
      * 校验汉字
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isChinese(String chinese) {
         return Pattern.matches(REGEX_CHINESE, chinese);
@@ -100,7 +100,7 @@ public class ValidatorHelper {
     /**
      * 校验身份证
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isIDCard(String idCard) {
         if (!StringUtils.hasText(idCard)) return false;
@@ -126,18 +126,21 @@ public class ValidatorHelper {
     }
 
     /**
-     * 校验URL
+     * 校验 URL
      *
-     * @return 校验通过返回true，否则返回false
+     * @return 校验通过返回 true，否则返回 false
      */
     public static boolean isUrl(String url) {
         return Pattern.matches(REGEX_URL, url);
     }
 
     /**
-     * 校验IP地址
+     * 校验给定的字符串是否符合 IP 地址的格式
+     *
+     * @param ipAddress 待校验的 IP 地址字符串
+     * @return 如果字符串符合 IP 地址的格式，则返回 true；否则返回 false
      */
-    public static boolean isIPAddr(String ipAddr) {
-        return Pattern.matches(REGEX_IP_ADDR, ipAddr);
+    public static boolean isIPAddress(String ipAddress) {
+        return Pattern.matches(REGEX_IP_ADDR, ipAddress);
     }
 }
