@@ -40,7 +40,8 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         Throwable _ex = ex.getCause() != null ? ex.getCause() : ex;
         String msg = _ex.getMessage();
 
-        if (msg == null) msg = _ex.toString();
+        if (msg == null)
+            msg = _ex.toString();
 
         req.setAttribute(EXCEPTION_CXT_KEY, _ex);
 
