@@ -1,6 +1,7 @@
 package com.ajaxjs.framework.entity.tree;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.util.List;
  * @param <T> id 类型
  */
 @Data
-public class TreeNode<T extends Serializable> extends BaseModel {
+public class TreeNode<T extends Serializable> implements IBaseModel {
     /**
      * @param id
      * @param name
@@ -24,13 +25,16 @@ public class TreeNode<T extends Serializable> extends BaseModel {
         this.parentId = parentId;
     }
 
+    public TreeNode() {
+    }
+
     /**
      * 节点 id
      */
     private T id;
 
     /**
-     * 节点名称
+     * 节点名称、自定义编码、相当于 key
      */
     private String name;
 
