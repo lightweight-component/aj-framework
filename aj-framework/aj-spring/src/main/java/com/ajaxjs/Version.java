@@ -36,6 +36,9 @@ public class Version {
 //		}
     }
 
+    /**
+     * 是否在运行单元测试
+     */
     private static Boolean isRunningTest;
 
     /**

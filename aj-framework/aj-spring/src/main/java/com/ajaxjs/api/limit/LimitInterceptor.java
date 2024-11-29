@@ -35,7 +35,7 @@ public class LimitInterceptor implements HandlerInterceptor {
      * @param limitKey RedisKey
      * @return 是否拦截
      */
-    private boolean checkLimit(LimitAccess limit, String limitKey) {
+    private boolean checkLimit(LimitAccessVerify limit, String limitKey) {
         int max = limit.max();
         int time = limit.time();
         TimeUnit timeUnit = limit.timeUnit();
@@ -73,7 +73,7 @@ public class LimitInterceptor implements HandlerInterceptor {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        LimitAccess limit = method.getAnnotation(LimitAccess.class);
+        LimitAccessVerify limit = method.getAnnotation(LimitAccessVerify.class);
 
         if (limit == null)
             return true;

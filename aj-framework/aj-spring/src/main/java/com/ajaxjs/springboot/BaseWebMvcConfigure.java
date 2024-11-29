@@ -2,11 +2,8 @@ package com.ajaxjs.springboot;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.List;
 
 @Configuration
 public class BaseWebMvcConfigure implements WebMvcConfigurer {
@@ -17,12 +14,7 @@ public class BaseWebMvcConfigure implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ShowControllerInterceptor());
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new GlobalResponseResultDep()); // 统一返回 JSON
+        registry.addInterceptor(new GlobalControllerInterceptor());
     }
 
     /**

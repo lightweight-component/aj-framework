@@ -11,6 +11,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
+/**
+ * 查询多个接口 然后汇总数据统一返回
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 public class BatchJobWaitEnd {
@@ -37,6 +40,5 @@ public class BatchJobWaitEnd {
                 throw new RuntimeException(e);
             }
         });
-
     }
 }
