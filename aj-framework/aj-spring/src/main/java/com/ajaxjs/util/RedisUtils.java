@@ -172,6 +172,13 @@ public class RedisUtils {
         return get(key).toString();
     }
 
+    /**
+     * 更新缓存
+     */
+    public Object getAndSet(final String key, String value) {
+        return redisTemplate.opsForValue().getAndSet(key, value);
+    }
+
     /* --------------------------- 存储 Hash 操作  -------------------------------------*/
 
     /**

@@ -38,9 +38,6 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 //            int errCode = ((ICustomException) _ex).getErrCode();
 //            resultWrapper.setErrorCode(String.valueOf(errCode));
 //            resp.setStatus(errCode);
-        } else if (_ex instanceof IllegalArgumentException) {// 客户端请求参数错误
-            resultWrapper.setErrorCode("400");
-            resp.setStatus(HttpStatus.BAD_REQUEST.value());
         } else if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException) {// 设置状态码
             resultWrapper.setErrorCode("403");
             resp.setStatus(HttpStatus.FORBIDDEN.value());

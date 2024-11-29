@@ -1,18 +1,14 @@
 package com.ajaxjs.api.time_signature;
 
-import com.ajaxjs.api.InterceptorAction;
 import com.ajaxjs.util.cryptography.AesCrypto;
 import lombok.Data;
-import org.springframework.util.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Used for:
- * 1) App public API, not browser 2) make a link for password reset
+ *  1) App public API, not browser 2) make a link for password reset
  */
 @Data
-public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
+public class TimeSignature {
     /**
      * 秘钥，需要保密
      */
@@ -33,7 +29,6 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
      */
     public boolean verifySignature(String signature) {
         String timestampStr;
-
         try {
             timestampStr = AesCrypto.getInstance().AES_decode(signature, secretKey);
         } catch (Exception e) {
@@ -48,9 +43,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
             throw new SecurityException("Invalid timestamp format.");
         }
 
-        long now = System.currentTimeMillis();
-
-        return Math.abs(now - timestamp) <= expirationTime;
+        return Math.abs(System.currentTimeMillis() - timestamp) <= expirationTime;
     }
 
     /**
@@ -72,18 +65,5 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
      */
     public String generateSignature() {
         return generateSignature(System.currentTimeMillis());
-    }
-
-    @Override
-    public boolean action(TimeSignatureVerify annotation, HttpServletRequest req) {
-        String signature = req.getParameter("tsign");// 获取签名参数
-
-        if (!StringUtils.hasText(signature))
-            throw new IllegalArgumentException("Missing Parameters: tsign.");
-
-        if (!verifySignature(signature))
-            throw new SecurityException("Invalid or expired signature.");
-
-        return true;
     }
 }

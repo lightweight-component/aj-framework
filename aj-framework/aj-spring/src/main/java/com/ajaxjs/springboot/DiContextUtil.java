@@ -10,6 +10,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -152,6 +153,14 @@ public class DiContextUtil implements ApplicationContextAware {
 //        registryBean(clz);
 //        return getBean(clz);
 //    }
+
+    public static void initTest(String xml) {
+        context = new FileSystemXmlApplicationContext(xml);
+    }
+
+    public static void closeTest() {
+        ((ConfigurableApplicationContext) context).close();
+    }
 
     /**
      * 获取当前请求的 HttpServletRequest 对象

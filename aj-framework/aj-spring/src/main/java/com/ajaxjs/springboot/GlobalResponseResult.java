@@ -8,12 +8,10 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.Objects;
-
 public abstract class GlobalResponseResult implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-//        System.out.println("supports:" + returnType);
+        System.out.println("supports:" + returnType);
         return true;
     }
 
@@ -24,7 +22,7 @@ public abstract class GlobalResponseResult implements ResponseBodyAdvice<Object>
         ResponseResultWrapper responseResult = new ResponseResultWrapper();
         responseResult.setStatus(1);
 
-        JsonMessage annotation = Objects.requireNonNull(returnType.getMethod()).getAnnotation(JsonMessage.class);
+        JsonMessage annotation = returnType.getMethod().getAnnotation(JsonMessage.class);
 
         if (annotation != null)
             responseResult.setMessage(annotation.value());

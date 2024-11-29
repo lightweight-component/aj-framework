@@ -29,8 +29,6 @@ public class TestTimeSign {
         // 计算半小时之前的时间
         long halfAnHourAgo = currentTimeMillis - (30 * 60 * 1000);
 
-        String signature = timeSignature.generateSignature(halfAnHourAgo);
-        System.out.println(signature);
-        assertFalse(timeSignature.verifySignature(signature));
+        assertFalse(timeSignature.verifySignature(timeSignature.generateSignature(halfAnHourAgo)));
     }
 }
