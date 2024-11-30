@@ -72,6 +72,7 @@ public class GlobalControllerInterceptor implements HandlerInterceptor {
                     annotation = method.getAnnotation(annotationType);
             }
         }
+
         if (annotation != null) {
             T a = (T) annotation;
             log.info(String.valueOf(a));

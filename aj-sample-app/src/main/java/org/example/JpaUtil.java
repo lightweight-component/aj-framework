@@ -1,5 +1,8 @@
 package org.example;
 
+import com.ajaxjs.service.tools.IIdCard;
+import org.apache.dubbo.config.bootstrap.builders.ReferenceBuilder;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

@@ -12,7 +12,6 @@ import java.lang.annotation.Annotation;
  */
 @Data
 public abstract class InterceptorAction<T extends Annotation> {
-
     /**
      * Whether is global access check
      */

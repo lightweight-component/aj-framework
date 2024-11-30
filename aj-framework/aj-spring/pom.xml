@@ -16,6 +16,12 @@
     <packaging>jar</packaging>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -28,6 +34,12 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.18.0</version><!-- 确保使用与Spring Boot 2.7兼容的版本 -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-framework-common</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>
