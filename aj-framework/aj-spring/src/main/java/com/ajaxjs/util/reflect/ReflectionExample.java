@@ -5,7 +5,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 
 public class ReflectionExample {
-    private String secret = "This is a secret";
+    private final String secret = "This is a secret";
 
     public static void main(String[] args) throws Throwable {
         ReflectionExample obj = new ReflectionExample();

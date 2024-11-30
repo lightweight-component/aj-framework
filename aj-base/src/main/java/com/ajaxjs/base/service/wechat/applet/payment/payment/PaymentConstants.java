@@ -4,7 +4,7 @@ public interface PaymentConstants {
     /**
      * 退款渠道
      */
-    public static enum RefundChannel {
+    enum RefundChannel {
         /**
          * 原路退款
          */
@@ -29,7 +29,7 @@ public interface PaymentConstants {
     /**
      * 退款状态
      */
-    public static enum RefundStatus {
+    enum RefundStatus {
         /**
          * 退款成功
          */
@@ -54,7 +54,7 @@ public interface PaymentConstants {
     /**
      * 退款状态
      */
-    public static enum FundsAccount {
+    enum FundsAccount {
         /**
          * 未结算资金
          */
@@ -78,6 +78,6 @@ public interface PaymentConstants {
         /**
          * 基本账户（含可用余额和不可用余额）
          */
-        BASIC;
+        BASIC
     }
 }

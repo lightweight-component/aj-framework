@@ -55,28 +55,24 @@ public class OpenAccount {
         if (ua != null)
             ua = ua.toLowerCase();// 强制转换为小写字母
 
-        if (ua.contains("micromessenger")) {
-//			try {
-//				if (TokenMgr.instance == null) {
-//					String appId = ConfigService.getValueAsString("wx_open.appId");
-//					String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
-//					TokenMgr.instance = new TokenMgr(appId, appSecret);
-//				}
-//
-//				// 获取当前页面的 url
-//				String url = (req.getRemotePort() != 80 ? "https" : req.getScheme()) + "://" + req.getServerName() + req.getRequestURI();
-//				if (req.getQueryString() != null)
-//					url += "?" + req.getQueryString();
-//
-//				Map<String, String> map = generateSignature(url, TokenMgr.instance.getTicket());
-//				req.setAttribute("map", map);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-
-            return true;
-        } else
-            return false;
+        //			try {
+        //				if (TokenMgr.instance == null) {
+        //					String appId = ConfigService.getValueAsString("wx_open.appId");
+        //					String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
+        //					TokenMgr.instance = new TokenMgr(appId, appSecret);
+        //				}
+        //
+        //				// 获取当前页面的 url
+        //				String url = (req.getRemotePort() != 80 ? "https" : req.getScheme()) + "://" + req.getServerName() + req.getRequestURI();
+        //				if (req.getQueryString() != null)
+        //					url += "?" + req.getQueryString();
+        //
+        //				Map<String, String> map = generateSignature(url, TokenMgr.instance.getTicket());
+        //				req.setAttribute("map", map);
+        //			} catch (Exception e) {
+        //				e.printStackTrace();
+        //			}
+        return ua.contains("micromessenger");
     }
 
     /**

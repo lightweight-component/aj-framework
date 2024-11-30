@@ -17,7 +17,7 @@ public abstract class JspSpringStarter implements WebApplicationInitializer {
     abstract public Class<?>[] getConfigClz();
 
     /**
-     * Servlet 容器启动时会自动运行该方法
+     * Servlet 容器启动时会自动运行该方法。
      */
     @Override
     public void onStartup(ServletContext servletContext)  {
@@ -39,7 +39,7 @@ public abstract class JspSpringStarter implements WebApplicationInitializer {
      */
     public static PropertySourcesPlaceholderConfigurer yaml() {
         PropertySourcesPlaceholderConfigurer cfg = new CustomPropertySources();
-        cfg.setIgnoreUnresolvablePlaceholders(true);// Don't fail if @Value is not supplied in properties. Ignore if not found
+        cfg.setIgnoreUnresolvablePlaceholders(true); // Don't fail if @Value is not supplied in properties. Ignore if not found
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         ClassPathResource c = new ClassPathResource("application.yml");
 

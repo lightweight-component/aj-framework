@@ -7,7 +7,7 @@ package com.ajaxjs.base.model;
  *
  */
 public interface BaseEntityConstant {
-	public static enum AttachmentType {
+	enum AttachmentType {
 		/**
 		 * 普通图片
 		 */

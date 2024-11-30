@@ -4,7 +4,7 @@ public interface DataServiceConstant {
     /**
      * 数据库厂商
      */
-    public static enum DatabaseType {
+    enum DatabaseType {
         MY_SQL, SQL_SERVER, ORACLE, POSTGRE_SQL, DB2, SQLITE, SPARK
     }
 
@@ -20,7 +20,7 @@ public interface DataServiceConstant {
     /**
      * 分页模式
      */
-    public enum GET_LIST {
+    enum GET_LIST {
         /**
          * Page:No/Size 分页方式
          */

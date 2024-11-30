@@ -99,7 +99,7 @@ public class TestReflectUtil {
     public static class B extends A {
     }
 
-    public static interface C {
+    public interface C {
     }
 
     public static class D implements C {

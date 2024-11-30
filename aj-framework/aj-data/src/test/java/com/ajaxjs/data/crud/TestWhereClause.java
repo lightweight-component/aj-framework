@@ -17,7 +17,7 @@ public class TestWhereClause {
     @Mock
     private HttpServletRequest request;
 
-    private Map<String, String[]> parameterMap = new HashMap<>();
+    private final Map<String, String[]> parameterMap = new HashMap<>();
 
     @Test
     public void testGetWhereClauseWithSingleValue() {

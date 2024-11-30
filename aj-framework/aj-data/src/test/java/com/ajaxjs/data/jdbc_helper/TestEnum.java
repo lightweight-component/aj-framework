@@ -3,14 +3,14 @@ package com.ajaxjs.data.jdbc_helper;
 import org.junit.Test;
 
 public class TestEnum {
-    public static enum Bar {
+    public enum Bar {
         A, B
     }
 
     /**
      * 数字类型的
      */
-    public static enum Foo {
+    public enum Foo {
         A(1), B(2);
 
 
@@ -42,7 +42,7 @@ public class TestEnum {
     @Test
     public void test() {
         System.out.println(Bar.A);
-        System.out.println(Bar.A.toString());
+        System.out.println(Bar.A);
         System.out.println(Foo.A);
     }
 }

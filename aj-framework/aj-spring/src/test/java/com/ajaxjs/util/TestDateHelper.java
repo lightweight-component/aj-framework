@@ -143,7 +143,7 @@ public class TestDateHelper {
 
     @Test
     public void object2Date_IntegerObject_ReturnsCorrectDate() {
-        long time = 1681584645000l; // GMT: Saturday, April 15, 2023 11:30:45.000
+        long time = 1681584645000L; // GMT: Saturday, April 15, 2023 11:30:45.000
         Date date = DateHelper.object2Date(time);
         assertNotNull(date);
         assertEquals("2023-04-15 11:30:45", DateHelper.formatDateTime(DateHelper.toLocalDateTime(date)));

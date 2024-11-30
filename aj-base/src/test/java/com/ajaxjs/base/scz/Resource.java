@@ -9,9 +9,9 @@ public class Resource {
     //当前资源的数量
     private int num = 0;
     //当前资源的上限
-    private int size = 10;
-    private Lock lock = new ReentrantLock();//创建锁对象
-    private Condition condition = lock.newCondition();//创建锁的条件，情况
+    private final int size = 10;
+    private final Lock lock = new ReentrantLock();//创建锁对象
+    private final Condition condition = lock.newCondition();//创建锁的条件，情况
 
     //消费资源
     public void remove() {

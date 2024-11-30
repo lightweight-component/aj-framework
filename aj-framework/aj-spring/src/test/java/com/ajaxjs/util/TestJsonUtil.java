@@ -81,7 +81,7 @@ public class TestJsonUtil {
 
         if (differences.length() > 0) {
             System.out.println("Differences found:");
-            System.out.println(differences.toString());
+            System.out.println(differences);
         } else {
             System.out.println("No differences found.");
         }

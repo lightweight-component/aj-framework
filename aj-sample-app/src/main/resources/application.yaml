@@ -39,3 +39,9 @@ management:
     web:
       exposure:
         include: "*"
+
+
+#        host: smtp.163.com
+#        protocol: smtp
+#        username: antsitya@163.com
+#        password: ant163authcode

@@ -102,7 +102,7 @@ public class Export {
         RequestDispatcher rd = req.getServletContext().getRequestDispatcher(tplJsp);
 
         try (ByteArrayServletOutputStream stream = new ByteArrayServletOutputStream();
-             PrintWriter pw = new PrintWriter(new OutputStreamWriter(stream.getOut(), StandardCharsets.UTF_8));
+             PrintWriter pw = new PrintWriter(new OutputStreamWriter(stream.getOut(), StandardCharsets.UTF_8))
         ) {
             rd.include(req, new HttpServletResponseWrapper(resp) {
                 @Override

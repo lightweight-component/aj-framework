@@ -38,15 +38,12 @@ public class GlobalControllerInterceptor implements HandlerInterceptor {
         if (!handler(LimitAccess.class, req, handlerMethod, method, LimitAccessVerify.class))
             return false;
 
-        if (!handler(HttpReferer.class, req, handlerMethod, method, HttpRefererCheck.class))
-            return false;
-
-        return true;
+        return handler(HttpReferer.class, req, handlerMethod, method, HttpRefererCheck.class);
     }
 
     @SuppressWarnings("unchecked")
     private <T extends Annotation> boolean handler(Class<? extends InterceptorAction<T>> serviceClz, HttpServletRequest req, HandlerMethod handlerMethod, Method method, Class<T> annotationType) {
-        InterceptorAction<T> service = (InterceptorAction<T>) DiContextUtil.getBean(serviceClz);
+        InterceptorAction<T> service = DiContextUtil.getBean(serviceClz);
 
         if (service == null)
             return true; // 对应的业务没有创建，放行

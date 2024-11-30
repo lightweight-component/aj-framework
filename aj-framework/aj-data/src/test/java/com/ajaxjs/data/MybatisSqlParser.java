@@ -31,7 +31,7 @@ public class MybatisSqlParser {
             String paramName = matcher.group(1);
             Object paramValue = params.get(paramName);
             if (paramValue != null) {
-                result.append(sql.substring(index, matcher.start()));
+                result.append(sql, index, matcher.start());
                 result.append(paramValue);
                 index = matcher.end();
             }
@@ -46,7 +46,7 @@ public class MybatisSqlParser {
         int end = sql.indexOf("<forEach>", start);
 
         while (end != -1) {
-            result.append(sql.substring(start, end));
+            result.append(sql, start, end);
             int subStart = end + "<forEach>".length();
             int subEnd = sql.indexOf("</forEach>", subStart);
             String subSql = sql.substring(subStart, subEnd);

@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  * 内部验签器
  */
 public class DefaultVerifier {
-	private String merchantId;
+	private final String merchantId;
 
 	private DefaultVerifier(String merchantId) {
         this.merchantId = merchantId;

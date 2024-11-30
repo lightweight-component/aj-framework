@@ -1,7 +1,7 @@
 package com.ajaxjs.base.scz;
 
 public class Producer implements Runnable {
-    private Resource resource;
+    private final Resource resource;
 
     public Producer(Resource resource){
         this.resource=resource;
