@@ -49,10 +49,19 @@
             <scope>provided</scope>
         </dependency>
 
-
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-framework-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -9,8 +9,8 @@
 
     <modules>
         <module>aj-framework</module>
-        <module>aj-framework-common</module>
-       <module>aj-data</module>
+
+        <module>aj-data</module>
         <!--        <module>aj-web</module>
                <module>aj-security</module>-->
     </modules>
