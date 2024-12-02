@@ -7,7 +7,7 @@ import com.ajaxjs.base.service.wechat.applet.WeChatAppletConfig;
 import com.ajaxjs.base.service.wechat.applet.model.TemplateMsgMp;
 import com.ajaxjs.base.service.wechat.applet.model.TemplateMsgWebApp;
 import com.ajaxjs.util.ObjectHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

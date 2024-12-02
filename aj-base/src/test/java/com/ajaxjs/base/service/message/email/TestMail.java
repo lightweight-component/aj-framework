@@ -1,7 +1,7 @@
 package com.ajaxjs.base.service.message.email;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;

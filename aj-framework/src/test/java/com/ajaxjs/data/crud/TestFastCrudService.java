@@ -2,17 +2,16 @@ package com.ajaxjs.data.crud;
 
 import com.ajaxjs.data.BaseTest;
 import com.ajaxjs.data.PageResult;
-import com.ajaxjs.util.ObjectHelper;
 import lombok.Data;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class TestFastCrudService extends BaseTest {
     @Autowired
@@ -111,7 +110,7 @@ public class TestFastCrudService extends BaseTest {
         fastCRUD2.setDao(crud);
         fastCRUD2.setTableName("Employees");
 
-        Map<String,Object> map = ObjectHelper.hashMap("id", 10L, "name", "Ben");
+        Map<String,Object> map = Map.of("id", 10L, "name", "Ben");
         Long newlyId2 = fastCRUD2.create(map);
 
         System.out.println(newlyId2);

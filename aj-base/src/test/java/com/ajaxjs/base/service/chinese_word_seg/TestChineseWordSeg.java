@@ -3,7 +3,7 @@ package com.ajaxjs.base.service.chinese_word_seg;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@ package com.ajaxjs.data;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.Select;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestJSQLParser {
     @Test

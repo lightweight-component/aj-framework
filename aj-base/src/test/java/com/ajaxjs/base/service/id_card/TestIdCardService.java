@@ -1,7 +1,7 @@
 package com.ajaxjs.base.service.id_card;
 
 import com.ajaxjs.base.service.id_card.IdCardService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertTrue;
 

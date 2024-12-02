@@ -1,8 +1,9 @@
 package com.ajaxjs.data.jdbc_helper;
 
-import com.ajaxjs.util.TestHelper;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.ajaxjs.util.ListUtils;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +22,8 @@ public class TestJdbc {
         JdbcWriter.SqlParams sp = JdbcWriter.entity2InsertSql(tableName, map);
 
         // 验证返回结果是否符合预期
-        Assert.assertEquals("INSERT INTO users ( `name`, `id`, `age`) VALUES ( ?, ?, ?)", sp.sql);
-        Assert.assertArrayEquals(new Object[]{"Tom", 1, 20}, sp.values);
+        assertEquals("INSERT INTO users ( `name`, `id`, `age`) VALUES ( ?, ?, ?)", sp.sql);
+        assertArrayEquals(new Object[]{"Tom", 1, 20}, sp.values);
     }
 
     @Test
@@ -38,12 +39,12 @@ public class TestJdbc {
 
         JdbcWriter.SqlParams sp = JdbcWriter.entity2UpdateSql(tableName, map, null, null);
 
-        Assert.assertEquals("UPDATE users SET `name` = ?, `id` = ?, `age` = ?", sp.sql);
-        Assert.assertArrayEquals(new Object[]{"Tom", 1, 20}, sp.values);
+        assertEquals("UPDATE users SET `name` = ?, `id` = ?, `age` = ?", sp.sql);
+        assertArrayEquals(new Object[]{"Tom", 1, 20}, sp.values);
 
         sp = JdbcWriter.entity2UpdateSql(tableName, map, "id", 100L);
 
-        Assert.assertEquals("UPDATE users SET `name` = ?, `id` = ?, `age` = ? WHERE id = ?", sp.sql);
-        TestHelper.printArr(sp.values);
+        assertEquals("UPDATE users SET `name` = ?, `id` = ?, `age` = ? WHERE id = ?", sp.sql);
+        ListUtils.printArray(sp.values);
     }
 }

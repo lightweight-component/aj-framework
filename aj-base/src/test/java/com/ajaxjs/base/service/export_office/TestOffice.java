@@ -1,7 +1,7 @@
 package com.ajaxjs.base.service.export_office;
 
 import com.ajaxjs.base.service.export_office.Export;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
