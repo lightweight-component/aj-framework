@@ -5,10 +5,8 @@ import com.ajaxjs.data.crud.CRUD_Service;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.entity.BaseCrudPlugins;
-import com.ajaxjs.framework.entity.DisableWritePlugins;
 import com.ajaxjs.iam.resource_server.UserInterceptor;
-import com.ajaxjs.util.logger.LogHelper;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -16,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -44,7 +41,6 @@ public class BaseConfiguration implements WebMvcConfigurer {
     DataSource getDs() {
         return JdbcConn.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
     }
-
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -84,7 +80,6 @@ public class BaseConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        LogHelper.p("初始化 SSO 拦截器");
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(authInterceptor());
         interceptorRegistration.addPathPatterns("/**"); // 拦截所有
 

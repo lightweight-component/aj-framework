@@ -16,8 +16,6 @@ import java.util.Map;
  * 小程序常见业务
  */
 public class AppletService {
-    private static final LogHelper LOGGER = LogHelper.getLog(AppletService.class);
-
     public final WeChatAppletConfig appletCfg;
 
     public WeChatAppletConfig getAppletCfg() {

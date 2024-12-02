@@ -12,8 +12,7 @@ package com.ajaxjs.base.service.message.email;
 
 
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.regexp.RegExpUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -31,8 +30,8 @@ import java.util.Map;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class Sender extends Socket {
-    private static final LogHelper LOGGER = LogHelper.getLog(Sender.class);
 
     /**
      * 发送一封邮件
@@ -63,7 +62,7 @@ public class Sender extends Socket {
      * @throws MailException 邮件异常
      */
     public boolean sendMail() throws MailException {
-        LOGGER.info("发送邮件:" + bean.getSubject());
+        log.info("发送邮件:" + bean.getSubject());
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
              DataOutputStream os = new DataOutputStream(getOutputStream())) {
@@ -106,7 +105,7 @@ public class Sender extends Socket {
                 throw new MailException("認証不成功" + result, 354);
 
             String data = data();
-            LOGGER.info(data);
+            log.info(data);
 
             result = sendCommand(data);
             if (!isOkCode(result, OK_250_CODE))
@@ -118,17 +117,17 @@ public class Sender extends Socket {
 
         } catch (UnknownHostException e) {
             System.err.println("初始化 失败！建立连接失败！");
-            LOGGER.warning(e);
+            log.warn("Error:", e);
             return false;
         } catch (IOException e) {
             System.err.println("初始化 失败！读取流失败！");
-            LOGGER.warning(e);
+            log.warn("Error:", e);
             return false;
         } finally {
             try {
                 close();
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("Error:", e);
             }
         }
 
@@ -142,7 +141,6 @@ public class Sender extends Socket {
      */
     private String data() {
         String boundary = "------=_NextPart_" + System.currentTimeMillis();
-
         Map<String, byte[]> attachment = bean.getAttachment();
 
         StringBuilder sb = new StringBuilder();
@@ -214,7 +212,7 @@ public class Sender extends Socket {
 
             return in.readLine(); // 读取服务器端响应信息
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("Error:", e);
             return null;
         }
     }
@@ -252,7 +250,7 @@ public class Sender extends Socket {
         try (Sender sender = new Sender(mail)) {
             return sender.sendMail();
         } catch (IOException | MailException e) {
-            LOGGER.warning(e);
+            log.warn("Error:", e);
             return false;
         }
     }

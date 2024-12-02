@@ -5,7 +5,6 @@ import com.ajaxjs.base.model.DataSourceInfo;
 import com.ajaxjs.base.service.DataServiceUtils;
 import com.ajaxjs.data.PageResult;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
-import com.ajaxjs.framework.CRUD;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

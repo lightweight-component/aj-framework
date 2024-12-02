@@ -1,6 +1,6 @@
 package com.ajaxjs.base.service.datasource;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,9 +16,8 @@ import java.util.function.Function;
 /**
  * 抽象基类，用于数据库元数据查询
  */
+@Slf4j
 public abstract class BaseMetaQuery {
-    private static final LogHelper LOGGER = LogHelper.getLog(BaseMetaQuery.class);
-
     Connection conn;
 
     public BaseMetaQuery(Connection conn) {
@@ -43,7 +42,7 @@ public abstract class BaseMetaQuery {
                 list.add(v);
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("SQLException", e);
         }
 
         return list;
@@ -69,7 +68,7 @@ public abstract class BaseMetaQuery {
             } else
                 cb.accept(rs, map);
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("SQLException", e);
         }
 
         return map;

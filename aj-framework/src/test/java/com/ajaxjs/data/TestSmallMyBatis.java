@@ -59,7 +59,7 @@ public class TestSmallMyBatis {
     }
     @Test
     public void test(){
-        Map<String, Object> params = Map.ofO("a", "z1");
+        Map<String, Object> params = Map.of("a", "z1");
         boolean b = evaluateBoolean("a != null and a != 'z1'", params);
         System.out.println(b);
     }

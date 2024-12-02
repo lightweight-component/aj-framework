@@ -1,16 +1,14 @@
 package com.ajaxjs.base;
 
-import com.ajaxjs.embeded_tomcat.EmbeddedTomcatStarter;
-import com.ajaxjs.framework.BaseWebMvcConfigure;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.redisson.spring.starter.RedissonAutoConfiguration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@Configuration
-@EnableWebMvc
-@ComponentScan({"com.ajaxjs.base"})
-public class BaseApplication extends BaseWebMvcConfigure {
+@SpringBootApplication(exclude = {RedissonAutoConfiguration.class})
+@EnableDubbo
+public class BaseApplication {
     public static void main(String[] args) {
-        EmbeddedTomcatStarter.start(BaseApplication.class);
+        SpringApplication.run(BaseApplication.class, args);
     }
 }

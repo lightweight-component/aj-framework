@@ -2,8 +2,8 @@ package com.ajaxjs.base.service.export_office;
 
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,9 +26,8 @@ import java.util.zip.ZipOutputStream;
  * Office 导出
  */
 @Data
+@Slf4j
 public class Export {
-    private static final LogHelper LOGGER = LogHelper.getLog(Export.class);
-
     /**
      * 模板 XML 文件
      */
@@ -122,7 +121,7 @@ public class Export {
             zip(stream);
             officeZipRes.delete();
         } catch (IOException | ServletException e) {
-            LOGGER.warning(e);
+            log.warn("Exception", e);
         }
     }
 
@@ -174,7 +173,7 @@ public class Export {
                 }
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("Exception", e);
         }
     }
 
@@ -196,7 +195,7 @@ public class Export {
 
             return outputFile;
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("Exception", e);
         }
 
         return null;

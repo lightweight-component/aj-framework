@@ -1,6 +1,6 @@
 package com.ajaxjs.base.service.datasource;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
@@ -17,8 +17,8 @@ import java.util.Map;
  *
  * @author frank
  */
+@Slf4j
 public class TableQuery extends BaseMetaQuery {
-    private static final LogHelper LOGGER = LogHelper.getLog(TableQuery.class);
 
     public TableQuery(Connection conn) {
         super(conn);
@@ -100,7 +100,7 @@ public class TableQuery extends BaseMetaQuery {
                         if (rs.next())
                             createDDL = rs.getString(2);
                     } catch (SQLException e) {
-                        LOGGER.warning(e);
+                        log.warn("SQLException", e);
                     }
 
                     String comment = TableQuery.parse(createDDL);
@@ -108,7 +108,7 @@ public class TableQuery extends BaseMetaQuery {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("SQLException", e);
         }
 
         return map;

@@ -1,6 +1,6 @@
 package com.ajaxjs.base.service.datasource;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
@@ -17,8 +17,8 @@ import java.util.regex.Pattern;
 /**
  * 列信息查询
  */
+@Slf4j
 public class ColumnQuery extends BaseMetaQuery {
-    private static final LogHelper LOGGER = LogHelper.getLog(ColumnQuery.class);
 
     public ColumnQuery(Connection conn) {
         super(conn);
@@ -94,7 +94,7 @@ public class ColumnQuery extends BaseMetaQuery {
                 list.add(col);
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("SQLException", e);
         }
     }
 }

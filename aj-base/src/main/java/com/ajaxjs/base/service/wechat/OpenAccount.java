@@ -13,8 +13,8 @@ package com.ajaxjs.base.service.wechat;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +30,7 @@ import java.util.Set;
  * 微信公众号
  */
 @Data
+@Slf4j
 public class OpenAccount {
     /**
      * AppId
@@ -41,12 +42,11 @@ public class OpenAccount {
      */
     private String accessSecret;
 
-    private static final LogHelper LOGGER = LogHelper.getLog(OpenAccount.class);
 
     private final static String ACCESS_TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
     public void getClientAccessToken() {
-        LOGGER.info("获取 ClientApp AT");
+        log.info("获取 ClientApp AT");
         Get.api(String.format(ACCESS_TOKEN_API, getAccessKeyId(), getAccessSecret()));
     }
 
@@ -118,8 +118,6 @@ public class OpenAccount {
     public static void main(String[] args) {
         // 获取当前时间的秒数
         long epochSecond = 1709296663;
-
-
 
         // 将时间戳转换为 LocalDateTime
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneId.systemDefault());
