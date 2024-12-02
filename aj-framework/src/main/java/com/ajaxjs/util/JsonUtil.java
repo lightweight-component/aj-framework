@@ -2,6 +2,7 @@ package com.ajaxjs.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -154,6 +155,14 @@ public class JsonUtil {
         JavaType type = objectMapper.getTypeFactory().constructParametricType(List.class, clazz);
 
         return fromJson(jsonArrayStr, type);
+    }
+
+    public static List<Map<String, Object>> json2mapList(String jsonArrayStr) {
+        try {
+            return objectMapper.readValue(jsonArrayStr, new TypeReference<List<Map<String, Object>>>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

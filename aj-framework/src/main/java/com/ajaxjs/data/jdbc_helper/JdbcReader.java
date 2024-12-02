@@ -4,7 +4,6 @@ import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.data.util.ConvertBasicValue;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.reflect.Types;
@@ -86,7 +85,7 @@ public class JdbcReader extends JdbcConn {
                     value = null;
                 else {
                     String jsonStr = value.toString();
-                    value = jsonStr.startsWith("[") ? EntityConvert.json2MapList(jsonStr) : JsonUtil.json2map(jsonStr);
+                    value = jsonStr.startsWith("[") ? JsonUtil.json2mapList(jsonStr) : JsonUtil.json2map(jsonStr);
                 }
             }
 
@@ -263,11 +262,11 @@ public class JdbcReader extends JdbcConn {
                             if (jsonStr.startsWith("{"))
 //                        value = ConvertComplexValue.getConvertValue().convert(jsonStr, propertyType);
 
-                                value = JsonUtil.json2bean(jsonStr, propertyType);
+                                value = JsonUtil.fromJson(jsonStr, propertyType);
                             else if (jsonStr.startsWith("[")) {
 //                            Class<?> listType =  propertyType; // it might be a List
                                 Class<?> _beanClz = Types.getGenericFirstReturnType(property.getReadMethod());
-                                value = EntityConvert.json2BeanList(jsonStr, _beanClz);
+                                value = JsonUtil.json2list(jsonStr, _beanClz);
                             } else {
                                 value = null;
                                 log.warn("非法 JSON 字符串： {}", jsonStr);
