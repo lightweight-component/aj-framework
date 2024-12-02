@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+spring:
+  #  main:
+  #    lazy-initialization: true
+  #  autoconfigure:
+  #    exclude:
+  #      - org.redisson.spring.starter.RedissonAutoConfigurationV2 # 禁用 Redis
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  redis:
+    host: xxxx
+    port: 123
+    password: xxxxxxxxxxx
+    ssl: true
+
+dubbo:
+  application:
+    logger: slf4j
+    name: DemoApplication
+  protocol:
+    name: tri
+    port: 50051
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+#        host: smtp.163.com
+#        protocol: smtp
+#        username: antsitya@163.com
+#        password: ant163authcode
