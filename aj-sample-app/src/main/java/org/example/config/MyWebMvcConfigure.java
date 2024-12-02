@@ -2,10 +2,7 @@ package org.example.config;
 
 import com.ajaxjs.api.security.referer.HttpReferer;
 import com.ajaxjs.api.time_signature.TimeSignature;
-import com.ajaxjs.api.time_signature.TimeSignatureVerify;
 import com.ajaxjs.springboot.BaseWebMvcConfigure;
-import com.ajaxjs.springboot.DiContextUtil;
-import com.ajaxjs.springboot.GlobalControllerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -13,7 +10,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 @Configuration
 public class MyWebMvcConfigure extends BaseWebMvcConfigure {

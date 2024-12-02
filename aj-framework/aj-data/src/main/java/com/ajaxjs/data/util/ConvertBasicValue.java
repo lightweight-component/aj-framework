@@ -113,7 +113,8 @@ public class ConvertBasicValue {
         } else if (clz == int[].class /*|| clz == Integer[].class*/) {
             // 复数
             if (value instanceof String)
-                return ListUtils.stringArr2intArr((String) value);
+                return ListUtils.
+        ((String) value);
             else if (value instanceof List)
                 return ListUtils.intList2Arr((List<Integer>) value);
             else
