@@ -159,7 +159,7 @@ public class JsonUtil {
 
     public static List<Map<String, Object>> json2mapList(String jsonArrayStr) {
         try {
-            return objectMapper.readValue(jsonArrayStr, new TypeReference<List<Map<String, Object>>>() {});
+            return objectMapper.readValue(jsonArrayStr, new TypeReference<>() {});
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

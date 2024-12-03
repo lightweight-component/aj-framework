@@ -71,8 +71,7 @@ public class AliyunSMS {
      */
     private static String sort(Map<String, String> paras) {
         // 4. 参数 KEY 排序
-        TreeMap<String, String> sortParas = new TreeMap<>();
-        sortParas.putAll(paras);
+        TreeMap<String, String> sortParas = new TreeMap<>(paras);
 
         // 5. 构造待签名的字符串
         Iterator<String> it = sortParas.keySet().iterator();

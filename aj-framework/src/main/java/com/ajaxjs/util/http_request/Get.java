@@ -43,7 +43,6 @@ public class Get {
     }
 
 
-
     public static void main(String[] args) {
         String s = serializeToJson();
         System.out.println(s);

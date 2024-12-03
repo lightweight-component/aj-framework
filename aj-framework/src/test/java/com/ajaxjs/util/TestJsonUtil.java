@@ -1,6 +1,7 @@
 package com.ajaxjs.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockedStatic;
@@ -11,6 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestJsonUtil {
+    @Data
     public static class Person {
         private String name;
         private int age;
@@ -20,22 +22,6 @@ public class TestJsonUtil {
 
         public Person(String name, int age) {
             this.name = name;
-            this.age = age;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
             this.age = age;
         }
     }
@@ -133,9 +119,18 @@ public class TestJsonUtil {
     }
 
     @Test
+    public void testJson2list() {
+        String jsonList = "[{\"name\":\"John\", \"age\":30}, {\"name\":\"Anna\", \"age\":22}]";
+
+        List<Map<String, Object>> persons = JsonUtil.json2mapList(jsonList);
+        assertNotNull(persons);
+        assertEquals(2, persons.size());
+        System.out.println(persons.get(0));
+    }
+
+    @Test
     public void testConvertValue_ValidObject_ShouldReturnConvertedObject() {
         Person person = new Person("John", 30);
-
         Map<String, Object> map = JsonUtil.convertValue(person, Map.class);
 
         assertNotNull(map);

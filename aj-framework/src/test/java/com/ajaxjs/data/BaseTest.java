@@ -1,9 +1,9 @@
 package com.ajaxjs.data;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+//import org.junit.After;
+//import org.junit.Before;
+//import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -11,17 +11,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.io.File;
 
 @ContextConfiguration(classes = TestConfig.class)
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public abstract class BaseTest {
-    @Before
+//    @Before
     public void initDb() {
         System.out.println("initDb");
 //        DataBaseConnection.initDb();
 
     }
 
-    @After
+//    @After
     public void closeDb() {
         JdbcConn.closeDb();
 

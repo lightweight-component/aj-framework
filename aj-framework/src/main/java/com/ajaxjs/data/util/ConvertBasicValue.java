@@ -117,7 +117,7 @@ public class ConvertBasicValue {
             else if (value instanceof List)
                 return ListUtils.intList2Arr((List<Integer>) value);
             else
-                log.warn("value: [{}] type:[{}] can not be converted to {}", value, value.getClass().getName(), clz);
+                log.warn("value: [{}] type:[{}] can‘t be converted to {}", value, value.getClass().getName(), clz);
         }
 
         log.info("More array type is on the way.");

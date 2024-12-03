@@ -58,7 +58,7 @@ public class JdbcConn {
             else
                 conn = DriverManager.getConnection(jdbcUrl);
 
-            log.info("数据库连接成功： " + conn.getMetaData().getURL());
+            log.info("数据库简单连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             log.warn("数据库连接失败！", e);
         }
@@ -103,8 +103,10 @@ public class JdbcConn {
     public Connection getConnection(DataSource source) {
         try {
             conn = source.getConnection();
-            if (conn == null) log.warn("DataSource 不能建立数据库连接");
-            if (Version.isDebug) log.info("数据库连接成功： " + conn.getMetaData().getURL());
+            if (conn == null)
+                log.warn("DataSource 不能建立数据库连接");
+            if (Version.isDebug)
+                log.info("数据库连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             log.warn("通过数据源对象获得数据库连接对象失败！", e);
         }
