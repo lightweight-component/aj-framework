@@ -1,4 +1,4 @@
-package org.example.config;
+package com.ajaxjs.framework;
 
 import com.ajaxjs.springboot.BaseWebMvcConfigure;
 import lombok.extern.slf4j.Slf4j;

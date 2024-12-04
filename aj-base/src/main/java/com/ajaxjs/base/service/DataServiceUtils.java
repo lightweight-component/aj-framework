@@ -3,10 +3,8 @@ package com.ajaxjs.base.service;
 
 import com.ajaxjs.base.model.DataServiceConstant;
 import com.ajaxjs.base.model.DataSourceInfo;
-import com.ajaxjs.framework.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
-import com.ajaxjs.data.jdbc_helper.JdbcReader;
-import com.ajaxjs.framework.DiContextUtil;
+import com.ajaxjs.springboot.DiContextUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;

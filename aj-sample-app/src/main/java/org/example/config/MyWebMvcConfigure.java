@@ -13,7 +13,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class MyWebMvcConfigure extends BaseWebMvcConfigure {
-
     /**
      * 配置 RedisTemplate
      *

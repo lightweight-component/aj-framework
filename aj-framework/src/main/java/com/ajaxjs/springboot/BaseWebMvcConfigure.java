@@ -17,23 +17,4 @@ public class BaseWebMvcConfigure implements WebMvcConfigurer {
         registry.addInterceptor(new GlobalControllerInterceptor());
     }
 
-    /**
-     * 全局异常拦截器
-     *
-     * @return 全局异常拦截器
-     */
-    @Bean
-    public GlobalExceptionHandler GlobalExceptionHandler() {
-        return new GlobalExceptionHandler();
-    }
-
-    /**
-     * Spring IoC 工具
-     *
-     * @return IoC 工具
-     */
-    @Bean
-    public DiContextUtil DiContextUtil() {
-        return new DiContextUtil();
-    }
 }
