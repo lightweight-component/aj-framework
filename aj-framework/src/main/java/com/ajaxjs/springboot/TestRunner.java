@@ -1,6 +1,5 @@
-package com.ajaxjs.framework;
+package com.ajaxjs.springboot;
 
-import com.ajaxjs.springboot.BaseWebMvcConfigure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
