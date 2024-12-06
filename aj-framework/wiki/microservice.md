@@ -3,6 +3,9 @@ https://dubbo.apache.org/en/overview/mannual/java-sdk/tasks/framework/lightweigh
 https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/tasks/develop/api/
 https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/reference-manual/protocol/tripe-rest-manual/
 
+https://blog.csdn.net/FireFox1997/article/details/140661372
+https://dubbo.apache.org/zh-cn/docs/advanced/token-authorization/
+
 # 服务发现
 
 https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/reference-manual/registry/others/redis/

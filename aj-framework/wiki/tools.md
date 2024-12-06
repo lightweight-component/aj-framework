@@ -26,3 +26,56 @@ FROM
 ORDER BY
   table_name
 ```
+
+# 各种Java JDK的镜像分发
+https://www.injdk.cn/
+
+# 免费 Javadoc 寄存
+https://www.javadoc.io/
+
+# Clean Maven
+
+clean-maven.bat
+```shell
+rem 这里填你的本地仓库路径如(F:\maven\repository)
+set REPOSITORY_PATH=C:\sp42\profile\dev\maven\resp
+rem Searching now...
+for /f "delims=" %%i in ('dir /b /s "%REPOSITORY_PATH%\*lastUpdated*"') do (
+    del /s /q %%i
+)
+for /f "delims=" %%i in ('dir /b /s "%REPOSITORY_PATH%\*unknown*"') do (
+    rmdir /s /q %%i
+)
+rem Clean success
+pause
+```
+find-small.bat
+```shell
+@echo off
+setlocal enabledelayedexpansion
+
+REM 设置要搜索的目录
+set "searchDir=C:\sp42\profile\dev\maven\resp"
+
+REM 遍历指定目录及其子目录中的所有 .jar 文件
+for /r "%searchDir%" %%f in (*.jar) do (
+    REM 获取文件大小（以字节为单位）
+    for %%s in (%%~zf) do set "fileSize=%%s"
+    
+    REM 将文件大小从字节转换为 KB
+    set /a fileSizeKB=fileSize/1024
+    
+    REM 检查文件大小是否小于 3KB
+    if !fileSizeKB! lss 4 (
+        REM 获取文件所在目录
+        set "dirPath=%%~dpf"
+        
+        REM 删除目录及其内容
+        echo Deleting directory: !dirPath!
+        rmdir /s /q "!dirPath!"
+    )
+)
+
+endlocal
+pause
+```
