@@ -10,7 +10,7 @@
  */
 package com.ajaxjs.base.service.message.ali_sms;
 
-import com.ajaxjs.net.http.Get;
+//import com.ajaxjs.net.http.Get;
 import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
 import org.springframework.util.AlternativeJdkIdGenerator;
@@ -49,11 +49,11 @@ public class AliyunSMS {
 
         String sortQueryStringTmp = sort(paras);
         String signature = makeSignature(sortQueryStringTmp, entity.getAccessSecret());
-
+return "";
         // 最终打印出合法 GET 请求的 URL
-        Map<String, Object> map = Get.api(SMS_API + signature + sortQueryStringTmp);
-
-        return "OK".equals(map.get("Code")) ? "OK" : map.get("Message").toString();
+//        Map<String, Object> map = Get.api(SMS_API + signature + sortQueryStringTmp);
+//
+//        return "OK".equals(map.get("Code")) ? "OK" : map.get("Message").toString();
     }
 
     /**

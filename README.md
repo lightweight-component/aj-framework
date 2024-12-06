@@ -1,21 +1,14 @@
-# Spring Enhancement Framework
-For fast using Spring Boot, some common components should be adding first.
+# AJ-Framework
 
-By using `spring-boot-starter-web`, here are the components by default:
+A Web Framework for Spring Boot has these features:
 
-- Spring Boot
-- Logback and Slf4j
-- Jackson JSON parser
-- StringUtils/MD5 from Spring
-- HTTP Request by JDK 11, simply encapsulated
+- Designed for distributed use, suitable for high-concurrency scenarios
+- Lightweight, minimize dependencies, less code, more functionality
+- Full-stack, support both front-end and back-end, Java and TypeScript
+- Modularity and low coupling
+- Clear code, fully documented and tested, easy to understand and maintain
 
-We add some components:
 
-- Obtain Controller Method Name, Request Parameters, and Annotation Information, for debugging more easily
-- Global Response Object
-- Global Exception Handler
-- Spring IoC Tools: DiContextUtil
-- Server-side form validation
 
 
 
