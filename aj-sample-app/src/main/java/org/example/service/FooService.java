@@ -38,29 +38,5 @@ public class FooService implements FooController {
         return foo;
     }
 
-    public static void main(String[] args) {
-        ReferenceBuilder<Object> referenceBuilder = ReferenceBuilder.newBuilder();
-        IIdCard demoService = (IIdCard) referenceBuilder.interfaceClass(IIdCard.class)
-                .url("tri://localhost:50051")
-                .build()
-                .get();
 
-        ISendEmail mailService = (ISendEmail) referenceBuilder.interfaceClass(ISendEmail.class)
-                .url("tri://localhost:50051")
-                .build()
-                .get();
-
-        boolean message = demoService.checkIdCard("440105198309060315");
-        MailVo mail = new MailVo();
-        mail.setTo("sp42@qq.com");
-        mail.setSubject("hi");
-        mail.setContent("test");
-        mail.setFrom("frank@ajaxjs.com");
-
-        boolean message2 = mailService.sendEmail(mail);
-
-
-        System.out.println(message);
-        System.out.println(message2);
-    }
 }

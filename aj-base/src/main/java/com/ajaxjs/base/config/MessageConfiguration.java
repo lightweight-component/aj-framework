@@ -2,6 +2,7 @@ package com.ajaxjs.base.config;
 
 import com.ajaxjs.base.service.message.email.Mail;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -36,20 +37,21 @@ public class MessageConfiguration {
     }
 */
 
-    @Value("${Message.email.smtpServer}")
+    @Value("${Message.email.smtpServer:aa}")
     private String smtpServer;
 
-    @Value("${Message.email.port}")
+    @Value("${Message.email.port:25}")
     private int port;
 
-    @Value("${Message.email.account}")
+    @Value("${Message.email.account:a}")
     private String account;
 
-    @Value("${Message.email.password}")
+    @Value("${Message.email.password:''}")
     private String password;
 
     @Bean
     @Scope("prototype")
+    @ConditionalOnProperty(name = "Message.email", havingValue = "true")
     Mail getMailConfig() {
         Mail mailCfg = new Mail();
         mailCfg.setMailServer(smtpServer);

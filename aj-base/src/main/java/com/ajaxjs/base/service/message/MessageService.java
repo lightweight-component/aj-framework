@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @DubboService
 public class MessageService implements ISendEmail, ISendSms {
-    @Autowired
+    @Autowired(required = false)
     Mail mailCfg;
 
     @Override

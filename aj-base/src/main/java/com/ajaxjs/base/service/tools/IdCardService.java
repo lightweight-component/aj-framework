@@ -4,6 +4,8 @@ import com.ajaxjs.service.tools.IIdCard;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.dubbo.remoting.http12.HttpMethods;
+import org.apache.dubbo.remoting.http12.rest.Mapping;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
@@ -117,6 +119,7 @@ public class IdCardService implements IIdCard {
     }
 
     @Override
+    @Mapping(path = "/hi", method = HttpMethods.GET)
     public boolean checkIdCard(String idNo) {
         return check(idNo);
     }

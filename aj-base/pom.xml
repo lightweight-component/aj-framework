@@ -76,6 +76,11 @@
             <artifactId>aj-iam-client</artifactId>
             <version>1.1</version>
         </dependency>-->
+      <!--  <dependency>
+        <groupId>org.apache.dubbo.extensions</groupId>
+        <artifactId>dubbo-rpc-rest</artifactId>
+        <version>3.3.0</version>
+    </dependency>-->
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-framework-common</artifactId>

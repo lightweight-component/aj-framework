@@ -1,6 +1,7 @@
 # Dubbo
 https://dubbo.apache.org/en/overview/mannual/java-sdk/tasks/framework/lightweight-rpc/
 https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/tasks/develop/api/
+https://dubbo.apache.org/zh-cn/overview/mannual/java-sdk/reference-manual/protocol/tripe-rest-manual/
 
 # 服务发现
 

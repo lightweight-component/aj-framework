@@ -16,7 +16,27 @@
         <maven.javadoc.skip>true</maven.javadoc.skip><!-- 非类库(业务工程)不要 JavaDoc -->
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.9.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg><!-- IDEA 设置 Javac 编译参数对于 Maven 无效 -->
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.3.0</version>
+        </dependency>
         <!-- LOMBOK 注解 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
