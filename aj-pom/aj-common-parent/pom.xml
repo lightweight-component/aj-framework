@@ -132,17 +132,6 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <!-- 模拟对象 -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-        </dependency>
-
         <!-- Spring 测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -165,6 +154,12 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-codec</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Dubbo -->

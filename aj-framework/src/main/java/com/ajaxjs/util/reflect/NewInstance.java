@@ -30,8 +30,8 @@ public class NewInstance {
 
         if (ObjectUtils.isEmpty(args)) {
             try {
-                return clz.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
+                return newInstance(clz.getDeclaredConstructor());
+            } catch (NoSuchMethodException e) {
                 log.warn("ERROR>>", e);
             }
         }
@@ -113,7 +113,7 @@ public class NewInstance {
      *
      * @param clz    类对象
      * @param argClz 指定构造函数的参数类型，这里传入我们想调用的构造函数所需的参数类型
-     * @param <T>     类引用
+     * @param <T>    类引用
      * @return 类的构造器
      */
     public static <T> Constructor<T> getConstructor(Class<T> clz, Class<?>... argClz) {

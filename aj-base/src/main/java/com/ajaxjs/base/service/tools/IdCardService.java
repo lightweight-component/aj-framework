@@ -1,6 +1,9 @@
-package com.ajaxjs.base.service.id_card;
+package com.ajaxjs.base.service.tools;
 
+import com.ajaxjs.service.tools.IIdCard;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
@@ -11,7 +14,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 @Data
-public class IdCardService {
+@DubboService
+@NoArgsConstructor
+public class IdCardService implements IIdCard {
     /**
      * 身份证第18位校检码
      */
@@ -29,7 +34,7 @@ public class IdCardService {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    private static final Map<String, String> PROVINCE_CODE_MAP = new HashMap<String, String>() {
+    private static final Map<String, String> PROVINCE_CODE_MAP = new HashMap<>() {
         private static final long serialVersionUID = 4593620948714292923L;
 
         {
@@ -108,6 +113,11 @@ public class IdCardService {
      * @return true 表示为合法的身份证号码
      */
     public boolean check() {
+        return check(idNo);
+    }
+
+    @Override
+    public boolean checkIdCard(String idNo) {
         return check(idNo);
     }
 

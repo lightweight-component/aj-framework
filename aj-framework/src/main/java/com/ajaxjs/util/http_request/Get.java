@@ -41,19 +41,4 @@ public class Get {
     public static String serializeToJson() {
         return Stream.of("name=zx", "age=19").collect(Collectors.joining(",", "{", "}"));
     }
-
-
-    public static void main(String[] args) {
-        String s = serializeToJson();
-        System.out.println(s);
-//        String result = get("https://beta.bingolink.biz/iamapi/user/af38ddf7-dd53-4bad-bee9-0d81abefb817?access_token=bG9jYWw6RUxFQ2Y2aEZnY206R2VESE1SQmZtVQ", req -> {
-//            req.timeout(Duration.ofMillis(9000))// 设置读取数据超时 read timeout
-//                    .header("key1", "v1")
-//                    .header("key2", "v2");
-//        });
-//        System.out.println(result);
-//
-//        result = postForm("https://qq.com", "phone=13113777337&pwd=1234567890");
-//        System.out.println(result);
-    }
 }

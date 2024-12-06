@@ -1,8 +1,6 @@
 package com.ajaxjs.util.reflect;
 
 
-
-
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -100,5 +98,13 @@ public class TestClazz {
 
         // Then
         // Assertions
+    }
+
+    private String foo = "hi";
+
+    @Test
+    public void testGetPrivateField() {
+        String foo1 = Clazz.getPrivateField(TestClazz.class, "foo", String.class);
+        System.out.println(foo1);
     }
 }

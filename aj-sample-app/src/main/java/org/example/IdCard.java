@@ -8,7 +8,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 @Slf4j
 public class IdCard implements IIdCard {
     @Override
-    public boolean check(String idCardNo) {
+    public boolean checkIdCard(String idCardNo) {
         log.info("check222");
         return false;
     }

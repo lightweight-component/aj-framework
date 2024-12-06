@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 /**
  * 流操作助手类
+ * 如不满足 可参考 Spring StreamUtils/ResourceUtils/FileCopyUtils/FileSystemUtils
  */
 public class StreamHelper {
     /**
@@ -30,8 +31,8 @@ public class StreamHelper {
      * @param in 输入流，无须手动关闭
      * @return 字符串
      */
-    public static String byteStream2string(InputStream in) {
-        return byteStream2string_Charset(in, StandardCharsets.UTF_8);
+    public static String copyToString(InputStream in) {
+        return copyToString(in, StandardCharsets.UTF_8);
     }
 
     /**
@@ -41,10 +42,10 @@ public class StreamHelper {
      * @param encode 字符编码
      * @return 字符串
      */
-    public static String byteStream2string_Charset(InputStream in, Charset encode) {
-        StringBuilder result = new StringBuilder();
+    public static String copyToString(InputStream in, Charset encode) {// 等价 Spring copyToString.copy(in, charset)
+        StringBuffer result = new StringBuffer();
 
-        read(new InputStreamReader(in, encode), line -> {
+        read(in, encode, line -> {
             result.append(line);
             result.append('\n');
         });
@@ -53,27 +54,19 @@ public class StreamHelper {
     }
 
     /**
-     * 从输入流中读取数据，并对每行数据应用提供的消费函数。
+     * 从输入流中读取数据，并对每行数据应用提供的消费函数
      *
-     * @param in 输入流，从中读取数据。
-     * @param fn 消费函数，用于处理读取到的每行数据。
+     * @param in     输入流读取器，用于读取数据
+     * @param encode 字符编码
+     * @param fn     消费函数，接收一行数据作为参数，对每行数据进行处理
      */
-    public static void read(InputStream in, Consumer<String> fn) {
-        read(new InputStreamReader(in, StandardCharsets.UTF_8), fn);
-    }
-
-    /**
-     * 从 InputStreamReader 中读取数据，并逐行消费。
-     *
-     * @param inReader 输入流读取器，用于读取数据。
-     * @param fn       消费函数，接收一行数据作为参数，对每行数据进行处理。
-     */
-    public static void read(InputStreamReader inReader, Consumer<String> fn) {
+    public static void read(InputStream in, Charset encode, Consumer<String> fn) {
         /*
          * 装饰器模式，又称为包装器，可以在不修改被包装类的情况下动态添加功能（例如缓冲区功能）
          * 这里使用 BufferedReader 为输入流添加缓冲功能
          */
-        try (BufferedReader reader = new BufferedReader(inReader)) {
+        try (InputStreamReader inReader = new InputStreamReader(in, encode);
+             BufferedReader reader = new BufferedReader(inReader)) {
             String line;
 
             while ((line = reader.readLine()) != null) // 一次读入一行，直到读入 null 表示文件结束
@@ -85,50 +78,31 @@ public class StreamHelper {
     }
 
     /**
-     * 两端速度不匹配，需要协调 理想环境下，速度一样快，那就没必要搞流，直接一坨给弄过去就可以了 流的意思很形象，就是一点一滴的，不是一坨坨大批量的
-     * 带缓冲的一入一出 出是字节流，所以要缓冲（字符流自带缓冲，所以不需要额外缓冲） 请注意，改方法不会关闭流 close，你需要手动关闭
+     * 输入流复制到输出流
      *
-     * @param in       输入流，无须手动关闭
-     * @param out      输出流
-     * @param isBuffer 是否加入缓冲功能
-     * @deprecated
+     * @param in  输入流
+     * @param out 输出流
+     * @return 复制了多少字节
      */
-    public static void write(InputStream in, OutputStream out, boolean isBuffer) {
-        int readSize; // 读取到的数据长度
-        byte[] buffer = new byte[1024]; // 通过 byte 作为数据中转，用于存放循环读取的临时数据
-
+    public static long write(InputStream in, OutputStream out) {
         try {
-            if (isBuffer) {
-                try (OutputStream _out = new BufferedOutputStream(out)) {// 加入缓冲功能
-                    while ((readSize = in.read(buffer)) != -1)
-                        _out.write(buffer, 0, readSize);
-                }
-            } else {
-                // 每次读 1KB 数据，将输入流数据写入到输出流中
-                // readSize = in.read(buffer, 0, bufferSize);
-                while ((readSize = in.read(buffer, 0, 1024)) != -1) {
-                    out.write(buffer, 0, readSize);
-                    // readSize = in.read(buffer, 0, bufferSize);
-                }
-
-                out.flush();
-            }
+            return in.transferTo(out); // 等价 Spring StreamUtils.copy(in, out)
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new RuntimeException("复制流的时候失败", e);
         }
     }
 
     /**
-     * 使用内存操作流，读取二进制，也就是将流转换为内存的数据。 InputStream 转换到 byte[]. 从输入流中获取数据， 转换到 byte[]
+     * 使用内存操作流，读取二进制，也就是将流转换为内存的数据。
+     * InputStream 转换到 byte[]. 从输入流中获取数据， 转换到 byte[]
      * 也就是 in 转到内存。虽然大家可能都在内存里面了但还不能直接使用，要转换
      *
      * @param in 输入流
-     * @return 返回本实例供链式调用
+     * @return 内存的数据
      */
-    public static byte[] inputStream2Byte(InputStream in) {
+    public static byte[] inputStream2Byte(InputStream in) { // 等价于 Spring StreamUtils.copyToByteArray(InputStream in)：将输入流的内容复制到字节数组
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//            write(in, out, true);
-            in.transferTo(out);
+            write(in, out);
 
             return out.toByteArray();
         } catch (IOException e) {
@@ -169,7 +143,7 @@ public class StreamHelper {
 
             out.flush();
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new UncheckedIOException("byte[] 转换为输出流时候错误", e);
         }
     }
 }

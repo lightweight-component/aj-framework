@@ -76,19 +76,24 @@
             <artifactId>aj-iam-client</artifactId>
             <version>1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-framework-common</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <dependency>
-            <groupId>org.wltea</groupId>  <!--自定义-->
-            <artifactId>IKAnalyzer2012</artifactId>    <!--自定义-->
-            <version>1.0</version> <!--自定义-->
+            <groupId>org.wltea</groupId>  
+            <artifactId>IKAnalyzer2012</artifactId>    
+            <version>1.0</version> 
             <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
             <systemPath>${basedir}/jar/IKAnalyzer2012.jar</systemPath> <!--项目根目录下的lib文件夹下，也可以是本机其它目录的绝对路径-->
         </dependency>
 
         <dependency>
-            <groupId>org.wltea</groupId>  <!--自定义-->
-            <artifactId>lucene</artifactId>    <!--自定义-->
-            <version>1.0</version> <!--自定义-->
+            <groupId>org.wltea</groupId>  
+            <artifactId>lucene</artifactId>    
+            <version>1.0</version> 
             <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
             <systemPath>${basedir}/jar/lucene-core-3.6.0.jar</systemPath> <!--项目根目录下的lib文件夹下，也可以是本机其它目录的绝对路径-->
         </dependency>

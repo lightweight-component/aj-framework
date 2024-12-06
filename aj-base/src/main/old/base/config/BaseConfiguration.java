@@ -111,21 +111,7 @@ public class BaseConfiguration implements WebMvcConfigurer {
 //        return v;
 //    }
 
-//    /**
-//     * 跨域
-//     *
-//     * @param registry 注册跨域
-//     */
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedOriginPatterns("*")
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                .allowedHeaders("*")
-//                .exposedHeaders("Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With")
-//                .allowCredentials(true)
-//                .maxAge(1728000);
-//    }
+
     @Bean
     @Qualifier("DS_beforeCreate")
     public Consumer<Map<String, Object>> beforeCreate() {

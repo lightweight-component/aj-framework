@@ -1,6 +1,5 @@
 package com.ajaxjs.base.config;
 
-import com.ajaxjs.base.service.message.ali_sms.AliyunSmsEntity;
 import com.ajaxjs.base.service.message.email.Mail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +11,7 @@ import org.springframework.context.annotation.Scope;
  */
 @Configuration
 public class MessageConfiguration {
+/*
     @Value("${sms.accessKeyId}")
     private String accessKeyId;
 
@@ -34,6 +34,7 @@ public class MessageConfiguration {
 
         return sms;
     }
+*/
 
     @Value("${Message.email.smtpServer}")
     private String smtpServer;

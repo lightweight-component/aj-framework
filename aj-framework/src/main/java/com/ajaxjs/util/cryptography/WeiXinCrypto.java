@@ -92,7 +92,7 @@ public class WeiXinCrypto {
 
             return encryptOAEP(message, cert);
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new UncheckedIOException("IC 错误", e);
         } catch (CertificateExpiredException e) {
             throw new RuntimeException("证书已过期", e);
         } catch (CertificateNotYetValidException e) {

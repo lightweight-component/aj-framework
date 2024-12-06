@@ -7,6 +7,8 @@ import org.springframework.util.ObjectUtils;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +20,6 @@ import java.util.function.BiConsumer;
  */
 @Slf4j
 public class Clazz {
-
     /**
      * 根据类名字符串获取类对象
      *
@@ -30,9 +31,8 @@ public class Clazz {
             return Class.forName(clzName);
         } catch (ClassNotFoundException e) {
             log.warn("找不到这个类： {}", clzName, e);
+            return null;
         }
-
-        return null;
     }
 
     /**
@@ -110,7 +110,7 @@ public class Clazz {
                 Object value = field.get(bean);
                 fn.accept(name, value);
             } catch (IllegalAccessException e) {
-                log.warn("ERROR>>", e);
+                log.warn("访问字段时候 " + field + " 失败", e);
             }
         });
     }
@@ -124,17 +124,14 @@ public class Clazz {
     public static void eachFields2(Class<?> clz, BiConsumer<String, Field> fn) {
         Field[] fields = clz.getFields();
 
-        if (ObjectUtils.isEmpty(fields)) return;
+        if (ObjectUtils.isEmpty(fields))
+            return;
 
-        try {
-            for (Field field : fields) {
-                if (Modifier.isStatic(field.getModifiers()))// 如果是静态的字段，则跳过
-                    continue;
+        for (Field field : fields) {
+            if (Modifier.isStatic(field.getModifiers()))// 如果是静态的字段，则跳过
+                continue;
 
-                fn.accept(field.getName(), field);// 对于当前字段执行给定的操作
-            }
-        } catch (IllegalArgumentException e) {
-            log.warn("ERROR>>", e);
+            fn.accept(field.getName(), field);// 对于当前字段执行给定的操作
         }
     }
 
@@ -154,7 +151,7 @@ public class Clazz {
             PropertyDescriptor[] props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
             eachField(bean, props, fn);
         } catch (IntrospectionException e) {
-            log.warn("ERROR>>", e);
+            log.warn("获取 Bean 信息时候错误", e);
         }
     }
 
@@ -185,7 +182,42 @@ public class Clazz {
                 fn.item(key, value, property);
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            log.warn("ERROR>>", e);
+            log.warn("遍历一个 Java Bean 错误", e);
+        }
+    }
+
+    /**
+     * 获取 private 字段
+     *
+     * @param clz       类
+     * @param fieldName 字段名
+     * @param fieldType 字段类型
+     * @param <T>       字段类型
+     * @return 字段的值
+     */
+    public static <T> T getPrivateField(Class<?> clz, String fieldName, Class<T> fieldType) {
+        MethodHandles.Lookup lookup;
+
+        try {
+            lookup = MethodHandles.privateLookupIn(clz, MethodHandles.lookup());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("非法访问类： " + clz, e);
+        }
+
+        MethodHandle mh;
+
+        try {
+            mh = lookup.findGetter(clz, fieldName, fieldType);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("找不到该字段 " + fieldName, e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("非法访问字段： " + fieldName, e);
+        }
+
+        try {
+            return (T) mh.invoke(NewInstance.newInstance(clz));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -258,7 +258,7 @@ public class AesCrypto {
         try {
             k = SecretKeyFactory.getInstance(KEY_PBE).generateSecret(new PBEKeySpec(key.toCharArray()));// 获取密钥，转换密钥
         } catch (InvalidKeySpecException e) {
-            throw new RuntimeException("无效的密钥格式");
+            throw new RuntimeException("无效的密钥格式", e);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("当前 Java 环境不支持 " + KEY_PBE, e);
         }

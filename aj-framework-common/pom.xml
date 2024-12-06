@@ -4,14 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.ajaxjs</groupId>
-        <artifactId>ajaxjs-parent</artifactId>
-        <version>1.21</version>
-        <relativePath/>
-    </parent>
-
+    <groupId>com.ajaxjs</groupId>
     <artifactId>aj-framework-common</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.javadoc.skip>true</maven.javadoc.skip><!-- 非类库(业务工程)不要 JavaDoc -->
+    </properties>
+
+    <dependencies>
+        <!-- LOMBOK 注解 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+        </dependency>
+    </dependencies>
 </project>

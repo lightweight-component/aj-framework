@@ -111,7 +111,7 @@ public class RsaCrypto {
             KeyFactory f = KeyFactory.getInstance(KEY_RSA);
             return isPublic ? f.generatePublic(new X509EncodedKeySpec(bytes)) : f.generatePrivate(new PKCS8EncodedKeySpec(bytes));
         } catch (InvalidKeySpecException e) {
-            throw new RuntimeException("无效的密钥格式");
+            throw new RuntimeException("无效的密钥格式", e);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("当前 Java 环境不支持 " + KEY_RSA, e);
         }

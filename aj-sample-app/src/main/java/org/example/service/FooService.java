@@ -1,5 +1,7 @@
 package org.example.service;
 
+import com.ajaxjs.model.MailVo;
+import com.ajaxjs.service.message.ISendEmail;
 import com.ajaxjs.service.tools.IIdCard;
 import com.ajaxjs.springboot.annotation.JsonMessage;
 import org.apache.dubbo.config.bootstrap.builders.ReferenceBuilder;
@@ -37,12 +39,28 @@ public class FooService implements FooController {
     }
 
     public static void main(String[] args) {
-        IIdCard demoService = (IIdCard) ReferenceBuilder.newBuilder().interfaceClass(IIdCard.class)
+        ReferenceBuilder<Object> referenceBuilder = ReferenceBuilder.newBuilder();
+        IIdCard demoService = (IIdCard) referenceBuilder.interfaceClass(IIdCard.class)
                 .url("tri://localhost:50051")
                 .build()
                 .get();
 
-        boolean message = demoService.check("dubbo");
+        ISendEmail mailService = (ISendEmail) referenceBuilder.interfaceClass(ISendEmail.class)
+                .url("tri://localhost:50051")
+                .build()
+                .get();
+
+        boolean message = demoService.checkIdCard("440105198309060315");
+        MailVo mail = new MailVo();
+        mail.setTo("sp42@qq.com");
+        mail.setSubject("hi");
+        mail.setContent("test");
+        mail.setFrom("frank@ajaxjs.com");
+
+        boolean message2 = mailService.sendEmail(mail);
+
+
         System.out.println(message);
+        System.out.println(message2);
     }
 }

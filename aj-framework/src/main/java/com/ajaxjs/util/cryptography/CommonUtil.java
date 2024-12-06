@@ -66,7 +66,7 @@ public class CommonUtil {
         } catch (InvalidKeyException e) {
             throw new IllegalArgumentException("无效的证书", e);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException("加密原串的长度不能超过214字节");
+            throw new RuntimeException("加密原串的长度不能超过214字节", e);
         } catch (InvalidAlgorithmParameterException e) {
             throw new IllegalArgumentException("无效的算法参数", e);
         }
@@ -90,7 +90,7 @@ public class CommonUtil {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new RuntimeException("当前 Java 环境不支持 " + algorithmName, e);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException("加密原串的长度不能超过214字节");
+            throw new RuntimeException("加密原串的长度不能超过214字节", e);
         } catch (InvalidKeyException e) {
             throw new IllegalArgumentException("无效的证书", e);
         } catch (InvalidAlgorithmParameterException e) {
@@ -178,7 +178,7 @@ public class CommonUtil {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("当前 Java 环境不支持 RSA", e);
         } catch (InvalidKeySpecException e) {
-            throw new RuntimeException("无效的密钥格式");
+            throw new RuntimeException("无效的密钥格式", e);
         }
     }
 

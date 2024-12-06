@@ -2,9 +2,9 @@ package com.ajaxjs.base.service.wechat.applet;
 
 
 import com.ajaxjs.base.service.wechat.applet.model.Code2SessionResult;
-import com.ajaxjs.framework.DiContextUtil;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Post;
+import com.ajaxjs.springboot.DiContextUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,12 +1,12 @@
-package com.ajaxjs.base.model;
+package com.ajaxjs.model;
 
-import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class MailVo implements IBaseModel {
+public class MailVo implements Serializable {
     /**
      * 发件人邮箱
      */

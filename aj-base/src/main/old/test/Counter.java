@@ -1,5 +1,7 @@
 package com.ajaxjs.base;
 
+import org.junit.jupiter.api.Test;
+
 public class Counter {
     private int count = 0;
 
@@ -12,7 +14,8 @@ public class Counter {
         return count;
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void test() {
         Counter counter = new Counter();
 
         // 创建多个线程共享同一个 Counter 实例

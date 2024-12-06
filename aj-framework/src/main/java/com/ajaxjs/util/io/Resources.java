@@ -112,7 +112,7 @@ public class Resources {
                 return null;
             }
 
-            return StreamHelper.byteStream2string(in);
+            return StreamHelper.copyToString(in);
         } catch (IOException e) {
             log.warn("ERROR>>", e);
             return null;

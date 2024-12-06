@@ -70,22 +70,22 @@ public class Mail {
     private Map<String, byte[]> attachment;
 
     public String getMailServer() {
-        if (mailServer == null)
-            throw new IllegalArgumentException("没有指定 MailServer！");
+//        if (mailServer == null)
+//            throw new IllegalArgumentException("没有指定 MailServer！");
 
         return mailServer;
     }
 
     public String getFrom() {
-        if (from == null)
-            throw new IllegalArgumentException("没有指定发件人！");
+//        if (from == null)
+//            throw new IllegalArgumentException("没有指定发件人！");
 
         return from;
     }
 
     public String getTo() {
-        if (to == null)
-            throw new IllegalArgumentException("没有指定收件人！");
+//        if (to == null)
+//            throw new IllegalArgumentException("没有指定收件人！");
 
         return to;
     }
