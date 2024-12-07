@@ -7,14 +7,13 @@ import com.ajaxjs.sql.model.Update;
 import com.ajaxjs.sql.util.ReflectUtil;
 import com.ajaxjs.sql.util.Utils;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.reflect.Clazz;
-import com.ajaxjs.util.reflect.Types;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -186,7 +185,13 @@ public class Sql extends JdbcCRUD implements DAO {
 //                }
             }
 
-            T bean = Clazz.newInstance(beanClz);
+            T bean;
+
+            try {
+                bean = beanClz.getDeclaredConstructor().newInstance();
+            } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException("Failed when creating Bean.", e);
+            }
 
 //            if (beanClz.toString().contains("xxx")) {
 //                System.out.println();
@@ -230,7 +235,7 @@ public class Sql extends JdbcCRUD implements DAO {
                                 value = JsonUtil.fromJson(jsonStr, propertyType);
                             else if (jsonStr.startsWith("[")) {
 //                            Class<?> listType =  propertyType; // it might be a List
-                                Class<?> _beanClz = Types.getGenericFirstReturnType(property.getReadMethod());
+                                Class<?> _beanClz = ReflectUtil.getGenericFirstReturnType(property.getReadMethod());
                                 value = JsonUtil.json2list(jsonStr, _beanClz);
                             } else {
                                 value = null;
@@ -254,7 +259,6 @@ public class Sql extends JdbcCRUD implements DAO {
 //						LOGGER.info("数据库返回这个字段 {0}，但是 bean {1} 没有对应的方法", key, beanClz);
                     try {
                         if ((_value != null) && beanClz.getField("extractData") != null) {
-                            assert bean != null;
                             Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
 
 //								LOGGER.info(":::::::::key::"+ key +":::v:::" + _value);
@@ -268,7 +272,7 @@ public class Sql extends JdbcCRUD implements DAO {
                             assert map != null;
                             map.put(key, _value);
                         }
-                    } catch (NoSuchFieldException | SecurityException e1) {
+                    } catch (NoSuchFieldException | SecurityException ignored) {
                     }
                 } catch (IllegalArgumentException e) {
                     throw new DataAccessException("记录集合转换为 bean 异常。", e);
