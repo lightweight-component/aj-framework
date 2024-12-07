@@ -1,14 +1,20 @@
 package com.ajaxjs.util.reflect;
 
+import com.ajaxjs.framework.IgnoreDB;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 @Slf4j
 public class BeanUtils {
@@ -54,6 +60,92 @@ public class BeanUtils {
         Methods.executeMethod(bean, method, value);
     }
 
+    @FunctionalInterface
+    public interface EachFieldArg {
+        void item(String key, Object value, PropertyDescriptor property);
+    }
+
+    /**
+     * 遍历一个 Java Bean
+     *
+     * @param bean Java Bean
+     * @param fn   执行的任务，参数有 key, value, property
+     */
+    public static void eachField(Object bean, EachFieldArg fn) {
+        try {
+            PropertyDescriptor[] props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
+            eachField(bean, props, fn);
+        } catch (IntrospectionException e) {
+            log.warn("获取 Bean 信息时候错误", e);
+        }
+    }
+
+    /**
+     * 遍历一个 Java Bean
+     *
+     * @param bean  Java Bean
+     * @param props 属性集合
+     * @param fn    执行的任务，参数有 key, value, property
+     */
+    public static void eachField(Object bean, PropertyDescriptor[] props, EachFieldArg fn) {
+        try {
+            if (props == null || props.length == 0)
+                return;
+
+            for (PropertyDescriptor property : props) {
+                String key = property.getName();
+                Method getter = property.getReadMethod();// 得到 property 对应的 getter 方法
+
+                if (getter.getAnnotation(IgnoreDB.class) != null)
+                    continue;
+
+                Object value = getter.invoke(bean); // 原始默认值，不过通常是没有指定的
+
+                if (value != null && value.equals("class"))  // 过滤 class 属性
+                    continue;
+
+                fn.item(key, value, property);
+
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            throw new RuntimeException("遍历一个 Java Bean 错误", e);
+        }
+    }
+
+    /**
+     * 遍历 Java Bean 对象的所有字段，并对每个字段执行指定的操作。
+     * 注意 static 成员无效
+     *
+     * @param bean 要遍历的 Java Bean 对象。
+     * @param fn   对每个字段要执行的操作，类型为 BiConsumer，其中第一个参数为字段名，第二个参数为字段值。
+     */
+    public static void eachFields(Object bean, BiConsumer<String, Object> fn) {
+        eachFields2(bean.getClass(), (name, field) -> {
+            try {
+                fn.accept(name, field.get(bean));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("访问字段时候 " + field + " 失败", e);
+            }
+        });
+    }
+
+    /**
+     * 遍历给定类的所有非静态字段，并对每个字段执行给定的操作。
+     *
+     * @param clz 要遍历的类
+     * @param fn  对于每个字段执行的操作
+     */
+    public static void eachFields2(Class<?> clz, BiConsumer<String, Field> fn) {
+        Field[] fields = clz.getFields();
+
+        for (Field field : fields) {
+            if (Modifier.isStatic(field.getModifiers()))// 如果是静态的字段，则跳过
+                continue;
+
+            fn.accept(field.getName(), field);// 对于当前字段执行给定的操作
+        }
+    }
+
     /**
      * 常量转换为 Map
      * 获取指定类中的所有 int 类型常量的名称和值，并返回它们构成的 Map 对象。
@@ -63,9 +155,8 @@ public class BeanUtils {
      */
     public static Map<String, Integer> getConstantsInt(Class<?> clz) {
         Map<String, Integer> map = new HashMap<>();// 创建一个空的 HashMap 对象，用于存储常量名称和值的映射关系
-
         Field[] fields = clz.getDeclaredFields();
-        Object instance = NewInstance.newInstance(clz);
+        Object instance = Clazz.newInstance(clz);
 
         for (Field field : fields) {
             String descriptor = Modifier.toString(field.getModifiers());// 获得其属性的修饰
@@ -74,8 +165,8 @@ public class BeanUtils {
             if (descriptor.equals("public static final")) {
                 try {
                     map.put(field.getName(), (int) field.get(instance));
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    log.warn("WARN>>>>>", e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException("常量转换为 Map 访问字段失败。", e);
                 }
             }
         }

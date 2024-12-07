@@ -15,14 +15,12 @@ public class Types {
      * @return 返回泛型类型数组。如果指定的 Type 对象不是 ParameterizedType 类型，则返回 null。
      */
     public static Type[] getActualType(Type type) {
-        if (type instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) type;
-
-            return pt.getActualTypeArguments();
+        if (type instanceof ParameterizedType)
+            return ((ParameterizedType) type).getActualTypeArguments();
+        else {
+            System.err.println(type + " 很可能不是一个泛型");
+            return null;
         }
-
-        log.warn(type + " 很可能不是一个泛型");
-        return null;
     }
 
     /**

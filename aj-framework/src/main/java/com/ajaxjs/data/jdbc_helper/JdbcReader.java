@@ -4,8 +4,8 @@ import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.data.util.ConvertBasicValue;
 import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
-import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.reflect.Types;
 import lombok.extern.slf4j.Slf4j;
 
@@ -221,7 +221,7 @@ public class JdbcReader extends JdbcConn {
 //                }
             }
 
-            T bean = NewInstance.newInstance(beanClz);
+            T bean = Clazz.newInstance(beanClz);
 
 //            if (beanClz.toString().contains("xxx")) {
 //                System.out.println();

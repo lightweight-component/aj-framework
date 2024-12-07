@@ -33,19 +33,6 @@ public class TestReflectUtil {
         }
     }
 
-    @Test
-    public void testNewInstance() {
-        assertNotNull(NewInstance.newInstance(Foo.class));
-        assertNotNull(NewInstance.newInstance(Foo.class, "a", "b"));
-        assertNotNull(NewInstance.newInstance(Objects.requireNonNull(NewInstance.getConstructor(Foo.class))));
-        assertNotNull(NewInstance.newInstance(Objects.requireNonNull(NewInstance.getConstructor(Foo.class, String.class, String.class)), "a", "b"));
-        assertNotNull(NewInstance.newInstance("com.ajaxjs.util.reflect.TestReflectUtil"));
-        assertNotNull(Clazz.getClassByName("com.ajaxjs.util.reflect.TestReflectUtil"));
-
-        Class<?>[] cs = Clazz.getDeclaredInterface(ArrayList.class);
-        assertNotNull(cs);
-    }
-
     static class Foo2 {
         public void m1() {
         }

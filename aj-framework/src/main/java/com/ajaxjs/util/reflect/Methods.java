@@ -49,7 +49,7 @@ public class Methods {
             for (Class<?> clz : args)
                 str.append(clz.getName());
 
-            log.warn("类找不到这个方法 {}.{}({})。", cls.getName(), method, str.toString().equals("") ? "void" : str.toString());
+            log.warn("类找不到这个方法 {}.{}({})。", cls.getName(), method, str.toString().isEmpty() ? "void" : str.toString());
             return null;
         }
     }
@@ -326,7 +326,7 @@ public class Methods {
                 log.warn("ERROR>>", e);
             }
         } else
-            log.warn("这不是一个静态方法：" + method);
+            log.warn("这不是一个静态方法：{}", method);
 
         return null;
     }

@@ -3,15 +3,16 @@ package com.ajaxjs.util.reflect;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static com.ajaxjs.util.reflect.Clazz.getConstructor;
+import static com.ajaxjs.util.reflect.Clazz.newInstance;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestClazz {
     @Test
@@ -55,56 +56,24 @@ public class TestClazz {
 //        Assert.assertEquals(expected, actualInterfaces);
     }
 
-    @Test
-    public void testEachFields() {
-        // Given
-        TestClass testClass = new TestClass();
-        BiConsumer<String, Object> fn = (fieldName, fieldValue) -> {
-            // Do something
-        };
-
-        // When
-        Clazz.eachFields(testClass, fn);
-
-        // Then
-        // Assertions
-    }
-
-    @Test
-    public void testEachFields2() {
-        // Given
-        Class<?> clz = TestClass.class;
-        BiConsumer<String, Field> fn = (fieldName, field) -> {
-            // Do something
-        };
-
-        // When
-        Clazz.eachFields2(clz, fn);
-
-        // Then
-        // Assertions
-    }
-
-    @Test
-    public void testEachField() {
-        // Given
-        TestClass testClass = new TestClass();
-        Clazz.EachFieldArg fn = (key, value, property) -> {
-            // Do something
-        };
-
-        // When
-        Clazz.eachField(testClass, fn);
-
-        // Then
-        // Assertions
-    }
-
     private String foo = "hi";
 
     @Test
     public void testGetPrivateField() {
         String foo1 = Clazz.getPrivateField(TestClazz.class, "foo", String.class);
         System.out.println(foo1);
+    }
+
+    @Test
+    public void testNewInstance() {
+        assertNotNull(newInstance(TestReflectUtil.Foo.class));
+        assertNotNull(newInstance(TestReflectUtil.Foo.class, "a", "b"));
+        assertNotNull(newInstance(Objects.requireNonNull(getConstructor(TestReflectUtil.Foo.class))));
+        assertNotNull(newInstance(Objects.requireNonNull(getConstructor(TestReflectUtil.Foo.class, String.class, String.class)), "a", "b"));
+        assertNotNull(newInstance("com.ajaxjs.util.reflect.TestReflectUtil"));
+        assertNotNull(Clazz.getClassByName("com.ajaxjs.util.reflect.TestReflectUtil"));
+
+        Class<?>[] cs = Clazz.getDeclaredInterface(ArrayList.class);
+        assertNotNull(cs);
     }
 }
