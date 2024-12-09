@@ -16,6 +16,7 @@ public class TestMessage {
                 .build()
                 .get();
 
+
         boolean message = demoService.checkIdCard("440105198309060315");
         System.out.println("----------------------------------"+message);
     }

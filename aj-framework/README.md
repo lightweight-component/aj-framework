@@ -31,4 +31,14 @@ https://www.euserv.com/en/
 https://www.jzbk.net/524.html https://wawo.wiki/index.php?rp=/store/hk-ipv6kvm
 
 
+# S3 Music player
+https://github.com/akrylysov/bsimp
+https://github.com/joe-king-sh/bucketify
+https://s3mediavault.com/
+https://stackoverflow.com/questions/66993311/trying-to-retrieve-an-mp3-file-stored-in-aws-s3-and-load-it-into-my-react-client
+
+https://github.com/core-lib/httpdoc
+
+
+
 
