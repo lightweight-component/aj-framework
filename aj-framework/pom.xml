@@ -29,6 +29,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>sqlman</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
