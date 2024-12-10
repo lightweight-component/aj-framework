@@ -42,12 +42,36 @@ public interface DataServiceController extends FastCRUD_Controller {
     @GetMapping("/{namespace}/{namespace2}/page")
     PageResult<Map<String, Object>> page(@PathVariable String namespace, @PathVariable String namespace2);
 
+    /**
+     * 创建实体
+     *
+     * @param namespace 实体的命名空间
+     * @param namespace2 实体的命名空间2
+     * @param params    实体
+     * @return 实体 id
+     */
     @PostMapping("/{namespace}/{namespace2}")
     Long create(@PathVariable String namespace, @PathVariable String namespace2, @RequestParam Map<String, Object> params);
 
+    /**
+     * 修改实体
+     *
+     * @param namespace 实体的命名空间
+     * @param namespace2 实体的命名空间2
+     * @param params    实体
+     * @return 是否成功
+     */
     @PutMapping("/{namespace}/{namespace2}")
     Boolean update(@PathVariable String namespace, @PathVariable String namespace2, @RequestParam Map<String, Object> params);
 
+    /**
+     * 删除实体
+     *
+     * @param namespace 实体的命名空间
+     * @param namespace2 实体的命名空间2
+     * @param id        实体 id
+     * @return 是否成功
+     */
     @DeleteMapping("/{namespace}/{namespace2}/{id}")
     Boolean delete(@PathVariable String namespace, @PathVariable String namespace2, @PathVariable Long id);
 
