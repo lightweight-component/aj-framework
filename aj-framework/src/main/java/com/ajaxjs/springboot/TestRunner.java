@@ -1,8 +1,10 @@
 package com.ajaxjs.springboot;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class TestRunner implements ApplicationRunner {
+    @Value("${server.port}")
+    private int port;
+
     @Override
     public void run(ApplicationArguments args) {
         String s = ("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
@@ -23,6 +28,6 @@ public class TestRunner implements ApplicationRunner {
         log.info(s);
 
         long elapsedTime = System.currentTimeMillis() - BaseWebMvcConfigure.APP_START_TIME;
-        log.info("Spring App startup time: {} ms", elapsedTime);
+        log.info("Spring App:{} startup time: {} ms", port, elapsedTime);
     }
 }

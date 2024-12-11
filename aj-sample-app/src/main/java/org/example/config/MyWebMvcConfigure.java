@@ -20,7 +20,7 @@ public class MyWebMvcConfigure extends BaseWebMvcConfigure {
      * @return RedisTemplate
      */
     @Bean
-    @Lazy
+//    @Lazy
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);

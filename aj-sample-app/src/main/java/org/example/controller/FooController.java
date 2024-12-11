@@ -14,4 +14,7 @@ public interface FooController {
     @GetMapping
     @HttpRefererCheck
     Foo getFoo();
+
+    @GetMapping("/lock")
+    boolean rLock();
 }
