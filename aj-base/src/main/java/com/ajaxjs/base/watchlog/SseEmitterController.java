@@ -1,6 +1,8 @@
-package com.ajaxjs.base.sselog;
+package com.ajaxjs.base.watchlog;
 
+import com.ajaxjs.base.watchlog.impl.ReadFile;
 import com.ajaxjs.springboot.annotation.IgnoredGlobalReturn;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,12 +11,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/sseEmitter")
+@Slf4j
 public class SseEmitterController {
+    private Long timeout = 3 * 1000L;
+
     private static final Map<String, SseEmitter> emitterMap = new HashMap<>();
 
     /**
@@ -41,25 +47,31 @@ public class SseEmitterController {
      */
     @IgnoredGlobalReturn
     @GetMapping(value = "/connect/{username}", produces = "text/event-stream;charset=UTF-8")
-    public SseEmitter connect(@PathVariable String username) throws IOException {
-        SseEmitter sseEmitter = new SseEmitter(0L);
-        sseEmitter.onCompletion(() -> {
+    public SseEmitter connect(@PathVariable String username) {
+        SseEmitter emitter = new SseEmitter(0L);
+
+        emitter.onCompletion(() -> {
             System.out.println(username + "连接结束！");
             emitterMap.remove(username);
         });
-        sseEmitter.onError((t) -> {
+        emitter.onError((t) -> {
             System.out.println(username + "连接出错！错误信息：" + t.getMessage());
             emitterMap.remove(username);
         });
-        sseEmitter.onTimeout(() -> {
+        emitter.onTimeout(() -> {
             System.out.println(username + "连接超时！");
             emitterMap.remove(username);
         });
-        emitterMap.put(username, sseEmitter);
+        emitterMap.put(username, emitter);
 
-        sseEmitter.send("连接建立成功");
+        try {
+            emitter.send("连接建立成功");
+        } catch (IOException e) {
+            emitter.completeWithError(e); // 发生错误时完成流
+            throw new UncheckedIOException(e);
+        }
 
-        return sseEmitter;
+        return emitter;
     }
 
     /**
@@ -71,12 +83,17 @@ public class SseEmitterController {
      */
     @GetMapping(value = "/send/{username}")
     @IgnoredGlobalReturn
-    public String send(@PathVariable String username) throws IOException {
+    public String send(@PathVariable String username) {
         SseEmitter sseEmitter = emitterMap.get(username);
-        if (sseEmitter == null) {
+        if (sseEmitter == null)
             return "没查询到该用户的连接！";
+
+        try {
+            sseEmitter.send(SseEmitter.event().name("psh").data("Hello～"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        sseEmitter.send(SseEmitter.event().name("psh").data("Hello～"));
+
         return "发送成功～";
     }
 
@@ -89,9 +106,33 @@ public class SseEmitterController {
     @IgnoredGlobalReturn
     @GetMapping(value = "/sendAll")
     public String sendAll() throws IOException {
-        for (SseEmitter sseEmitter : emitterMap.values()) {
+        for (SseEmitter sseEmitter : emitterMap.values())
             sseEmitter.send(SseEmitter.event().name("psh").data("Hello～"));
-        }
+
         return "发送完成～";
+    }
+
+    String p = "C:\\code\\ajaxjs\\aj-framework\\aj-base\\src\\test\\java\\com\\ajaxjs\\base\\watchlog\\bar.txt";
+    ReadFile tail;
+
+    @IgnoredGlobalReturn
+    @GetMapping(value = "/tail_log")
+    public String tailLog() {
+        if (tail == null) {
+            tail = new ReadFile(p, 1000, true);
+            tail.setTailing(true);
+            tail.start();
+        }
+        try {
+            for (SseEmitter sseEmitter : emitterMap.values()) {
+                sseEmitter.send(SseEmitter.event().name("psh").data(tail.getMessageLine()));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        tail.setMessageLine("");
+
+        return "all-ok";
     }
 }

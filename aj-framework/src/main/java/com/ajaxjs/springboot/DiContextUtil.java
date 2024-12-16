@@ -10,6 +10,8 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -193,6 +195,25 @@ public class DiContextUtil implements ApplicationContextAware {
      */
     public static HttpSession getSession() {
         return Objects.requireNonNull(getRequest()).getSession();
+    }
+
+    /**
+     * 非 spring 管理的容器获取 application.yml 中的配置
+     *
+     * @param configName YAML 中的配置名称
+     * @return 配置
+     */
+    public static String getConfigFromYml(String configName) {
+        Environment env = getBean(Environment.class);
+        if (env == null)
+            throw new NullPointerException("Environment Not ready.");
+
+        String property = env.getProperty(configName);
+
+        if (!StringUtils.hasText(property))
+            throw new NullPointerException("The config name [" + configName + "] is null.");
+
+        return property;
     }
 
     /**
