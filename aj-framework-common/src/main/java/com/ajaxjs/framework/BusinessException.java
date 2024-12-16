@@ -2,7 +2,7 @@ package com.ajaxjs.framework;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.http.HttpStatus;
+//import org.springframework.http.HttpStatus;
 
 /**
  * 自定义的业务异常
@@ -29,6 +29,6 @@ public class BusinessException extends RuntimeException {
      */
     public BusinessException(String msg) {
         super(msg);
-        this.errCode = String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        this.errCode = "500";
     }
 }

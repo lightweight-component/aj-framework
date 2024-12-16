@@ -4,7 +4,6 @@ import com.ajaxjs.data.DataAccessException;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.crud.CRUD_Service;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
-import com.ajaxjs.framework.IgnoreDB;
 import com.ajaxjs.util.DateHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
@@ -183,8 +182,8 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                 if ("class".equals(filedName)) continue;
 
                 Method method = property.getReadMethod(); // 获取字段对应的读取方法
-                if (method.getAnnotation(IgnoreDB.class) != null) // 忽略的字段，不参与
-                    continue;
+//                if (method.getAnnotation(IgnoreDB.class) != null) // 忽略的字段，不参与
+//                    continue;
 
                 Object value = method.invoke(entity);
 
