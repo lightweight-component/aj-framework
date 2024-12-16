@@ -1,5 +1,6 @@
 package com.ajaxjs.springboot;
 
+import com.ajaxjs.springboot.annotation.IgnoredGlobalReturn;
 import com.ajaxjs.springboot.annotation.JsonMessage;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -9,10 +10,11 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 @RestControllerAdvice
-public  class GlobalResponseResult implements ResponseBodyAdvice<Object> {
+public class GlobalResponseResult implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 //        System.out.println("supports:" + returnType);
@@ -23,6 +25,12 @@ public  class GlobalResponseResult implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+
+        assert method != null;
+        if (method.getAnnotation(IgnoredGlobalReturn.class) != null)
+            return body;
+
         ResponseResultWrapper responseResult = new ResponseResultWrapper();
         responseResult.setStatus(1);
 
@@ -30,7 +38,7 @@ public  class GlobalResponseResult implements ResponseBodyAdvice<Object> {
 
         if (annotation != null)
             responseResult.setMessage(annotation.value());
-         else
+        else
             responseResult.setMessage(OK);
 
         responseResult.setData(body);
