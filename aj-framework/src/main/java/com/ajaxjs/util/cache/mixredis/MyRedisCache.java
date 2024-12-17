@@ -6,7 +6,11 @@ import org.springframework.data.redis.core.RedisOperations;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * SpringBoot，用 200 行代码完成一个一二级分布式缓存
+ * <p>
+ * <a href="https://my.oschina.net/xiandafu/blog/847147">...</a>
+ */
 public class MyRedisCache extends RedisCache {
     //local cache for performace
     ConcurrentHashMap<Object, ValueWrapper> local = new ConcurrentHashMap<>();
