@@ -79,3 +79,7 @@ for /r "%searchDir%" %%f in (*.jar) do (
 endlocal
 pause
 ```
+
+# 让 IDEA 忽略单词拼写检查的注解
+
+`@SuppressWarnings("SpellCheckingInspection")`
