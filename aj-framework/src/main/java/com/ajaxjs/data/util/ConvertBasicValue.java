@@ -1,7 +1,7 @@
 package com.ajaxjs.data.util;
 
 import com.ajaxjs.util.DateHelper;
-import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.CollUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -113,9 +113,9 @@ public class ConvertBasicValue {
         } else if (clz == int[].class /*|| clz == Integer[].class*/) {
             // 复数
             if (value instanceof String)
-                return ListUtils.stringArr2intArr((String) value);
+                return CollUtils.stringArr2intArr((String) value);
             else if (value instanceof List)
-                return ListUtils.intList2Arr((List<Integer>) value);
+                return CollUtils.intList2Arr((List<Integer>) value);
             else
                 log.warn("value: [{}] type:[{}] can‘t be converted to {}", value, value.getClass().getName(), clz);
         }

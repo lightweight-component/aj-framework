@@ -6,7 +6,7 @@ import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.jdbc_helper.common.IdField;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
-import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.CollUtils;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -60,26 +60,26 @@ public class CRUD_Service implements DataAccessObject {
 
     @Override
     public <T> List<T> list(Class<T> beanClz, String sql, Object... params) {
-        return ListUtils.getList(reader.queryAsBeanList(beanClz, sql, params));
+        return CollUtils.getList(reader.queryAsBeanList(beanClz, sql, params));
     }
 
     @Override
     public <T> List<T> listById(Class<T> beanClz, String sqlId, Map<String, Object> mapParams, Object... params) {
         String sql = smallMyBatis.handleSql(mapParams, sqlId);
 
-        return ListUtils.getList(reader.queryAsBeanList(beanClz, sql, params));
+        return CollUtils.getList(reader.queryAsBeanList(beanClz, sql, params));
     }
 
     @Override
     public List<Map<String, Object>> listMap(String sql, Object... params) {
-        return ListUtils.getList(reader.queryAsMapList(sql, params));
+        return CollUtils.getList(reader.queryAsMapList(sql, params));
     }
 
     @Override
     public List<Map<String, Object>> listMapBySqlId(String sqlId, Map<String, Object> mapParams, Object... params) {
         String sql = smallMyBatis.handleSql(mapParams, sqlId);
 
-        return ListUtils.getList(reader.queryAsMapList(sql, params));
+        return CollUtils.getList(reader.queryAsMapList(sql, params));
     }
 
     @Override

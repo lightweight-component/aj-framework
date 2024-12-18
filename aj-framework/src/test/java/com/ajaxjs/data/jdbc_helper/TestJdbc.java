@@ -2,7 +2,7 @@ package com.ajaxjs.data.jdbc_helper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.CollUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -45,6 +45,6 @@ public class TestJdbc {
         sp = JdbcWriter.entity2UpdateSql(tableName, map, "id", 100L);
 
         assertEquals("UPDATE users SET `name` = ?, `id` = ?, `age` = ? WHERE id = ?", sp.sql);
-        ListUtils.printArray(sp.values);
+        CollUtils.printArray(sp.values);
     }
 }
