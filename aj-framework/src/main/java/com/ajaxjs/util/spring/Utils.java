@@ -120,7 +120,6 @@ public class Utils {
         return StringUtils.uncapitalize(str);
     }
 
-
     public static String uuid() {
         return new AlternativeJdkIdGenerator().generateId().toString();
     }

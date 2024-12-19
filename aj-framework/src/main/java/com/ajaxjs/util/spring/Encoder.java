@@ -16,7 +16,6 @@ public class Encoder {
      * @return the encoded byte array as a UTF-8 String
      */
     public static String encodeToString(byte[] src) {
-        SpelExpression expr;
         return Base64Utils.encodeToString(src);
     }
 
@@ -27,7 +26,6 @@ public class Encoder {
      * @return the original byte array
      */
     public static byte[] decodeFromString(String src) {
-        MapAccessor d;
         return Base64Utils.decodeFromString(src);
     }
 
