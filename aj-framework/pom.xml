@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.21</version>
+        <version>1.22</version>
         <relativePath/>
     </parent>
 
@@ -16,7 +16,7 @@
     <name>aj-framework</name>
     <packaging>jar</packaging>
 
-    <dependencyManagement>
+<!--    <dependencyManagement>
         <dependencies>
 
             <dependency>
@@ -26,7 +26,7 @@
             </dependency>
 
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
 
     <dependencies>
         <dependency>
@@ -59,6 +59,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-framework-common</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <dependency>

@@ -1,12 +1,10 @@
-package org.example.config;
+package com.ajaxjs;
 
-import com.ajaxjs.api.security.referer.HttpReferer;
-import com.ajaxjs.api.time_signature.TimeSignature;
-import com.ajaxjs.springboot.BaseWebMvcConfigure;
+import com.ajaxjs.util.cache.leveltwocache.levelone.LevelOneSimpleCache;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.MessageListener;
@@ -21,8 +19,12 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
-@Configuration
-public class MyWebMvcConfigure extends BaseWebMvcConfigure {
+@SpringBootApplication
+public class TestApp {
+//    public static void main(String[] args) {
+//        SpringApplication.run(TestApp.class, args);
+//    }
+
     /**
      * 配置 RedisTemplate
      *
@@ -42,33 +44,21 @@ public class MyWebMvcConfigure extends BaseWebMvcConfigure {
         return template;
     }
 
-    @Bean
-    public TimeSignature TimeSignature() {
-        TimeSignature timeSignature = new TimeSignature();
-        timeSignature.setGlobalCheck(true);
-
-        return timeSignature;
-    }
-
-    @Bean
-    HttpReferer HttpReferer() {
-        return new HttpReferer();
-    }
-
-
+    /* ----------------- 配置二级缓存 -------------------------- */
     @Value("${springext.cache.redis.topic:level_cache}")
     String topicName;
 
     @Bean
     public LevelTwoCacheManager cacheManager(RedisConnectionFactory connectionFactory, RedisTemplate<String, Object> redisTemplate) {
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+        RedisCacheConfiguration cfg = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(1)); // 设置缓存有效期一小时
 
-        LevelTwoCacheManager cacheManager = new LevelTwoCacheManager(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory), redisCacheConfiguration);
-        cacheManager.setRedisTemplate(redisTemplate);
-        cacheManager.setTopicName(topicName);
+        LevelTwoCacheManager manager = new LevelTwoCacheManager(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory), cfg);
+        manager.setRedisTemplate(redisTemplate);
+        manager.setTopicName(topicName);
+        manager.setLocal(new LevelOneSimpleCache());
 
-        return cacheManager;
+        return manager;
     }
 
     @Bean

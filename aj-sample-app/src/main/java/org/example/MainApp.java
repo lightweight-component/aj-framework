@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 //@SpringBootApplication(exclude = {RedissonAutoConfiguration.class})
-@EnableDubbo
+//@EnableDubbo
 public class MainApp {
     public static void main(String[] args) {
 //        DubboBootstrap.getInstance()

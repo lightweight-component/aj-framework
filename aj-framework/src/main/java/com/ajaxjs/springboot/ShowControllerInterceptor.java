@@ -1,6 +1,7 @@
 package com.ajaxjs.springboot;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -31,6 +32,8 @@ public class ShowControllerInterceptor implements HandlerInterceptor {
                 log.info("{} 请求参数：\n{}", request.getMethod(), s);
             }
         }
+
+        Cache d;
 
         return true;
     }

@@ -11,11 +11,11 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version><!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
+        <java.version>11</java.version>
         <springboot.version>2.7.18</springboot.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <maven.javadoc.failOnError>false</maven.javadoc.failOnError><!-- 当发生 JavaDoc 编译错误时继续执行 -->
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.javadoc.skip>true</maven.javadoc.skip><!-- 非类库(业务工程)不要 JavaDoc -->
     </properties>
 
@@ -117,7 +117,7 @@
             <dependency>
                 <groupId>com.ajaxjs</groupId>
                 <artifactId>ajaxjs-parent</artifactId>
-                <version>1.21</version>
+                <version>1.22</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

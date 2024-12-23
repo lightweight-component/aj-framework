@@ -1,10 +1,7 @@
 package org.example.service;
 
-import com.ajaxjs.model.MailVo;
-import com.ajaxjs.service.message.ISendEmail;
-import com.ajaxjs.service.tools.IIdCard;
 import com.ajaxjs.springboot.annotation.JsonMessage;
-import org.apache.dubbo.config.bootstrap.builders.ReferenceBuilder;
+import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
 import org.example.model.Foo;
 import org.redisson.api.RLock;
@@ -21,10 +18,15 @@ public class FooService implements FooController {
     @Resource
     private RedisTemplate<String, Integer> redisTemplate;
 
+    @Resource
+    LevelTwoCacheManager cacheManager;
+
     @Override
     @JsonMessage("返回 Foo")
 //    @TimeSignatureVerify
     public Foo getFoo() {
+        cacheManager.createRedisCache().put("foo2", "hihi");
+        System.out.println(cacheManager.getCache("foo").get("foo2").get());
 //        RedisUtils.getInstance().set("bar", "888");
 //        redisTemplate.opsForValue().set("foo", 1);
 //        EntityManager entityManager = JpaUtil.getEntityManager();
