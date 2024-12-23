@@ -14,9 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 基于Spring {@link PathMatchingResourcePatternResolver}实现资源扫描
- *
- * @author guyadong
+ * 基于 Spring {@link PathMatchingResourcePatternResolver}实现资源扫描
  */
 public class ResourceScanner {
     private static final String CLASS_SUFFIX = ".class";
@@ -89,7 +87,7 @@ public class ResourceScanner {
                         String className = p.replace('/', '.');
                         Class<?> clz = Class.forName(className, false, classLoader);
 
-                        if (predicate == null || (predicate != null && predicate.test(clz)))
+                        if (predicate == null || predicate.test(clz))
                             result.add(clz);
                     } catch (Throwable e) {
                         System.err.printf("%s:%s\n", e.getClass().getSimpleName(), e.getMessage());

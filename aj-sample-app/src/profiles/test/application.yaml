@@ -25,6 +25,9 @@ spring:
     port: 123
     password: xxxxxxxxxxx
     ssl: true
+  jackson:
+    time-zone: GMT+8
+
 
 dubbo:
   application:

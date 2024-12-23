@@ -38,7 +38,7 @@ public class LevelTwoCache extends RedisCache {
     }
 
     @Override
-    public void put(final Object key, final Object value) {
+    public void put(Object key, Object value) {
         super.put(key, value);
         cacheManager.publishMessage(super.getName());
     }
@@ -50,7 +50,7 @@ public class LevelTwoCache extends RedisCache {
     }
 
     @Override
-    public ValueWrapper putIfAbsent(Object key, final Object value) {
+    public ValueWrapper putIfAbsent(Object key, Object value) {
         ValueWrapper wrapper = super.putIfAbsent(key, value);
         cacheManager.publishMessage(super.getName());
 

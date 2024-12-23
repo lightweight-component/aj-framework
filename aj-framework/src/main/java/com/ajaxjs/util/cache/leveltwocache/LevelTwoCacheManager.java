@@ -50,7 +50,7 @@ public class LevelTwoCacheManager extends RedisCacheManager {
         cache.cacheUpdate();
     }
 
-    //notify other redis clent to update cache( clear local cache in fact)
+    //notify other redis client to update cache( clear local cache in fact)
     public void publishMessage(String cacheName) {
         redisTemplate.convertAndSend(topicName, cacheName);
     }

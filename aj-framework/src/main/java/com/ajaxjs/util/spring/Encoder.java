@@ -20,7 +20,7 @@ public class Encoder {
     }
 
     /**
-     * Base64-decode the given byte array from an UTF-8 String.
+     * Base64-decode the given byte array from a UTF-8 String.
      *
      * @param src the encoded UTF-8 String
      * @return the original byte array

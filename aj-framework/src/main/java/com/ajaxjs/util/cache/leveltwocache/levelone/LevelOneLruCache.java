@@ -14,7 +14,7 @@ public class LevelOneLruCache implements LevelOneCache<String, Cache.ValueWrappe
 
     @Override
     public void put(String key, Cache.ValueWrapper value) {
-        map.set(key, value);
+//        map.add(key, value);
     }
 
     @Override
