@@ -10,7 +10,6 @@
  */
 package com.ajaxjs.util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.*;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
@@ -39,7 +38,6 @@ import java.util.function.Consumer;
  *
  * @author sp42 frank@ajaxjs.com
  */
-@Slf4j
 public class XmlHelper {
     /**
      * XML 转换需要的对象
@@ -50,8 +48,7 @@ public class XmlHelper {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            log.warn("WARN>>>>>", e);
-            return null;
+            throw new RuntimeException("Parser Configuration Exception", e);
         }
     }
 
@@ -73,7 +70,7 @@ public class XmlHelper {
             for (int i = 0; i < nodes.getLength(); i++)
                 fn.accept(nodes.item(i));
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-            log.warn("WARN>>>>>", e);
+            throw new RuntimeException("Get a node from XML err. XPath: " + xpath, e);
         }
     }
 
@@ -93,7 +90,7 @@ public class XmlHelper {
                 fn.accept(node, nodeList);
             }
         } catch (SAXException | IOException e) {
-            log.warn("WARN>>>>>", e);
+            throw new RuntimeException("Parsed this XML err." + xml, e);
         }
     }
 
@@ -107,10 +104,8 @@ public class XmlHelper {
         try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
             return Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
         } catch (SAXException | IOException e) {
-            log.warn("WARN>>>>>", e);
+            throw new RuntimeException("Get the root of this XML err." + xml, e);
         }
-
-        return null;
     }
 
     /**

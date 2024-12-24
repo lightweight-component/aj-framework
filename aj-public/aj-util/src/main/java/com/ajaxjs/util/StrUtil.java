@@ -89,6 +89,29 @@ public class StrUtil {
             return a + b;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String DELIM_STR = "{}";
+
+    public static String print(String tpl, Object... args) {
+        StringBuilder buffer = new StringBuilder(tpl.length() + 64);
+        int beginIndex = 0, endIndex, count = 0;
+
+        while ((endIndex = tpl.indexOf(DELIM_STR, beginIndex)) >= 0) {
+            buffer.append(tpl, beginIndex, endIndex);
+
+            try {
+                buffer.append(args[count++]);
+            } catch (IndexOutOfBoundsException e) {
+                buffer.append("null"); // 数组越界时对应占位符填null
+            }
+            beginIndex = endIndex + DELIM_STR.length();
+        }
+
+        buffer.append(tpl.substring(beginIndex));
+
+        return buffer.toString();
+    }
+
     /**
      * 统计文本中某个字符串出现的次数
      *

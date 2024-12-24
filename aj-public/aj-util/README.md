@@ -1,5 +1,5 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.ajaxjs/ajaxjs-util?label=Latest%20Release)](https://central.sonatype.com/artifact/com.ajaxjs/ajaxjs-util)
-[![Javadoc](https://img.shields.io/badge/javadoc-1.1.7-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util )
+[![Javadoc](https://img.shields.io/badge/javadoc-1.1.8-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util )
 ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?maxAge=2592000)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
@@ -43,6 +43,6 @@ Runs on Java 1.8+. Maven:
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-util</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
 </dependency>
 ```

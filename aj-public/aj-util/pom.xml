@@ -14,23 +14,23 @@
     <artifactId>ajaxjs-util</artifactId>
     <name>aj-util</name>
     <description>Small Java Utils Library with many powerful components</description>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <packaging>jar</packaging>
 
-<!--    <scm>
-        <url>https://github.com/lightweight-component/aj-util</url>
-        <connection>scm:git:https://github.com/lightweight-component/aj-util.git</connection>
+    <scm>
+        <url>https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-public/aj-util</url>
+<!--        <connection>scm:git:https://github.com/lightweight-component/aj-util.git</connection>-->
     </scm>
     <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/lightweight-component/aj-util/issues</url>
-    </issueManagement>-->
+        <system>GitCode Issues</system>
+        <url>https://gitcode.com/zhangxin09/aj-framework/issues</url>
+    </issueManagement>
 
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.16</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

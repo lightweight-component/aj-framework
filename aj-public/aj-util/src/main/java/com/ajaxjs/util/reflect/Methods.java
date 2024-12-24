@@ -2,7 +2,6 @@ package com.ajaxjs.util.reflect;
 
 import com.ajaxjs.util.CollUtils;
 import com.ajaxjs.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
@@ -13,7 +12,6 @@ import java.util.List;
 /**
  * 方法相关的反射
  */
-@Slf4j
 public class Methods {
     /**
      * 根据类和方法名获取该类声明的方法
@@ -26,8 +24,7 @@ public class Methods {
         try {
             return clz.getDeclaredMethod(methodName);
         } catch (NoSuchMethodException e) {
-            log.warn("ERROR>>", e);
-            return null;
+            throw new RuntimeException("No Such Method Exception " + methodName, e);
         }
     }
 
@@ -50,7 +47,7 @@ public class Methods {
             for (Class<?> clz : args)
                 str.append(clz.getName());
 
-            log.warn("类找不到这个方法 {}.{}({})。", cls.getName(), method, str.toString().isEmpty() ? "void" : str.toString());
+            System.err.println(StrUtil.print("类找不到这个方法 {}.{}({})。", cls.getName(), method, str.toString().isEmpty() ? "void" : str.toString()));
             return null;
         }
     }
@@ -119,7 +116,7 @@ public class Methods {
                             return methodObj;
                     }
                 } catch (Exception e) {
-                    log.warn("ERROR>>", e);
+                    throw new RuntimeException("循环 object 向上转型（接口）异常 ", e);
                 }
             }
             //			else {
@@ -226,7 +223,7 @@ public class Methods {
 
             if (e1 instanceof InvocationTargetException) {
                 e = ((InvocationTargetException) e1).getTargetException();
-                log.warn("反射执行方法异常！所在类[{}] 方法：[{}]", instance.getClass().getName(), method.getName());
+                System.err.println(StrUtil.print("反射执行方法异常！所在类[{}] 方法：[{}]", instance.getClass().getName(), method.getName()));
 
                 throw e;
             }
@@ -324,10 +321,10 @@ public class Methods {
             try {
                 return executeMethod_Throwable(new Object(), method, args);
             } catch (Throwable e) {
-                log.warn("ERROR>>", e);
+                throw new RuntimeException("Error when executing static method: ", e);
             }
         } else
-            log.warn("这不是一个静态方法：{}", method);
+            System.err.println("这不是一个静态方法：{}" + method);
 
         return null;
     }

@@ -1,12 +1,9 @@
 package com.ajaxjs.util.reflect;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-@Slf4j
 public class Types {
     /**
      * 获取泛型类型数组。

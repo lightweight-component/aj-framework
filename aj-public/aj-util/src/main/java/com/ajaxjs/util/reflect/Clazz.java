@@ -1,10 +1,7 @@
 package com.ajaxjs.util.reflect;
 
 import com.ajaxjs.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -15,7 +12,7 @@ import java.util.List;
 /**
  * 类相关的反射
  */
-@Slf4j
+
 public class Clazz {
     /**
      * 根据类名字符串获取类对象
@@ -27,8 +24,7 @@ public class Clazz {
         try {
             return Class.forName(clzName);
         } catch (ClassNotFoundException e) {
-            log.warn("找不到这个类： {}", clzName, e);
-            return null;
+            throw new RuntimeException("找不到这个类： " + clzName);
         }
     }
 
@@ -44,7 +40,7 @@ public class Clazz {
     public static <T> Class<T> getClassByName(String clzName, Class<T> clz) {
         Class<?> c = getClassByName(clzName);
 
-        return c == null ? null : (Class<T>) c;
+        return (Class<T>) c;
     }
 
     /**
@@ -159,18 +155,19 @@ public class Clazz {
         return false;
     }
 
-	/**
-	 * 根据类全称创建实例，并转换到其接口的类型
-	 *
-	 * @param className 实际类的类型
-	 * @param clazz     接口类型
-	 * @return 对象实例
-	 */
-    // @SuppressWarnings("unchecked")
-    // public static <T> T newInstance(String className, Class<T> clazz) {
-    // Class<?> clz = getClassByName(className);
-    // return clazz != null ? (T) newInstance(clz) : null;
-    // }
+    /**
+     * 根据类全称创建实例，并转换到其接口的类型
+     *
+     * @param className 实际类的类型
+     * @param clazz     接口类型
+     * @return 对象实例
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstance(String className, Class<T> clazz) {
+        Class<?> clz = getClassByName(className);
+
+        return clazz != null ? (T) newInstance(clz) : null;
+    }
 
     /**
      * 根据类全称创建实例
@@ -183,7 +180,7 @@ public class Clazz {
     public static Object newInstance(String clzName, Object... args) {
         Class<?> clazz = Clazz.getClassByName(clzName);
 
-        return clazz != null ? newInstance(clazz, args) : null;
+        return newInstance(clazz, args);
     }
 
     /**

@@ -2,17 +2,12 @@ package com.ajaxjs.util.io;
 
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
-@Slf4j
 public class Resources {
     /**
      * 获取 Classpath 根目录下的资源文件的路径
@@ -109,14 +104,13 @@ public class Resources {
     public static String getResourceText(String path) {
         try (InputStream in = getResource(path)) {
             if (in == null) {
-                log.warn("[{}] 下没有 [{}] 资源文件", getResourcesFromClasspath(StrUtil.EMPTY_STRING), path);
+                System.err.println(getResourcesFromClasspath(StrUtil.EMPTY_STRING) + " 下没有资源文件 " + path);
                 return null;
             }
 
             return StreamHelper.copyToString(in);
         } catch (IOException e) {
-            log.warn("ERROR>>", e);
-            return null;
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -142,15 +136,11 @@ public class Resources {
      * @return JAR 文件的目录
      */
     public static String getJarDir() {
-        String jarDir = null;
-
         try {
-            jarDir = new File(Resources.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+            return new File(Resources.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
         } catch (URISyntaxException e) {
-            log.warn("ERROR>>", e);
+            throw new RuntimeException("Error when accessing the dir of the JAR.", e);
         }
-
-        return jarDir;
     }
 
     /**

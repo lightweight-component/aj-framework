@@ -41,8 +41,7 @@ public class EasyLogger {
             try {
                 buffer.append(args[count++]);
             } catch (IndexOutOfBoundsException e) {
-                // 数组越界时对应占位符填null
-                buffer.append("null");
+                buffer.append("null"); // 数组越界时对应占位符填null
             }
             beginIndex = endIndex + DELIM_STR.length();
         }

@@ -2,7 +2,6 @@ package com.ajaxjs.util;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
@@ -19,7 +18,6 @@ import java.security.NoSuchAlgorithmException;
  * 字符串摘要（哈希）工具类
  */
 @Data
-@Slf4j
 @Accessors(chain = true)
 public class MessageDigestHelper {
     /**
