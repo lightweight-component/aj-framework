@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>aj-pom</module>
+        <module>aj-public</module>
         <module>aj-framework</module>
         <module>aj-framework-common</module>
         <module>aj-base</module>

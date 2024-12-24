@@ -2,7 +2,7 @@ package com.ajaxjs.util.cache.leveltwocache.levelone;
 
 import com.ajaxjs.util.cache.leveltwocache.LevelOneCache;
 import org.springframework.cache.Cache;
-import org.springframework.util.ConcurrentLruCache;
+
 
 public class LevelOneLruCache implements LevelOneCache<String, Cache.ValueWrapper> {
     ConcurrentLruCache<String, Cache.ValueWrapper> map = new ConcurrentLruCache<>(10, null);

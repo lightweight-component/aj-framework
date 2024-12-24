@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=GBK"> 
+  <title>Coverage Report > ObjectHelper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.ajaxjs.util</a>
+</div>
+
+<h1>Coverage Summary for Class: ObjectHelper (com.ajaxjs.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ObjectHelper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (26/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/*
+&nbsp; * Copyright (C) 2025 Frank Cheung&lt;frank@ajaxjs.com&gt;
+&nbsp; *
+&nbsp; * This program is free software: you can redistribute it and/or modify
+&nbsp; * it under the terms of the GNU General Public License as published by
+&nbsp; * the Free Software Foundation, either version 3 of the License, or
+&nbsp; * (at your option) any later version.
+&nbsp; *
+&nbsp; * This program is distributed in the hope that it will be useful,
+&nbsp; * but WITHOUT ANY WARRANTY; without even the implied warranty of
+&nbsp; * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+&nbsp; * GNU General Public License for more details.
+&nbsp; *
+&nbsp; * You should have received a copy of the GNU General Public License
+&nbsp; * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+&nbsp; */
+&nbsp;package com.ajaxjs.util;
+&nbsp;
+&nbsp;import java.io.*;
+&nbsp;import java.util.Collections;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * A helper for Java Object.
+&nbsp; */
+<b class="nc">&nbsp;public class ObjectHelper {</b>
+&nbsp;    /**
+&nbsp;     * 对象深度克隆
+&nbsp;     *
+&nbsp;     * @param &lt;T&gt; 对象泛型参数
+&nbsp;     * @param obj 待克隆的对象
+&nbsp;     * @return 克隆后的对象
+&nbsp;     */
+&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)
+&nbsp;    public static &lt;T extends Serializable&gt; T clone(T obj) {
+<b class="fc">&nbsp;        try (ByteArrayOutputStream bout = new ByteArrayOutputStream();</b>
+<b class="fc">&nbsp;             ObjectOutputStream oos = new ObjectOutputStream(bout)) {</b>
+<b class="fc">&nbsp;            oos.writeObject(obj);</b>
+&nbsp;
+<b class="fc">&nbsp;            try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bout.toByteArray()))) {</b>
+&nbsp;                // 说明：调用 ByteArrayInputStream 或 ByteArrayOutputStream 对象的 close 方法没有任何意义
+&nbsp;                // 这两个基于内存的流只要垃圾回收器清理对象就能够释放资源，这一点不同于对外部资源（如文件流）的释放
+<b class="fc">&nbsp;                return (T) ois.readObject();</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            throw new UncheckedIOException(&quot;对象深度克隆 Error.&quot;, e);</b>
+<b class="nc">&nbsp;        } catch (ClassNotFoundException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(&quot;对象深度克隆 Error. 找不到类&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Dummy Map
+&nbsp;     */
+<b class="fc">&nbsp;    public static final Map&lt;String, Object&gt; EMPTY_PARAMS_MAP = Collections.unmodifiableMap(new HashMap&lt;&gt;());</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * 创建一个新的 HashMap
+&nbsp;     *
+&nbsp;     * @param k1  键1
+&nbsp;     * @param v1  值1
+&nbsp;     * @param &lt;K&gt; k1 类型
+&nbsp;     * @param &lt;V&gt; v1 类型
+&nbsp;     * @return 新创建的 HashMap
+&nbsp;     */
+&nbsp;    public static &lt;K, V&gt; Map&lt;K, V&gt; mapOf(K k1, V v1) {
+<b class="fc">&nbsp;        Map&lt;K, V&gt; map = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        map.put(k1, v1);</b>
+&nbsp;
+<b class="fc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * 创建一个新的 HashMap
+&nbsp;     *
+&nbsp;     * @param k1  键1
+&nbsp;     * @param v1  值1
+&nbsp;     * @param k2  键2
+&nbsp;     * @param v2  值2
+&nbsp;     * @param &lt;K&gt; k1 类型
+&nbsp;     * @param &lt;V&gt; v1 类型
+&nbsp;     * @return 新创建的 HashMap
+&nbsp;     */
+&nbsp;    public static &lt;K, V&gt; Map&lt;K, V&gt; mapOf(K k1, V v1, K k2, V v2) {
+<b class="fc">&nbsp;        Map&lt;K, V&gt; map = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        map.put(k1, v1);</b>
+<b class="fc">&nbsp;        map.put(k2, v2);</b>
+&nbsp;
+<b class="fc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * 创建一个新的 HashMap
+&nbsp;     *
+&nbsp;     * @param k1  键1
+&nbsp;     * @param v1  值1
+&nbsp;     * @param k2  键2
+&nbsp;     * @param v2  值2
+&nbsp;     * @param k3  键3
+&nbsp;     * @param v3  值3
+&nbsp;     * @param &lt;K&gt; k1 类型
+&nbsp;     * @param &lt;V&gt; v1 类型
+&nbsp;     * @return 新创建的 HashMap
+&nbsp;     */
+&nbsp;    public static &lt;K, V&gt; Map&lt;K, V&gt; mapOf(K k1, V v1, K k2, V v2, K k3, V v3) {
+<b class="fc">&nbsp;        Map&lt;K, V&gt; map = mapOf(3);</b>
+<b class="fc">&nbsp;        map.put(k1, v1);</b>
+<b class="fc">&nbsp;        map.put(k2, v2);</b>
+<b class="fc">&nbsp;        map.put(k3, v3);</b>
+&nbsp;
+<b class="fc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a HashMap with a specified expected number of entries.
+&nbsp;     * The initial capacity and load factor are calculated to minimize resizing.
+&nbsp;     *
+&nbsp;     * @param expectedSize the expected number of entries in the map
+&nbsp;     * @return a new HashMap with optimal initial capacity and load factor
+&nbsp;     */
+&nbsp;    public static &lt;K, V&gt; Map&lt;K, V&gt; mapOf(int expectedSize) {
+&nbsp;        // Calculate the initial capacity as the next power of two greater than or equal to expectedSize / default_load_factor
+<b class="fc">&nbsp;        float defaultLoadFactor = 0.75f;</b>
+<b class="fc">&nbsp;        int initialCapacity = (int) Math.ceil(expectedSize / defaultLoadFactor);</b>
+<b class="fc">&nbsp;        initialCapacity = Integer.highestOneBit(initialCapacity - 1) &lt;&lt; 1;</b>
+&nbsp;
+&nbsp;        // Ensure that the initial capacity is at least 16 (the default capacity)
+<b class="pc">&nbsp;        if (initialCapacity &lt; 16)</b>
+<b class="fc">&nbsp;            initialCapacity = 16;</b>
+&nbsp;
+<b class="fc">&nbsp;        return new HashMap&lt;&gt;(initialCapacity, defaultLoadFactor);// Create and return the HashMap with the calculated initial capacity and default load factor</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-24 11:36</div>
+</div>
+</body>
+</html>

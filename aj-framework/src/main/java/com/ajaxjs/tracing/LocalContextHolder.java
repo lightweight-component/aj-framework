@@ -1,6 +1,7 @@
 package com.ajaxjs.tracing;
 
 import com.ajaxjs.tracing.model.HeaderInfo;
+import com.ajaxjs.util.spring.Utils;
 import com.alibaba.ttl.TransmittableThreadLocal;
 
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ public class LocalContextHolder {
         protected TracingHolder initialValue() {
             return new TracingHolder()
                     .systemNumber(SystemNumberHelper.getSystemNumber())
-                    .traceId(StringUtils.hasText(RequestUtils.getHeader(HeaderInfo.TRACE_ID)) ? RequestUtils.getHeader(HeaderInfo.TRACE_ID) : UUIDUtils.randomSimpleUUID())
+                    .traceId(StringUtils.hasText(RequestUtils.getHeader(HeaderInfo.TRACE_ID)) ? RequestUtils.getHeader(HeaderInfo.TRACE_ID) : Utils.uuid())
                     .servlet(RequestUtils.isServlet())
                     .appType(RequestUtils.getHeader(HeaderInfo.APP_TYPE))
                     .appVersion(RequestUtils.getHeader(HeaderInfo.APP_VERSION))

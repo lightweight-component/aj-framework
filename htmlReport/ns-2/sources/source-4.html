@@ -1,0 +1,213 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=GBK"> 
+  <title>Coverage Report > WeiXinCrypto</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.ajaxjs.util.cryptography</a>
+</div>
+
+<h1>Coverage Summary for Class: WeiXinCrypto (com.ajaxjs.util.cryptography)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WeiXinCrypto</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (2/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20.8%
+  </span>
+  <span class="absValue">
+    (5/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package com.ajaxjs.util.cryptography;
+&nbsp;
+&nbsp;import com.ajaxjs.util.StrUtil;
+&nbsp;import com.ajaxjs.util.io.Resources;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.io.UncheckedIOException;
+&nbsp;import java.nio.charset.StandardCharsets;
+&nbsp;import java.security.PrivateKey;
+&nbsp;import java.security.cert.CertificateException;
+&nbsp;import java.security.cert.CertificateExpiredException;
+&nbsp;import java.security.cert.CertificateFactory;
+&nbsp;import java.security.cert.CertificateNotYetValidException;
+&nbsp;import java.security.cert.X509Certificate;
+<b class="nc">&nbsp;import java.util.Base64;</b>
+&nbsp;import javax.crypto.spec.GCMParameterSpec;
+&nbsp;import javax.crypto.spec.IvParameterSpec;
+&nbsp;
+&nbsp;public class WeiXinCrypto {
+&nbsp;    private static final String TRANSFORMATION = &quot;RSA/ECB/OAEPWithSHA-1AndMGF1Padding&quot;;
+&nbsp;
+&nbsp;    public WeiXinCrypto() {
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String aesDecryptToString(byte[] aesKey, byte[] associatedData, byte[] nonce, String cipherText) {
+<b class="pc">&nbsp;        if (aesKey.length != 32) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;无效的 ApiV3Key，长度必须为32个字节&quot;);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            GCMParameterSpec spec = new GCMParameterSpec(128, nonce);</b>
+&nbsp;            return CommonUtil.doCipher(&quot;AES/GCM/NoPadding&quot;, 2, aesKey, spec, cipherText, associatedData);
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String aesDecryptPhone(String iv, String cipherText, String sessionKey) {
+&nbsp;        IvParameterSpec spec = new IvParameterSpec(StrUtil.base64DecodeFromString(iv));
+&nbsp;        return CommonUtil.doCipher(&quot;AES/CBC/PKCS5Padding&quot;, 2, StrUtil.base64DecodeFromString(sessionKey), spec, cipherText, (byte[])null);
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String encryptOAEP(String message, X509Certificate certificate) {
+&nbsp;        return StrUtil.base64Encode(CommonUtil.doCipher(&quot;RSA/ECB/OAEPWithSHA-1AndMGF1Padding&quot;, 1, certificate.getPublicKey(), message.getBytes(StandardCharsets.UTF_8)));
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public static String decryptOAEP(String cipherText, PrivateKey privateKey) {</b>
+&nbsp;        byte[] cipherData = CommonUtil.doCipher(&quot;RSA/ECB/OAEPWithSHA-1AndMGF1Padding&quot;, 2, privateKey, Base64.getDecoder().decode(cipherText));
+<b class="fc">&nbsp;        return new String(cipherData, StandardCharsets.UTF_8);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String rsaEncrypt(String message, String certPath) {
+&nbsp;        try {
+&nbsp;            InputStream in = Resources.getResource(certPath);
+&nbsp;
+&nbsp;            String var4;
+&nbsp;            try {
+&nbsp;                X509Certificate cert = (X509Certificate)CertificateFactory.getInstance(&quot;X509&quot;).generateCertificate(in);
+&nbsp;                cert.checkValidity();
+&nbsp;                var4 = encryptOAEP(message, cert);
+&nbsp;            } catch (Throwable var6) {
+&nbsp;                if (in != null) {
+<b class="nc">&nbsp;                    try {</b>
+&nbsp;                        in.close();
+<b class="nc">&nbsp;                    } catch (Throwable var5) {</b>
+&nbsp;                        var6.addSuppressed(var5);
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;                throw var6;
+&nbsp;            }
+&nbsp;
+&nbsp;            if (in != null) {
+&nbsp;                in.close();
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+&nbsp;            return var4;
+<b class="nc">&nbsp;        } catch (IOException var7) {</b>
+&nbsp;            IOException e = var7;
+&nbsp;            throw new UncheckedIOException(&quot;IC 错误&quot;, e);
+&nbsp;        } catch (CertificateExpiredException var8) {
+&nbsp;            CertificateExpiredException e = var8;
+&nbsp;            throw new RuntimeException(&quot;证书已过期&quot;, e);
+&nbsp;        } catch (CertificateNotYetValidException var9) {
+&nbsp;            CertificateNotYetValidException e = var9;
+&nbsp;            throw new RuntimeException(&quot;证书尚未生效&quot;, e);
+&nbsp;        } catch (CertificateException var10) {
+&nbsp;            CertificateException e = var10;
+&nbsp;            throw new RuntimeException(&quot;无效的证书&quot;, e);
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    public static String rsaSign(PrivateKey privateKey, byte[] data) {
+<b class="nc">&nbsp;        return StrUtil.base64Encode(RsaCrypto.sign(&quot;SHA256withRSA&quot;, privateKey, data));</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;}</b>
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-24 11:36</div>
+</div>
+</body>
+</html>

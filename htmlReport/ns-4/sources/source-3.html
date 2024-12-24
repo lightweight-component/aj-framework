@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=GBK"> 
+  <title>Coverage Report > StreamHelper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.ajaxjs.util.io</a>
+</div>
+
+<h1>Coverage Summary for Class: StreamHelper (com.ajaxjs.util.io)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StreamHelper</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.7%
+  </span>
+  <span class="absValue">
+    (5/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    56.4%
+  </span>
+  <span class="absValue">
+    (22/39)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package com.ajaxjs.util.io;
+&nbsp;
+&nbsp;import java.io.BufferedOutputStream;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.ByteArrayOutputStream;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.io.InputStreamReader;
+&nbsp;import java.io.OutputStream;
+&nbsp;import java.io.UncheckedIOException;
+&nbsp;import java.nio.charset.Charset;
+&nbsp;import java.nio.charset.StandardCharsets;
+&nbsp;import java.util.function.Consumer;
+&nbsp;
+&nbsp;public class StreamHelper {
+&nbsp;    public StreamHelper() {
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String copyToString(InputStream in) {
+&nbsp;        return copyToString(in, StandardCharsets.UTF_8);
+&nbsp;    }
+<b class="nc">&nbsp;</b>
+&nbsp;    public static String copyToString(InputStream in, Charset encode) {
+&nbsp;        StringBuffer result = new StringBuffer();
+&nbsp;        read(in, encode, (line) -&gt; {
+&nbsp;            result.append(line);
+&nbsp;            result.append(&#39;\n&#39;);
+&nbsp;        });
+&nbsp;        return result.toString();
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public static void read(InputStream in, Charset encode, Consumer&lt;String&gt; fn) {
+&nbsp;        try {
+&nbsp;            InputStreamReader inReader = new InputStreamReader(in, encode);
+&nbsp;
+&nbsp;            try {
+&nbsp;                BufferedReader reader = new BufferedReader(inReader);
+&nbsp;
+&nbsp;                String line;
+&nbsp;                try {
+<b class="fc">&nbsp;                    while((line = reader.readLine()) != null) {</b>
+&nbsp;                        fn.accept(line);
+<b class="fc">&nbsp;                    }</b>
+<b class="fc">&nbsp;                } catch (Throwable var9) {</b>
+<b class="fc">&nbsp;                    try {</b>
+&nbsp;                        reader.close();
+&nbsp;                    } catch (Throwable var8) {
+<b class="fc">&nbsp;                        var9.addSuppressed(var8);</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;                    throw var9;
+&nbsp;                }
+&nbsp;
+&nbsp;                reader.close();
+&nbsp;            } catch (Throwable var10) {
+&nbsp;                try {
+&nbsp;                    inReader.close();
+&nbsp;                } catch (Throwable var7) {
+&nbsp;                    var10.addSuppressed(var7);
+&nbsp;                }
+&nbsp;
+&nbsp;                throw var10;
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;            inReader.close();
+&nbsp;        } catch (IOException var11) {
+<b class="fc">&nbsp;            IOException e = var11;</b>
+&nbsp;            throw new UncheckedIOException(e);
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+&nbsp;    public static long write(InputStream in, OutputStream out) {
+&nbsp;        try {
+&nbsp;            return in.transferTo(out);
+&nbsp;        } catch (IOException var3) {
+&nbsp;            IOException e = var3;
+&nbsp;            throw new RuntimeException(&quot;复制流的时候失败&quot;, e);
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static byte[] inputStream2Byte(InputStream in) {
+&nbsp;        try {
+&nbsp;            ByteArrayOutputStream out = new ByteArrayOutputStream();
+&nbsp;
+&nbsp;            byte[] var2;
+&nbsp;            try {
+&nbsp;                write(in, out);
+&nbsp;                var2 = out.toByteArray();
+&nbsp;            } catch (Throwable var5) {
+&nbsp;                try {
+&nbsp;                    out.close();
+&nbsp;                } catch (Throwable var4) {
+&nbsp;                    var5.addSuppressed(var4);
+&nbsp;                }
+&nbsp;
+&nbsp;                throw var5;
+&nbsp;            }
+&nbsp;
+&nbsp;            out.close();
+&nbsp;            return var2;
+&nbsp;        } catch (IOException var6) {
+&nbsp;            IOException e = var6;
+&nbsp;            throw new UncheckedIOException(e);
+&nbsp;        }
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    public static void bytes2output(OutputStream out, byte[] data, int off, int length) {
+&nbsp;        bytes2output(out, data, true, off, length);
+<b class="pc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public static void bytes2output(OutputStream out, byte[] data, boolean isBuffered, int off, int length) {</b>
+<b class="fc">&nbsp;        try {</b>
+&nbsp;            if (isBuffered) {
+<b class="fc">&nbsp;                out = new BufferedOutputStream((OutputStream)out, 1024);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            if (off == 0 &amp;&amp; length == 0) {
+<b class="nc">&nbsp;                ((OutputStream)out).write(data);</b>
+<b class="nc">&nbsp;            } else {</b>
+&nbsp;                ((OutputStream)out).write(data, off, length);
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            ((OutputStream)out).flush();</b>
+&nbsp;        } catch (IOException var6) {
+<b class="nc">&nbsp;            IOException e = var6;</b>
+<b class="nc">&nbsp;            throw new UncheckedIOException(&quot;byte[] 转换为输出流时候错误&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-24 11:36</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,392 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=GBK"> 
+  <title>Coverage Report > ConvertBasicValue</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.ajaxjs.util</a>
+</div>
+
+<h1>Coverage Summary for Class: ConvertBasicValue (com.ajaxjs.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConvertBasicValue</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.6%
+  </span>
+  <span class="absValue">
+    (103/148)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.3%
+  </span>
+  <span class="absValue">
+    (102/132)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;//
+&nbsp;// Source code recreated from a .class file by IntelliJ IDEA
+&nbsp;// (powered by FernFlower decompiler)
+&nbsp;//
+&nbsp;
+&nbsp;package com.ajaxjs.util;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.math.BigInteger;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;import lombok.Generated;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+<b class="fc">&nbsp;</b>
+&nbsp;public class ConvertBasicValue {
+&nbsp;    @Generated
+&nbsp;    private static final Logger log = LoggerFactory.getLogger(ConvertBasicValue.class);
+&nbsp;    private static String diver = &quot;,&quot;;
+<b class="fc">&nbsp;</b>
+&nbsp;    public static &lt;T&gt; T basicCast(Object value, Class&lt;T&gt; clz) {
+&nbsp;        return basicConvert(value, clz);
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Object basicConvert(Object value, Class&lt;?&gt; clz) {
+&nbsp;        if (value == null) {
+&nbsp;            return null;
+&nbsp;        } else if (clz == null) {
+&nbsp;            log.warn(&quot;Clz can not be null&quot;);
+&nbsp;            return null;
+&nbsp;        } else if (clz == String.class) {
+&nbsp;            return value.toString();
+&nbsp;        } else if (clz != Boolean.TYPE &amp;&amp; clz != Boolean.class) {
+&nbsp;            if (clz != Integer.TYPE &amp;&amp; clz != Integer.class) {
+&nbsp;                if (clz != Long.TYPE &amp;&amp; clz != Long.class) {
+&nbsp;                    if (clz != Float.TYPE &amp;&amp; clz != Float.class) {
+&nbsp;                        if (clz != Double.TYPE &amp;&amp; clz != Double.class) {
+<b class="nc">&nbsp;                            if (clz == Date.class) {</b>
+&nbsp;                                return DateHelper.object2Date(value);
+&nbsp;                            } else {
+&nbsp;                                if (clz == BigDecimal.class) {
+&nbsp;                                    if (value instanceof String || value instanceof Number) {
+&nbsp;                                        return new BigDecimal(value.toString());
+&nbsp;                                    }
+&nbsp;
+&nbsp;                                    log.warn(&quot;value: [{}] type:[{}] can not be converted to BigDecimal&quot;, value, value.getClass().getName());
+&nbsp;                                } else {
+&nbsp;                                    if (clz.isArray()) {
+<b class="pc">&nbsp;                                        return toArray(value, clz);</b>
+<b class="nc">&nbsp;                                    }</b>
+&nbsp;
+<b class="pc">&nbsp;                                    if (clz.isEnum()) {</b>
+<b class="nc">&nbsp;                                        Object[] enumConstants = clz.getEnumConstants();</b>
+<b class="nc">&nbsp;                                        boolean isNumber = value instanceof Integer;</b>
+&nbsp;                                        Object[] var4 = enumConstants;
+&nbsp;                                        int var5 = enumConstants.length;
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;                                        for(int var6 = 0; var6 &lt; var5; ++var6) {</b>
+<b class="pc">&nbsp;                                            Object obj = var4[var6];</b>
+<b class="fc">&nbsp;                                            if (isNumber) {</b>
+<b class="pc">&nbsp;                                                Enum&lt;?&gt; e = (Enum)obj;</b>
+<b class="fc">&nbsp;                                                if (e.ordinal() == (Integer)value) {</b>
+<b class="pc">&nbsp;                                                    return e.ordinal();</b>
+<b class="fc">&nbsp;                                                }</b>
+<b class="pc">&nbsp;                                            } else if (obj.toString().equals(value)) {</b>
+<b class="nc">&nbsp;                                                return obj;</b>
+<b class="pc">&nbsp;                                            }</b>
+<b class="nc">&nbsp;                                        }</b>
+<b class="fc">&nbsp;                                    }</b>
+<b class="fc">&nbsp;                                }</b>
+<b class="pc">&nbsp;</b>
+<b class="nc">&nbsp;                                return null;</b>
+<b class="nc">&nbsp;                            }</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            return object2double(value);</b>
+<b class="pc">&nbsp;                        }</b>
+<b class="fc">&nbsp;                    } else {</b>
+<b class="nc">&nbsp;                        return object2float(value);</b>
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                } else {</b>
+&nbsp;                    return object2long(value);
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            } else {</b>
+<b class="nc">&nbsp;                return object2int(value);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            return toBoolean(value);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    static Object toArray(Object value, Class&lt;?&gt; clz) {
+&nbsp;        if (clz == String[].class) {
+<b class="nc">&nbsp;            if (value instanceof ArrayList) {</b>
+&nbsp;                ArrayList&lt;String&gt; list = (ArrayList)value;
+&nbsp;                return list.toArray(new String[0]);
+&nbsp;            }
+&nbsp;
+&nbsp;            if (value instanceof String) {
+&nbsp;                return ((String)value).split(diver);
+&nbsp;            }
+<b class="fc">&nbsp;</b>
+&nbsp;            log.warn(&quot;value: [{}] type:[{}] can not be converted to {}&quot;, new Object[]{value, value.getClass().getName(), clz});
+<b class="fc">&nbsp;        } else if (clz == int[].class) {</b>
+<b class="fc">&nbsp;            if (value instanceof String) {</b>
+<b class="fc">&nbsp;                return CollUtils.stringArr2intArr((String)value);</b>
+<b class="pc">&nbsp;            }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;            if (value instanceof List) {
+<b class="nc">&nbsp;                return CollUtils.intList2Arr((List)value);</b>
+<b class="pc">&nbsp;            }</b>
+&nbsp;
+<b class="fc">&nbsp;            log.warn(&quot;value: [{}] type:[{}] can‘t be converted to {}&quot;, new Object[]{value, value.getClass().getName(), clz});</b>
+<b class="fc">&nbsp;        }</b>
+<b class="pc">&nbsp;</b>
+<b class="fc">&nbsp;        log.info(&quot;More array type is on the way.&quot;);</b>
+&nbsp;        return null;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public static boolean toBoolean(Object value) {
+<b class="nc">&nbsp;        if (value == null) {</b>
+&nbsp;            return false;
+<b class="nc">&nbsp;        } else if (!value.equals(true) &amp;&amp; !value.equals(1) &amp;&amp; !value.equals(1L)) {</b>
+&nbsp;            if (value instanceof String) {
+&nbsp;                String _value = (String)value;
+&nbsp;                if (_value.equalsIgnoreCase(&quot;yes&quot;) || _value.equalsIgnoreCase(&quot;true&quot;) || _value.equals(&quot;1&quot;) || _value.equalsIgnoreCase(&quot;on&quot;)) {
+&nbsp;                    return true;
+&nbsp;                }
+&nbsp;
+&nbsp;                if (_value.equalsIgnoreCase(&quot;no&quot;) || _value.equalsIgnoreCase(&quot;false&quot;) || _value.equals(&quot;0&quot;) || _value.equalsIgnoreCase(&quot;off&quot;) || _value.equalsIgnoreCase(&quot;null&quot;)) {
+&nbsp;                    return false;
+&nbsp;                }
+&nbsp;            }
+<b class="pc">&nbsp;</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        } else {
+<b class="pc">&nbsp;            return true;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+<b class="pc">&nbsp;</b>
+<b class="fc">&nbsp;    public static int object2int(Object value) {</b>
+&nbsp;        if (value == null) {
+<b class="fc">&nbsp;            return 0;</b>
+<b class="fc">&nbsp;        } else if (value instanceof String) {</b>
+&nbsp;            return Integer.parseInt((String)value);
+<b class="pc">&nbsp;        } else if (value instanceof Number) {</b>
+<b class="pc">&nbsp;            return value instanceof Integer ? (Integer)value : ((Number)value).intValue();</b>
+<b class="fc">&nbsp;        } else {</b>
+&nbsp;            String toString = value.toString();
+&nbsp;            if (toString.matches(&quot;-?\\d+&quot;)) {
+<b class="nc">&nbsp;                return Integer.parseInt(toString);</b>
+&nbsp;            } else {
+&nbsp;                throw new IllegalArgumentException(&quot;This Object doesn&#39;t represent an int&quot;);
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static long object2long(Object value) {
+&nbsp;        if (value == null) {
+&nbsp;            return 0L;
+<b class="fc">&nbsp;        } else if (value instanceof Long) {</b>
+<b class="fc">&nbsp;            return (Long)value;</b>
+&nbsp;        } else if (value instanceof BigInteger) {
+<b class="fc">&nbsp;            return ((BigInteger)value).longValue();</b>
+<b class="fc">&nbsp;        } else if (value instanceof Number) {</b>
+<b class="fc">&nbsp;            return ((Number)value).longValue();</b>
+<b class="pc">&nbsp;        } else if (value instanceof String) {</b>
+&nbsp;            return Long.parseLong((String)value);
+<b class="fc">&nbsp;        } else {</b>
+&nbsp;            throw new IllegalArgumentException(&quot;This Object doesn&#39;t represent a long&quot;);
+<b class="pc">&nbsp;        }</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    public static double object2double(Object value) {</b>
+&nbsp;        if (value == null) {
+&nbsp;            return 0.0;
+&nbsp;        } else if (value instanceof Double) {
+&nbsp;            return (Double)value;
+&nbsp;        } else if (value instanceof BigInteger) {
+&nbsp;            return ((BigInteger)value).doubleValue();
+&nbsp;        } else if (value instanceof Number) {
+&nbsp;            return ((Number)value).doubleValue();
+&nbsp;        } else if (value instanceof String) {
+&nbsp;            return Double.parseDouble((String)value);
+<b class="fc">&nbsp;        } else {</b>
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;This Object doesn&#39;t represent a double&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public static float object2float(Object value) {</b>
+<b class="fc">&nbsp;        if (value == null) {</b>
+<b class="fc">&nbsp;            return 0.0F;</b>
+<b class="fc">&nbsp;        } else if (value instanceof Float) {</b>
+<b class="fc">&nbsp;            return (Float)value;</b>
+<b class="fc">&nbsp;        } else if (value instanceof BigInteger) {</b>
+&nbsp;            return ((BigInteger)value).floatValue();
+<b class="fc">&nbsp;        } else if (value instanceof Number) {</b>
+&nbsp;            return ((Number)value).floatValue();
+&nbsp;        } else if (value instanceof String) {
+&nbsp;            return Float.parseFloat((String)value);
+&nbsp;        } else {
+&nbsp;            throw new IllegalArgumentException(&quot;This Object doesn&#39;t represent a float&quot;);
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Object toJavaValue(String value) {
+<b class="fc">&nbsp;        if (value == null) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            value = value.trim();</b>
+<b class="fc">&nbsp;            if (&quot;&quot;.equals(value)) {</b>
+<b class="fc">&nbsp;                return &quot;&quot;;</b>
+<b class="fc">&nbsp;            } else if (&quot;null&quot;.equals(value)) {</b>
+<b class="fc">&nbsp;                return null;</b>
+<b class="fc">&nbsp;            } else if (&quot;true&quot;.equalsIgnoreCase(value)) {</b>
+<b class="fc">&nbsp;                return true;</b>
+<b class="fc">&nbsp;            } else if (&quot;false&quot;.equalsIgnoreCase(value)) {</b>
+&nbsp;                return false;
+<b class="fc">&nbsp;            } else {</b>
+&nbsp;                if (value.charAt(0) == &#39;-&#39; || value.charAt(0) &gt;= &#39;0&#39; &amp;&amp; value.charAt(0) &lt;= &#39;9&#39;) {
+&nbsp;                    try {
+&nbsp;                        int int_value = Integer.parseInt(value);
+&nbsp;                        if (String.valueOf(int_value).equals(value)) {
+&nbsp;                            return int_value;
+&nbsp;                        }
+&nbsp;                    } catch (NumberFormatException var5) {
+&nbsp;                        try {
+&nbsp;                            long long_value = Long.parseLong(value);
+<b class="fc">&nbsp;                            if (String.valueOf(long_value).equals(value)) {</b>
+<b class="fc">&nbsp;                                return long_value;</b>
+&nbsp;                            }
+<b class="fc">&nbsp;                        } catch (NumberFormatException var4) {</b>
+<b class="fc">&nbsp;                            if (value.matches(&quot;[0-9]{1,13}(\\.[0-9]*)?&quot;)) {</b>
+<b class="fc">&nbsp;                                return Double.parseDouble(value);</b>
+<b class="fc">&nbsp;                            }</b>
+<b class="fc">&nbsp;                        }</b>
+<b class="fc">&nbsp;                    }</b>
+<b class="fc">&nbsp;                }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;                return value;
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Generated
+&nbsp;    public ConvertBasicValue() {
+&nbsp;    }
+&nbsp;
+&nbsp;    @Generated
+&nbsp;    public boolean equals(final Object o) {
+<b class="pc">&nbsp;        if (o == this) {</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        } else if (!(o instanceof ConvertBasicValue)) {
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        } else {
+<b class="pc">&nbsp;            ConvertBasicValue other = (ConvertBasicValue)o;</b>
+<b class="nc">&nbsp;            return other.canEqual(this);</b>
+&nbsp;        }
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    @Generated
+<b class="fc">&nbsp;    protected boolean canEqual(final Object other) {</b>
+<b class="fc">&nbsp;        return other instanceof ConvertBasicValue;</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @Generated</b>
+&nbsp;    public int hashCode() {
+&nbsp;        int result = true;
+<b class="pc">&nbsp;        return 1;</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    @Generated
+<b class="pc">&nbsp;    public String toString() {</b>
+<b class="fc">&nbsp;        return &quot;ConvertBasicValue()&quot;;</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-12-24 11:36</div>
+</div>
+</body>
+</html>
