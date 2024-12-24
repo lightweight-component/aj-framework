@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * String encoder
+ * String URL/Base64 encoder
  */
 public class EncodeTools {
     /**

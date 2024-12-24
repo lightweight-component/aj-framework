@@ -5,6 +5,9 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+/**
+ * 字节数组工具类
+ */
 public class BytesHelper {
     /**
      * 在字节数组中截取指定长度数组

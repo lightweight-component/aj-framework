@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 正则表达式工具类
+ */
 public class RegExpUtils {
     public boolean isMatch(Pattern pattern, String str) {
         return pattern.matcher(str).find();

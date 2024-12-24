@@ -5,27 +5,33 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
 [![QQ群](https://framework.ajaxjs.com/static/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22)
 
-# AJ Util 工具包
+# AJ Utilities
 
-工具库/助手包是框架的基础构成部分之一，英文多见于 Utils、Helpers、Tools。本项目定位为轻量级工具库，jar 体积不过 60k 左右，尽量避免第三方依赖。
+Small Java Utils Library with many powerful components. The size of jar is around 60kb.
 
-本框架由下面若干模块所组成。
-
-| 模块           | 说明                                                    | 备注 |
-|--------------|-------------------------------------------------------|----|
-| util         | 常规工具包，有字符串工具类、编码工具类、常用日期处理类、XML 工具类等等                 |    |
-| io           | 文件磁盘处理、流处理工具类、资源扫描器                        |    |
-| reflect      | 反射工具包                                                 |    |
-| convert      | 值处理工具类、键对值转换                                          |    |
-| cryptography | 摘要算法：MD5/SHA；加密解密工具包： DES/AES/3D_DES/PBE/RSA/DH       |    |
-| regexp       | 类似 js 的正则表达式 API                                      |    |
-
-
+| Class/Package 模块    | Detail 说明                     | Memo 备注 |
+|---------------------|-------------------------------|---------|
+| BytesHelper         | 字节数组工具类                       |         |
+| CollUtils           | 集合工具类                         |         |
+| ConvertBasicValue   | 尝试转换目标类型，注意并不是所有的类型都可以进行转换    |         |
+| DateHelper          | 日期工具类                         |         |
+| EncodeTools         | String URL/Base64 encoder     |         |
+| MessageDigestHelper | MD5/SHA1/SHA256/384/512 加密工具类 |         |
+| ObjectHelper        | A helper for Java Object.     |         |
+| RandomTools         | Random Numbers and Strings    |         |
+| RegExpUtils         | 正则表达式工具类                      |         |
+| StrUtil             | 字符串工具类                        |         |
+| XmlHelper           | XML 处理工具类                     |         |
+| cryptography        | AES/RSA 加密解密包                 |         |
+| io                  | 文件、资源、流工具包                    |         |
+| reflect             | 反射工具包                         |         |
 
 ## Source code
-[Github](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [Gitcode](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util)
+
+[Github](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [Gitcode](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-public/aj-util)
 
 ## Link
+
 [Tutorials](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [Java Documents](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [Web Site](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util)
 
 ## Install
