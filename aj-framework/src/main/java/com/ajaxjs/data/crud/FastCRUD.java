@@ -254,8 +254,8 @@ public class FastCRUD<T, K extends Serializable> extends FastCRUD_Config {
             if (idType == 2)
                 params.put(getTableModel().getIdField(), SnowflakeId.get());
 
-            if (idType == 3)
-                params.put(idField, StrUtil.uuid());
+//            if (idType == 3)
+//                params.put(idField, StrUtil.uuid());
         }
 
         if (beforeCreate != null)

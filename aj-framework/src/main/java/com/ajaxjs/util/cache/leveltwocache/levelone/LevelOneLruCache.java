@@ -5,7 +5,7 @@ import org.springframework.cache.Cache;
 
 
 public class LevelOneLruCache implements LevelOneCache<String, Cache.ValueWrapper> {
-    ConcurrentLruCache<String, Cache.ValueWrapper> map = new ConcurrentLruCache<>(10, null);
+    ConcurrentLruCache<String, Cache.ValueWrapper> map = new ConcurrentLruCache<>(10);
 
     @Override
     public Cache.ValueWrapper get(String key) {

@@ -4,11 +4,13 @@ import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
 import org.example.model.Foo;
+import org.example.model.User;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 
@@ -79,6 +81,13 @@ public class FooService implements FooController {
             }
         }
 
+    }
+
+    @Override
+    public boolean jsonSubmit(@RequestBody User user) {
+        // 处理接收到的 user 对象
+        System.out.println("Received user: " + user.getName() + ", " + user.getAge());
+        return false;
     }
 
 

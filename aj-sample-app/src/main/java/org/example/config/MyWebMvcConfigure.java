@@ -17,12 +17,27 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.List;
 
 @Configuration
 public class MyWebMvcConfigure extends BaseWebMvcConfigure {
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        converters.add(0, new MyBeanC());
+//    }
+
+
+//    @Bean
+//    public MappingJackson2HttpMessageConverter converter() {
+//        MappingJackson2HttpMessageConverter messageConverter = new MyBeanC();
+//
+//        return messageConverter;
+//    }
     /**
      * 配置 RedisTemplate
      *
