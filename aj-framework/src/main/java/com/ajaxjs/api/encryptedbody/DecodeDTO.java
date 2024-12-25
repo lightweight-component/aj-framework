@@ -1,4 +1,4 @@
-package com.ajaxjs.api.encryptbody;
+package com.ajaxjs.api.encryptedbody;
 
 import lombok.Data;
 

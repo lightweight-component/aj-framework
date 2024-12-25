@@ -1,34 +1,24 @@
 package org.example.config;
 
-import com.ajaxjs.api.encryptbody.EncryptBodyConverter;
+import com.ajaxjs.api.encryptedbody.EncryptedBodyConverter;
 import com.ajaxjs.api.security.referer.HttpReferer;
 import com.ajaxjs.api.time_signature.TimeSignature;
 import com.ajaxjs.springboot.BaseWebMvcConfigure;
-import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheWriter;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.converter.HttpMessageConverter;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.List;
 
 @Configuration
 public class MyWebMvcConfigure extends BaseWebMvcConfigure {
+    @Value("${api.EncryptedBody.privateKey}")
+    private String apiPrivateKey;
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, new EncryptBodyConverter());
+        converters.add(0, new EncryptedBodyConverter(apiPrivateKey));
     }
 
 
@@ -56,6 +46,7 @@ public class MyWebMvcConfigure extends BaseWebMvcConfigure {
 //
 //        return template;
 //    }
+
 
     @Bean
     public TimeSignature TimeSignature() {

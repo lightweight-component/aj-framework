@@ -1,0 +1,16 @@
+package com.ajaxjs.api.encryptedbody;
+
+import org.junit.jupiter.api.Test;
+
+public class TestEncryptBodyConverter {
+    String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIwEbyJboyyef3848da7iWrdkVGPhc/m5N/dkEQtEv5EwzOhif06vhcX7S/X7EbWHLzGglkEXvzYcLGPPY6m9eVw0JRudXccd4M/HWOvwBhukSEx5gjftGTtDMh/WCS1zmlaqicyyB2Hy1EXwVdY6zT+gzMnN92oVeD6HERqDN7PAgMBAAECgYB+t8Sco7KZvxhEW5UDcdZ8EOpjljDUZ3Lb5/mYufJmjHTdVWU8+NzwqYbPterwcPaxIjb1uS7+RiQ3jht370K6daZwuii7ipuS8KbghnJodlE6oY4FthFo5l2BJbdnIL7ahiMK2fWN9fj4I4r+7yaenn8Vyq1y94hVoEblJcweAQJBAOkxO86p0/DJ4KdyPVjjz0gtzc5YZSqUjuvKydgblJ7YW6oKiYcqAmnIBQ/Q1oky7ttQ0BvfzET+QxgnZs0CyDECQQCZtj8AOrpcIGvGuV7o6Bl2PzQ7QTq4i+rCCqV8G22p0qWY4Lvcpby7yB86IamDHCRqMuu88taZBWFZpmRKt1b/AkEAnWKlQu5MJQ+bmGf6D6xxkf2YEdSHMx3g+DN912WGAU91TmaeO6OWzV46TFpe8Wp2237HdoitjUMudXbiYyulgQJAV+A71kq83gxe8UZqvyZp4BM0LigVhQnglTx27SPVJwBZUbQxUmyiIIzBZX93JJCDNP+Vi/kcvHC5/gHFVn3ISwJAbMK933DY4CW+dLWdu5DdkVz3FUeHLg7OmCIYAVqQ89eMrkmXzhR9fqMYF7J6BpwukrB0rGY1EooRdPwQ40/tqg==";
+
+    String encryptedText = "BQduoGH4PI+6jxgu+6S2FWu5c/vHd+041ITnCH9JulUKpPX8BvRTvBNYfP7cl0rez7GFCH5OMvXQDrQl6iGEVUxQMemhky5WFCh8EzUrFZeFVDhpCA6pVy2ev0anPZxJ7s3aEdUWAtvogmn7LaTIgNANULN7dnKBWBY2DVC1dSg=";
+
+    @Test
+    void testDecrypt() {
+        String text = EncryptedBodyConverter.decrypt(encryptedText, privateKey);
+        System.out.println(text);
+    }
+
+}

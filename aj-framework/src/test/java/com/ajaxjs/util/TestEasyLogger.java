@@ -13,7 +13,7 @@ public class TestEasyLogger {
 
     @Test
     public void testGetPrivateField() {
-        String foo1 = Clazz.getPrivateField(new TestEasyLogger(), "foo", String.class);
+        String foo1 = EasyLogger.getPrivateField(new TestEasyLogger(), "foo", String.class);
         System.out.println(foo1);
     }
 

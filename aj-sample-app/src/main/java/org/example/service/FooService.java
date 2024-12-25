@@ -4,15 +4,12 @@ import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
 import org.example.model.Foo;
-import com.ajaxjs.api.encryptbody.User;
+import com.ajaxjs.api.encryptedbody.User;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.annotation.Resource;
 
 @Service
 public class FooService implements FooController {
