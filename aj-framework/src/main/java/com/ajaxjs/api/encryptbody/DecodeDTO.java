@@ -1,10 +1,11 @@
-package org.example.config;
+package com.ajaxjs.api.encryptbody;
 
 import lombok.Data;
 
 @Data
 public class DecodeDTO {
-    private String key;
-
+    /**
+     * Encrypted data
+     */
     private String data;
 }

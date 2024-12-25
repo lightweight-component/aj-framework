@@ -1,8 +1,8 @@
 package com.ajaxjs.desensitize.entity;
 
-import com.emily.infrastructure.sensitize.DesensitizeType;
-import com.emily.infrastructure.sensitize.annotation.DesensitizeMapProperty;
-import com.emily.infrastructure.sensitize.annotation.DesensitizeModel;
+import com.ajaxjs.desensitize.DesensitizeType;
+import com.ajaxjs.desensitize.annotation.DesensitizeMapProperty;
+import com.ajaxjs.desensitize.annotation.DesensitizeModel;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

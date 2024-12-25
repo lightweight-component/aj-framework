@@ -4,7 +4,7 @@ import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
 import org.example.model.Foo;
-import org.example.model.User;
+import com.ajaxjs.api.encryptbody.User;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +17,10 @@ import javax.annotation.Resource;
 @Service
 public class FooService implements FooController {
     //    @Autowired(required = false)
-    @Resource
+//    @Resource
     private RedisTemplate<String, Integer> redisTemplate;
 
-    @Resource
+//    @Resource
     LevelTwoCacheManager cacheManager;
 
     @Override
@@ -48,7 +48,7 @@ public class FooService implements FooController {
         return foo;
     }
 
-    @Autowired
+//    @Resource
     private RedissonClient redissonClient;
 
     @Override

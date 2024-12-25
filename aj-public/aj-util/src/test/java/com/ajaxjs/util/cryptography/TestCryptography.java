@@ -1,8 +1,10 @@
 package com.ajaxjs.util.cryptography;
 
 
+import com.ajaxjs.util.EncodeTools;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,15 +62,18 @@ public class TestCryptography {
         Map<String, byte[]> map = RsaCrypto.init();
         String publicKey = RsaCrypto.getPublicKey(map), privateKey = RsaCrypto.getPrivateKey(map);
 
-//		System.out.println("公钥: \n\r" + publicKey);
-//		System.out.println("私钥： \n\r" + privateKey);
+        System.out.println("公钥: \n\r" + publicKey);
+        System.out.println("私钥： \n\r" + privateKey);
 //		System.out.println("公钥加密--------私钥解密");
 
         String word = "你好，世界！";
 
         byte[] encWord = RsaCrypto.encryptByPublicKey(word.getBytes(), publicKey);
         String decWord = new String(RsaCrypto.decryptByPrivateKey(encWord, privateKey));
-//		System.out.println("加密前: " + word + "\n\r" + "解密后: " + decWord);
+
+        String eBody = EncodeTools.base64EncodeToString(encWord);
+        String decWord2 = new String(RsaCrypto.decryptByPrivateKey(EncodeTools.base64Decode(eBody), privateKey));
+        System.out.println("加密前: " + word + "\n\r密文：" + eBody + "\n解密后: " + decWord2);
         assertEquals(word, decWord);
 
 //		System.out.println("私钥加密--------公钥解密");

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 //@TestPropertySource(locations = "classpath:application.yml")
 public class TestLevelTwoCache {
-    @Resource
+//    @Resource
     LevelTwoCacheManager cacheManager;
 
     String _value = "h888";

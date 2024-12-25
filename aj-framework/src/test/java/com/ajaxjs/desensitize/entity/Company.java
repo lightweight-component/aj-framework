@@ -1,7 +1,7 @@
 package com.ajaxjs.desensitize.entity;
 
-import com.emily.infrastructure.sensitize.annotation.DesensitizeModel;
-import com.emily.infrastructure.sensitize.annotation.DesensitizeProperty;
+import com.ajaxjs.desensitize.annotation.DesensitizeModel;
+import com.ajaxjs.desensitize.annotation.DesensitizeProperty;
 
 import java.util.List;
 import java.util.Map;

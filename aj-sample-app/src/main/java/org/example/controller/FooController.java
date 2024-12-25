@@ -1,9 +1,10 @@
 package org.example.controller;
 
+import com.ajaxjs.api.encryptbody.User;
 import com.ajaxjs.api.security.referer.HttpRefererCheck;
 import com.ajaxjs.api.time_signature.TimeSignatureVerify;
 import org.example.model.Foo;
-import org.example.model.User;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
