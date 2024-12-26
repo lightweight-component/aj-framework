@@ -19,4 +19,8 @@ public interface FooController {
 
     @PostMapping("/submit")
     boolean jsonSubmit(@RequestBody User user);
+
+    @GetMapping("/user")
+    User User();
+
 }

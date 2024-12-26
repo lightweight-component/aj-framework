@@ -24,18 +24,18 @@ class Tools {
      * @throws IllegalArgumentException 如果找不到具有指定名称的字段，或者类或字段名是 null
      */
     public static Field getField(Class<?> clazz, String name, boolean forceAccess) {
-        if (clazz == null || name == null || name.isEmpty()) {
+        if (clazz == null || name == null || name.isEmpty())
             throw new IllegalArgumentException("Class and field name must not be null or empty");
-        }
 
         Class<?> currentClass = clazz;
+
         while (currentClass != null) {
             try {
                 // 尝试在当前类中获取字段
                 Field field = currentClass.getDeclaredField(name);
-                if (forceAccess) {
+                if (forceAccess)
                     field.setAccessible(true);
-                }
+
                 return field;
             } catch (NoSuchFieldException ignored) {
                 // 如果当前类没有该字段，则继续查找父类

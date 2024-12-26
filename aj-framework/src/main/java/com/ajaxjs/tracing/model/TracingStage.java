@@ -1,4 +1,4 @@
-package com.ajaxjs.tracing;
+package com.ajaxjs.tracing.model;
 
 /**
  * Api请求阶段枚举类

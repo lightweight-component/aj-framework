@@ -42,9 +42,8 @@ public class DeSensitizeUtils {
             for (Object o : (Collection<?>) entity)
                 acquire(o, packClass);
         } else if (entity instanceof Map) {
-            for (Map.Entry<?, ?> entry : ((Map<?, ?>) entity).entrySet()) {
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) entity).entrySet())
                 acquire(entry.getValue(), packClass);
-            }
         } else if (entity.getClass().isArray()) {
             if (!entity.getClass().getComponentType().isPrimitive()) {
                 for (Object v : (Object[]) entity)

@@ -6,8 +6,6 @@ import lombok.Data;
 public class ResponseResultWrapper {
     private Integer status;
 
-    private Integer total;
-
     private String errorCode;
 
     private String message;

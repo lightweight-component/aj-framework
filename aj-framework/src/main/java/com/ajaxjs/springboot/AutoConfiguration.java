@@ -7,10 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = "com.ajaxjs.springboot")
 public class AutoConfiguration {
-    {
-        System.out.println("----------------------------");
-    }
-
     /**
      * 全局异常拦截器
      *

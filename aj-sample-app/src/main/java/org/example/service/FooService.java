@@ -17,7 +17,7 @@ public class FooService implements FooController {
 //    @Resource
     private RedisTemplate<String, Integer> redisTemplate;
 
-//    @Resource
+    //    @Resource
     LevelTwoCacheManager cacheManager;
 
     @Override
@@ -45,7 +45,7 @@ public class FooService implements FooController {
         return foo;
     }
 
-//    @Resource
+    //    @Resource
     private RedissonClient redissonClient;
 
     @Override
@@ -85,6 +85,14 @@ public class FooService implements FooController {
         // 处理接收到的 user 对象
         System.out.println("Received user: " + user.getName() + ", " + user.getAge());
         return false;
+    }
+
+    @Override
+    public User User() {
+        User user = new User();
+        user.setAge(1);
+        user.setName("tom");
+        return user;
     }
 
 

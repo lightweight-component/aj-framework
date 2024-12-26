@@ -13,12 +13,15 @@ import java.util.List;
 
 @Configuration
 public class MyWebMvcConfigure extends BaseWebMvcConfigure {
+    @Value("${api.EncryptedBody.publicKey}")
+    private String apiPublicKey;
+
     @Value("${api.EncryptedBody.privateKey}")
     private String apiPrivateKey;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, new EncryptedBodyConverter(apiPrivateKey));
+        converters.add(0, new EncryptedBodyConverter(apiPublicKey, apiPrivateKey));
     }
 
 

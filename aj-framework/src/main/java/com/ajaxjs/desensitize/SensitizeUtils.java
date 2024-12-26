@@ -61,9 +61,10 @@ public class SensitizeUtils {
             else {
                 Object[] v = (Object[]) entity;
                 Object[] t = new Object[v.length];
-                for (int i = 0; i < v.length; i++) {
+
+                for (int i = 0; i < v.length; i++)
                     t[i] = acquire(v[i], packClass);
-                }
+
                 return t;
             }
         } else if (entity.getClass().isAnnotationPresent(DesensitizeModel.class))
@@ -80,7 +81,7 @@ public class SensitizeUtils {
      * @param entity 需要脱敏的实体类对象
      * @return 实体类属性脱敏后的集合对象
      */
-    protected static Map<String, Object> doSetField(final Object entity, final Class<?>... packClass) throws IllegalAccessException {
+    protected static Map<String, Object> doSetField(Object entity, Class<?>... packClass) throws IllegalAccessException {
         Map<String, Object> fieldMap = new HashMap<>();
         List<Field> fields = Tools.getAllFields(entity.getClass());
 
@@ -96,17 +97,17 @@ public class SensitizeUtils {
                 fieldMap.put(name, null);
                 continue;
             }
-            if (value instanceof String) {
+
+            if (value instanceof String)
                 fieldMap.put(name, doGetEntityStr(field, value));
-            } else if (value instanceof Collection) {
+            else if (value instanceof Collection)
                 fieldMap.put(name, doGetEntityColl(field, value));
-            } else if (value instanceof Map) {
+            else if (value instanceof Map)
                 fieldMap.put(name, doGetEntityMap(field, value));
-            } else if (value.getClass().isArray()) {
+            else if (value.getClass().isArray())
                 fieldMap.put(name, doGetEntityArray(field, value));
-            } else {
+            else
                 fieldMap.put(name, acquire(value, packClass));
-            }
         }
 
         fieldMap.putAll(doGetEntityComplex(entity));
@@ -140,12 +141,11 @@ public class SensitizeUtils {
      * @return 脱敏后的数据对象
      * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static Object doGetEntityStr(final Field field, final Object value) throws IllegalAccessException {
-        if (field.isAnnotationPresent(DesensitizeProperty.class)) {
+    protected static Object doGetEntityStr( Field field,  Object value) throws IllegalAccessException {
+        if (field.isAnnotationPresent(DesensitizeProperty.class))
             return DataMask.doGetProperty((String) value, field.getAnnotation(DesensitizeProperty.class).value());
-        } else {
+         else
             return acquire(value);
-        }
     }
 
     /**
@@ -154,18 +154,19 @@ public class SensitizeUtils {
      * @return 脱敏后的数据对象
      * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static Object doGetEntityColl(final Field field, final Object value) throws IllegalAccessException {
+    protected static Object doGetEntityColl( Field field,  Object value) throws IllegalAccessException {
         Collection<Object> list = new ArrayList<>();
         Collection<?> collection = (Collection<?>) value;
+
         for (Object v : collection) {
-            if (Objects.isNull(v)) {
+            if (Objects.isNull(v))
                 list.add(null);
-            } else if ((v instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class)) {
+             else if ((v instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class))
                 list.add(DataMask.doGetProperty((String) v, field.getAnnotation(DesensitizeProperty.class).value()));
-            } else {
+             else
                 list.add(acquire(v));
-            }
         }
+
         return list;
     }
 
@@ -175,7 +176,7 @@ public class SensitizeUtils {
      * @return 脱敏后的数据对象
      * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static Object doGetEntityMap(final Field field, final Object value) throws IllegalAccessException {
+    protected static Object doGetEntityMap( Field field,  Object value) throws IllegalAccessException {
         Map<Object, Object> dMap = new HashMap<>();
         @SuppressWarnings("unchecked")
         Map<Object, Object> entryMap = ((Map<Object, Object>) value);
@@ -183,6 +184,7 @@ public class SensitizeUtils {
         for (Map.Entry<Object, Object> entry : entryMap.entrySet()) {
             Object key = entry.getKey();
             Object v = entry.getValue();
+
             if (Objects.isNull(v)) {
                 dMap.put(key, null);
                 continue;
@@ -192,22 +194,25 @@ public class SensitizeUtils {
                 if (field.isAnnotationPresent(DesensitizeMapProperty.class)) {
                     DesensitizeMapProperty desensitizeMapProperty = field.getAnnotation(DesensitizeMapProperty.class);
                     int index = (key instanceof String) ? Arrays.asList(desensitizeMapProperty.keys()).indexOf(key) : -1;
+
                     if (index < 0) {
                         dMap.put(key, acquire(v));
                         continue;
                     }
+
                     DesensitizeType type = DesensitizeType.DEFAULT;
-                    if (index <= desensitizeMapProperty.types().length - 1) {
+                    if (index <= desensitizeMapProperty.types().length - 1)
                         type = desensitizeMapProperty.types()[index];
-                    }
+
                     dMap.put(key, DataMask.doGetProperty((String) v, type));
                     continue;
-                } else if (field.isAnnotationPresent(DesensitizeProperty.class)) {
+                } else if (field.isAnnotationPresent(DesensitizeProperty.class))
                     dMap.put(key, DataMask.doGetProperty((String) v, field.getAnnotation(DesensitizeProperty.class).value()));
-                }
             }
+
             dMap.put(key, acquire(v));
         }
+
         return dMap;
     }
 
@@ -217,21 +222,21 @@ public class SensitizeUtils {
      * @return 脱敏后的数据对象
      * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static Object doGetEntityArray(final Field field, final Object value) throws IllegalAccessException {
-        if (value.getClass().getComponentType().isPrimitive()) {
+    protected static Object doGetEntityArray( Field field,  Object value) throws IllegalAccessException {
+        if (value.getClass().getComponentType().isPrimitive())
             return value;
-        } else {
+        else {
             Object[] v = (Object[]) value;
             Object[] t = new Object[v.length];
             for (int i = 0; i < v.length; i++) {
-                if (Objects.isNull(v[i])) {
+                if (Objects.isNull(v[i]))
                     t[i] = null;
-                } else if ((v[i] instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class)) {
+                 else if ((v[i] instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class))
                     t[i] = DataMask.doGetProperty((String) v[i], field.getAnnotation(DesensitizeProperty.class).value());
-                } else {
+                 else
                     t[i] = acquire(v[i]);
-                }
             }
+
             return t;
         }
     }
@@ -243,16 +248,16 @@ public class SensitizeUtils {
      * @return 复杂类型字段脱敏后的数据集合
      * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static Map<String, Object> doGetEntityComplex(final Object entity) throws IllegalAccessException {
+    protected static Map<String, Object> doGetEntityComplex( Object entity) throws IllegalAccessException {
         Map<String, Object> flexFieldMap = null;
         List<Field> fields = Tools.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
 
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(entity);
-            if (Objects.isNull(value)) {
+            if (Objects.isNull(value))
                 continue;
-            }
+
             DesensitizeComplexProperty desensitizeComplexProperty = field.getAnnotation(DesensitizeComplexProperty.class);
             if (Objects.isNull(desensitizeComplexProperty.value()))
                 continue;
@@ -276,6 +281,7 @@ public class SensitizeUtils {
             flexFieldMap = Objects.isNull(flexFieldMap) ? new HashMap<>() : flexFieldMap;
             flexFieldMap.put(desensitizeComplexProperty.value(), DataMask.doGetProperty((String) flexValue, type));
         }
+
         return Objects.isNull(flexFieldMap) ? Collections.emptyMap() : flexFieldMap;
     }
 }

@@ -5,14 +5,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.StringUtils;
 
 /**
- * 新增对非servlet上下文请求入口
+ * 新增对非 servlet 上下文请求入口
  * 应用场景：
  * 1.定时调度器方法，需要当前调用的请求方法内调用三方业务的事物流水号串联起来；
  * 2.消息监听器方法，需要当前调用的请求方法内调用三方业务的事物流水号串联起来；
  * 3.也可以应用在正常的控制器请求方法；
- *
- * @author :  Emily
- * @since :  2023/8/7 4:59 PM
  */
 public class TracingWrapper {
     /**
@@ -38,7 +35,6 @@ public class TracingWrapper {
         run(task, runnable, null);
     }
 
-
     /**
      * 1.对线程前初始化上下文，并标记是否是逻辑上的servlet上下文
      * 2.将线程通过TTL修饰后加入线程池执行；
@@ -49,7 +45,7 @@ public class TracingWrapper {
      */
     public static void run(ThreadPoolTaskExecutor task, Runnable runnable, String traceId) {
         try {
-            if (StringUtils.hasText(traceId)) //事务流水号
+            if (StringUtils.hasText(traceId)) // 事务流水号
                 LocalContextHolder.current().setTraceId(traceId);
 
             LocalContextHolder.current().setServlet(true);   // 初始化上下文

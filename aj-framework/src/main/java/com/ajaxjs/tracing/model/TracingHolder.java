@@ -1,4 +1,4 @@
-package com.ajaxjs.tracing;
+package com.ajaxjs.tracing.model;
 
 import java.time.Instant;
 
