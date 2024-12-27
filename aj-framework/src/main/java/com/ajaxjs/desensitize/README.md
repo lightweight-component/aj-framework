@@ -1,14 +1,5 @@
 ##### 脱敏SDK组件
 
-##### 一、pom依赖
-
-```xml
-            <dependency>
-                <groupId>io.github.mingyang66</groupId>
-                <artifactId>emily-spring-boot-desensitize</artifactId>
-                <version>${revision}</version>
-            </dependency>
-```
 
 ##### 二、属性配置
 
@@ -16,7 +7,6 @@
 #脱敏组件SDK开关
 spring.emily.desensitize.enabled=true
 ```
-
 
 
 ##### 三、注解列表
@@ -102,11 +92,9 @@ public class Company {
     @DesensitizeOperation
     @GetMapping("api/desensitize/getCompanyStr")
     public String getCompanyStr() {
-        return "魔方科技";
+        return "xxx";
     }
 ```
-
-
 
 - 返回值是List集合对象，会对内层实体类脱敏处理
 
@@ -142,7 +130,6 @@ public class Company {
 ```
 
 
-
 - 返回值是Map集合，会对内层实体类脱敏处理
 
 ```java
@@ -175,8 +162,6 @@ public class Company {
     }
 ```
 
-
-
 - 返回值是数组类型集合，会对内层实体类进行脱敏处理
 
 ```java
@@ -202,37 +187,34 @@ public class Company {
 - 返回字符串数组
 
 ```java
-    @DesensitizeOperation(removePackClass = ResponseEntity.class)
-    @GetMapping("api/desensitize/getCompanyArrayStr")
-    public ResponseEntity<String[]> getCompanyArrayStr() {
-        return ResponseEntity.ok(new String[]{"魔方科技"});
-    }
+@DesensitizeOperation(removePackClass = ResponseEntity.class)
+@GetMapping("api/desensitize/getCompanyArrayStr")
+public ResponseEntity<String[]> getCompanyArrayStr() {
+    return ResponseEntity.ok(new String[]{"魔方科技"});
+}
 ```
-
-
 
 - 返回值带有外层包装，指定剥离外层的实体类，会对内层类进行脱敏处理
 
 ```java
-
-    @DesensitizeOperation(removePackClass = {BaseResponse.class, ResponseEntity.class, ResponseEntity.class})
-    @GetMapping("api/desensitize/getCompanyPack")
-    public BaseResponse<ResponseEntity<ResponseEntity<Company>>> getCompanyPack() {
-        Company company = new Company();
-        company.setCompanyName("魔方科技");
-        company.setAddress("古北市南京路1688号50号楼106");
-        company.setPhone("18888888888");
-        company.setEmail("18888888888@qq.com");
-        company.getDataMap().put("password", "123456");
-        company.getDataMap().put("username", "兰兰");
-        BaseResponse<ResponseEntity<ResponseEntity<Company>>> baseResponse = new BaseResponse<>();
-        baseResponse.setData(ResponseEntity.ok(ResponseEntity.ok(company)));
-        company.setTestNull(100D);
-        company.setFieldKey("phone");
-        company.setFieldValue("188888888888");
-        company.setList(List.of("123", "456", "789"));
-        company.setArrays(new String[]{"123", "456", "789"});
-        return baseResponse;
-    }
+@DesensitizeOperation(removePackClass = {BaseResponse.class, ResponseEntity.class, ResponseEntity.class})
+@GetMapping("api/desensitize/getCompanyPack")
+public BaseResponse<ResponseEntity<ResponseEntity<Company>>> getCompanyPack() {
+    Company company = new Company();
+    company.setCompanyName("魔方科技");
+    company.setAddress("古北市南京路1688号50号楼106");
+    company.setPhone("18888888888");
+    company.setEmail("18888888888@qq.com");
+    company.getDataMap().put("password", "123456");
+    company.getDataMap().put("username", "兰兰");
+    BaseResponse<ResponseEntity<ResponseEntity<Company>>> baseResponse = new BaseResponse<>();
+    baseResponse.setData(ResponseEntity.ok(ResponseEntity.ok(company)));
+    company.setTestNull(100D);
+    company.setFieldKey("phone");
+    company.setFieldValue("188888888888");
+    company.setList(List.of("123", "456", "789"));
+    company.setArrays(new String[]{"123", "456", "789"});
+    return baseResponse;
+}
 ```
 

@@ -204,16 +204,6 @@ public class DataMask {
         if (type == null)
             type = DesensitizeType.DEFAULT;
 
-//        return switch (type) {
-//            case PHONE -> maskPhoneNumber(value);
-//            case ID_CARD -> maskIdCard(value);
-//            case BANK_CARD -> maskBankCard(value);
-//            case EMAIL -> maskEmail(value);
-//            case USERNAME -> maskChineseName(value);
-//            case ADDRESS -> maskAddress(value, 0);
-//            default -> PLACE_HOLDER;
-//        };
-
         switch (type) {
             case PHONE:
                 return maskPhoneNumber(value);

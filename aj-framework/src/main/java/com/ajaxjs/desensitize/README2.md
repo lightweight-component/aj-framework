@@ -1,12 +1,5 @@
 #### 开源pom依赖引用
 https://mingyang.blog.csdn.net/article/details/130324987
-```xml
-<dependency>
-  <groupId>io.github.mingyang66</groupId>
-  <artifactId>oceansky-desensitize</artifactId>
-  <version>4.3.2</version>
-</dependency>
-```
 
 ##### 新增JsonNullField注解，可将指定的字段值置为null，注解定义如下：
 

@@ -5,9 +5,6 @@ import java.io.Serializable;
 
 /**
  * 控制器返回结果
- *
- * @author Emily
- * @since 1.0
  */
 public class BaseResponse<T> implements Serializable {
     private int status;
@@ -16,7 +13,7 @@ public class BaseResponse<T> implements Serializable {
     private long spentTime;
 
     public static <T> Builder<T> newBuilder() {
-        return new Builder<T>();
+        return new Builder<>();
     }
 
     public int getStatus() {

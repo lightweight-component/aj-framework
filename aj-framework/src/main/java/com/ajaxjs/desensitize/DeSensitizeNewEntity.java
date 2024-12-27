@@ -7,35 +7,18 @@ import java.util.*;
 
 /**
  * 对实体类进行脱敏，返回原来的实体类对象
-
  */
-public class DeSensitizeUtils {
-
+public class DeSensitizeNewEntity {
     /**
      * 对指定实体类中标记类脱敏注解的字段进行脱敏；支持指定外层包装类未标记类脱敏注解的字段，但对内层进行脱敏
      *
-     * @param entity    实体类|普通对象 如果发生异常则源对象返回
-     * @param packClass 需脱敏的实体类对象外层包装类
-     * @param <T>       实体类类型
-     * @return 对实体类进行脱敏，返回原来的实体类对象
-     */
-    public static <T> T acquireElseGet( T entity,  Class<?>... packClass) {
-        try {
-            return acquire(entity, packClass);
-        } catch (Exception exception) {
-            return entity;
-        }
-    }
-
-    /**
      * @param entity    实体类|普通对象
      * @param packClass 需脱敏的实体类对象外层包装类
      * @param <T>       实体类类型
      * @return 对实体类进行脱敏，返回原来的实体类对象
-     * @throws IllegalAccessException 非法访问异常
      */
-    protected static <T> T acquire(final T entity, final Class<?>... packClass) throws IllegalAccessException {
-        if (Tools.isFinal(entity))
+    protected static <T> T acquire(T entity, Class<?>... packClass) {
+        if (Utils.isFinal(entity))
             return entity;
 
         if (entity instanceof Collection) {
@@ -51,8 +34,8 @@ public class DeSensitizeUtils {
             }
         } else if (entity.getClass().isAnnotationPresent(DesensitizeModel.class))
             doSetField(entity);
-         else if (packClass.length > 0 && entity.getClass().isAssignableFrom(packClass[0]))
-            doSetField(entity, Tools.remove(packClass, 0));
+        else if (packClass.length > 0 && entity.getClass().isAssignableFrom(packClass[0]))
+            doSetField(entity, Utils.remove(packClass, 0));
 
         return entity;
     }
@@ -62,33 +45,36 @@ public class DeSensitizeUtils {
      *
      * @param entity 实体类对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 非法访问异常
      */
-    protected static <T> void doSetField(final T entity, final Class<?>... packClass) throws IllegalAccessException {
-        List<Field> fields = Tools.getAllFields(entity.getClass());
+    protected static <T> void doSetField(T entity, Class<?>... packClass) {
+        List<Field> fields = Utils.getAllFields(entity.getClass());
 
-        for (Field field : fields) {
-            if (Tools.isModifierFinal(field))
-                continue;
+        try {
+            for (Field field : fields) {
+                if (Utils.isModifierFinal(field))
+                    continue;
 
-            field.setAccessible(true);
-            Object value = field.get(entity);
+                field.setAccessible(true);
+                Object value = field.get(entity);
 
-            if (checkNullValue(field, value)) {
-                doGetEntityNull(field, entity, value);
-                continue;
+                if (checkNullValue(field, value)) {
+                    field.set(entity, null);
+                    continue;
+                }
+
+                if (value instanceof String) {
+                    doGetEntityStr(field, entity, value);
+                } else if (value instanceof Collection) {
+                    doGetEntityColl(field, entity, value);
+                } else if (value instanceof Map) {
+                    doGetEntityMap(field, entity, value);
+                } else if (value.getClass().isArray()) {
+                    doGetEntityArray(field, entity, value);
+                } else
+                    acquire(value, packClass);
             }
-
-            if (value instanceof String) {
-                doGetEntityStr(field, entity, value);
-            } else if (value instanceof Collection) {
-                doGetEntityColl(field, entity, value);
-            } else if (value instanceof Map) {
-                doGetEntityMap(field, entity, value);
-            } else if (value.getClass().isArray()) {
-                doGetEntityArray(field, entity, value);
-            } else
-                acquire(value, packClass);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
 
         doGetEntityComplex(entity);
@@ -108,25 +94,11 @@ public class DeSensitizeUtils {
      * @return true-置为null, false-按原值展示
      */
     protected static boolean checkNullValue(Field field, Object value) {
-        if (value == null) {
+        if (value == null)
             return true;
-        } else if (field.getType().isPrimitive()) {
+        else if (field.getType().isPrimitive())
             return false;
-        } else return field.isAnnotationPresent(DesensitizeNullProperty.class);
-    }
-
-    /**
-     * 将字段值置为null
-     *
-     * @param field  实体类属性对象
-     * @param entity 实体类对象
-     * @param value  属性值对象
-     * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
-     */
-    @SuppressWarnings("unused")
-    protected static <T> void doGetEntityNull(final Field field, final T entity, final Object value) throws IllegalAccessException {
-        field.set(entity, null);
+        else return field.isAnnotationPresent(DesensitizeNullProperty.class);
     }
 
     /**
@@ -136,15 +108,18 @@ public class DeSensitizeUtils {
      * @param entity 实体类对象
      * @param value  属性值对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static <T> void doGetEntityStr(final Field field, final T entity, final Object value) throws IllegalAccessException {
+    protected static <T> void doGetEntityStr(Field field, T entity, Object value) {
         if (field.isAnnotationPresent(DesensitizeProperty.class)) {
-            field.set(entity, DataMask.doGetProperty((String) value, field.getAnnotation(DesensitizeProperty.class).value()));
-        } else {
+            try {
+                field.set(entity, DataMask.doGetProperty((String) value, field.getAnnotation(DesensitizeProperty.class).value()));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        } else
             acquire(value);
-        }
     }
+
 
     /**
      * 对Collection集合中存储是字符串、实体对象进行多语言支持
@@ -153,24 +128,28 @@ public class DeSensitizeUtils {
      * @param entity 实体类对象
      * @param value  属性值对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static <T> void doGetEntityColl(final Field field, final T entity, final Object value) throws IllegalAccessException {
+    protected static <T> void doGetEntityColl(Field field, T entity, Object value) {
         Collection<Object> list = null;
         Collection<?> collection = ((Collection<?>) value);
+
         for (Object v : collection) {
-            if (Objects.isNull(v)) {
+            if (Objects.isNull(v))
                 continue;
-            }
+
             if ((v instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class)) {
                 list = (list == null) ? new ArrayList<>() : list;
                 list.add(DataMask.doGetProperty((String) v, field.getAnnotation(DesensitizeProperty.class).value()));
-            } else {
+            } else
                 acquire(v);
-            }
         }
+
         if (Objects.nonNull(list)) {
-            field.set(entity, list);
+            try {
+                field.set(entity, list);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -181,29 +160,31 @@ public class DeSensitizeUtils {
      * @param entity 实体类对象
      * @param value  属性值对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
      */
     @SuppressWarnings("unused")
-    protected static <T> void doGetEntityMap(final Field field, final T entity, final Object value) throws IllegalAccessException {
+    protected static <T> void doGetEntityMap(Field field, T entity, Object value) {
         @SuppressWarnings("unchecked")
         Map<Object, Object> dMap = (Map<Object, Object>) value;
+
         for (Map.Entry<Object, Object> entry : dMap.entrySet()) {
             Object key = entry.getKey();
             Object v = entry.getValue();
-            if (Objects.isNull(v)) {
+
+            if (Objects.isNull(v))
                 continue;
-            }
+
             if (v instanceof String) {
                 if (field.isAnnotationPresent(DesensitizeMapProperty.class)) {
                     DesensitizeMapProperty desensitizeMapProperty = field.getAnnotation(DesensitizeMapProperty.class);
                     int index = (key instanceof String) ? Arrays.asList(desensitizeMapProperty.keys()).indexOf(key) : -1;
-                    if (index < 0) {
+
+                    if (index < 0)
                         continue;
-                    }
+
                     DesensitizeType type = DesensitizeType.DEFAULT;
-                    if (index <= desensitizeMapProperty.types().length - 1) {
+                    if (index <= desensitizeMapProperty.types().length - 1)
                         type = desensitizeMapProperty.types()[index];
-                    }
+
                     dMap.put(key, DataMask.doGetProperty((String) v, type));
                     continue;
                 } else if (field.isAnnotationPresent(DesensitizeProperty.class)) {
@@ -211,6 +192,7 @@ public class DeSensitizeUtils {
                     continue;
                 }
             }
+
             acquire(value);
         }
     }
@@ -222,63 +204,66 @@ public class DeSensitizeUtils {
      * @param entity 实体类对象
      * @param value  属性值对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
      */
     @SuppressWarnings("unused")
-    protected static <T> void doGetEntityArray(final Field field, final T entity, final Object value) throws IllegalAccessException {
-        if (value.getClass().getComponentType().isPrimitive()) {
+    protected static <T> void doGetEntityArray( Field field,  T entity,  Object value) {
+        if (value.getClass().getComponentType().isPrimitive())
             return;
-        }
+
         Object[] arrays = ((Object[]) value);
+
         for (int i = 0; i < arrays.length; i++) {
             Object v = arrays[i];
-            if (Objects.isNull(v)) {
+
+            if (Objects.isNull(v))
                 continue;
-            }
-            if ((v instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class)) {
+
+            if ((v instanceof String) && field.isAnnotationPresent(DesensitizeProperty.class))
                 arrays[i] = DataMask.doGetProperty((String) v, field.getAnnotation(DesensitizeProperty.class).value());
-            } else {
+            else
                 acquire(value);
-            }
         }
     }
 
     /**
      * @param entity 实体类对象
      * @param <T>    实体类类型
-     * @throws IllegalAccessException 抛出非法访问异常
      */
-    protected static <T> void doGetEntityComplex(final T entity) throws IllegalAccessException {
-        List<Field> fields = Tools.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
+    protected static <T> void doGetEntityComplex( T entity) {
+        List<Field> fields = Utils.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
 
-        for (Field field : fields) {
-            field.setAccessible(true);
-            Object value = field.get(entity);
+        try {
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object value = field.get(entity);
 
-            if (Objects.isNull(value))
-                continue;
+                if (Objects.isNull(value))
+                    continue;
 
-            DesensitizeComplexProperty desensitizeComplexProperty = field.getAnnotation(DesensitizeComplexProperty.class);
-            if (Objects.isNull(desensitizeComplexProperty.value()))
-                return;
+                DesensitizeComplexProperty desensitizeComplexProperty = field.getAnnotation(DesensitizeComplexProperty.class);
+                if (Objects.isNull(desensitizeComplexProperty.value()))
+                    return;
 
-            Field flexField = Tools.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
-            if (Objects.isNull(flexField))
-                return;
+                Field flexField = Utils.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
+                if (Objects.isNull(flexField))
+                    return;
 
-            Object flexValue = flexField.get(entity);
-            if (Objects.isNull(flexValue) || !(flexValue instanceof String))
-                return;
+                Object flexValue = flexField.get(entity);
+                if (Objects.isNull(flexValue) || !(flexValue instanceof String))
+                    return;
 
-            int index = Arrays.asList(desensitizeComplexProperty.keys()).indexOf((String) value);
-            if (index < 0)
-                return;
+                int index = Arrays.asList(desensitizeComplexProperty.keys()).indexOf((String) value);
+                if (index < 0)
+                    return;
 
-            DesensitizeType type = DesensitizeType.DEFAULT;
-            if (index <= desensitizeComplexProperty.types().length - 1)
-                type = desensitizeComplexProperty.types()[index];
+                DesensitizeType type = DesensitizeType.DEFAULT;
+                if (index <= desensitizeComplexProperty.types().length - 1)
+                    type = desensitizeComplexProperty.types()[index];
 
-            flexField.set(entity, DataMask.doGetProperty((String) flexValue, type));
+                flexField.set(entity, DataMask.doGetProperty((String) flexValue, type));
+            }
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }

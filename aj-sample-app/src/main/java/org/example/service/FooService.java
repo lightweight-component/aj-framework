@@ -4,7 +4,7 @@ import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
 import org.example.model.Foo;
-import com.ajaxjs.api.encryptedbody.User;
+import org.example.model.User;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -92,6 +92,7 @@ public class FooService implements FooController {
         User user = new User();
         user.setAge(1);
         user.setName("tom");
+
         return user;
     }
 

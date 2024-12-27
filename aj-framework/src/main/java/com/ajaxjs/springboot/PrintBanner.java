@@ -53,7 +53,7 @@ public class PrintBanner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
 //        log.info(s);
-        long elapsedTime = System.currentTimeMillis() - BaseWebMvcConfigure.APP_START_TIME;
+        long elapsedTime = System.currentTimeMillis() - AutoConfiguration.APP_START_TIME;
 //        log.info("Spring App:{} startup time: {} ms", port, elapsedTime);
 
         Log log = LogFactory.getLog(PrintBanner.class);

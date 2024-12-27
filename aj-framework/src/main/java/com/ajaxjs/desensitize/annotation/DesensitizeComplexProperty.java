@@ -1,7 +1,5 @@
 package com.ajaxjs.desensitize.annotation;
 
-
-
 import com.ajaxjs.desensitize.DesensitizeType;
 
 import java.lang.annotation.ElementType;
@@ -22,9 +20,6 @@ import java.lang.annotation.Target;
  *     private String fieldValue1;
  *     }
  * }</pre>
- *
- * @author Emily
- * @since :  Created in 2022/7/19 5:22 下午
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

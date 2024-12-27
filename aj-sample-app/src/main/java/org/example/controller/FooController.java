@@ -1,9 +1,9 @@
 package org.example.controller;
 
-import com.ajaxjs.api.encryptedbody.User;
 import com.ajaxjs.api.security.referer.HttpRefererCheck;
 import org.example.model.Foo;
 
+import org.example.model.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

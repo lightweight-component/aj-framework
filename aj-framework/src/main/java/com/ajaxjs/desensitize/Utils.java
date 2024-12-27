@@ -9,11 +9,8 @@ import java.util.function.Predicate;
 
 /**
  * bean相互转换工具类
- *
- * @author Emily
- * @since 2021/05/28
  */
-class Tools {
+class Utils {
     /**
      * 获取指定类及其所有父类中带有指定名称的字段。
      *
@@ -81,8 +78,8 @@ class Tools {
             }
 
             // 遍历当前类实现的接口
-            for (Class<?> interf : currentClass.getInterfaces())
-                fields.addAll(getAllFields(interf, fn));
+            for (Class<?> interF : currentClass.getInterfaces())
+                fields.addAll(getAllFields(interF, fn));
 
             // 移动到父类
             currentClass = currentClass.getSuperclass();

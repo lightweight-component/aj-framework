@@ -1,6 +1,9 @@
 package org.example.model;
 
+import com.ajaxjs.api.encryptedbody.EncryptedData;
+
 // User.java
+@EncryptedData
 public class User {
     private String name;
     private int age;

@@ -11,17 +11,14 @@ import java.util.Map;
 
 /**
  * 实体类对象脱敏单元测试
- *
- * @author Emily
- * @since :  Created in 2023/5/31 3:34 PM
  */
-public class DeSensitizeUtilsTest {
+public class DeSensitizeNewEntityTest {
     @Test
     public void simpleFieldTest() {
         People people = new People();
         people.setUsername("孙少平");
         people.setPassword("ssp");
-        People p = DeSensitizeUtils.acquireElseGet(people);
+        People p = DeSensitizeNewEntity.acquire(people);
         Assertions.assertEquals(p, people);
         Assertions.assertEquals(p.getUsername(), "--隐藏--");
     }
@@ -31,14 +28,14 @@ public class DeSensitizeUtilsTest {
         People people = new People();
         people.setKey("email");
         people.setValue("1563919868@qq.com");
-        People p = DeSensitizeUtils.acquireElseGet(people);
+        People p = DeSensitizeNewEntity.acquire(people);
         Assertions.assertEquals(p, people);
         Assertions.assertEquals(p.getKey(), "email");
         Assertions.assertEquals(p.getValue(), "1***8@qq.com");
 
         people.setKey("phone");
         people.setValue("1563919868");
-        p = DeSensitizeUtils.acquireElseGet(people);
+        p = DeSensitizeNewEntity.acquire(people);
         Assertions.assertEquals(p.getKey(), "phone");
         Assertions.assertEquals(people.getValue(), "15****9868");
     }
@@ -49,7 +46,7 @@ public class DeSensitizeUtilsTest {
         people.setKey("email");
         people.setValue("1563919868@qq.com");
         people.setStr("测试null");
-        People s = DeSensitizeUtils.acquireElseGet(people);
+        People s = DeSensitizeNewEntity.acquire(people);
         Assertions.assertNull(s.getStr());
         Assertions.assertEquals(s.getAge(), 0);
         Assertions.assertEquals(s.getB(), (byte) 0);
@@ -63,7 +60,7 @@ public class DeSensitizeUtilsTest {
         peopleMap.getParams().put("password", "12345");
         peopleMap.getParams().put("username", "田晓霞");
         peopleMap.getParams().put("phone", "15645562587");
-        PeopleMap p = DeSensitizeUtils.acquireElseGet(peopleMap);
+        PeopleMap p = DeSensitizeNewEntity.acquire(peopleMap);
         System.out.println(p);
     }
 
@@ -84,9 +81,9 @@ public class DeSensitizeUtilsTest {
         response.jobs = new PubResponse.Job[]{job};
         response.jobList = List.of(job);
         BaseResponse<PubResponse> r = BaseResponse.<PubResponse>newBuilder().withData(response).build();
-        BaseResponse<PubResponse> response1 = DeSensitizeUtils.acquireElseGet(r);
+        BaseResponse<PubResponse> response1 = DeSensitizeNewEntity.acquire(r);
         Assertions.assertEquals(response1.getData().email, "1393619859@qq.com");
-        BaseResponse<PubResponse> response2 = DeSensitizeUtils.acquireElseGet(r, BaseResponse.class);
+        BaseResponse<PubResponse> response2 = DeSensitizeNewEntity.acquire(r, BaseResponse.class);
         Assertions.assertEquals(response2.getData().email, "1***9@qq.com");
     }
 
@@ -100,7 +97,7 @@ public class DeSensitizeUtilsTest {
         worker.setId(456L);
         worker.setName("甥王爷");
         company.setWorker(worker);
-        Company company1 = DeSensitizeUtils.acquireElseGet(company, Company.class);
+        Company company1 = DeSensitizeNewEntity.acquire(company, Company.class);
         Assertions.assertEquals(company1.getWorker().getName(), "--隐藏--");
     }
 
@@ -114,7 +111,7 @@ public class DeSensitizeUtilsTest {
         worker.setId(456L);
         worker.setName("甥王爷");
         company.setList(List.of(worker));
-        Company company1 = DeSensitizeUtils.acquireElseGet(company, Company.class);
+        Company company1 = DeSensitizeNewEntity.acquire(company, Company.class);
         Assertions.assertEquals(company1.getList().get(0).getName(), "--隐藏--");
     }
 
@@ -128,7 +125,7 @@ public class DeSensitizeUtilsTest {
         worker.setId(456L);
         worker.setName("甥王爷");
         company.setDataMap(new HashMap<>(Map.of("test", worker)));
-        Company company1 = DeSensitizeUtils.acquireElseGet(company, Company.class);
+        Company company1 = DeSensitizeNewEntity.acquire(company, Company.class);
         Assertions.assertEquals(company1.getDataMap().get("test").getName(), "--隐藏--");
     }
 }

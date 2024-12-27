@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.ajaxjs.desensitize.Tools.*;
+import static com.ajaxjs.desensitize.Utils.*;
 
-public class TestTools {
+public class TestUtils {
     @Test
     void testRemove() {
         Integer[] numbers = {1, 2, 3, 4, 5};
@@ -37,7 +37,7 @@ public class TestTools {
     @Test
     void testGetField() {
         try {
-            Field field = Tools.getField(Child.class, "childField", true);
+            Field field = Utils.getField(Child.class, "childField", true);
             System.out.println("Found field: " + field.getName());
 
             // 创建类实例并设置字段值

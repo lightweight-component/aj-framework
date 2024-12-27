@@ -8,10 +8,6 @@ import com.ajaxjs.desensitize.annotation.DesensitizeProperty;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Emily
- * @since Created in 2022/10/27 10:53 上午
- */
 @DesensitizeModel
 public class PubResponse {
     @DesensitizeProperty(DesensitizeType.USERNAME)

@@ -19,9 +19,15 @@ public class MyWebMvcConfigure extends BaseWebMvcConfigure {
     @Value("${api.EncryptedBody.privateKey}")
     private String apiPrivateKey;
 
+    @Value("${api.EncryptedBody.enable}")
+    private boolean apiEncryptedBodyEnable;
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, new EncryptedBodyConverter(apiPublicKey, apiPrivateKey));
+        EncryptedBodyConverter converter = new EncryptedBodyConverter(apiPublicKey, apiPrivateKey);
+        converter.setEnabled(apiEncryptedBodyEnable);
+
+        converters.add(0, converter);
     }
 
 
