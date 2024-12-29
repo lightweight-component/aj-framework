@@ -1,17 +1,19 @@
 package org.example.model;
 
 import com.ajaxjs.api.encryptedbody.EncryptedData;
+import com.ajaxjs.desensitize.DesensitizeType;
+import com.ajaxjs.desensitize.annotation.DesensitizeModel;
+import com.ajaxjs.desensitize.annotation.DesensitizeProperty;
+import lombok.Data;
 
-// User.java
-@EncryptedData
+//@EncryptedData
+@Data
+@DesensitizeModel
 public class User {
     private String name;
+
+    @DesensitizeProperty(DesensitizeType.PHONE)
+    private String phone;
+
     private int age;
-
-    // Getters and Setters
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
 }

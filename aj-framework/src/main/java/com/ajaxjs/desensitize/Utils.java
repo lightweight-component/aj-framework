@@ -1,5 +1,7 @@
 package com.ajaxjs.desensitize;
 
+import com.ajaxjs.desensitize.annotation.DesensitizeProperty;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -11,6 +13,22 @@ import java.util.function.Predicate;
  * bean相互转换工具类
  */
 class Utils {
+    public static Object getValue(Field field, Object obj) {
+        try {
+            return field.get(obj);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Illegal Access when getting the Value from " + field + " on object of " + obj, e);
+        }
+    }
+
+    public static void setField(Field field, Object obj, Object value) {
+        try {
+            field.set(obj, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Illegal Access when setting the Field of " + field + " on object of " + obj + "to the value is " + value, e);
+        }
+    }
+
     /**
      * 获取指定类及其所有父类中带有指定名称的字段。
      *

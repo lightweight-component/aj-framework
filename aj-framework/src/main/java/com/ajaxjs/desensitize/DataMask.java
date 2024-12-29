@@ -204,21 +204,23 @@ public class DataMask {
         if (type == null)
             type = DesensitizeType.DEFAULT;
 
-        switch (type) {
-            case PHONE:
-                return maskPhoneNumber(value);
-            case ID_CARD:
-                return maskIdCard(value);
-            case BANK_CARD:
-                return maskBankCard(value);
-            case EMAIL:
-                return maskEmail(value);
-            case USERNAME:
-                return maskChineseName(value);
-            case ADDRESS:
-                return maskAddress(value, 0);
-            default:
-                return PLACE_HOLDER;
-        }
+        return type.handler.apply(value);
+
+//        switch (type) {
+//            case PHONE:
+//                return DesensitizeType.PHONE.handler.apply(value);
+//            case ID_CARD:
+//                return maskIdCard(value);
+//            case BANK_CARD:
+//                return maskBankCard(value);
+//            case EMAIL:
+//                return maskEmail(value);
+//            case USERNAME:
+//                return maskChineseName(value);
+//            case ADDRESS:
+//                return maskAddress(value, 0);
+//            default:
+//                return PLACE_HOLDER;
+//        }
     }
 }

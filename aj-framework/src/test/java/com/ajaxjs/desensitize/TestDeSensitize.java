@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SensitiveUtilsTest {
+public class TestDeSensitize {
     @Test
     public void jsonNullFieldTest() {
         People people = new People();

@@ -1,20 +1,30 @@
 package com.ajaxjs.desensitize;
 
+import com.ajaxjs.desensitize.DataMask;
+
+import java.util.function.Function;
+
 /**
  * 脱敏类型
  */
 public enum DesensitizeType {
-    DEFAULT,
+    DEFAULT(v -> DataMask.PLACE_HOLDER),
     // 手机号
-    PHONE,
+    PHONE(DataMask::maskPhoneNumber),
     // 银行卡号
-    BANK_CARD,
+    BANK_CARD(DataMask::maskBankCard),
     // 身份证号
-    ID_CARD,
+    ID_CARD(DataMask::maskIdCard),
     // 姓名
-    USERNAME,
+    USERNAME(DataMask::maskChineseName),
     // email
-    EMAIL,
+    EMAIL(DataMask::maskEmail),
     //地址
-    ADDRESS;
+    ADDRESS(v -> DataMask.maskAddress(v, 0));
+
+    public final Function<String, String> handler;
+
+    DesensitizeType(Function<String, String> handler) {
+        this.handler = handler;
+    }
 }

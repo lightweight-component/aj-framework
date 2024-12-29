@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 实体类对象脱敏单元测试
  */
-public class DeSensitizeNewEntityTest {
+public class TestDeSensitizeNewEntity {
     @Test
     public void simpleFieldTest() {
         People people = new People();

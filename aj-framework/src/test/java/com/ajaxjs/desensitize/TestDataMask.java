@@ -6,7 +6,12 @@ import org.junit.jupiter.api.Test;
 /**
  * 字符串脱敏
  */
-public class DataMaskTest {
+public class TestDataMask {
+    @Test
+    void testEnum() {
+        DataMask.doGetProperty("lklllllllllllllll", DesensitizeType.PHONE);
+    }
+
     @Test
     public void chineseName() {
         Assertions.assertEquals(DataMask.maskChineseName("孙玉婷"), "孙**");

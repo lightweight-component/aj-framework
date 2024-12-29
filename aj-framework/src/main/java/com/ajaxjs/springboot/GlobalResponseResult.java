@@ -1,5 +1,7 @@
 package com.ajaxjs.springboot;
 
+import com.ajaxjs.desensitize.DeSensitize;
+import com.ajaxjs.desensitize.annotation.Desensitize;
 import com.ajaxjs.springboot.annotation.IgnoredGlobalReturn;
 import com.ajaxjs.springboot.annotation.JsonMessage;
 import org.springframework.core.MethodParameter;
@@ -28,9 +30,12 @@ public class GlobalResponseResult implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Method method = returnType.getMethod();
-
         assert method != null;
-        if (method.getAnnotation(IgnoredGlobalReturn.class) != null)
+
+        if (method.isAnnotationPresent(Desensitize.class))
+            body=  DeSensitize.acquire(body);
+
+        if (method.isAnnotationPresent(IgnoredGlobalReturn.class))
             return body;
 
         ResponseResultWrapper responseResult = new ResponseResultWrapper();

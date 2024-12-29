@@ -1,5 +1,6 @@
 package org.example.service;
 
+import com.ajaxjs.desensitize.annotation.Desensitize;
 import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
@@ -92,6 +93,17 @@ public class FooService implements FooController {
         User user = new User();
         user.setAge(1);
         user.setName("tom");
+
+        return user;
+    }
+
+    @Override
+    @Desensitize
+    public User UserDesensitize() {
+        User user = new User();
+        user.setAge(1);
+        user.setName("tom");
+        user.setPhone("13711118120");
 
         return user;
     }

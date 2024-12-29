@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import com.ajaxjs.api.security.referer.HttpRefererCheck;
+import com.ajaxjs.desensitize.annotation.Desensitize;
 import org.example.model.Foo;
-
 import org.example.model.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,4 +23,6 @@ public interface FooController {
     @GetMapping("/user")
     User User();
 
+    @GetMapping("/user_desensitize")
+    User UserDesensitize();
 }

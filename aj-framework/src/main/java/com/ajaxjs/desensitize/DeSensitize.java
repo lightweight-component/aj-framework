@@ -16,7 +16,7 @@ public class DeSensitize {
      * @param packClass 需脱敏的实体类对象外层包装类
      * @return 脱敏后的实体类对象
      */
-    protected static Object acquire(Object entity, Class<?>... packClass) {
+    public static Object acquire(Object entity, Class<?>... packClass) {
         if (Utils.isFinal(entity))
             return entity;
 
@@ -66,33 +66,30 @@ public class DeSensitize {
         Map<String, Object> fieldMap = new HashMap<>();
         List<Field> fields = Utils.getAllFields(entity.getClass());
 
-        try {
-            for (Field field : fields) {
-                if (Utils.isModifierFinal(field))
-                    continue;
 
-                field.setAccessible(true);
-                String name = field.getName();
-                Object value = field.get(entity);
+        for (Field field : fields) {
+            if (Utils.isModifierFinal(field))
+                continue;
 
-                if (DeSensitizeNewEntity.checkNullValue(field, value)) {
-                    fieldMap.put(name, null);
-                    continue;
-                }
+            field.setAccessible(true);
+            String name = field.getName();
+            Object value = Utils.getValue(field, entity);
 
-                if (value instanceof String)
-                    fieldMap.put(name, doGetEntityStr(field, value));
-                else if (value instanceof Collection)
-                    fieldMap.put(name, doGetEntityColl(field, value));
-                else if (value instanceof Map)
-                    fieldMap.put(name, doGetEntityMap(field, value));
-                else if (value.getClass().isArray())
-                    fieldMap.put(name, doGetEntityArray(field, value));
-                else
-                    fieldMap.put(name, acquire(value, packClass));
+            if (DeSensitizeNewEntity.checkNullValue(field, value)) {
+                fieldMap.put(name, null);
+                continue;
             }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+
+            if (value instanceof String)
+                fieldMap.put(name, doGetEntityStr(field, value));
+            else if (value instanceof Collection)
+                fieldMap.put(name, doGetEntityColl(field, value));
+            else if (value instanceof Map)
+                fieldMap.put(name, doGetEntityMap(field, value));
+            else if (value.getClass().isArray())
+                fieldMap.put(name, doGetEntityArray(field, value));
+            else
+                fieldMap.put(name, acquire(value, packClass));
         }
 
         fieldMap.putAll(doGetEntityComplex(entity));
@@ -213,38 +210,35 @@ public class DeSensitize {
         Map<String, Object> flexFieldMap = null;
         List<Field> fields = Utils.getFieldsWithAnnotation(entity.getClass(), DesensitizeComplexProperty.class);
 
-        try {
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object value = field.get(entity);
-                if (Objects.isNull(value))
-                    continue;
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object value = Utils.getValue(field, entity);
 
-                DesensitizeComplexProperty desensitizeComplexProperty = field.getAnnotation(DesensitizeComplexProperty.class);
-                if (Objects.isNull(desensitizeComplexProperty.value()))
-                    continue;
+            if (Objects.isNull(value))
+                continue;
 
-                Field flexField = Utils.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
-                if (Objects.isNull(flexField))
-                    continue;
+            DesensitizeComplexProperty desensitizeComplexProperty = field.getAnnotation(DesensitizeComplexProperty.class);
+            if (Objects.isNull(desensitizeComplexProperty.value()))
+                continue;
 
-                Object flexValue = flexField.get(entity);
-                if (Objects.isNull(flexValue) || !(flexValue instanceof String))
-                    continue;
+            Field flexField = Utils.getField(entity.getClass(), desensitizeComplexProperty.value(), true);
+            if (Objects.isNull(flexField))
+                continue;
 
-                int index = Arrays.asList(desensitizeComplexProperty.keys()).indexOf((String) value);
-                if (index < 0)
-                    continue;
+            Object flexValue = Utils.getValue(flexField, entity);
+            if (Objects.isNull(flexValue) || !(flexValue instanceof String))
+                continue;
 
-                DesensitizeType type = DesensitizeType.DEFAULT;
-                if (index <= desensitizeComplexProperty.types().length - 1)
-                    type = desensitizeComplexProperty.types()[index];
+            int index = Arrays.asList(desensitizeComplexProperty.keys()).indexOf((String) value);
+            if (index < 0)
+                continue;
 
-                flexFieldMap = Objects.isNull(flexFieldMap) ? new HashMap<>() : flexFieldMap;
-                flexFieldMap.put(desensitizeComplexProperty.value(), DataMask.doGetProperty((String) flexValue, type));
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            DesensitizeType type = DesensitizeType.DEFAULT;
+            if (index <= desensitizeComplexProperty.types().length - 1)
+                type = desensitizeComplexProperty.types()[index];
+
+            flexFieldMap = Objects.isNull(flexFieldMap) ? new HashMap<>() : flexFieldMap;
+            flexFieldMap.put(desensitizeComplexProperty.value(), DataMask.doGetProperty((String) flexValue, type));
         }
 
         return Objects.isNull(flexFieldMap) ? Collections.emptyMap() : flexFieldMap;
