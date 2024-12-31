@@ -1,4 +1,4 @@
-# AJ-Framework
+# AJ-Framework Global Readme
 
 A Web Framework for Spring Boot has these features:
 
