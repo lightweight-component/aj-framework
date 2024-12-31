@@ -10,7 +10,7 @@
     <modules>
         <module>aj-public</module>
         <module>aj-framework</module>
-        <module>aj-framework-common</module>
+
         <module>aj-base</module>
         <module>aj-sample-app</module>
     </modules>

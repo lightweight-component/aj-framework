@@ -10,6 +10,7 @@
     <modules>
         <module>aj-parent-pom</module>
         <module>aj-common-parent</module>
+        <module>aj-framework-common</module>
         <module>aj-util</module>
     </modules>
 </project>

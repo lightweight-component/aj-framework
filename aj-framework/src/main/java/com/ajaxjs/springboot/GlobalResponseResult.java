@@ -13,15 +13,35 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @RestControllerAdvice
 @Component
 public class GlobalResponseResult implements ResponseBodyAdvice<Object> {
+    //不支持的类型列表
+    private static final Set<Class<?>> NO_SUPPORTED_CLASSES = new HashSet<>(8);
+
+    static {
+        NO_SUPPORTED_CLASSES.add(byte[].class);
+        NO_SUPPORTED_CLASSES.add(javax.xml.transform.Source.class);
+    }
+
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-//        System.out.println("supports:" + returnType);
+        //如果返回值是NO_SUPPORTED_CLASSES中的类型，则不会被当前类的beforeBodyWrite方法处理，即不会被包装为ResultDto类型
+        if (NO_SUPPORTED_CLASSES.contains(returnType.getParameterType()))
+            return false;
+
+        // 若加了 @IgnoredGlobalReturn 则该方法不用做统一的拦截
+//        AnnotatedElement annotatedElement = returnType.getParameterType();
+//
+//        if (annotatedElement.isAnnotationPresent(IgnoredGlobalReturn.class))
+//            return false;
+
         return true;
     }
 
@@ -33,7 +53,7 @@ public class GlobalResponseResult implements ResponseBodyAdvice<Object> {
         assert method != null;
 
         if (method.isAnnotationPresent(Desensitize.class))
-            body=  DeSensitize.acquire(body);
+            body = DeSensitize.acquire(body);
 
         if (method.isAnnotationPresent(IgnoredGlobalReturn.class))
             return body;

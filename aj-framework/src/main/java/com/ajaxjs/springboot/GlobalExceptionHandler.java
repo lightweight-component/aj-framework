@@ -3,7 +3,6 @@ package com.ajaxjs.springboot;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 统一异常处理
+ */
 @Slf4j
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
     @Override

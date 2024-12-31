@@ -39,7 +39,7 @@ public class SseEmitterController {
     }
 
     /**
-     * 服务端使用SseEmitter时使用
+     * 服务端使用 SseEmitter 时使用
      *
      * @param username
      * @return
