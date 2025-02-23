@@ -28,7 +28,7 @@ Small Java Utils Library with many powerful components. The size of jar is aroun
 
 ## Source code
 
-[Github](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [Gitcode](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-public/aj-util)
+[Github](https://javadoc.io/doc/com.ajaxjs/ajaxjs-util) | [GitCode](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-public/aj-util)
 
 ## Link
 
@@ -36,7 +36,7 @@ Small Java Utils Library with many powerful components. The size of jar is aroun
 
 ## Install
 
-Runs on Java 1.8+. Maven:
+Runs on Java 11+. Maven:
 
 ```xml
 <dependency>

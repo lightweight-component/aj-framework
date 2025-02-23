@@ -21,6 +21,7 @@
         <url>https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-public/aj-util</url>
 <!--        <connection>scm:git:https://github.com/lightweight-component/aj-util.git</connection>-->
     </scm>
+
     <issueManagement>
         <system>GitCode Issues</system>
         <url>https://gitcode.com/zhangxin09/aj-framework/issues</url>

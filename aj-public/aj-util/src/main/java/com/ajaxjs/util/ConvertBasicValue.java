@@ -21,16 +21,16 @@ public class ConvertBasicValue {
     /**
      * 安全地将对象转换为指定的类类型。
      * <p>
-     * 该方法提供了一种类型安全的方式将对象转换为目标类类型T。它首先调用basicConvert方法进行实际的转换操作，
+     * 该方法提供了一种类型安全的方式将对象转换为目标类类型T。它首先调用 basicConvert 方法进行实际的转换操作，
      * 然后通过泛型的类型擦除机制，将转换后的对象强制转换为T类型并返回。使用此方法可以避免直接的强制类型转换，
-     * 从而减少因类型不匹配导致的ClassCastException的风险。
+     * 从而减少因类型不匹配导致的 ClassCastException 的风险。
      * <p>
      * 指定 Class 类型的转换，少了强类型转换的步骤
      *
      * @param value 需要转换的对象。
      * @param clz   目标类类型，用于指定转换后的类型。
      * @param <T>   泛型参数，表示目标类类型。
-     * @return 转换后的对象，类型为T。
+     * @return 转换后的对象，类型为 T。
      */
     @SuppressWarnings("unchecked")
     public static <T> T basicCast(Object value, Class<T> clz) {
@@ -123,7 +123,7 @@ public class ConvertBasicValue {
     }
 
     /**
-     * true/1、 字符串 true/1/yes/on 被视为 true 返回； false/0/null、字符串 false/0/no/off/null
+     * true/1、字符串 true/1/yes/on 被视为 true 返回；false/0/null、字符串 false/0/no/off/null
      * 被视为 false 返回；
      *
      * @param value 输入值
