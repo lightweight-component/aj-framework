@@ -65,10 +65,8 @@ public class EnumsUtil {
 
         T[] enums = cla.getEnumConstants();
 
-        // 遍历枚举项，寻找与消息匹配的枚举项
-        for (T value : enums) {
-            // 如果消息与枚举项的消息匹配，则返回该枚举项的代码
-            if (msg.equals(value.getMsg()))
+        for (T value : enums) { // 遍历枚举项，寻找与消息匹配的枚举项
+            if (msg.equals(value.getMsg())) // 如果消息与枚举项的消息匹配，则返回该枚举项的代码
                 return value.getCode();
         }
 

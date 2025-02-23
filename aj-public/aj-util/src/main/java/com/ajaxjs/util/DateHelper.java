@@ -208,7 +208,7 @@ public class DateHelper {
     private final static Pattern DATE_YEAR_PATTERN = Pattern.compile(DATE_YEAR);
 
     /**
-     * 一般日期判断的正则
+     * 判断日期的正则
      */
     private final static Pattern DATETIME_PATTERN = Pattern.compile(DATE_YEAR + " ([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]");
 

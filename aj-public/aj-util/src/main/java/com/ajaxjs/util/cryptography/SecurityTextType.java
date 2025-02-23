@@ -3,7 +3,6 @@ package com.ajaxjs.util.cryptography;
 public interface SecurityTextType {
     enum Encode {
         BASE16,
-
         BASE32,
         BASE58,
         BASE64,
