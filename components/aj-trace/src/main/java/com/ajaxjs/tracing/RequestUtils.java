@@ -2,8 +2,6 @@ package com.ajaxjs.tracing;
 
 
 import com.ajaxjs.tracing.model.HeaderInfo;
-import com.ajaxjs.util.StrUtil;
-
 
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -100,7 +98,7 @@ public class RequestUtils {
 
             return ip;
         } catch (Exception exception) {
-            return StrUtil.EMPTY_STRING;
+            return "";
         }
     }
 
