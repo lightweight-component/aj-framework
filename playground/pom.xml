@@ -3,16 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ajaxjs</groupId>
-    <artifactId>aj-top</artifactId>
+    <artifactId>aj-playground</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>common</module>
-        <module>core</module>
-        <module>components</module>
-        <module>playground</module>
-        <module>aj-base</module>
-        <module>aj-sample-app</module>
+        <!--<module>aj-mvc</module>
+        <module>aj-nlp</module>
+        <module>aj-delayedtaskqueue</module>
+        <module>aj-monitor</module>-->
     </modules>
 </project>
