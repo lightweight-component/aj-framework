@@ -10,7 +10,7 @@
     <modules>
         <!--<module>aj-mvc</module>
         <module>aj-nlp</module>
-        <module>aj-delayedtaskqueue</module>
-        <module>aj-monitor</module>-->
+        <module>aj-playground</module>
+        -->
     </modules>
 </project>

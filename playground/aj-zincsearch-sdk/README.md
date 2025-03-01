@@ -22,7 +22,6 @@ Java Documents: https://dev.ajaxjs.com/docs/javadoc/aj-zincsearch-sdk/.
 
 ## Usage
 
-FTP upload:
 
 ```java
 DocumentService docService = new DocumentService();

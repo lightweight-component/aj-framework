@@ -13,6 +13,7 @@
     <version>1.0</version>
     <packaging>jar</packaging>
     <description>A MVC Toy</description>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
