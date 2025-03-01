@@ -12,5 +12,8 @@
         <module>aj-trace</module>
         <module>aj-delayedtaskqueue</module>
         <module>aj-monitor</module>
+        <module>aj-ftp</module>
+        <module>aj-s3client</module>
+        <module>aj-qrcode</module>
     </modules>
 </project>
