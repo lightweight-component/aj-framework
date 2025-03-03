@@ -23,7 +23,7 @@ spring:
   redis:
     host: creative-martin-46984.upstash.io
     port: 6379
-    password: AbeIAAIjcDFmZmVmY2M2YzViYmQ0M2U3YWJmODU3NGNlYzNhMTNkMHAxMA
+    password: xxxx
     ssl: true
 
 dubbo:
