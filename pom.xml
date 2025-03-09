@@ -11,7 +11,8 @@
         <module>common</module>
         <module>core</module>
         <module>components</module>
-        <module>aj-base</module>
         <module>aj-sample-app</module>
+        <module>aj-base</module>
+        <module>aj-rag</module>
     </modules>
 </project>
