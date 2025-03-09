@@ -14,7 +14,7 @@ public class RedisClient {
     static {
         // 静态代码块中初始化 Jedis 客户端
         jedis = new Jedis(Config.REDIS_HOST, Config.REDIS_PORT);
-        if (Config.REDIS_PASSWORD != null && !Config.REDIS_PASSWORD.isEmpty()) {
+        if (!Config.REDIS_PASSWORD.isEmpty()) {
             jedis.auth(Config.REDIS_PASSWORD);
         }
     }

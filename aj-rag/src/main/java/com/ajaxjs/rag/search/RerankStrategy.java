@@ -1,11 +1,11 @@
 package com.ajaxjs.rag.search;
 
-import org.constant.Config;
-import org.entity.SearchInput;
-import org.entity.SearchOutput;
-import org.entity.Document;
-import org.service.embedding.JinaEmbeddingRerankService;
-import org.utils.DistanceUtils;
+import com.ajaxjs.rag.constant.Config;
+import com.ajaxjs.rag.entity.SearchInput;
+import com.ajaxjs.rag.entity.SearchOutput;
+import com.ajaxjs.rag.entity.Document;
+import com.ajaxjs.rag.service.embedding.JinaEmbeddingRerankService;
+import com.ajaxjs.rag.utils.DistanceUtils;
 
 import java.util.Comparator;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RerankStrategy {
-    public static void JinaCobertRerank(SearchInput searchInput, SearchOutput searchOutput){
+    public static void JinaCobertRerank(SearchInput searchInput, SearchOutput searchOutput) {
         JinaEmbeddingRerankService service = JinaEmbeddingRerankService.instance;
         try {
             double[] input = service.getEmbedding(Config.Jina_multi_vector, searchInput.getDocument().getChunkText());
@@ -43,7 +43,6 @@ public class RerankStrategy {
             throw new RuntimeException(e);
         }
     }
-
 
 
     private static class DocumentWithDistance {

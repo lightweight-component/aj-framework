@@ -3,7 +3,6 @@ package com.ajaxjs.rag.parser;
 import java.io.IOException;
 
 public class FileParserFactory {
-
     public static FileParser getFileParser(String fileType) {
         switch (fileType.toLowerCase()) {
             case "html":
@@ -31,10 +30,11 @@ public class FileParserFactory {
 
     public static FileParser getFileParserByOriginalName(String originalFileName) {
         int lastIndex = originalFileName.lastIndexOf('.');
-        if (lastIndex == -1) {
+        if (lastIndex == -1)
             throw new IllegalArgumentException("Invalid original file name: " + originalFileName);
-        }
+
         String fileType = originalFileName.substring(lastIndex + 1);
+
         return getFileParser(fileType);
     }
 
@@ -53,28 +53,14 @@ public class FileParserFactory {
 
     public static String easyParse(String filePath) {
         FileParser parser = FileParserFactory.getFileParser(filePath);
-        String content = null;
+        String content;
+
         try {
             content = parser.parse(filePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         return content;
-    }
-
-    public static void main(String[] args) {
-        try {
-            // 解析PDF文件
-            testParseFile("C:\\Users\\19664\\Desktop\\2311.12351v2.pdf");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void testParseFile(String filePath) throws IOException {
-//        FileParser parser = FileParserFactory.getFileParserByPath(filePath);
-//        String content = parser.parse(filePath);
-//        System.out.println("Content of " + filePath + ":\n" + content);
-//        System.out.println("----------------------------------------\n");
     }
 }

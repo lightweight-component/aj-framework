@@ -10,7 +10,7 @@ import java.io.IOException;
  * Agent 类，包含角色、能力和知识模型等属性
  */
 public class Agent {
-    private String role; // 角色
+    private final String role; // 角色
     private String[] abilities; // 能力
     private String knowledgeModel; // 知识模型
 
@@ -56,13 +56,9 @@ public class Agent {
 
     // 调用大模型能力
     public String callLLM() {
-        // 替换为您的API密钥
-        String apiKey = Config.API_KEY;
-        // 使用百川Baichuan3-Turbo模型
-        String model = Config.LLM_MODEL;
-        // API的URL
-        String url = Config.LLM_URL;
-
+        String apiKey = Config.API_KEY; // 替换为您的API密钥
+        String model = Config.LLM_MODEL;// 使用百川Baichuan3-Turbo模型
+        String url = Config.LLM_URL;// API的URL
         OpenAIChatService openAIChatService = new OpenAIChatService(apiKey);
 
         try {

@@ -1,8 +1,8 @@
 package com.ajaxjs.rag.search;
 
-import org.entity.Document;
-import org.entity.SearchInput;
-import org.entity.SearchOutput;
+import com.ajaxjs.rag.entity.Document;
+import com.ajaxjs.rag.entity.SearchInput;
+import com.ajaxjs.rag.entity.SearchOutput;
 
 import java.util.Collections;
 import java.util.Comparator;

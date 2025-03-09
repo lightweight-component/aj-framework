@@ -1,19 +1,16 @@
 package com.ajaxjs.rag.controler;
 
+import com.ajaxjs.rag.constant.Config;
+import com.ajaxjs.rag.web.SearchEngine;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fi.iki.elonen.NanoHTTPD;
-import org.json.JSONObject;
-import com.ajaxjs.rag.service.LLM.OpenAIChatService;
-import com.ajaxjs.rag.constant.Config;
-import com.ajaxjs.rag.web.SearchEngine;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SearchController extends NanoHTTPD {
-
     public SearchController(int port) throws IOException {
         super(port);
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
@@ -52,7 +49,6 @@ public class SearchController extends NanoHTTPD {
                     searchParams.put("engine", "baidu");
                     searchParams.put("q", keyword);
                     searchParams.put("api_key", Config.SerpAPI);
-
 
                     JsonObject searchResult = SearchEngine.getResult(searchParams);
                     if (searchResult != null) {

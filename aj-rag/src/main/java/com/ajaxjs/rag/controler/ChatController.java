@@ -11,15 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChatController extends NanoHTTPD {
-
     // 存储聊天消息的列表
     private static final Map<String, String> chatHistory = new HashMap<>();
-    private OpenAIChatService openAIChatService;
+    private final OpenAIChatService openAIChatService;
 
     public ChatController(int port) throws IOException {
         super(port);
-        // 初始化 OpenAIChatService
-        String apiKey = Config.API_KEY;
+
+        String apiKey = Config.API_KEY; // 初始化 OpenAIChatService
         this.openAIChatService = new OpenAIChatService(apiKey);
         start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
         System.out.println("Server started on port " + port);
@@ -45,9 +44,9 @@ public class ChatController extends NanoHTTPD {
                 // 处理 GET 请求，返回聊天历史记录
                 StringBuilder html = new StringBuilder();
                 html.append("<html><body>");
-                for (Map.Entry<String, String> entry : chatHistory.entrySet()) {
+                for (Map.Entry<String, String> entry : chatHistory.entrySet())
                     html.append("<p>").append(entry.getKey()).append(": ").append(entry.getValue()).append("</p>");
-                }
+
                 html.append("</body></html>");
                 response = newFixedLengthResponse(html.toString());
             } else if (Method.POST.equals(method) && "/send".equals(uri)) {
@@ -55,6 +54,7 @@ public class ChatController extends NanoHTTPD {
                 session.parseBody(new HashMap<>());
                 Map<String, String> params = session.getParms();
                 String message = params.get("message");
+
                 if (message != null && !message.isEmpty()) {
                     chatHistory.put("User", message);
 
@@ -76,7 +76,6 @@ public class ChatController extends NanoHTTPD {
                     // 创建一个 JSON 对象，将生成的文本放入其中
                     JSONObject responseJson = new JSONObject();
                     responseJson.put("generatedText", generatedText);
-
                     // 将 JSON 对象转换为字符串并返回
                     response = newFixedLengthResponse(Response.Status.OK, "application/json", responseJson.toString());
                 } else {

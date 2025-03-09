@@ -14,7 +14,6 @@ public class OllamaChatService {
 
     public String generateChatCompletion(String model, String message) throws Exception {
         String url = "http://localhost:11434/api/chat";
-
         // 创建请求体
         JSONObject requestBody = new JSONObject();
         requestBody.put("model", model);
@@ -40,18 +39,8 @@ public class OllamaChatService {
 
             // 获取响应体
             assert response.body() != null;
+
             return response.body().string();
-        }
-    }
-
-    public static void main(String[] args) {
-        OllamaChatService service = new OllamaChatService();
-
-        try {
-            String response = service.generateChatCompletion("llama3.2", "why is the sky blue?");
-            System.out.println(response);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

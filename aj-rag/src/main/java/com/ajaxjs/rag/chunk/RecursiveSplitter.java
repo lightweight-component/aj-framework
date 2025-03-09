@@ -2,6 +2,7 @@ package com.ajaxjs.rag.chunk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class RecursiveSplitter implements TextSplitter {
@@ -18,7 +19,7 @@ public class RecursiveSplitter implements TextSplitter {
 
     private List<String> recursiveSplit(String text, int currentDepth) {
         if (currentDepth >= depth)
-            return new ArrayList<>(Arrays.asList(text));
+            return new ArrayList<>(Collections.singletonList(text));
 
         List<String> result = new ArrayList<>();
 
