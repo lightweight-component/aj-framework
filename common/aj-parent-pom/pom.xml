@@ -5,17 +5,17 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>aj-parent</name>
-    <version>1.24</version>
+    <version>1.25</version>
     <packaging>pom</packaging>
     <description>Public Maven config for AJAXJS OpenSource Library</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <springboot.version>2.7.18</springboot.version>
         <dubbo.version>3.3.0</dubbo.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
 

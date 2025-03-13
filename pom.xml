@@ -14,5 +14,8 @@
         <module>aj-sample-app</module>
         <module>aj-base</module>
         <module>aj-rag</module>
+        <module>java-rag-master</module>
+        <module>learn-java-rag</module>
+        <module>aj-rag2</module>
     </modules>
 </project>
