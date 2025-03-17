@@ -1,6 +1,7 @@
 package org.example.service;
 
-import com.ajaxjs.desensitize.annotation.Desensitize;
+//import com.ajaxjs.desensitize.annotation.Desensitize;
+
 import com.ajaxjs.springboot.annotation.JsonMessage;
 import com.ajaxjs.util.cache.leveltwocache.LevelTwoCacheManager;
 import org.example.controller.FooController;
@@ -8,9 +9,12 @@ import org.example.model.Foo;
 import org.example.model.User;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @Service
 public class FooService implements FooController {
@@ -98,7 +102,7 @@ public class FooService implements FooController {
     }
 
     @Override
-    @Desensitize
+//    @Desensitize
     public User UserDesensitize() {
         User user = new User();
         user.setAge(1);
@@ -106,6 +110,17 @@ public class FooService implements FooController {
         user.setPhone("13711118120");
 
         return user;
+    }
+
+    @Autowired
+    JSONPlaceHolderClient jsonPlaceHolderClient;
+
+    @Override
+    public boolean testOpenFeign() {
+        System.out.println(jsonPlaceHolderClient);
+        List<Post> list = jsonPlaceHolderClient.getPosts();
+        System.out.println(list);
+        return true;
     }
 
 

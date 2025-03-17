@@ -98,6 +98,9 @@ public class EncryptedBodyConverter extends MappingJackson2HttpMessageConverter 
 
     @Override
     protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+        if(!(type instanceof Class))
+            return;
+
         Class<?> clz = (Class<?>) type;
 
         if (isEnabled && object instanceof ResponseResultWrapper && clz.getAnnotation(EncryptedData.class) != null) {

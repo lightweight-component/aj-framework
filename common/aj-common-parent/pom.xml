@@ -117,7 +117,7 @@
             <dependency>
                 <groupId>com.ajaxjs</groupId>
                 <artifactId>ajaxjs-parent</artifactId>
-                <version>1.24</version>
+                <version>1.26</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

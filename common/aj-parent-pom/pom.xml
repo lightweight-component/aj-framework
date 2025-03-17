@@ -5,7 +5,7 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>aj-parent</name>
-    <version>1.25</version>
+    <version>1.26</version>
     <packaging>pom</packaging>
     <description>Public Maven config for AJAXJS OpenSource Library</description>
 
@@ -192,7 +192,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>2.3.232</version>
+                <version>2.2.220</version>
                 <scope>runtime</scope>
             </dependency>
 
@@ -210,6 +210,12 @@
                 <artifactId>jakarta.servlet-api</artifactId>
                 <version>4.0.4</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>2.0.16</version>
             </dependency>
 
             <!-- Spring -->
@@ -268,6 +274,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
         </dependency>
 
         <!-- Spring 测试 -->
