@@ -5,6 +5,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthDouyinScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +15,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 
 /**
@@ -115,7 +115,7 @@ public class AuthDouyinRequest extends AuthDefaultRequest {
             .queryParam("response_type", "code")
             .queryParam("client_key", config.getClientId())
             .queryParam("redirect_uri", config.getRedirectUri())
-            .queryParam("scope", this.getScopes(",", true, AuthScopeUtils.getDefaultScopes(AuthDouyinScope.values())))
+            .queryParam("scope", this.getScopes(",", true, AuthChecker.getDefaultScopes(AuthDouyinScope.values())))
             .queryParam("state", getRealState(state))
             .build();
     }

@@ -5,6 +5,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthSlackScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONArray;
@@ -16,7 +17,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 /**
  * slack登录, slack.com
@@ -126,7 +126,7 @@ public class AuthSlackRequest extends AuthDefaultRequest {
             .queryParam("client_id", config.getClientId())
             .queryParam("state", getRealState(state))
             .queryParam("redirect_uri", config.getRedirectUri())
-            .queryParam("scope", this.getScopes(",", true, AuthScopeUtils.getDefaultScopes(AuthSlackScope.values())))
+            .queryParam("scope", this.getScopes(",", true, AuthChecker.getDefaultScopes(AuthSlackScope.values())))
             .build();
     }
 

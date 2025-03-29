@@ -2,19 +2,16 @@ package com.ajaxjs.oauth.request;
 
 import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.scope.AuthWeChatEnterpriseWebScope;
-import com.ajaxjs.oauth.utils.GlobalAuthUtils;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.config.AuthDefaultSource;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
+import com.ajaxjs.util.EncodeTools;
 
 /**
  * <p>
  * 企业微信网页登录
  * </p>
- *
- * @author liguanhua (347826496(a)qq.com)
- * @since 1.15.9
  */
 public class AuthWeChatEnterpriseWebRequest extends AbstractAuthWeChatEnterpriseRequest {
     public AuthWeChatEnterpriseWebRequest(AuthConfig config) {
@@ -30,9 +27,9 @@ public class AuthWeChatEnterpriseWebRequest extends AbstractAuthWeChatEnterprise
         return UrlBuilder.fromBaseUrl(source.authorize())
             .queryParam("appid", config.getClientId())
             .queryParam("agentid", config.getAgentId())
-            .queryParam("redirect_uri", GlobalAuthUtils.urlEncode(config.getRedirectUri()))
+            .queryParam("redirect_uri", EncodeTools.urlEncodeSafe(config.getRedirectUri()))
             .queryParam("response_type", "code")
-            .queryParam("scope", this.getScopes(",", false, AuthScopeUtils.getDefaultScopes(AuthWeChatEnterpriseWebScope.values())))
+            .queryParam("scope", this.getScopes(",", false, AuthChecker.getDefaultScopes(AuthWeChatEnterpriseWebScope.values())))
             .queryParam("state", getRealState(state).concat("#wechat_redirect"))
             .build();
     }

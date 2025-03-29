@@ -1,9 +1,8 @@
 package com.ajaxjs.oauth.enums;
 
-import com.ajaxjs.oauth.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
+import com.ajaxjs.util.StrUtil;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,10 +47,9 @@ public enum AuthUserGender {
      *
      * @param originalGender 用户第三方标注的原始性别
      * @return 用户性别
-     * @since 1.13.2
      */
     public static AuthUserGender getWechatRealGender(String originalGender) {
-        if (StringUtils.isEmpty(originalGender) || "0".equals(originalGender))
+        if (StrUtil.isEmptyText(originalGender) || "0".equals(originalGender))
             return AuthUserGender.UNKNOWN;
 
         return getRealGender(originalGender);

@@ -5,9 +5,6 @@ import lombok.Getter;
 
 /**
  * 今日头条授权登录时的异常状态码
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.8
  */
 @Getter
 @AllArgsConstructor

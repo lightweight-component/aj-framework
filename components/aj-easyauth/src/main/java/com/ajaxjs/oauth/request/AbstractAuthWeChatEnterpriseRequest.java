@@ -1,18 +1,18 @@
 package com.ajaxjs.oauth.request;
 
 import com.ajaxjs.oauth.cache.AuthStateCache;
-import com.ajaxjs.oauth.enums.AuthResponseStatus;
-import com.ajaxjs.oauth.enums.AuthUserGender;
-import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.StringUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
-import com.alibaba.fastjson.JSONObject;
 import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.config.AuthSource;
+import com.ajaxjs.oauth.enums.AuthResponseStatus;
+import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.model.AuthCallback;
+import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
+import com.ajaxjs.oauth.utils.HttpUtils;
+import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * <p>
@@ -136,7 +136,7 @@ public abstract class AbstractAuthWeChatEnterpriseRequest extends AuthDefaultReq
         JSONObject userInfo = checkResponse(userInfoResponse);
 
         // 用户敏感信息
-        if (StringUtils.isNotEmpty(userTicket)) {
+        if (StrUtil.hasText(userTicket)) {
             String userDetailUrl = UrlBuilder.fromBaseUrl("https://qyapi.weixin.qq.com/cgi-bin/auth/getuserdetail")
                 .queryParam("access_token", accessToken)
                 .build();

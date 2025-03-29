@@ -5,8 +5,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthOktaScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 import com.ajaxjs.oauth.config.AuthConfig;
@@ -15,8 +14,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
-import com.ajaxjs.oauth.utils.Base64Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -125,7 +122,7 @@ public class AuthOktaRequest extends AuthDefaultRequest {
             .queryParam("prompt", "consent")
             .queryParam("client_id", config.getClientId())
             .queryParam("redirect_uri", config.getRedirectUri())
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthOktaScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthOktaScope.values())))
             .queryParam("state", getRealState(state))
             .build();
     }

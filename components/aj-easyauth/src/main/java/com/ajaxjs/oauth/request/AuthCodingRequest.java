@@ -4,6 +4,7 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthCodingScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
 import com.ajaxjs.oauth.config.AuthConfig;
@@ -11,7 +12,6 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 /**
  * Coding登录
@@ -89,7 +89,7 @@ public class AuthCodingRequest extends AuthDefaultRequest {
             .queryParam("response_type", "code")
             .queryParam("client_id", config.getClientId())
             .queryParam("redirect_uri", config.getRedirectUri())
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthCodingScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthCodingScope.values())))
             .queryParam("state", getRealState(state))
             .build();
     }

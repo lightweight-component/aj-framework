@@ -8,7 +8,7 @@ import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.GlobalAuthUtils;
-import com.ajaxjs.oauth.utils.StringUtils;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -128,7 +128,7 @@ public class AuthAlipayRequest extends AuthDefaultRequest {
     protected void check(AuthConfig config) {
         AuthChecker.checkConfig(config, AuthDefaultSource.ALIPAY);
 
-        if (!StringUtils.isNotEmpty(alipayPublicKey)) {
+        if (!StrUtil.hasText(alipayPublicKey)) {
             throw new AuthException(AuthResponseStatus.PARAMETER_INCOMPLETE, AuthDefaultSource.ALIPAY);
         }
 
@@ -141,7 +141,7 @@ public class AuthAlipayRequest extends AuthDefaultRequest {
 
     @Override
     protected void checkCode(AuthCallback authCallback) {
-        if (StringUtils.isEmpty(authCallback.getAuth_code())) {
+        if (StrUtil.isEmptyText(authCallback.getAuth_code())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CODE, source);
         }
     }
@@ -214,12 +214,12 @@ public class AuthAlipayRequest extends AuthDefaultRequest {
         }
 
         String province = response.getProvince(), city = response.getCity();
-        String location = String.format("%s %s", StringUtils.isEmpty(province) ? "" : province, StringUtils.isEmpty(city) ? "" : city);
+        String location = String.format("%s %s", StrUtil.isEmptyText(province) ? "" : province, StrUtil.isEmptyText(city) ? "" : city);
 
         return AuthUser.builder()
             .rawUserInfo(JSONObject.parseObject(JSONObject.toJSONString(response)))
             .uuid(response.getUserId())
-            .username(StringUtils.isEmpty(response.getUserName()) ? response.getNickName() : response.getUserName())
+            .username(StrUtil.isEmptyText(response.getUserName()) ? response.getNickName() : response.getUserName())
             .nickname(response.getNickName())
             .avatar(response.getAvatar())
             .location(location)

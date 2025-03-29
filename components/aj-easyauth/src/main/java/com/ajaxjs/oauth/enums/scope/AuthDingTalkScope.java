@@ -5,17 +5,11 @@ import lombok.Getter;
 
 /**
  * 钉钉平台 OAuth 授权范围
- *
- * https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @version 1.0.0
- * @since 1.16.7
+ * <a href="https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug">...</a>
  */
 @Getter
 @AllArgsConstructor
 public enum AuthDingTalkScope implements AuthScope {
-
     /**
      * 无需申请	默认开启
      */
@@ -29,5 +23,4 @@ public enum AuthDingTalkScope implements AuthScope {
     private final String scope;
     private final String description;
     private final boolean isDefault;
-
 }

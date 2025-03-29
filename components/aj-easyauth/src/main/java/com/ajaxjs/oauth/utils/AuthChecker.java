@@ -5,8 +5,17 @@ import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.config.AuthSource;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
+import com.ajaxjs.oauth.enums.scope.AuthScope;
 import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.model.AuthCallback;
+import com.ajaxjs.util.RandomTools;
+import com.ajaxjs.util.StrUtil;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 授权配置类的校验器
@@ -21,21 +30,21 @@ public class AuthChecker {
      * @since 1.6.1-beta
      */
     public static boolean isSupportedAuth(AuthConfig config, AuthSource source) {
-        boolean isSupported = StringUtils.isNotEmpty(config.getClientId()) && StringUtils.isNotEmpty(config.getClientSecret());
+        boolean isSupported = StrUtil.hasText(config.getClientId()) && StrUtil.hasText(config.getClientSecret());
         if (isSupported && AuthDefaultSource.STACK_OVERFLOW == source)
-            isSupported = StringUtils.isNotEmpty(config.getStackOverflowKey());
+            isSupported = StrUtil.hasText(config.getStackOverflowKey());
 
         if (isSupported && AuthDefaultSource.WECHAT_ENTERPRISE == source)
-            isSupported = StringUtils.isNotEmpty(config.getAgentId());
+            isSupported = StrUtil.hasText(config.getAgentId());
 
         if (isSupported && (AuthDefaultSource.CODING == source || AuthDefaultSource.OKTA == source))
-            isSupported = StringUtils.isNotEmpty(config.getDomainPrefix());
+            isSupported = StrUtil.hasText(config.getDomainPrefix());
 
         if (isSupported && AuthDefaultSource.XMLY == source)
-            isSupported = StringUtils.isNotEmpty(config.getDeviceId()) && null != config.getClientOsType();
+            isSupported = StrUtil.hasText(config.getDeviceId()) && null != config.getClientOsType();
 
         if (isSupported)
-            isSupported = config.getClientOsType() == 3 || StringUtils.isNotEmpty(config.getPackId());
+            isSupported = config.getClientOsType() == 3 || StrUtil.hasText(config.getPackId());
 
         return isSupported;
     }
@@ -51,7 +60,7 @@ public class AuthChecker {
         if (config.isIgnoreCheckRedirectUri())
             return;
 
-        if (StringUtils.isEmpty(redirectUri))
+        if (StrUtil.isEmptyText(redirectUri))
             throw new AuthException(AuthResponseStatus.ILLEGAL_REDIRECT_URI, source);
 
         if (!GlobalAuthUtils.isHttpProtocol(redirectUri) && !GlobalAuthUtils.isHttpsProtocol(redirectUri))
@@ -74,10 +83,10 @@ public class AuthChecker {
 
         String code = callback.getCode();
 
-        if (StringUtils.isEmpty(code) && source == AuthDefaultSource.HUAWEI)
+        if (StrUtil.isEmptyText(code) && source == AuthDefaultSource.HUAWEI)
             code = callback.getAuthorization_code();
 
-        if (StringUtils.isEmpty(code))
+        if (StrUtil.isEmptyText(code))
             throw new AuthException(AuthResponseStatus.ILLEGAL_CODE, source);
     }
 
@@ -97,7 +106,55 @@ public class AuthChecker {
         if (source == AuthDefaultSource.TWITTER)
             return;
 
-        if (StringUtils.isEmpty(state) || !authStateCache.containsKey(state))
+        if (StrUtil.isEmptyText(state) || !authStateCache.containsKey(state))
             throw new AuthException(AuthResponseStatus.ILLEGAL_STATUS, source);
+    }
+
+    /**
+     * 从 {@link AuthScope} 数组中获取实际的 scope 字符串
+     *
+     * @param scopes 可变参数，支持传任意 {@link AuthScope}
+     * @return List
+     */
+    public static List<String> getScopes(AuthScope... scopes) {
+        if (null == scopes || scopes.length == 0)
+            return null;
+
+        return Arrays.stream(scopes).map(AuthScope::getScope).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取 {@link AuthScope} 数组中所有的被标记为 {@code default} 的 scope
+     *
+     * @param scopes scopes
+     * @return List
+     */
+    public static List<String> getDefaultScopes(AuthScope[] scopes) {
+        if (null == scopes || scopes.length == 0)
+            return null;
+
+        return Arrays.stream(scopes).filter((AuthScope::isDefault)).map(AuthScope::getScope).collect(Collectors.toList());
+    }
+
+    /* 该配置仅用于支持 PKCE 模式的平台，针对无服务应用，不推荐使用隐式授权，推荐使用 PKCE 模式 */
+    public static String generateCodeVerifier() {
+        String randomStr = RandomTools.generateRandomString(50);
+        return Base64Utils.encodeUrlSafe(randomStr);
+    }
+
+    /**
+     * 适用于 OAuth 2.0 PKCE 增强协议
+     *
+     * @param codeChallengeMethod s256 / plain
+     * @param codeVerifier        客户端生产的校验码
+     * @return code challenge
+     */
+    public static String generateCodeChallenge(String codeChallengeMethod, String codeVerifier) {
+        if ("S256".equalsIgnoreCase(codeChallengeMethod))
+            // https://tools.ietf.org/html/rfc7636#section-4.2
+            // code_challenge = BASE64URL-ENCODE(SHA256(ASCII(code_verifier)))
+            return new String(Objects.requireNonNull(Base64Utils.encodeUrlSafe(Sha256.digest(codeVerifier), true)), StandardCharsets.US_ASCII);
+        else
+            return codeVerifier;
     }
 }

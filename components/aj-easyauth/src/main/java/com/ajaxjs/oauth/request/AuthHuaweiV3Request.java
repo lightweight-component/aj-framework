@@ -8,6 +8,7 @@ import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthHuaweiV3Scope;
 import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.constants.Constants;
 import com.xkcoding.http.support.HttpHeader;
@@ -78,7 +79,8 @@ public class AuthHuaweiV3Request extends AuthDefaultRequest {
     @Override
     public AuthUser getUserInfo(AuthToken authToken) {
         String idToken = authToken.getIdToken();
-        if (StringUtils.isEmpty(idToken)) {
+
+        if (StrUtil.isEmptyText(idToken)) {
             Map<String, String> form = new HashMap<>(7);
             form.put("access_token", authToken.getAccessToken());
             form.put("getNickName", "1");
@@ -162,13 +164,13 @@ public class AuthHuaweiV3Request extends AuthDefaultRequest {
         String realState = getRealState(state);
         UrlBuilder builder = UrlBuilder.fromBaseUrl(super.authorize(realState))
             .queryParam("access_type", "offline")
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthHuaweiV3Scope.values())));
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthHuaweiV3Scope.values())));
 
         if (config.isPkce()) {
             String cacheKey = this.source.getName().concat(":code_verifier:").concat(realState);
-            String codeVerifier = PkceUtil.generateCodeVerifier();
+            String codeVerifier = AuthChecker.generateCodeVerifier();
             String codeChallengeMethod = "S256";
-            String codeChallenge = PkceUtil.generateCodeChallenge(codeChallengeMethod, codeVerifier);
+            String codeChallenge = AuthChecker.generateCodeChallenge(codeChallengeMethod, codeVerifier);
             builder.queryParam("code_challenge", codeChallenge)
                 .queryParam("code_challenge_method", codeChallengeMethod);
             // 缓存 codeVerifier 十分钟

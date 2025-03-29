@@ -4,6 +4,7 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthGoogleScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -13,7 +14,6 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 /**
  * Google登录
@@ -77,7 +77,7 @@ public class AuthGoogleRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
             .queryParam("access_type", "offline")
-            .queryParam("scope", this.getScopes(" ", false, AuthScopeUtils.getDefaultScopes(AuthGoogleScope.values())))
+            .queryParam("scope", this.getScopes(" ", false, AuthChecker.getDefaultScopes(AuthGoogleScope.values())))
             .queryParam("prompt","select_account")
             .build();
     }

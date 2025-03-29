@@ -5,6 +5,7 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.StrUtil;
 import com.xkcoding.http.util.UrlUtil;
 import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.config.AuthSource;
@@ -81,7 +82,7 @@ public abstract class AuthDefaultRequest implements AuthRequest {
         if (e instanceof AuthException) {
             AuthException authException = ((AuthException) e);
             errorCode = authException.getErrorCode();
-            if (StringUtils.isNotEmpty(authException.getErrorMsg()))
+            if (StrUtil.hasText(authException.getErrorMsg()))
                 errorMsg = authException.getErrorMsg();
         }
         return AuthResponse.<AuthUser>builder().code(errorCode).msg(errorMsg).build();
@@ -178,7 +179,7 @@ public abstract class AuthDefaultRequest implements AuthRequest {
      * @return 返回不为null的state
      */
     protected String getRealState(String state) {
-        if (StringUtils.isEmpty(state))
+        if (StrUtil.isEmptyText(state))
             state = RandomTools.uuid();
 
         // 缓存state

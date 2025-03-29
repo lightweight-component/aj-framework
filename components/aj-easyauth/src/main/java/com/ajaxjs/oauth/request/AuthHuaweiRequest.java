@@ -7,7 +7,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthHuaweiScope;
 import com.ajaxjs.oauth.model.*;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -127,7 +127,7 @@ public class AuthHuaweiRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
             .queryParam("access_type", "offline")
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthHuaweiScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthHuaweiScope.values())))
             .build();
     }
 

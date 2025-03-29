@@ -4,6 +4,7 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthLineScope;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +15,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -120,7 +120,7 @@ public class AuthLineRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
             .queryParam("nonce", state)
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthLineScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthLineScope.values())))
             .build();
     }
 }

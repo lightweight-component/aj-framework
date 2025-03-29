@@ -4,7 +4,8 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.scope.AuthAppleScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.StringUtils;
+import com.ajaxjs.oauth.utils.AuthChecker;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +16,6 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -45,13 +45,13 @@ public class AuthAppleRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
             .queryParam("response_mode", "form_post")
-            .queryParam("scope", this.getScopes(" ", false, AuthScopeUtils.getDefaultScopes(AuthAppleScope.values())))
+            .queryParam("scope", this.getScopes(" ", false, AuthChecker.getDefaultScopes(AuthAppleScope.values())))
             .build();
     }
 
     @Override
     public AuthToken getAccessToken(AuthCallback authCallback) {
-        if (!StringUtils.isEmpty(authCallback.getError())) {
+        if (!StrUtil.isEmptyText(authCallback.getError())) {
             throw new AuthException(authCallback.getError());
         }
         this.config.setClientSecret(this.getToken());
@@ -65,7 +65,7 @@ public class AuthAppleRequest extends AuthDefaultRequest {
             .refreshToken(accessTokenObject.getString("refresh_token"))
             .tokenType(accessTokenObject.getString("token_type"))
             .idToken(accessTokenObject.getString("id_token"));
-        if (!StringUtils.isEmpty(authCallback.getUser())) {
+        if (!StrUtil.isEmptyText(authCallback.getUser())) {
             try {
                 AppleUserInfo userInfo = JSONObject.parseObject(authCallback.getUser(), AppleUserInfo.class);
                 builder.username(userInfo.getName().getFirstName() + " " + userInfo.getName().getLastName());
@@ -95,16 +95,16 @@ public class AuthAppleRequest extends AuthDefaultRequest {
     @Override
     protected void checkConfig(AuthConfig config) {
         super.checkConfig(config);
-        if (StringUtils.isEmpty(config.getClientId())) {
+        if (StrUtil.isEmptyText(config.getClientId())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CLIENT_ID, source);
         }
-        if (StringUtils.isEmpty(config.getClientSecret())) {
+        if (StrUtil.isEmptyText(config.getClientSecret())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CLIENT_SECRET, source);
         }
-        if (StringUtils.isEmpty(config.getKid())) {
+        if (StrUtil.isEmptyText(config.getKid())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_KID, source);
         }
-        if (StringUtils.isEmpty(config.getTeamId())) {
+        if (StrUtil.isEmptyText(config.getTeamId())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_TEAM_ID, source);
         }
     }

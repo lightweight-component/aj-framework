@@ -12,10 +12,6 @@ import com.ajaxjs.oauth.model.AuthUser;
 
 /**
  * 测试用自定义扩展的第三方request
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @version 1.0
- * @since 1.12.0
  */
 public class AuthExtendRequest extends AuthDefaultRequest {
 
@@ -28,7 +24,7 @@ public class AuthExtendRequest extends AuthDefaultRequest {
     }
 
     /**
-     * 获取access token
+     * 获取 access token
      *
      * @param authCallback 授权成功后的回调参数
      * @return token

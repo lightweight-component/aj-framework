@@ -8,16 +8,14 @@ import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthQqScope;
 import com.ajaxjs.oauth.model.*;
 import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.Map;
 
 /**
  * qq登录
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @author yangkai.shen (https://xkcoding.com)
- * @since 1.1.0
  */
 public class AuthQqRequest extends AuthDefaultRequest {
     public AuthQqRequest(AuthConfig config) {
@@ -49,7 +47,7 @@ public class AuthQqRequest extends AuthDefaultRequest {
             throw new AuthException(object.getString("msg"));
         }
         String avatar = object.getString("figureurl_qq_2");
-        if (StringUtils.isEmpty(avatar)) {
+        if (StrUtil.isEmptyText(avatar)) {
             avatar = object.getString("figureurl_qq_1");
         }
 
@@ -90,7 +88,7 @@ public class AuthQqRequest extends AuthDefaultRequest {
         if (object.containsKey("unionid")) {
             authToken.setUnionId(object.getString("unionid"));
         }
-        return StringUtils.isEmpty(authToken.getUnionId()) ? authToken.getOpenId() : authToken.getUnionId();
+        return StrUtil.isEmptyText(authToken.getUnionId()) ? authToken.getOpenId() : authToken.getUnionId();
     }
 
     /**
@@ -109,10 +107,10 @@ public class AuthQqRequest extends AuthDefaultRequest {
     }
 
     private AuthToken getAuthToken(String response) {
-        Map<String, String> accessTokenObject = GlobalAuthUtils.parseStringToMap(response);
-        if (!accessTokenObject.containsKey("access_token") || accessTokenObject.containsKey("code")) {
+        Map<String, String> accessTokenObject = EncodeTools.parseStringToMap(response);
+        if (!accessTokenObject.containsKey("access_token") || accessTokenObject.containsKey("code"))
             throw new AuthException(accessTokenObject.get("msg"));
-        }
+
         return AuthToken.builder()
             .accessToken(accessTokenObject.get("access_token"))
             .expireIn(Integer.parseInt(accessTokenObject.getOrDefault("expires_in", "0")))
@@ -123,7 +121,7 @@ public class AuthQqRequest extends AuthDefaultRequest {
     @Override
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
-            .queryParam("scope", this.getScopes(",", false, AuthScopeUtils.getDefaultScopes(AuthQqScope.values())))
+            .queryParam("scope", this.getScopes(",", false, AuthChecker.getDefaultScopes(AuthQqScope.values())))
             .build();
     }
 }

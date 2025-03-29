@@ -6,9 +6,6 @@ import com.ajaxjs.oauth.request.*;
 
 /**
  * JustAuth内置的各api需要的url， 用枚举类分平台类型管理
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.0
  */
 public enum AuthDefaultSource implements AuthSource {
     /**
@@ -221,7 +218,7 @@ public enum AuthDefaultSource implements AuthSource {
     /**
      * Coding，
      * <p>
-     * 参考 https://help.coding.net/docs/project/open/oauth.html#%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83 中的说明，
+     * 参考 <a href="https://help.coding.net/docs/project/open/oauth.html#%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83">...</a> 中的说明，
      * 新版的 coding API 地址需要传入用户团队名，这儿使用动态参数，方便在 request 中使用
      */
     CODING {
@@ -406,7 +403,7 @@ public enum AuthDefaultSource implements AuthSource {
     },
     /**
      * Google
-     * 端点地址：https://accounts.google.com/.well-known/openid-configuration
+     * 端点地址：<a href="https://accounts.google.com/.well-known/openid-configuration">...</a>
      */
     GOOGLE {
         @Override
@@ -565,7 +562,9 @@ public enum AuthDefaultSource implements AuthSource {
         }
 
         @Override
-        public Class<? extends AuthDefaultRequest> getTargetClass() { return AuthMicrosoftCnRequest.class; }
+        public Class<? extends AuthDefaultRequest> getTargetClass() {
+            return AuthMicrosoftCnRequest.class;
+        }
     },
     /**
      * 小米
@@ -732,7 +731,7 @@ public enum AuthDefaultSource implements AuthSource {
 
     /**
      * 华为
-     *
+     * <p>
      * 当前方式未来可能被废弃，建议使用 {@link this#HUAWEI_V3}
      *
      * @since 1.10.0
@@ -1234,8 +1233,7 @@ public enum AuthDefaultSource implements AuthSource {
 
         /**
          * 该 API 获取到的是 access token
-         *
-         * https://slack.com/api/oauth.token 获取到的是 workspace token
+         * <a href="https://slack.com/api/oauth.token">...</a> 获取到的是 workspace token
          *
          * @return String
          */
@@ -1409,7 +1407,7 @@ public enum AuthDefaultSource implements AuthSource {
         }
     },
 
-    FIGMA{
+    FIGMA {
         @Override
         public String authorize() {
             return "https://www.figma.com/oauth";
@@ -1437,10 +1435,10 @@ public enum AuthDefaultSource implements AuthSource {
     },
     /**
      * 微信小程序授权登录
+     *
      * @since yudaocode
      */
     WECHAT_MINI_PROGRAM {
-
         @Override
         public String authorize() {
             // 参见 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html 文档

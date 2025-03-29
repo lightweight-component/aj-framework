@@ -5,9 +5,8 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthBaiduScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.StringUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.config.AuthDefaultSource;
@@ -15,7 +14,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 /**
  * 百度账号登录
@@ -67,7 +65,7 @@ public class AuthBaiduRequest extends AuthDefaultRequest {
 
     private String getAvatar(JSONObject object) {
         String protrait = object.getString("portrait");
-        return StringUtils.isEmpty(protrait) ? null : String.format("http://himg.bdimg.com/sys/portrait/item/%s.jpg", protrait);
+        return StrUtil.isEmptyText(protrait) ? null : String.format("http://himg.bdimg.com/sys/portrait/item/%s.jpg", protrait);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class AuthBaiduRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
             .queryParam("display", "popup")
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthBaiduScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthBaiduScope.values())))
             .build();
     }
 

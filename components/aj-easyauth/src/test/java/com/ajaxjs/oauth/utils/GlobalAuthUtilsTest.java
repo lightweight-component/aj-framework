@@ -3,6 +3,7 @@ package com.ajaxjs.oauth.utils;
 import com.ajaxjs.oauth.config.AuthConfig;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
+import com.ajaxjs.util.EncodeTools;
 import com.alibaba.fastjson.JSON;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import java.util.TreeMap;
 
 import static com.ajaxjs.oauth.config.AuthDefaultSource.TWITTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class GlobalAuthUtilsTest {
@@ -25,16 +25,9 @@ public class GlobalAuthUtilsTest {
 
     @Test
     public void urlDecode() {
-        assertEquals("", GlobalAuthUtils.urlDecode(null));
-        assertEquals("https://www.foo.bar", GlobalAuthUtils.urlDecode("https://www.foo.bar"));
-        assertEquals("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe/Nis5lq9ik=", GlobalAuthUtils.urlDecode("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%2FNis5lq9ik%3D"));
-    }
-
-    @Test
-    public void parseStringToMap() {
-        Map expected = new HashMap();
-        expected.put("bar", "baz");
-        assertEquals(expected, GlobalAuthUtils.parseStringToMap("foo&bar=baz"));
+        assertEquals("", EncodeTools.urlDecode(null));
+        assertEquals("https://www.foo.bar", EncodeTools.urlDecode("https://www.foo.bar"));
+        assertEquals("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe/Nis5lq9ik=", EncodeTools.urlDecode("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%2FNis5lq9ik%3D"));
     }
 
     @Test
@@ -80,7 +73,7 @@ public class GlobalAuthUtilsTest {
         String baseUrl = "https://api.twitter.com/oauth/request_token";
         params.put("oauth_signature", GlobalAuthUtils.generateTwitterSignature(params, "POST", baseUrl, config.getClientSecret(), null));
 
-        params.forEach((k, v) -> params.put(k, "\"" + GlobalAuthUtils.urlEncode(v) + "\""));
+        params.forEach((k, v) -> params.put(k, "\"" + EncodeTools.urlEncodeSafe(v) + "\""));
         String actual = "OAuth " + GlobalAuthUtils.parseMapToString(params, false).replaceAll("&", ", ");
 
         assertEquals("OAuth oauth_nonce=\"sTj7Ivg73u052eXstpoS1AWQCynuDEPN\", oauth_signature=\"%2BL5Jq%2FTaKubge04cWw%2B4yfjFlaU%3D\", oauth_callback=\"https%3A%2F%2Fcodinglife.tech\", oauth_consumer_key=\"HD0XLqzi5Wz0G08rh45Cg8mgh\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"1569750981\", oauth_version=\"1.0\"", actual);
@@ -108,7 +101,7 @@ public class GlobalAuthUtilsTest {
         params.put("oauth_signature", GlobalAuthUtils.generateTwitterSignature(params, "POST", TWITTER.accessToken(), config.getClientSecret(), authCallback
             .getOauth_token()));
 
-        params.forEach((k, v) -> params.put(k, "\"" + GlobalAuthUtils.urlEncode(v) + "\""));
+        params.forEach((k, v) -> params.put(k, "\"" + EncodeTools.urlEncodeSafe(v) + "\""));
         String actual = "OAuth " + GlobalAuthUtils.parseMapToString(params, false).replaceAll("&", ", ");
 
         assertEquals("OAuth oauth_verifier=\"lYou4gxfA6S5KioUa8VF8HCShzA2nSxp\", oauth_nonce=\"sTj7Ivg73u052eXstpoS1AWQCynuDEPN\", oauth_signature=\"9i0lmWgvphtkl2KcCO9VyZ3K2%2F0%3D\", oauth_token=\"W_KLmAAAAAAAxq5LAAABbXxJeD0\", oauth_consumer_key=\"HD0XLqzi5Wz0G08rh45Cg8mgh\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"1569751082\", oauth_version=\"1.0\"", actual);
@@ -143,17 +136,10 @@ public class GlobalAuthUtilsTest {
         Map<String, String> params = new HashMap<>(queryParams);
         oauthParams.put("oauth_signature", GlobalAuthUtils.generateTwitterSignature(params, "GET", TWITTER.userInfo(), config.getClientSecret(), authToken
             .getOauthTokenSecret()));
-        oauthParams.forEach((k, v) -> oauthParams.put(k, "\"" + GlobalAuthUtils.urlEncode(v) + "\""));
+        oauthParams.forEach((k, v) -> oauthParams.put(k, "\"" + EncodeTools.urlEncodeSafe(v) + "\""));
 
         String actual = "OAuth " + GlobalAuthUtils.parseMapToString(oauthParams, false).replaceAll("&", ", ");
         assertEquals("OAuth oauth_nonce=\"sTj7Ivg73u052eXstpoS1AWQCynuDEPN\", oauth_signature=\"OsqHjRmBf7syxlz8lB7MRdzqEjY%3D\", oauth_token=\"1961977975-PcFQaCnpN9h9xqtqHwHlpGBXFrHJ9bOLy7OtGAL\", oauth_consumer_key=\"HD0XLqzi5Wz0G08rh45Cg8mgh\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"1569751082\", oauth_version=\"1.0\"", actual);
-    }
-
-    @Test
-    public void md5() {
-        String str = "helloworld,iamjustauth";
-        String md5Str = GlobalAuthUtils.md5(str);
-        assertEquals("b0d923de4289b69976448cac718528b8", md5Str);
     }
 
     @Test
@@ -169,9 +155,9 @@ public class GlobalAuthUtilsTest {
 
     @Test
     public void urlEncode() {
-        assertEquals("", GlobalAuthUtils.urlEncode(null));
-        assertEquals("https%3A%2F%2Fwww.foo.bar", GlobalAuthUtils.urlEncode("https://www.foo.bar"));
-        assertEquals("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%252FNis5lq9ik%253D", GlobalAuthUtils.urlEncode("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%2FNis5lq9ik%3D"));
+        assertEquals("", EncodeTools.urlEncodeSafe(null));
+        assertEquals("https%3A%2F%2Fwww.foo.bar", EncodeTools.urlEncodeSafe("https://www.foo.bar"));
+        assertEquals("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%252FNis5lq9ik%253D", EncodeTools.urlEncodeSafe("mLTZEMqIlpAA3xtJ43KcRT0EDLwgSamFe%2FNis5lq9ik%3D"));
     }
 
     @Test
@@ -183,16 +169,6 @@ public class GlobalAuthUtilsTest {
         assertEquals("user_id=1&screen_name=史上最全的第三方授权登录库&include_entities=true", GlobalAuthUtils.parseMapToString(parameters, false));
         assertEquals("user_id=1&screen_name=%E5%8F%B2%E4%B8%8A%E6%9C%80%E5%85%A8%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95%E5%BA%93&include_entities=true", GlobalAuthUtils.parseMapToString(parameters, true));
         assertEquals("", GlobalAuthUtils.parseMapToString(null, true));
-    }
-
-    @Test
-    public void generateNonce() {
-        assertEquals(10, GlobalAuthUtils.generateNonce(10).length());
-    }
-
-    @Test
-    public void getTimestamp() {
-        assertNotNull(GlobalAuthUtils.getTimestamp());
     }
 
     @Test

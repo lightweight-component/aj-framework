@@ -5,6 +5,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthFacebookScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.GlobalAuthUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -13,7 +14,6 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 /**
  * Facebook登录
@@ -119,7 +119,7 @@ public class AuthFacebookRequest extends AuthDefaultRequest {
     @Override
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
-            .queryParam("scope", this.getScopes(",", false, AuthScopeUtils.getDefaultScopes(AuthFacebookScope.values())))
+            .queryParam("scope", this.getScopes(",", false, AuthChecker.getDefaultScopes(AuthFacebookScope.values())))
             .build();
     }
 }

@@ -6,10 +6,8 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthGithubScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
-import com.ajaxjs.oauth.utils.GlobalAuthUtils;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.EncodeTools;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 import com.ajaxjs.oauth.model.AuthCallback;
@@ -20,9 +18,6 @@ import java.util.Map;
 
 /**
  * Github登录
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.0.0
  */
 public class AuthGithubRequest extends AuthDefaultRequest {
 
@@ -37,7 +32,7 @@ public class AuthGithubRequest extends AuthDefaultRequest {
     @Override
     public AuthToken getAccessToken(AuthCallback authCallback) {
         String response = doPostAuthorizationCode(authCallback.getCode());
-        Map<String, String> res = GlobalAuthUtils.parseStringToMap(response);
+        Map<String, String> res = EncodeTools.parseStringToMap(response);
 
         this.checkResponse(res.containsKey("error"), res.get("error_description"));
 
@@ -89,7 +84,7 @@ public class AuthGithubRequest extends AuthDefaultRequest {
     @Override
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthGithubScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthGithubScope.values())))
             .build();
     }
 

@@ -3,17 +3,14 @@ package com.ajaxjs.oauth.config;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.request.AuthDefaultRequest;
 import com.ajaxjs.oauth.utils.AuthChecker;
-import com.ajaxjs.oauth.utils.StringUtils;
 import com.xkcoding.http.config.HttpConfig;
 import lombok.*;
+import com.ajaxjs.util.StrUtil;
 
 import java.util.List;
 
 /**
  * JustAuth配置类
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.8
  */
 @Getter
 @Setter
@@ -180,7 +177,7 @@ public class AuthConfig {
      * @return authServerId
      */
     public String getAuthServerId() {
-        return StringUtils.isEmpty(authServerId) ? "default" : authServerId;
+        return StrUtil.isEmptyText(authServerId) ? "default" : authServerId;
     }
 
     /**
@@ -190,20 +187,22 @@ public class AuthConfig {
 
     /**
      * 苹果开发者账号中的密钥标识符
+     *
      * @see <a href="https://developer.apple.com/help/account/configure-app-capabilities/create-a-sign-in-with-apple-private-key/">create-a-sign-in-with-apple-private-key</a>
      */
     private String kid;
 
     /**
      * 苹果开发者账号中的团队ID
+     *
      * @see <a href="https://developer.apple.com/help/glossary/team-id/">team id</a>
      */
     private String teamId;
 
     /**
      * 新版企业微信 Web 登录时的参数，
-     *
      * 登录类型。ServiceApp：服务商登录；CorpApp：企业自建/代开发应用登录。
+     *
      * @see <a href="https://developer.work.weixin.qq.com/document/path/98152">https://developer.work.weixin.qq.com/document/path/98152</a>
      * @since 1.16.7
      */
@@ -218,7 +217,6 @@ public class AuthConfig {
 
     /**
      * 钉钉平台参数：控制输出特定类型的组织列表，org_type=management 表示只输出有管理权限的组织。
-     *
      * scope包含corpid时该参数存在意义。
      *
      * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug">https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug</a>
@@ -228,8 +226,7 @@ public class AuthConfig {
 
     /**
      * 钉钉平台参数：用于指定用户需要选择的组织。
-     *
-     * scope包含corpid时该参数存在意义。传入的corpId需要是当前用户所在的组织。
+     * scope 包含 corpid 时该参数存在意义。传入的corpId需要是当前用户所在的组织。
      *
      * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug">https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug</a>
      * @since 1.16.7
@@ -246,7 +243,6 @@ public class AuthConfig {
 
     /**
      * 钉钉平台参数：开启了专属帐号功能的组织corpId。
-     *
      * scope包含corpid时该参数存在意义。传入的corpId需要是当前用户所在的组织。
      *
      * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug">https://open.dingtalk.com/document/orgapp/obtain-identity-credentials#title-4up-u8w-5ug</a>

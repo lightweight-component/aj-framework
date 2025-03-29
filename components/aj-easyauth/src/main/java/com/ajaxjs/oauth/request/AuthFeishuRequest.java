@@ -1,22 +1,18 @@
 package com.ajaxjs.oauth.request;
 
 import com.ajaxjs.oauth.cache.AuthStateCache;
+import com.ajaxjs.oauth.config.AuthConfig;
+import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
-import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.GlobalAuthUtils;
+import com.ajaxjs.oauth.model.*;
 import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.StringUtils;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.util.EncodeTools;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
-import com.ajaxjs.oauth.config.AuthConfig;
-import com.ajaxjs.oauth.config.AuthDefaultSource;
-import com.ajaxjs.oauth.model.AuthCallback;
-import com.ajaxjs.oauth.model.AuthResponse;
-import com.ajaxjs.oauth.model.AuthToken;
-import com.ajaxjs.oauth.model.AuthUser;
 
 /**
  * 飞书平台，企业自建应用授权登录，原逻辑由 beacon 集成于 1.14.0 版，但最新的飞书 api 已修改，并且飞书平台一直为 {@code Deprecated} 状态
@@ -48,7 +44,7 @@ public class AuthFeishuRequest extends AuthDefaultRequest {
     private String getAppAccessToken() {
         String cacheKey = this.source.getName().concat(":app_access_token:").concat(config.getClientId());
         String cacheAppAccessToken = this.authStateCache.get(cacheKey);
-        if (StringUtils.isNotEmpty(cacheAppAccessToken)) {
+        if (StrUtil.hasText(cacheAppAccessToken)) {
             return cacheAppAccessToken;
         }
         String url = "https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal/";
@@ -129,7 +125,7 @@ public class AuthFeishuRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(source.authorize())
             .queryParam("app_id", config.getClientId())
-            .queryParam("redirect_uri", GlobalAuthUtils.urlEncode(config.getRedirectUri()))
+            .queryParam("redirect_uri", EncodeTools.urlEncodeSafe(config.getRedirectUri()))
             .queryParam("state", getRealState(state))
             .build();
     }

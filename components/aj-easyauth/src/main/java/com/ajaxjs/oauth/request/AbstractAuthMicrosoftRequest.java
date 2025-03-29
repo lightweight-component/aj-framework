@@ -5,9 +5,8 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthMicrosoftScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.StringUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 import com.xkcoding.http.util.MapUtil;
@@ -17,7 +16,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 import java.util.Map;
 
@@ -129,14 +127,14 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         // 兼容 Microsoft Entra ID 登录（原微软 AAD）
         // @since 1.16.6
-        String tenantId = StringUtils.isEmpty(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.authorize(), tenantId))
             .queryParam("response_type", "code")
             .queryParam("client_id", config.getClientId())
             .queryParam("redirect_uri", config.getRedirectUri())
             .queryParam("state", getRealState(state))
             .queryParam("response_mode", "query")
-            .queryParam("scope", this.getScopes(" ", false, AuthScopeUtils.getDefaultScopes(AuthMicrosoftScope.values())))
+            .queryParam("scope", this.getScopes(" ", false, AuthChecker.getDefaultScopes(AuthMicrosoftScope.values())))
             .build();
     }
 
@@ -148,13 +146,13 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
      */
     @Override
     protected String accessTokenUrl(String code) {
-        String tenantId = StringUtils.isEmpty(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.accessToken(), tenantId))
             .queryParam("code", code)
             .queryParam("client_id", config.getClientId())
             .queryParam("client_secret", config.getClientSecret())
             .queryParam("grant_type", "authorization_code")
-            .queryParam("scope", this.getScopes(" ", false, AuthScopeUtils.getDefaultScopes(AuthMicrosoftScope.values())))
+            .queryParam("scope", this.getScopes(" ", false, AuthChecker.getDefaultScopes(AuthMicrosoftScope.values())))
             .queryParam("redirect_uri", config.getRedirectUri())
             .build();
     }
@@ -178,13 +176,13 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
      */
     @Override
     protected String refreshTokenUrl(String refreshToken) {
-        String tenantId = StringUtils.isEmpty(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.refresh(), tenantId))
             .queryParam("client_id", config.getClientId())
             .queryParam("client_secret", config.getClientSecret())
             .queryParam("refresh_token", refreshToken)
             .queryParam("grant_type", "refresh_token")
-            .queryParam("scope", this.getScopes(" ", false, AuthScopeUtils.getDefaultScopes(AuthMicrosoftScope.values())))
+            .queryParam("scope", this.getScopes(" ", false, AuthChecker.getDefaultScopes(AuthMicrosoftScope.values())))
             .queryParam("redirect_uri", config.getRedirectUri())
             .build();
     }

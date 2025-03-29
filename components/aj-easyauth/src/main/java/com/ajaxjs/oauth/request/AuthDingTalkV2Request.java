@@ -3,6 +3,7 @@ package com.ajaxjs.oauth.request;
 import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.scope.AuthDingTalkScope;
 import com.ajaxjs.oauth.model.AuthException;
+import com.ajaxjs.oauth.utils.AuthChecker;
 import com.ajaxjs.oauth.utils.HttpUtils;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
@@ -12,7 +13,6 @@ import com.ajaxjs.oauth.config.AuthDefaultSource;
 import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class AuthDingTalkV2Request extends AuthDefaultRequest {
         return UrlBuilder.fromBaseUrl(source.authorize())
             .queryParam("response_type", "code")
             .queryParam("client_id", config.getClientId())
-            .queryParam("scope", this.getScopes(",", true, AuthScopeUtils.getDefaultScopes(AuthDingTalkScope.values())))
+            .queryParam("scope", this.getScopes(",", true, AuthChecker.getDefaultScopes(AuthDingTalkScope.values())))
             .queryParam("redirect_uri", config.getRedirectUri())
             .queryParam("prompt", "consent")
             .queryParam("org_type", config.getDingTalkOrgType())

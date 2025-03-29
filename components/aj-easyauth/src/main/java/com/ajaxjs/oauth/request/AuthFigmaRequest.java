@@ -4,10 +4,7 @@ import com.ajaxjs.oauth.cache.AuthStateCache;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.scope.AuthFigmaScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
-import com.ajaxjs.oauth.utils.Base64Utils;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 import com.ajaxjs.oauth.config.AuthConfig;
@@ -34,7 +31,7 @@ public class AuthFigmaRequest extends AuthDefaultRequest {
     @Override
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
-            .queryParam("scope", this.getScopes(",", true, AuthScopeUtils.getDefaultScopes(AuthFigmaScope.values())))
+            .queryParam("scope", this.getScopes(",", true, AuthChecker.getDefaultScopes(AuthFigmaScope.values())))
             .build();
     }
 

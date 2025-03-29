@@ -12,7 +12,6 @@ import java.util.Map;
  * HttpUtil 工具，统一处理 http 请求，方便对 simple-http 做定制
  */
 public class HttpUtils {
-
     private SimpleHttpResponse httpResponse;
 
     public HttpUtils(HttpConfig config) {
@@ -21,7 +20,6 @@ public class HttpUtils {
 
     public HttpUtils() {
     }
-
 
     /**
      * GET 请求
@@ -112,12 +110,12 @@ public class HttpUtils {
     }
 
     private HttpUtils check() {
-        if (null == httpResponse) {
+        if (null == httpResponse)
             throw new AuthException("Invalid SimpleHttpResponse.");
-        }
-        if (!httpResponse.isSuccess()) {
+
+        if (!httpResponse.isSuccess())
             throw new AuthException(httpResponse.getError());
-        }
+
         return this;
     }
 

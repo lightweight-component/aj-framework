@@ -5,9 +5,6 @@ import lombok.Getter;
 
 /**
  * JustAuth通用的状态码对照表
- *
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.8
  */
 @Getter
 @AllArgsConstructor

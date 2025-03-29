@@ -4,7 +4,7 @@ package com.ajaxjs.oauth.request;
 import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.StringUtils;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.oauth.utils.UrlBuilder;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
@@ -43,7 +43,7 @@ public class AuthAlipayCertRequest extends AuthDefaultRequest {
 
     @Override
     protected void checkCode(AuthCallback authCallback) {
-        if (StringUtils.isEmpty(authCallback.getAuth_code())) {
+        if (StrUtil.isEmptyText(authCallback.getAuth_code())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CODE, source);
         }
     }
@@ -117,12 +117,12 @@ public class AuthAlipayCertRequest extends AuthDefaultRequest {
         }
 
         String province = response.getProvince(), city = response.getCity();
-        String location = String.format("%s %s", StringUtils.isEmpty(province) ? "" : province, StringUtils.isEmpty(city) ? "" : city);
+        String location = String.format("%s %s", StrUtil.isEmptyText(province) ? "" : province, StrUtil.isEmptyText(city) ? "" : city);
 
         return AuthUser.builder()
             .rawUserInfo(JSONObject.parseObject(JSONObject.toJSONString(response)))
             .uuid(response.getOpenId())
-            .username(StringUtils.isEmpty(response.getUserName()) ? response.getNickName() : response.getUserName())
+            .username(StrUtil.isEmptyText(response.getUserName()) ? response.getNickName() : response.getUserName())
             .nickname(response.getNickName())
             .avatar(response.getAvatar())
             .location(location)

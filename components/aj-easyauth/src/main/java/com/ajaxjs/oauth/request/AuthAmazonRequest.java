@@ -5,9 +5,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthAmazonScope;
 import com.ajaxjs.oauth.model.AuthException;
-import com.ajaxjs.oauth.utils.HttpUtils;
-import com.ajaxjs.oauth.utils.PkceUtil;
-import com.ajaxjs.oauth.utils.UrlBuilder;
+import com.ajaxjs.oauth.utils.*;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.constants.Constants;
 import com.xkcoding.http.support.HttpHeader;
@@ -18,7 +16,6 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
-import com.ajaxjs.oauth.utils.AuthScopeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,16 +50,16 @@ public class AuthAmazonRequest extends AuthDefaultRequest {
         String realState = getRealState(state);
         UrlBuilder builder = UrlBuilder.fromBaseUrl(source.authorize())
             .queryParam("client_id", config.getClientId())
-            .queryParam("scope", this.getScopes(" ", true, AuthScopeUtils.getDefaultScopes(AuthAmazonScope.values())))
+            .queryParam("scope", this.getScopes(" ", true, AuthChecker.getDefaultScopes(AuthAmazonScope.values())))
             .queryParam("redirect_uri", config.getRedirectUri())
             .queryParam("response_type", "code")
             .queryParam("state", realState);
 
         if (config.isPkce()) {
             String cacheKey = this.source.getName().concat(":code_verifier:").concat(realState);
-            String codeVerifier = PkceUtil.generateCodeVerifier();
+            String codeVerifier = AuthChecker.generateCodeVerifier();
             String codeChallengeMethod = "S256";
-            String codeChallenge = PkceUtil.generateCodeChallenge(codeChallengeMethod, codeVerifier);
+            String codeChallenge = AuthChecker.generateCodeChallenge(codeChallengeMethod, codeVerifier);
             builder.queryParam("code_challenge", codeChallenge)
                 .queryParam("code_challenge_method", codeChallengeMethod);
             // 缓存 codeVerifier 十分钟

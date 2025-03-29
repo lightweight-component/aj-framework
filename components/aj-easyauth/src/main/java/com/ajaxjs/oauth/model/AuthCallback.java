@@ -1,13 +1,7 @@
 package com.ajaxjs.oauth.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import com.ajaxjs.oauth.utils.StringUtils;
-
-import java.io.Serializable;
+import com.ajaxjs.util.StrUtil;
+import lombok.*;
 
 /**
  * 授权回调时的参数类
@@ -69,6 +63,6 @@ public class AuthCallback  {
     private String error;
 
     public String getCode() {
-        return StringUtils.isEmpty(code) ? auth_code : code;
+        return StrUtil.isEmptyText(code) ? auth_code : code;
     }
 }

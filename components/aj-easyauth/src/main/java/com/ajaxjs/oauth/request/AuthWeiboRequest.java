@@ -8,6 +8,8 @@ import com.ajaxjs.oauth.enums.AuthUserGender;
 import com.ajaxjs.oauth.enums.scope.AuthWeiboScope;
 import com.ajaxjs.oauth.model.*;
 import com.ajaxjs.oauth.utils.*;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.WebUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.xkcoding.http.support.HttpHeader;
 
@@ -51,9 +53,11 @@ public class AuthWeiboRequest extends AuthDefaultRequest {
 
         HttpHeader httpHeader = new HttpHeader();
         httpHeader.add("Authorization", "OAuth2 " + oauthParam);
-        httpHeader.add("API-RemoteIP", IpUtils.getLocalIp());
+        httpHeader.add("API-RemoteIP",WebUtils.getLocalIp());
+
         String userInfo = new HttpUtils(config.getHttpConfig()).get(userInfoUrl(authToken), null, httpHeader, false).getBody();
         JSONObject object = JSONObject.parseObject(userInfo);
+
         if (object.containsKey("error"))
             throw new AuthException(object.getString("error"));
 
@@ -62,7 +66,7 @@ public class AuthWeiboRequest extends AuthDefaultRequest {
             .uuid(object.getString("id"))
             .username(object.getString("name"))
             .avatar(object.getString("profile_image_url"))
-            .blog(StringUtils.isEmpty(object.getString("url")) ? "https://weibo.com/" + object.getString("profile_url") : object
+            .blog(StrUtil.isEmptyText(object.getString("url")) ? "https://weibo.com/" + object.getString("profile_url") : object
                 .getString("url"))
             .nickname(object.getString("screen_name"))
             .location(object.getString("location"))
@@ -90,7 +94,7 @@ public class AuthWeiboRequest extends AuthDefaultRequest {
     @Override
     public String authorize(String state) {
         return UrlBuilder.fromBaseUrl(super.authorize(state))
-            .queryParam("scope", this.getScopes(",", false, AuthScopeUtils.getDefaultScopes(AuthWeiboScope.values())))
+            .queryParam("scope", this.getScopes(",", false, AuthChecker.getDefaultScopes(AuthWeiboScope.values())))
             .build();
     }
 

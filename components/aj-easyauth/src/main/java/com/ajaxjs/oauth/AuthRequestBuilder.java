@@ -8,7 +8,7 @@ import com.ajaxjs.oauth.enums.AuthResponseStatus;
 import com.ajaxjs.oauth.model.AuthException;
 import com.ajaxjs.oauth.request.AuthDefaultRequest;
 import com.ajaxjs.oauth.request.AuthRequest;
-import com.ajaxjs.oauth.utils.StringUtils;
+import com.ajaxjs.util.StrUtil;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -56,7 +56,7 @@ public class AuthRequestBuilder {
     }
 
     public AuthRequest build() {
-        if (StringUtils.isEmpty(this.source) || null == this.authConfig) {
+        if (StrUtil.isEmptyText(this.source) || null == this.authConfig) {
             throw new AuthException(AuthResponseStatus.NOT_IMPLEMENTED);
         }
         // 合并 JustAuth 默认的 AuthDefaultSource 和 开发者自定义的 AuthSource
