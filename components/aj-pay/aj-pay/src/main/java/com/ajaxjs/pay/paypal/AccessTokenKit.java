@@ -1,7 +1,7 @@
 
 package com.ajaxjs.pay.paypal;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.pay.paypal.model.AccessToken;
 import com.ajaxjs.pay.core.model.IJPayHttpResponse;
 import com.ajaxjs.pay.core.utils.RetryUtils;
@@ -73,7 +73,7 @@ public class AccessTokenKit {
 		// 从缓存中获取 AccessToken
 		if (!forceRefresh) {
 			String json = accessTokenCache.get(clientId);
-			if (StrUtil.isNotEmpty(json)) {
+			if (StrUtil.hasText(json)) {
 				AccessToken accessToken = new AccessToken(json, 200);
 				if (accessToken.isAvailable()) {
 					return accessToken;

@@ -1,6 +1,6 @@
 package com.ajaxjs.pay.alipay;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
@@ -196,14 +196,14 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getPrivateKey() {
-		if (StrUtil.isBlank(privateKey))
+		if (StrUtil.isEmptyText(privateKey))
 			throw new IllegalStateException("privateKey 未被赋值");
 
 		return privateKey;
 	}
 
 	public AliPayApiConfig setPrivateKey(String privateKey) {
-		if (StrUtil.isEmpty(privateKey)) {
+		if (StrUtil.isEmptyText(privateKey)) {
 			throw new IllegalArgumentException("privateKey 值不能为 null");
 		}
 		this.privateKey = privateKey;
@@ -216,14 +216,14 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getAppId() {
-		if (StrUtil.isEmpty(appId)) {
+		if (StrUtil.isEmptyText(appId)) {
 			throw new IllegalStateException("appId 未被赋值");
 		}
 		return appId;
 	}
 
 	public AliPayApiConfig setAppId(String appId) {
-		if (StrUtil.isEmpty(appId)) {
+		if (StrUtil.isEmptyText(appId)) {
 			throw new IllegalArgumentException("appId 值不能为 null");
 		}
 		this.appId = appId;
@@ -231,14 +231,14 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getServiceUrl() {
-		if (StrUtil.isEmpty(serviceUrl)) {
+		if (StrUtil.isEmptyText(serviceUrl)) {
 			throw new IllegalStateException("serviceUrl 未被赋值");
 		}
 		return serviceUrl;
 	}
 
 	public AliPayApiConfig setServiceUrl(String serviceUrl) {
-		if (StrUtil.isEmpty(serviceUrl)) {
+		if (StrUtil.isEmptyText(serviceUrl)) {
 			serviceUrl = "https://openapi.alipay.com/gateway.do";
 		}
 		this.serviceUrl = serviceUrl;
@@ -246,14 +246,14 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getCharset() {
-		if (StrUtil.isEmpty(charset)) {
+		if (StrUtil.isEmptyText(charset)) {
 			charset = "UTF-8";
 		}
 		return charset;
 	}
 
 	public AliPayApiConfig setCharset(String charset) {
-		if (StrUtil.isEmpty(charset)) {
+		if (StrUtil.isEmptyText(charset)) {
 			charset = "UTF-8";
 		}
 		this.charset = charset;
@@ -261,14 +261,14 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getSignType() {
-		if (StrUtil.isEmpty(signType)) {
+		if (StrUtil.isEmptyText(signType)) {
 			signType = "RSA2";
 		}
 		return signType;
 	}
 
 	public AliPayApiConfig setSignType(String signType) {
-		if (StrUtil.isEmpty(signType)) {
+		if (StrUtil.isEmptyText(signType)) {
 			signType = "RSA2";
 		}
 		this.signType = signType;
@@ -276,7 +276,7 @@ public class AliPayApiConfig implements Serializable {
 	}
 
 	public String getFormat() {
-		if (StrUtil.isEmpty(format)) {
+		if (StrUtil.isEmptyText(format)) {
 			format = "json";
 		}
 		return format;

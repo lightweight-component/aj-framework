@@ -1,6 +1,6 @@
 package com.ajaxjs.pay.alipay;
 
-import cn.hutool.crypto.SecureUtil;
+import com.ajaxjs.util.MessageDigestHelper;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayConstants;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -33,7 +33,7 @@ public class AliPayCore {
 		// 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
 		String preStr = createLinkString(params);
 		if (SignType.MD5.getType().equals(signType)) {
-			return SecureUtil.md5(preStr.concat(key));
+			return MessageDigestHelper.md5(preStr.concat(key));
 		} else if (SignType.RSA2.getType().equals(signType)) {
 			return AlipaySignature.rsa256Sign(preStr, key, AlipayConstants.CHARSET_UTF8);
 		} else if (SignType.RSA.getType().equals(signType)) {

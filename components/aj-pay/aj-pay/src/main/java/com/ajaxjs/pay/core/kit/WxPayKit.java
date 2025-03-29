@@ -1,6 +1,6 @@
 package com.ajaxjs.pay.core.kit;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.ajaxjs.pay.core.model.IJPayHttpResponse;
@@ -93,7 +93,7 @@ public class WxPayKit {
 	 * @return {boolean}
 	 */
 	public static boolean verifyNotify(Map<String, String> params, String partnerKey, SignType signType, String signKey) {
-		if (StrUtil.isEmpty(signKey)) {
+		if (StrUtil.isEmptyText(signKey)) {
 			signKey = FIELD_SIGN;
 		}
 		String sign = params.get(signKey);
@@ -151,7 +151,7 @@ public class WxPayKit {
 		if (signType == null) {
 			signType = SignType.MD5;
 		}
-		if (StrUtil.isEmpty(signKey)) {
+		if (StrUtil.isEmptyText(signKey)) {
 			signKey = FIELD_SIGN;
 		}
 		// 生成签名前先去除sign
@@ -217,11 +217,11 @@ public class WxPayKit {
 	 * @return 签名后的 Map
 	 */
 	public static Map<String, String> buildSign(Map<String, String> params, String partnerKey, SignType signType, String signKey, String signTypeKey, boolean haveSignType) {
-		if (StrUtil.isEmpty(signKey)) {
+		if (StrUtil.isEmptyText(signKey)) {
 			signKey = FIELD_SIGN;
 		}
 		if (haveSignType) {
-			if (StrUtil.isEmpty(signTypeKey)) {
+			if (StrUtil.isEmptyText(signTypeKey)) {
 				signTypeKey = FIELD_SIGN_TYPE;
 			}
 			params.put(signTypeKey, signType.getType());
@@ -289,8 +289,8 @@ public class WxPayKit {
 		HashMap<String, String> map = new HashMap<>(5);
 		map.put("appid", appId);
 		map.put("mch_id", mchId);
-		map.put("time_stamp", StrUtil.isEmpty(timeStamp) ? Long.toString(System.currentTimeMillis() / 1000) : timeStamp);
-		map.put("nonce_str", StrUtil.isEmpty(nonceStr) ? WxPayKit.generateStr() : nonceStr);
+		map.put("time_stamp", StrUtil.isEmptyText(timeStamp) ? Long.toString(System.currentTimeMillis() / 1000) : timeStamp);
+		map.put("nonce_str", StrUtil.isEmptyText(nonceStr) ? WxPayKit.generateStr() : nonceStr);
 		map.put("product_id", productId);
 		return bizPayUrl(createSign(map, partnerKey, signType), appId, mchId, productId, timeStamp, nonceStr);
 	}
@@ -340,7 +340,7 @@ public class WxPayKit {
 	 * @return 是否是 SUCCESS
 	 */
 	public static boolean codeIsOk(String codeValue) {
-		return StrUtil.isNotEmpty(codeValue) && "SUCCESS".equals(codeValue);
+		return StrUtil.hasText(codeValue) && "SUCCESS".equals(codeValue);
 	}
 
 	/**
@@ -847,8 +847,7 @@ public class WxPayKit {
 	 * @return 异步通知明文
 	 * @throws Exception 异常信息
 	 */
-	public static String verifyPublicKeyNotify(String body, String signature, String nonce, String timestamp,
-											   String key, String certPath) throws Exception {
+	public static String verifyPublicKeyNotify(String body, String signature, String nonce, String timestamp, String key, String certPath) throws Exception {
 		return verifyNotify(body, signature, nonce, timestamp, key, PayKit.getCertFileContent(certPath));
 	}
 
@@ -881,10 +880,8 @@ public class WxPayKit {
 	 * @return 异步通知明文
 	 * @throws Exception 异常信息
 	 */
-	public static String verifyNotify(String body, String signature, String nonce, String timestamp,
-									  String key, String certFileContent) throws Exception {
-		boolean verifySignature = WxPayKit.verifySignature(signature, body, nonce, timestamp,
-			PayKit.getPublicKeyByContent(certFileContent));
+	public static String verifyNotify(String body, String signature, String nonce, String timestamp, String key, String certFileContent) throws Exception {
+		boolean verifySignature = WxPayKit.verifySignature(signature, body, nonce, timestamp, PayKit.getPublicKeyByContent(certFileContent));
 		if (verifySignature) {
 			JSONObject resultObject = JSONUtil.parseObj(body);
 			JSONObject resource = resultObject.getJSONObject("resource");

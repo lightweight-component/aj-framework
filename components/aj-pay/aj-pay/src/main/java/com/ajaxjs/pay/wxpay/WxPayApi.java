@@ -245,7 +245,7 @@ public class WxPayApi {
 		String authorization = WxPayKit.buildAuthorization(method, urlSuffix, mchId, serialNo,
 			keyPath, body, nonceStr, timestamp, authType);
 
-		if (StrUtil.isEmptyText(platSerialNo)) {
+		if (StrUtil.isEmptyTextText(platSerialNo)) {
 			platSerialNo = serialNo;
 		}
 
@@ -291,7 +291,7 @@ public class WxPayApi {
 		String authorization = WxPayKit.buildAuthorization(method, urlSuffix, mchId, serialNo,
 			privateKey, body, nonceStr, timestamp, authType);
 
-		if (StrUtil.isEmptyText(platSerialNo))
+		if (StrUtil.isEmptyTextText(platSerialNo))
 			platSerialNo = serialNo;
 
 		if (method == RequestMethodEnum.GET) {
@@ -2200,7 +2200,8 @@ public class WxPayApi {
 			OS, VERSION == null ? "Unknown" : VERSION);
 
 		Map<String, String> headers = new HashMap<>(5);
-		headers.put("Accept", "application/json");
+		headers.put("Accept", HttpConstants.CONTENT_TYPE_JSON
+);
 		headers.put("Authorization", authorization);
 		headers.put("User-Agent", userAgent);
 		return headers;
@@ -2208,7 +2209,8 @@ public class WxPayApi {
 
 	public static Map<String, String> getHeaders(String authorization, String serialNumber) {
 		Map<String, String> headers = getBaseHeaders(authorization);
-		headers.put("Content-Type", "application/json");
+		headers.put("Content-Type", HttpConstants.CONTENT_TYPE_JSON
+);
 		if (StrUtil.hasText(serialNumber))
 			headers.put("Wechatpay-Serial", serialNumber);
 

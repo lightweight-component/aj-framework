@@ -1,7 +1,7 @@
 package com.ajaxjs.pay.jdpay;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.ajaxjs.pay.core.kit.WxPayKit;
@@ -126,7 +126,7 @@ public class JdPayKit {
 			String name = entry.getKey();
 			String value = entry.getValue();
 
-			if (StrUtil.isNotEmpty(value)) {
+			if (StrUtil.hasText(value)) {
 				if ("merchant".equals(name) || "version".equals(name) || "sign".equals(name))
 					tempMap.put(name, value);
 				else
@@ -143,7 +143,7 @@ public class JdPayKit {
 	 * @return 解析后的数据
 	 */
 	public static Map<String, String> parseResp(String xml) {
-		if (StrUtil.isEmpty(xml))
+		if (StrUtil.isEmptyText(xml))
 			return null;
 
 		Map<String, String> map = new HashMap<String, String>(3);

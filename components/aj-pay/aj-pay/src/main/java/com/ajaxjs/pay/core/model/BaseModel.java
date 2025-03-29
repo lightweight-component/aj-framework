@@ -13,7 +13,7 @@
  */
 package com.ajaxjs.pay.core.model;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.pay.core.enums.SignType;
 import com.ajaxjs.pay.core.kit.WxPayKit;
 
@@ -34,7 +34,7 @@ public class BaseModel {
 		HashMap<String, String> map = new HashMap<>(fieldNames.length);
 		for (String name : fieldNames) {
 			String value = (String) getFieldValueByName(name, this);
-			if (StrUtil.isNotEmpty(value)) {
+			if (StrUtil.hasText(value)) {
 				map.put(name, value);
 			}
 		}

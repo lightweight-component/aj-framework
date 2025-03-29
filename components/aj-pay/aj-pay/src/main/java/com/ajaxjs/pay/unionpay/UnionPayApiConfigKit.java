@@ -1,11 +1,9 @@
 
 package com.ajaxjs.pay.unionpay;
 
-import cn.hutool.core.util.StrUtil;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+import com.ajaxjs.util.StrUtil;
 
 public class UnionPayApiConfigKit {
 	private static final ThreadLocal<String> TL = new ThreadLocal<>();
@@ -28,9 +26,9 @@ public class UnionPayApiConfigKit {
 	}
 
 	public static UnionPayApiConfig setThreadLocalApiConfig(UnionPayApiConfig UnionPayApiConfig) {
-		if (StrUtil.isNotEmpty(UnionPayApiConfig.getMchId())) {
+		if (StrUtil.hasText(UnionPayApiConfig.getMchId()))
 			setThreadLocalMchId(UnionPayApiConfig.getMchId());
-		}
+
 		return putApiConfig(UnionPayApiConfig);
 	}
 
@@ -43,9 +41,9 @@ public class UnionPayApiConfigKit {
 	}
 
 	public static void setThreadLocalMchId(String mchId) {
-		if (StrUtil.isEmpty(mchId)) {
+		if (StrUtil.isEmptyTextText(mchId))
 			mchId = CFG_MAP.get(DEFAULT_CFG_KEY).getMchId();
-		}
+
 		TL.set(mchId);
 	}
 
@@ -55,9 +53,9 @@ public class UnionPayApiConfigKit {
 
 	public static String getMchId() {
 		String appId = TL.get();
-		if (StrUtil.isEmpty(appId)) {
+		if (StrUtil.isEmptyTextText(appId))
 			appId = CFG_MAP.get(DEFAULT_CFG_KEY).getMchId();
-		}
+
 		return appId;
 	}
 
@@ -68,9 +66,9 @@ public class UnionPayApiConfigKit {
 
 	public static UnionPayApiConfig getApiConfig(String appId) {
 		UnionPayApiConfig cfg = CFG_MAP.get(appId);
-		if (cfg == null) {
+		if (cfg == null)
 			throw new IllegalStateException("需事先调用 UnionPayApiConfigKit.putApiConfig(UnionPayApiConfig) 将 mchId 对应的 UnionPayApiConfig 对象存入，才可以使用 UnionPayApiConfigKit.getUnionPayApiConfig() 的系列方法");
-		}
+
 		return cfg;
 	}
 }

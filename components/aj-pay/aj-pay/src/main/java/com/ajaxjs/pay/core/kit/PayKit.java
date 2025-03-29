@@ -9,7 +9,7 @@ import cn.hutool.core.io.resource.Resource;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.digest.HmacAlgorithm;
 import com.ajaxjs.pay.core.utils.XmlHelper;
@@ -347,7 +347,7 @@ public class PayKit {
 			String key = keys.get(i);
 			String value = params.get(key);
 			// 参数的值为空不参与签名
-			if (StrUtil.isBlank(value)) {
+			if (StrUtil.isEmptyText(value)) {
 				continue;
 			}
 			// 拼接时，不包括最后一个&字符
@@ -394,21 +394,21 @@ public class PayKit {
 	 */
 	public static StringBuffer forEachMap(Map<String, String> params, String prefix, String suffix) {
 		StringBuffer xml = new StringBuffer();
-		if (StrUtil.isNotEmpty(prefix)) {
+		if (StrUtil.hasText(prefix)) {
 			xml.append(prefix);
 		}
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue();
 			// 略过空值
-			if (StrUtil.isEmpty(value)) {
+			if (StrUtil.isEmptyText(value)) {
 				continue;
 			}
 			xml.append("<").append(key).append(">");
 			xml.append(entry.getValue());
 			xml.append("</").append(key).append(">");
 		}
-		if (StrUtil.isNotEmpty(suffix)) {
+		if (StrUtil.hasText(suffix)) {
 			xml.append(suffix);
 		}
 		return xml;
@@ -523,7 +523,7 @@ public class PayKit {
 	 * @throws Exception 异常信息
 	 */
 	public static String createSign(String signMessage, String keyPath, String authType) throws Exception {
-		if (StrUtil.isEmpty(signMessage)) {
+		if (StrUtil.isEmptyText(signMessage)) {
 			return null;
 		}
 		// 获取商户私钥
@@ -544,7 +544,7 @@ public class PayKit {
 	 * @throws Exception 异常信息
 	 */
 	public static String createSign(String signMessage, PrivateKey privateKey) throws Exception {
-		if (StrUtil.isEmpty(signMessage)) {
+		if (StrUtil.isEmptyText(signMessage)) {
 			return null;
 		}
 		// 生成签名
@@ -592,7 +592,7 @@ public class PayKit {
 	 */
 	public static PrivateKey getPrivateKey(String keyPath, String authType) throws Exception {
 		String originalKey = getCertFileContent(keyPath);
-		if (StrUtil.isEmpty(originalKey)) {
+		if (StrUtil.isEmptyText(originalKey)) {
 			throw new RuntimeException("商户私钥证书获取失败");
 		}
 		return getPrivateKeyByKeyContent(originalKey, authType);
@@ -668,7 +668,7 @@ public class PayKit {
 	 * @return {@link X509Certificate} 获取证书
 	 */
 	public static X509Certificate getCertificate(String path) {
-		if (StrUtil.isEmpty(path)) {
+		if (StrUtil.isEmptyText(path)) {
 			return null;
 		}
 		InputStream inputStream;
@@ -729,7 +729,7 @@ public class PayKit {
 			return false;
 		}
 		// 证书CN字段
-		if (StrUtil.isNotEmpty(mchId)) {
+		if (StrUtil.hasText(mchId)) {
 			Principal subjectDn = model.getSubjectDn();
 			if (null == subjectDn || !subjectDn.getName().contains(IJPayConstants.CN.concat(mchId.trim()))) {
 				return false;
@@ -737,7 +737,7 @@ public class PayKit {
 		}
 		// 证书序列号固定40字节的字符串
 		String serialNumber = model.getSerialNumber();
-		if (StrUtil.isEmpty(serialNumber) || serialNumber.length() != IJPayConstants.SERIAL_NUMBER_LENGTH) {
+		if (StrUtil.isEmptyText(serialNumber) || serialNumber.length() != IJPayConstants.SERIAL_NUMBER_LENGTH) {
 			return false;
 		}
 		// 偏移后的时间
@@ -852,7 +852,7 @@ public class PayKit {
 	 * @throws IOException 异常信息
 	 */
 	public static InputStream getCertFileInputStream(String path) throws IOException {
-		if (StrUtil.isBlank(path)) {
+		if (StrUtil.isEmptyText(path)) {
 			return null;
 		}
 		// 绝对地址

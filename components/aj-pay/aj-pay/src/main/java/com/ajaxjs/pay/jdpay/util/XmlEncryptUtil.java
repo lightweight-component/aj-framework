@@ -1,6 +1,6 @@
 package com.ajaxjs.pay.jdpay.util;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import org.apache.commons.codec.binary.Base64;
 
 import java.nio.charset.StandardCharsets;
@@ -15,7 +15,7 @@ public class XmlEncryptUtil {
 	public static String encrypt(String rsaPrivateKey, String strDesKey, String genSignStr) {
 		System.out.println("genSignStr>" + genSignStr);
 		String encrypt = null;
-		if (StrUtil.isNotEmpty(rsaPrivateKey) && StrUtil.isNotEmpty(strDesKey) && StrUtil.isNotEmpty(genSignStr)) {
+		if (StrUtil.hasText(rsaPrivateKey) && StrUtil.hasText(strDesKey) && StrUtil.hasText(genSignStr)) {
 
 			try {
 				genSignStr = JdPayXmlUtil.addXmlHeadAndElJdPay(genSignStr);

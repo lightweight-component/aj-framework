@@ -1,7 +1,7 @@
 
 package com.ajaxjs.pay.jdpay.model;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.pay.core.model.BaseModel;
 import com.ajaxjs.pay.jdpay.JdPayKit;
 
@@ -19,7 +19,7 @@ public class JdBaseModel extends BaseModel {
 	 * @return 生成的 xml 数据
 	 */
 	public String genReqXml(String rsaPrivateKey, String strDesKey, String version, String merchant) {
-		if (StrUtil.isEmpty(version) || StrUtil.isEmpty(merchant))
+		if (StrUtil.isEmptyText(version) || StrUtil.isEmptyText(merchant))
 			throw new RuntimeException("version or merchant is empty");
 
 		String encrypt = JdPayKit.encrypt(rsaPrivateKey, strDesKey, JdPayKit.toJdXml(toMap()));

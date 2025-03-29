@@ -1,6 +1,6 @@
 package com.ajaxjs.pay.paypal;
 
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class PayPalApiConfigKit {
 	 * @return {@link PayPalApiConfig}
 	 */
 	public static PayPalApiConfig setThreadLocalApiConfig(PayPalApiConfig config) {
-		if (StrUtil.isNotEmpty(config.getClientId())) {
+		if (StrUtil.hasText(config.getClientId())) {
 			setThreadLocalClientId(config.getClientId());
 		}
 		return putApiConfig(config);
@@ -91,7 +91,7 @@ public class PayPalApiConfigKit {
 	 * @param clientId 应用编号
 	 */
 	public static void setThreadLocalClientId(String clientId) {
-		if (StrUtil.isEmpty(clientId)) {
+		if (StrUtil.isEmptyText(clientId)) {
 			clientId = CFG_MAP.get(DEFAULT_CFG_KEY).getClientId();
 		}
 		TL.set(clientId);
@@ -111,7 +111,7 @@ public class PayPalApiConfigKit {
 	 */
 	public static String getClientId() {
 		String clientId = TL.get();
-		if (StrUtil.isEmpty(clientId)) {
+		if (StrUtil.isEmptyText(clientId)) {
 			clientId = CFG_MAP.get(DEFAULT_CFG_KEY).getClientId();
 		}
 		return clientId;

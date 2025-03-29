@@ -3,7 +3,7 @@ package com.ajaxjs.pay.core.model;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.CaseInsensitiveMap;
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,7 +25,7 @@ public class IJPayHttpResponse implements Serializable {
 	}
 
 	private List<String> headerList(String name) {
-		if (StrUtil.isBlank(name)) {
+		if (StrUtil.isEmptyText(name)) {
 			return null;
 		} else {
 			CaseInsensitiveMap<String, List<String>> headersIgnoreCase = new CaseInsensitiveMap<>(getHeaders());

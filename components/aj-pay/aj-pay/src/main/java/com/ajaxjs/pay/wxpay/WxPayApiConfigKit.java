@@ -33,7 +33,7 @@ public class WxPayApiConfigKit {
 	}
 
 	public static WxPayApiConfig setThreadLocalWxPayApiConfig(String key, WxPayApiConfig wxPayApiConfig) {
-		if (StrUtil.isEmptyText(key))
+		if (StrUtil.isEmptyTextText(key))
 			key = wxPayApiConfig.getAppId();
 
 		setThreadLocalAppId(key);
@@ -49,7 +49,7 @@ public class WxPayApiConfigKit {
 	}
 
 	public static void setThreadLocalAppId(String appId) {
-		if (StrUtil.isEmptyText(appId))
+		if (StrUtil.isEmptyTextText(appId))
 			appId = CFG_MAP.get(DEFAULT_CFG_KEY).getAppId();
 
 		TL.set(appId);
@@ -61,7 +61,7 @@ public class WxPayApiConfigKit {
 
 	public static String getAppId() {
 		String appId = TL.get();
-		if (StrUtil.isEmptyText(appId))
+		if (StrUtil.isEmptyTextText(appId))
 			appId = CFG_MAP.get(DEFAULT_CFG_KEY).getAppId();
 
 		return appId;

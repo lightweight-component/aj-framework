@@ -1,7 +1,7 @@
 package com.ajaxjs.pay.core.kit;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.util.StrUtil;
+import com.ajaxjs.util.StrUtil;
 
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -172,6 +172,7 @@ public class RsaKit {
 		}
 		byte[] encryptedData = out.toByteArray();
 		out.close();
+
 		return StrUtil.str(Base64.encode(encryptedData));
 	}
 
@@ -208,6 +209,7 @@ public class RsaKit {
 		signature.initSign(privateKey);
 		signature.update(data.getBytes(StandardCharsets.UTF_8));
 		byte[] signed = signature.sign();
+
 		return StrUtil.str(Base64.encode(signed));
 	}
 
