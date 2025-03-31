@@ -66,7 +66,7 @@ public class AuthWeiboRequest extends AuthDefaultRequest {
             .uuid(object.getString("id"))
             .username(object.getString("name"))
             .avatar(object.getString("profile_image_url"))
-            .blog(StrUtil.isEmptyText(object.getString("url")) ? "https://weibo.com/" + object.getString("profile_url") : object
+            .blog(StrUtil.isEmptyTextText(object.getString("url")) ? "https://weibo.com/" + object.getString("profile_url") : object
                 .getString("url"))
             .nickname(object.getString("screen_name"))
             .location(object.getString("location"))

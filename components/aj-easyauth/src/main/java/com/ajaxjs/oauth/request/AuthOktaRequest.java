@@ -14,6 +14,7 @@ import com.ajaxjs.oauth.model.AuthCallback;
 import com.ajaxjs.oauth.model.AuthResponse;
 import com.ajaxjs.oauth.model.AuthToken;
 import com.ajaxjs.oauth.model.AuthUser;
+import com.ajaxjs.util.http_request.model.HttpConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,8 +45,8 @@ public class AuthOktaRequest extends AuthDefaultRequest {
 
     private AuthToken getAuthToken(String tokenUrl) {
         HttpHeader header = new HttpHeader()
-            .add("accept", "application/json")
-            .add("content-type", "application/x-www-form-urlencoded")
+            .add("accept", HttpConstants.CONTENT_TYPE_JSON)
+            .add("content-type", HttpConstants.CONTENT_TYPE_FORM)
             .add("Authorization", "Basic " + Base64Utils.encode(config.getClientId().concat(":").concat(config.getClientSecret())));
         String response = new HttpUtils(config.getHttpConfig()).post(tokenUrl, null, header, false).getBody();
         JSONObject accessTokenObject = JSONObject.parseObject(response);

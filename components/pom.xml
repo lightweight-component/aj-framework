@@ -13,7 +13,10 @@
         <module>aj-delayedtaskqueue</module>
         <module>aj-monitor</module>
         <module>aj-ftp</module>
+        <module>aj-easyauth</module>
         <module>aj-s3client</module>
         <module>aj-qrcode</module>
+        <module>aj-pay</module>
+        <module>aj-mcp</module>
     </modules>
 </project>

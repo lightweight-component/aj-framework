@@ -9,7 +9,6 @@ import com.ajaxjs.data.data_service.TenantService;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;

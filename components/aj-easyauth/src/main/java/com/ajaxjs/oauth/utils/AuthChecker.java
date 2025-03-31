@@ -60,7 +60,7 @@ public class AuthChecker {
         if (config.isIgnoreCheckRedirectUri())
             return;
 
-        if (StrUtil.isEmptyText(redirectUri))
+        if (StrUtil.isEmptyTextText(redirectUri))
             throw new AuthException(AuthResponseStatus.ILLEGAL_REDIRECT_URI, source);
 
         if (!GlobalAuthUtils.isHttpProtocol(redirectUri) && !GlobalAuthUtils.isHttpsProtocol(redirectUri))
@@ -83,10 +83,10 @@ public class AuthChecker {
 
         String code = callback.getCode();
 
-        if (StrUtil.isEmptyText(code) && source == AuthDefaultSource.HUAWEI)
+        if (StrUtil.isEmptyTextText(code) && source == AuthDefaultSource.HUAWEI)
             code = callback.getAuthorization_code();
 
-        if (StrUtil.isEmptyText(code))
+        if (StrUtil.isEmptyTextText(code))
             throw new AuthException(AuthResponseStatus.ILLEGAL_CODE, source);
     }
 
@@ -106,7 +106,7 @@ public class AuthChecker {
         if (source == AuthDefaultSource.TWITTER)
             return;
 
-        if (StrUtil.isEmptyText(state) || !authStateCache.containsKey(state))
+        if (StrUtil.isEmptyTextText(state) || !authStateCache.containsKey(state))
             throw new AuthException(AuthResponseStatus.ILLEGAL_STATUS, source);
     }
 

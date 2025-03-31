@@ -65,7 +65,7 @@ public class AuthTaobaoRequest extends AuthDefaultRequest {
         String nick = EncodeTools.urlDecode(accessTokenObject.getString("taobao_user_nick"));
         return AuthUser.builder()
             .rawUserInfo(accessTokenObject)
-            .uuid(StrUtil.isEmptyText(authToken.getUid()) ? authToken.getOpenId() : authToken.getUid())
+            .uuid(StrUtil.isEmptyTextText(authToken.getUid()) ? authToken.getOpenId() : authToken.getUid())
             .username(nick)
             .nickname(nick)
             .gender(AuthUserGender.UNKNOWN)

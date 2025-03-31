@@ -45,7 +45,7 @@ public class AuthWeChatEnterpriseQrcodeV2Request extends AbstractAuthWeChatEnter
     protected void checkConfig(AuthConfig config) {
         super.checkConfig(config);
 
-        if ("CorpApp".equals(config.getLoginType()) && StrUtil.isEmptyText(config.getAgentId()))
+        if ("CorpApp".equals(config.getLoginType()) && StrUtil.isEmptyTextText(config.getAgentId()))
             throw new AuthException(AuthResponseStatus.ILLEGAL_WECHAT_AGENT_ID, source);
     }
 }

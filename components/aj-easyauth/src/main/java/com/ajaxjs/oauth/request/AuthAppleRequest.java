@@ -51,7 +51,7 @@ public class AuthAppleRequest extends AuthDefaultRequest {
 
     @Override
     public AuthToken getAccessToken(AuthCallback authCallback) {
-        if (!StrUtil.isEmptyText(authCallback.getError())) {
+        if (!StrUtil.isEmptyTextText(authCallback.getError())) {
             throw new AuthException(authCallback.getError());
         }
         this.config.setClientSecret(this.getToken());
@@ -65,7 +65,7 @@ public class AuthAppleRequest extends AuthDefaultRequest {
             .refreshToken(accessTokenObject.getString("refresh_token"))
             .tokenType(accessTokenObject.getString("token_type"))
             .idToken(accessTokenObject.getString("id_token"));
-        if (!StrUtil.isEmptyText(authCallback.getUser())) {
+        if (!StrUtil.isEmptyTextText(authCallback.getUser())) {
             try {
                 AppleUserInfo userInfo = JSONObject.parseObject(authCallback.getUser(), AppleUserInfo.class);
                 builder.username(userInfo.getName().getFirstName() + " " + userInfo.getName().getLastName());
@@ -95,16 +95,16 @@ public class AuthAppleRequest extends AuthDefaultRequest {
     @Override
     protected void checkConfig(AuthConfig config) {
         super.checkConfig(config);
-        if (StrUtil.isEmptyText(config.getClientId())) {
+        if (StrUtil.isEmptyTextText(config.getClientId())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CLIENT_ID, source);
         }
-        if (StrUtil.isEmptyText(config.getClientSecret())) {
+        if (StrUtil.isEmptyTextText(config.getClientSecret())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CLIENT_SECRET, source);
         }
-        if (StrUtil.isEmptyText(config.getKid())) {
+        if (StrUtil.isEmptyTextText(config.getKid())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_KID, source);
         }
-        if (StrUtil.isEmptyText(config.getTeamId())) {
+        if (StrUtil.isEmptyTextText(config.getTeamId())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_TEAM_ID, source);
         }
     }

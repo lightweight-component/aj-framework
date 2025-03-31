@@ -40,7 +40,7 @@ public class AuthWeChatMpRequest extends AuthDefaultRequest {
         String openId = authToken.getOpenId();
 
         String scope = authToken.getScope();
-        if (!StrUtil.isEmptyText(scope) && !scope.contains("snsapi_userinfo")) {
+        if (!StrUtil.isEmptyTextText(scope) && !scope.contains("snsapi_userinfo")) {
             return AuthUser.builder()
                     .rawUserInfo(JSONObject.parseObject(JSONObject.toJSONString(authToken)))
                     .uuid(openId)

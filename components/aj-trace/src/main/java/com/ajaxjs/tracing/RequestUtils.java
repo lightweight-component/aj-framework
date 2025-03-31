@@ -109,7 +109,7 @@ public class RequestUtils {
      * @return 是否内网
      */
     public static boolean isInternet(String ip) {
-        if (StringUtils.isEmpty(ip))
+        if (StrUtil.isEmptyTextText(ip))
             return false;
 
         if (LOCAL_HOST.equals(ip))

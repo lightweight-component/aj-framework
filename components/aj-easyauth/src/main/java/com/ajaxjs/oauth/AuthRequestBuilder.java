@@ -56,7 +56,7 @@ public class AuthRequestBuilder {
     }
 
     public AuthRequest build() {
-        if (StrUtil.isEmptyText(this.source) || null == this.authConfig) {
+        if (StrUtil.isEmptyTextText(this.source) || null == this.authConfig) {
             throw new AuthException(AuthResponseStatus.NOT_IMPLEMENTED);
         }
         // 合并 JustAuth 默认的 AuthDefaultSource 和 开发者自定义的 AuthSource

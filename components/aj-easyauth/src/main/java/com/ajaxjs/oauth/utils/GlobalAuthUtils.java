@@ -90,7 +90,7 @@ public class GlobalAuthUtils {
      * @return true: http协议, false: 非http协议
      */
     public static boolean isHttpProtocol(String url) {
-        if (StrUtil.isEmptyText(url))
+        if (StrUtil.isEmptyTextText(url))
             return false;
 
         return url.startsWith("http://") || url.startsWith("http%3A%2F%2F");
@@ -103,7 +103,7 @@ public class GlobalAuthUtils {
      * @return true: https协议, false: 非https协议
      */
     public static boolean isHttpsProtocol(String url) {
-        if (StrUtil.isEmptyText(url))
+        if (StrUtil.isEmptyTextText(url))
             return false;
 
         return url.startsWith("https://") || url.startsWith("https%3A%2F%2F");
@@ -116,7 +116,7 @@ public class GlobalAuthUtils {
      * @return true: 本地主机（域名）, false: 非本地主机（域名）
      */
     public static boolean isLocalHost(String url) {
-        return StrUtil.isEmptyText(url) || url.contains("127.0.0.1") || url.contains("localhost");
+        return StrUtil.isEmptyTextText(url) || url.contains("127.0.0.1") || url.contains("localhost");
     }
 
     /**
@@ -126,7 +126,7 @@ public class GlobalAuthUtils {
      * @return true: https 协议或本地主机 false: 非 https 协议或本机主机
      */
     public static boolean isHttpsProtocolOrLocalHost(String url) {
-        if (StrUtil.isEmptyText(url))
+        if (StrUtil.isEmptyTextText(url))
             return false;
 
         return isHttpsProtocol(url) || isLocalHost(url);
@@ -147,7 +147,7 @@ public class GlobalAuthUtils {
         TreeMap<String, String> map = new TreeMap<>(params);
         String str = parseMapToString(map, true);
         String baseStr = method.toUpperCase() + "&" + EncodeTools.urlEncodeSafe(baseUrl) + "&" + EncodeTools.urlEncodeSafe(str);
-        String signKey = apiSecret + "&" + (StrUtil.isEmptyText(tokenSecret) ? "" : tokenSecret);
+        String signKey = apiSecret + "&" + (StrUtil.isEmptyTextText(tokenSecret) ? "" : tokenSecret);
         byte[] signature = sign(signKey.getBytes(DEFAULT_ENCODING), baseStr.getBytes(DEFAULT_ENCODING), HMAC_SHA1);
 
         return new String(Base64Utils.encode(signature, false));

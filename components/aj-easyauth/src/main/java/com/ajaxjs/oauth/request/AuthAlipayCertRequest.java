@@ -43,7 +43,7 @@ public class AuthAlipayCertRequest extends AuthDefaultRequest {
 
     @Override
     protected void checkCode(AuthCallback authCallback) {
-        if (StrUtil.isEmptyText(authCallback.getAuth_code())) {
+        if (StrUtil.isEmptyTextText(authCallback.getAuth_code())) {
             throw new AuthException(AuthResponseStatus.ILLEGAL_CODE, source);
         }
     }
@@ -117,12 +117,12 @@ public class AuthAlipayCertRequest extends AuthDefaultRequest {
         }
 
         String province = response.getProvince(), city = response.getCity();
-        String location = String.format("%s %s", StrUtil.isEmptyText(province) ? "" : province, StrUtil.isEmptyText(city) ? "" : city);
+        String location = String.format("%s %s", StrUtil.isEmptyTextText(province) ? "" : province, StrUtil.isEmptyTextText(city) ? "" : city);
 
         return AuthUser.builder()
             .rawUserInfo(JSONObject.parseObject(JSONObject.toJSONString(response)))
             .uuid(response.getOpenId())
-            .username(StrUtil.isEmptyText(response.getUserName()) ? response.getNickName() : response.getUserName())
+            .username(StrUtil.isEmptyTextText(response.getUserName()) ? response.getNickName() : response.getUserName())
             .nickname(response.getNickName())
             .avatar(response.getAvatar())
             .location(location)

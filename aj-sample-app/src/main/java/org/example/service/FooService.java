@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FooService implements FooController {
@@ -119,7 +120,9 @@ public class FooService implements FooController {
     public boolean testOpenFeign() {
         System.out.println(jsonPlaceHolderClient);
         List<Post> list = jsonPlaceHolderClient.getPosts();
-        System.out.println(list);
+//        System.out.println(list);
+        Map<String, Object> map = jsonPlaceHolderClient.getPostMapById(1L);
+//        System.out.println(map);
         return true;
     }
 

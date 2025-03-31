@@ -279,9 +279,11 @@ public class JarWriter {
 
     // data stream 'flow' from in to out, pseudo-zero-copy
     private static void flowTo(InputStream in, OutputStream out) throws IOException {
-        try (in) {
+        try {
             for (int count = in.read(buf); count != -1; count = in.read(buf))
                 out.write(buf, 0, count);
+        } finally {
+            in.close();
         }
     }
 

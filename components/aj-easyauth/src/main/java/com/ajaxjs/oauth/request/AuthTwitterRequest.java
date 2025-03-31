@@ -97,7 +97,8 @@ public class AuthTwitterRequest extends AuthDefaultRequest {
 
         HttpHeader httpHeader = new HttpHeader();
         httpHeader.add("Authorization", header);
-        httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
 
         Map<String, String> form = new HashMap<>(3);
         form.put("oauth_verifier", authCallback.getOauth_verifier());

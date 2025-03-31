@@ -58,7 +58,8 @@ public class AuthLineRequest extends AuthDefaultRequest {
     @Override
     public AuthUser getUserInfo(AuthToken authToken) {
         String userInfo = new HttpUtils(config.getHttpConfig()).get(source.userInfo(), null, new HttpHeader()
-            .add("Content-Type", "application/x-www-form-urlencoded")
+            .add("Content-Type", HttpConstants.CONTENT_TYPE_FORM
+)
             .add("Authorization", "Bearer ".concat(authToken.getAccessToken())), false).getBody();
         JSONObject object = JSONObject.parseObject(userInfo);
         return AuthUser.builder()

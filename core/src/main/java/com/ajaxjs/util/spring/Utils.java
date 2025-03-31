@@ -40,7 +40,7 @@ public class Utils {
         }
 
         if (obj instanceof Optional) {
-            return ((Optional<?>) obj).isEmpty();
+            return ((Optional<?>) obj).isPresent();
         }
         if (obj instanceof CharSequence) {
             return ((CharSequence) obj).length() == 0;

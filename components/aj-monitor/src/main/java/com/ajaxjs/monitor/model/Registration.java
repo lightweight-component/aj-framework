@@ -33,10 +33,10 @@ public class Registration implements Serializable {
         Assert.hasText(name, "'name' must not be empty.");
         Assert.hasText(healthUrl, "'healthUrl' must not be empty.");
         Assert.isTrue(checkUrl(healthUrl), "'healthUrl' is not valid: " + healthUrl);
-        Assert.isTrue(StringUtils.isEmpty(managementUrl) || checkUrl(managementUrl),
+        Assert.isTrue(StrUtil.isEmptyTextText(managementUrl) || checkUrl(managementUrl),
             "'managementUrl' is not valid: " + managementUrl
         );
-        Assert.isTrue(StringUtils.isEmpty(serviceUrl) || checkUrl(serviceUrl),
+        Assert.isTrue(StrUtil.isEmptyTextText(serviceUrl) || checkUrl(serviceUrl),
             "'serviceUrl' is not valid: " + serviceUrl
         );
         this.name = name;

@@ -179,7 +179,7 @@ public abstract class AuthDefaultRequest implements AuthRequest {
      * @return 返回不为null的state
      */
     protected String getRealState(String state) {
-        if (StrUtil.isEmptyText(state))
+        if (StrUtil.isEmptyTextText(state))
             state = RandomTools.uuid();
 
         // 缓存state

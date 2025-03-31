@@ -5,7 +5,7 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>aj-parent</name>
-    <version>1.26</version>
+    <version>1.27</version>
     <packaging>pom</packaging>
     <description>Public Maven config for AJAXJS OpenSource Library</description>
 
@@ -281,10 +281,11 @@
             <artifactId>slf4j-simple</artifactId>
         </dependency>
 
-        <!-- Spring 测试 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

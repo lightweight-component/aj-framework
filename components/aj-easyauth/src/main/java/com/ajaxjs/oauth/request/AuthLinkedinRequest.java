@@ -178,7 +178,8 @@ public class AuthLinkedinRequest extends AuthDefaultRequest {
     private AuthToken getToken(String accessTokenUrl) {
         HttpHeader httpHeader = new HttpHeader();
         httpHeader.add("Host", "www.linkedin.com");
-        httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
 
         String response = new HttpUtils(config.getHttpConfig()).post(accessTokenUrl, null, httpHeader).getBody();
         JSONObject accessTokenObject = JSONObject.parseObject(response);

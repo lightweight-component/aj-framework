@@ -54,7 +54,7 @@ public class UiController {
 		if (reqUserName == null || reqPassword == null)
 			return "redirect:/monitor/login.html";
 
-		if (!StringUtils.isEmpty(reqUserName) && !StringUtils.isEmpty(reqPassword)) {
+		if (!StrUtil.isEmptyTextText(reqUserName) && !StrUtil.isEmptyTextText(reqPassword)) {
 			if (reqUserName.equals(userInfo.getUserName()) && reqPassword.equals(userInfo.getPassword())) {
 				Cookie cookie = new Cookie("moni_id", userInfo.getUserNameToken());
 				response.addCookie(cookie);

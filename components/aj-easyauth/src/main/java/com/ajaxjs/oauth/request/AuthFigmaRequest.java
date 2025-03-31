@@ -38,7 +38,8 @@ public class AuthFigmaRequest extends AuthDefaultRequest {
     @Override
     public AuthToken getAccessToken(AuthCallback authCallback) {
         HttpHeader header = new HttpHeader()
-            .add("content-type", "application/x-www-form-urlencoded")
+            .add("content-type", HttpConstants.CONTENT_TYPE_FORM
+)
             .add("Authorization", "Basic " + Base64Utils.encode(config.getClientId().concat(":").concat(config.getClientSecret())));
 
         String response = new HttpUtils(config.getHttpConfig()).post(super.accessTokenUrl(authCallback.getCode()), null, header, true).getBody();
@@ -57,7 +58,8 @@ public class AuthFigmaRequest extends AuthDefaultRequest {
 
     @Override
     public AuthResponse<AuthToken> refresh(AuthToken authToken) {
-        HttpHeader header = new HttpHeader().add("content-type", "application/x-www-form-urlencoded");
+        HttpHeader header = new HttpHeader().add("content-type", HttpConstants.CONTENT_TYPE_FORM
+);
         String response = new HttpUtils(config.getHttpConfig()).post(this.refreshTokenUrl(authToken.getRefreshToken()), null, header, false).getBody();
         JSONObject dataObj = JSONObject.parseObject(response);
 

@@ -127,7 +127,7 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
     public String authorize(String state) {
         // 兼容 Microsoft Entra ID 登录（原微软 AAD）
         // @since 1.16.6
-        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyTextText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.authorize(), tenantId))
             .queryParam("response_type", "code")
             .queryParam("client_id", config.getClientId())
@@ -146,7 +146,7 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
      */
     @Override
     protected String accessTokenUrl(String code) {
-        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyTextText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.accessToken(), tenantId))
             .queryParam("code", code)
             .queryParam("client_id", config.getClientId())
@@ -176,7 +176,7 @@ public abstract class AbstractAuthMicrosoftRequest extends AuthDefaultRequest {
      */
     @Override
     protected String refreshTokenUrl(String refreshToken) {
-        String tenantId = StrUtil.isEmptyText(config.getTenantId()) ? "common" : config.getTenantId();
+        String tenantId = StrUtil.isEmptyTextText(config.getTenantId()) ? "common" : config.getTenantId();
         return UrlBuilder.fromBaseUrl(String.format(source.refresh(), tenantId))
             .queryParam("client_id", config.getClientId())
             .queryParam("client_secret", config.getClientSecret())

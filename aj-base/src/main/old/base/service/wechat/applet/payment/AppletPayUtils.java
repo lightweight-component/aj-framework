@@ -36,8 +36,10 @@ public class AppletPayUtils {
      */
     public static void setSign2Header(HttpURLConnection conn, String signToken) {
         conn.addRequestProperty("Authorization", SCHEMA + " " + signToken);
-        conn.addRequestProperty("Accept", "application/json");
-        conn.addRequestProperty("Content-Type", "application/json");
+        conn.addRequestProperty("Accept", HttpConstants.CONTENT_TYPE_JSON
+);
+        conn.addRequestProperty("Content-Type", HttpConstants.CONTENT_TYPE_JSON
+);
 
 //        ProfitSharingServiceImpl s = DiContextUtil.getBean(ProfitSharingServiceImpl.class);// 写死
 //        conn.addRequestProperty("Wechatpay-Serial", s.platformCertSerialNo);

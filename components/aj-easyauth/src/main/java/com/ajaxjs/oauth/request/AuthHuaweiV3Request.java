@@ -64,7 +64,8 @@ public class AuthHuaweiV3Request extends AuthDefaultRequest {
         }
 
         HttpHeader httpHeader = new HttpHeader();
-        httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
         String response = new HttpUtils(config.getHttpConfig()).post(source.accessToken(), form, httpHeader, false).getBody();
         return getAuthToken(response);
     }
@@ -80,14 +81,15 @@ public class AuthHuaweiV3Request extends AuthDefaultRequest {
     public AuthUser getUserInfo(AuthToken authToken) {
         String idToken = authToken.getIdToken();
 
-        if (StrUtil.isEmptyText(idToken)) {
+        if (StrUtil.isEmptyTextText(idToken)) {
             Map<String, String> form = new HashMap<>(7);
             form.put("access_token", authToken.getAccessToken());
             form.put("getNickName", "1");
             form.put("nsp_svc", "GOpen.User.getInfo");
 
             HttpHeader httpHeader = new HttpHeader();
-            httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+            httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
             String response = new HttpUtils(config.getHttpConfig()).post(source.userInfo(), form, httpHeader, false).getBody();
             JSONObject object = JSONObject.parseObject(response);
 
@@ -134,7 +136,8 @@ public class AuthHuaweiV3Request extends AuthDefaultRequest {
         form.put("grant_type", "refresh_token");
 
         HttpHeader httpHeader = new HttpHeader();
-        httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
         String response = new HttpUtils(config.getHttpConfig()).post(source.refresh(), form, httpHeader, false).getBody();
         return AuthResponse.<AuthToken>builder().code(AuthResponseStatus.SUCCESS.getCode()).data(getAuthToken(response)).build();
     }

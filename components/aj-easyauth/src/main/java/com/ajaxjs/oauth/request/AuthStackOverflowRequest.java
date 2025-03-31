@@ -41,7 +41,8 @@ public class AuthStackOverflowRequest extends AuthDefaultRequest {
         String accessTokenUrl = accessTokenUrl(authCallback.getCode());
         Map<String, String> form = MapUtil.parseStringToMap(accessTokenUrl, false);
         HttpHeader httpHeader = new HttpHeader();
-        httpHeader.add(Constants.CONTENT_TYPE, "application/x-www-form-urlencoded");
+        httpHeader.add(Constants.CONTENT_TYPE, HttpConstants.CONTENT_TYPE_FORM
+);
         String response = new HttpUtils(config.getHttpConfig()).post(accessTokenUrl, form, httpHeader, false).getBody();
 
         JSONObject accessTokenObject = JSONObject.parseObject(response);

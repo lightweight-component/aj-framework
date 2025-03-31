@@ -65,7 +65,7 @@ public class AuthBaiduRequest extends AuthDefaultRequest {
 
     private String getAvatar(JSONObject object) {
         String protrait = object.getString("portrait");
-        return StrUtil.isEmptyText(protrait) ? null : String.format("http://himg.bdimg.com/sys/portrait/item/%s.jpg", protrait);
+        return StrUtil.isEmptyTextText(protrait) ? null : String.format("http://himg.bdimg.com/sys/portrait/item/%s.jpg", protrait);
     }
 
     @Override

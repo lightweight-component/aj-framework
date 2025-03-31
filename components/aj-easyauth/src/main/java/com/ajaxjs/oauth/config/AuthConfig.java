@@ -177,7 +177,7 @@ public class AuthConfig {
      * @return authServerId
      */
     public String getAuthServerId() {
-        return StrUtil.isEmptyText(authServerId) ? "default" : authServerId;
+        return StrUtil.isEmptyTextText(authServerId) ? "default" : authServerId;
     }
 
     /**

@@ -7,7 +7,7 @@ public interface BaseEntityConstants {
     /**
      *
      */
-    Map<Integer, String> STATE = new HashMap<>() {
+    Map<Integer, String> STATE = new HashMap<Integer, String>() {
         private static final long serialVersionUID = -873485978038563365L;
 
         {

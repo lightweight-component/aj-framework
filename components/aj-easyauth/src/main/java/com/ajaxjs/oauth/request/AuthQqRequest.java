@@ -47,7 +47,7 @@ public class AuthQqRequest extends AuthDefaultRequest {
             throw new AuthException(object.getString("msg"));
         }
         String avatar = object.getString("figureurl_qq_2");
-        if (StrUtil.isEmptyText(avatar)) {
+        if (StrUtil.isEmptyTextText(avatar)) {
             avatar = object.getString("figureurl_qq_1");
         }
 
@@ -88,7 +88,7 @@ public class AuthQqRequest extends AuthDefaultRequest {
         if (object.containsKey("unionid")) {
             authToken.setUnionId(object.getString("unionid"));
         }
-        return StrUtil.isEmptyText(authToken.getUnionId()) ? authToken.getOpenId() : authToken.getUnionId();
+        return StrUtil.isEmptyTextText(authToken.getUnionId()) ? authToken.getOpenId() : authToken.getUnionId();
     }
 
     /**

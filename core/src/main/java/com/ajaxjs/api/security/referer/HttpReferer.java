@@ -21,7 +21,7 @@ public class HttpReferer extends InterceptorAction<HttpRefererCheck> {
 
     @Override
     public boolean action(HttpRefererCheck annotation, HttpServletRequest req) {
-        var referer = req.getHeader("Referer");  // 获取 Referer 头
+        String referer = req.getHeader("Referer");  // 获取 Referer 头
 
         if (ALLOWED_REFERRERS != null && (!StringUtils.hasText(referer) || !ALLOWED_REFERRERS.contains(referer)))
             throw new SecurityException("Invalid Referer header.");

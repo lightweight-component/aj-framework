@@ -41,7 +41,7 @@ public class UrlBuilder {
      * @return 追加后的字符串
      */
     public static String appendIfNotContain(String str, String appendStr, String otherwise) {
-        if (StrUtil.isEmptyText(str) || StrUtil.isEmptyText(appendStr))
+        if (StrUtil.isEmptyTextText(str) || StrUtil.isEmptyTextText(appendStr))
             return str;
 
         if (str.contains(appendStr))

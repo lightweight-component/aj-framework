@@ -37,7 +37,8 @@ public class AuthSlackRequest extends AuthDefaultRequest {
     @Override
     public AuthToken getAccessToken(AuthCallback authCallback) {
         HttpHeader header = new HttpHeader()
-            .add("Content-Type", "application/x-www-form-urlencoded");
+            .add("Content-Type", HttpConstants.CONTENT_TYPE_FORM
+);
         String response = new HttpUtils(config.getHttpConfig())
             .get(accessTokenUrl(authCallback.getCode()), null, header, false).getBody();
         JSONObject accessTokenObject = JSONObject.parseObject(response);
@@ -53,7 +54,8 @@ public class AuthSlackRequest extends AuthDefaultRequest {
     @Override
     public AuthUser getUserInfo(AuthToken authToken) {
         HttpHeader header = new HttpHeader()
-            .add("Content-Type", "application/x-www-form-urlencoded")
+            .add("Content-Type", HttpConstants.CONTENT_TYPE_FORM
+)
             .add("Authorization", "Bearer ".concat(authToken.getAccessToken()));
         String userInfo = new HttpUtils(config.getHttpConfig())
             .get(userInfoUrl(authToken), null, header, false).getBody();
@@ -77,7 +79,8 @@ public class AuthSlackRequest extends AuthDefaultRequest {
     @Override
     public AuthResponse revoke(AuthToken authToken) {
         HttpHeader header = new HttpHeader()
-            .add("Content-Type", "application/x-www-form-urlencoded")
+            .add("Content-Type", HttpConstants.CONTENT_TYPE_FORM
+)
             .add("Authorization", "Bearer ".concat(authToken.getAccessToken()));
         String userInfo = new HttpUtils(config.getHttpConfig())
             .get(source.revoke(), null, header, false).getBody();

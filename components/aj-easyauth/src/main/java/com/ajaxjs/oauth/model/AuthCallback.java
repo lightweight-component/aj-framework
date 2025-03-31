@@ -63,6 +63,6 @@ public class AuthCallback  {
     private String error;
 
     public String getCode() {
-        return StrUtil.isEmptyText(code) ? auth_code : code;
+        return StrUtil.isEmptyTextText(code) ? auth_code : code;
     }
 }

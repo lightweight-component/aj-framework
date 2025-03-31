@@ -72,7 +72,7 @@ public class PrintBanner implements ApplicationRunner {
                 padding.append(" ");
 
             printStream.println(AnsiOutput.toString(AnsiColor.GREEN, bannerName, AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, version));
-            log.info(baos.toString(StandardCharsets.UTF_8));
+            log.info(baos.toString());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
