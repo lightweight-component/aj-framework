@@ -1,4 +1,4 @@
-package com.ajaxjs.mcp.schema;
+package com.ajaxjs.mcp.transport;
 
 /**
  * Marker interface for the server-side MCP transport.

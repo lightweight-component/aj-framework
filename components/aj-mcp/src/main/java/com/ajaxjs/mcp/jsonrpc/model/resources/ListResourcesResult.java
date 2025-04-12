@@ -1,5 +1,6 @@
 package com.ajaxjs.mcp.jsonrpc.model.resources;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  *
  */
 @Data
+@AllArgsConstructor
 public class ListResourcesResult {
     List<Resource> resources;
 

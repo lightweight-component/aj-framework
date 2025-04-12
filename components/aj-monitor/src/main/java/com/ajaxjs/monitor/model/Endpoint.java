@@ -1,14 +1,14 @@
 package com.ajaxjs.monitor.model;
 
 import lombok.Data;
-import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 public class Endpoint implements Serializable {
-	private static final long serialVersionUID = -8656237790482826441L;
-	public static final String INFO = "info";
+    private static final long serialVersionUID = -8656237790482826441L;
+    public static final String INFO = "info";
     public static final String HEALTH = "health";
     public static final String LOGFILE = "logfile";
     public static final String ENV = "env";
@@ -21,8 +21,8 @@ public class Endpoint implements Serializable {
     private final String url;
 
     Endpoint(String id, String url) {
-        Assert.hasText(id, "'id' must not be empty.");
-        Assert.hasText(url, "'url' must not be empty.");
+        Objects.requireNonNull(id, "'id' must not be empty.");
+        Objects.requireNonNull(url, "'url' must not be empty.");
         this.id = id;
         this.url = url;
     }

@@ -1,7 +1,9 @@
-package com.ajaxjs.mcp.schema;
+package com.ajaxjs.mcp.transport;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ajaxjs.mcp.jsonrpc.schema.JSONRPCMessage;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 定义模型上下文协议 (MCP) 的异步传输层。
@@ -39,7 +41,7 @@ public interface McpTransport {
     /**
      * 异步关闭传输连接并释放任何关联的资源。当连接已关闭时完成的。
      */
-    void closeGracefully();
+    CompletableFuture<Void> closeGracefully();
 
     /**
      * 异步向对端发送消息。当消息已发送时完成的 。
@@ -50,7 +52,7 @@ public interface McpTransport {
      *
      * @param message 要发送到服务器的 {@link JSONRPCMessage}
      */
-    void sendMessage(JSONRPCMessage message);
+    CompletableFuture<Void> sendMessage(JSONRPCMessage message);
 
     /**
      * 将给定数据解组为指定类型的对象。

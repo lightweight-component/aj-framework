@@ -7,8 +7,6 @@ import java.util.Map;
 
 @Data
 public class JsonSchema {
-
-
     String type;
 
 

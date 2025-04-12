@@ -1,6 +1,6 @@
-package com.ajaxjs.mcp.jsonrpc.constant;
+package com.ajaxjs.mcp;
 
-public interface JsonRpcConstant {
+public interface McpConstant {
     String LATEST_PROTOCOL_VERSION = "2024-11-05";
 
     String JSONRPC_VERSION = "2.0";

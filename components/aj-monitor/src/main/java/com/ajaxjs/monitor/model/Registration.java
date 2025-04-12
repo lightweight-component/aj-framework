@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @ToString(exclude = "metadata")
@@ -30,8 +31,8 @@ public class Registration implements Serializable {
     @lombok.Builder(builderClassName = "Builder", toBuilder = true)
 	public Registration(String name, @Nullable String managementUrl, String healthUrl,
                          @Nullable String serviceUrl, String source) {
-        Assert.hasText(name, "'name' must not be empty.");
-        Assert.hasText(healthUrl, "'healthUrl' must not be empty.");
+         Objects.requireNonNull(name, "'name' must not be empty.");
+         Objects.requireNonNull(healthUrl, "'healthUrl' must not be empty.");
         Assert.isTrue(checkUrl(healthUrl), "'healthUrl' is not valid: " + healthUrl);
         Assert.isTrue(StrUtil.isEmptyTextText(managementUrl) || checkUrl(managementUrl),
             "'managementUrl' is not valid: " + managementUrl

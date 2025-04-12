@@ -34,7 +34,7 @@ public class StatusInfo implements Serializable {
     private final Map<String, Object> details;
 
     private StatusInfo(String status, @Nullable Map<String, ?> details) {
-        Assert.hasText(status, "'status' must not be empty.");
+         Objects.requireNonNull(status, "'status' must not be empty.");
         this.status = status.toUpperCase();
         this.details = details != null ? new HashMap<>(details) : Collections.emptyMap();
     }

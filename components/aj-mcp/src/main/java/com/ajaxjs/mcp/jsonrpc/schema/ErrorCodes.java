@@ -1,4 +1,4 @@
-package com.ajaxjs.mcp.jsonrpc.constant;
+package com.ajaxjs.mcp.jsonrpc.schema;
 
 /**
  * Standard error codes used in MCP JSON-RPC responses.
