@@ -5,7 +5,7 @@ description: TODO
 date: 2022-01-05
 tags:
   - last one
-layout: layouts/docs.njk
+layout: layouts/aj-docs.njk
 ---
 # Quick Start
 ## 🔧 Install SqlMan

@@ -168,7 +168,7 @@ function highlightCode() {
         item.innerHTML = highlightDDLKeywords(code);
     });
 
-    codeElement = document.querySelectorAll('.java-code');
+    codeElement = document.querySelectorAll('.language-java');
 
     codeElement && codeElement.length && codeElement.forEach(item => {
         let code = item.innerHTML;
