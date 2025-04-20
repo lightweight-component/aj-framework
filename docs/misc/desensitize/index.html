@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Framework-实体类字段脱敏</title>
+        <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
+        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
+        <link rel="stylesheet" href="/style/docs/main.css"/>
+        <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
+        <script src="/asset/common.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 Home</a>
+                    |
+                                    ⚙️ Source:
+                    <a target="_blank" href="https://github.com/lightweight-component/SqlMan">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/SqlMan/overview">Gitcode</a>
+                    |
+                    <a href="/docs/common/contact">✉️ Contact</a>
+                </div>
+                <h1>
+                    <img src="/asset/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> 
+                    AJ Framework
+                </h1>
+                <h3>轻量级 Java 快速开发框架
+                </h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                
+                <ul>
+                    <li class="selected">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="/quick-start">快速开始</a>
+                    </li>
+                </ul>
+                <h3>开始</h3>
+                <ul>
+                    <li>
+                        <a href="pages/api/init.html">初始化一个项目</a>
+                    </li>
+                    <li>
+                        <a href="/init/controller">简化控制器为接口</a>
+                    </li>
+                    <li>
+                        <a href="/init/global">统一返回、统一异常</a>
+                    </li>
+                    <li>
+                        <a href="pages/api/package.html">打包与部署</a>
+                    </li>
+                </ul>
+                <h3>API 功能</h3>
+                <ul>
+                    <li class="data">
+                        <a href="/api/api-limit/">API 限流</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-encode/">API 加密/解密</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-security/">API 安全</a>
+                    </li>
+                    <li>
+                        <a href="/api/bean-validator/">Bean 实体校验</a>
+                    </li>
+                </ul>
+                <h3>其他模块</h3>
+                <ul>
+                    <li>
+                        <a href="/misc/cache">使用多级缓存</a>
+                    </li>
+                    <li>
+                        <a href="/misc/desensitize">脱敏组件</a>
+                    </li>
+                    <li>
+                        <a href="/misc/trace">链路跟踪</a>
+                    </li>
+                    <li>
+                        <a href="/misc/dlock">分布式锁、延迟消息</a>
+                    </li>
+                </ul>
+    
+                <h3>Misc</h3>
+                <ul>
+                    <li><a href="/common/versions">Release History</a></li>
+                    <li><a href="/common/contact">Contact</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h1>实体类字段脱敏</h1>
+<p>脱敏就是现实某些敏感的字段完全暴露数据，但又不能完全消去，保留一部分信息即可判断，常见如姓名、手机、邮箱、用户名、密码等字段。</p>
+<p>考虑到穿梭于 Java 的实体要么是 Java Bean 要么就是 Map，针对实体数据处理即可。接着把控好在哪里调用这个脱敏组件，比如 REST API 的在返回实体之前处理就好；而 RPC 的又不一样。</p>
+<p>脱敏实现方式也不难，本质上只是一个简单的字符串替换函数即可。但围绕实体字段各种的情况，考虑得就比较多了。</p>
+<h1>使用方式</h1>
+<h2>源码</h2>
+<p>从源码空间直接 copy 代码接口，没有其他依赖。</p>
+<p><a href="https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/desensitize">https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/desensitize</a></p>
+<p>很简单的几个类，轻量级为目标。</p>
+<h2>定义实体注解</h2>
+<pre><code class="language-java">import com.ajaxjs.desensitize.DesensitizeType;
+import com.ajaxjs.desensitize.annotation.DesensitizeModel;
+import com.ajaxjs.desensitize.annotation.DesensitizeProperty;
+import lombok.Data;
+
+@Data
+@DesensitizeModel
+public class User {
+    private String name;
+
+    @DesensitizeProperty(DesensitizeType.PHONE)
+    private String phone;
+
+    private int age;
+}
+</code></pre>
+<p>上例使用了 <code>@DesensitizeModel</code> 表示该 POJO 要脱敏；<code>@DesensitizeProperty(DesensitizeType.PHONE)</code>说明要脱敏的字段，以及是“手机”的类型。其他更多的类型参见枚举：</p>
+<pre><code class="language-java">/**
+ * 脱敏类型
+ */
+public enum DesensitizeType {
+    DEFAULT(v -&gt; DataMask.PLACE_HOLDER),
+    // 手机号
+    PHONE(DataMask::maskPhoneNumber),
+    // 银行卡号
+    BANK_CARD(DataMask::maskBankCard),
+    // 身份证号
+    ID_CARD(DataMask::maskIdCard),
+    // 姓名
+    USERNAME(DataMask::maskChineseName),
+    // email
+    EMAIL(DataMask::maskEmail),
+    //地址
+    ADDRESS(v -&gt; DataMask.maskAddress(v, 0));
+
+    public final Function&lt;String, String&gt; handler;
+
+    DesensitizeType(Function&lt;String, String&gt; handler) {
+        this.handler = handler;
+    }
+}
+
+</code></pre>
+<p>手动执行脱敏：<code>DeSensitize.acquire(body);</code>。</p>
+<h2>定义控制器的注解</h2>
+<p>使用<code>@Desensitize</code>定义在控制器方法上。</p>
+<pre><code class="language-java">@GetMapping(&quot;/user_desensitize&quot;)
+@Desensitize
+public User UserDesensitize() {
+    User user = new User();
+    user.setAge(1);
+    user.setName(&quot;tom&quot;);
+    user.setPhone(&quot;13711118120&quot;);
+
+    return user;
+}
+</code></pre>
+<p>在统一返回的<code>ResponseBodyAdvice</code>上，增加一行判断。</p>
+<pre><code class="language-java">@RestControllerAdvice
+@Component
+public class GlobalResponseResult implements ResponseBodyAdvice&lt;Object&gt; {
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+        assert method != null;
+
+        if (method.isAnnotationPresent(Desensitize.class)) // 判断要执行脱敏
+            body = DeSensitize.acquire(body);
+
+        ResponseResultWrapper responseResult = new ResponseResultWrapper();
+        responseResult.setStatus(1);
+        responseResult.setData(body);
+
+        return responseResult;
+    }
+}
+</code></pre>
+<p>返回结果如：</p>
+<pre><code class="language-json">{
+    &quot;status&quot;: 1,
+    &quot;errorCode&quot;: null,
+    &quot;message&quot;: &quot;操作成功&quot;,
+    &quot;data&quot;: {
+        &quot;phone&quot;: &quot;137*****8120&quot;,
+        &quot;name&quot;: &quot;tom&quot;,
+        &quot;age&quot;: 1
+    }
+}
+</code></pre>
+<h1>类说明</h1>
+<ul>
+<li>DeSensitizeUtils：这个类对实体进行脱敏后返回的是原来的实体对象，它直接在原始对象上进行操作，并对其进行修改。</li>
+<li>SensitizeUtils：而这个类则创建了一个新的对象实例（或集合），并在这个新对象上应用脱敏规则。这意味着原对象保持不变，而返回的是一个结构相同但值被脱敏处理过的新对象。</li>
+</ul>
+<h1>同类开源</h1>
+<ul>
+<li>https://gitee.com/strong_sea/sensitive-plus https://www.cnblogs.com/nuccch/p/18148298 使用了<code>MappingJackson2HttpMessageConverter</code>这点不错，同时也比较全面，还支持日志脱敏，可是代码组织太分散了</li>
+<li>https://github.com/chenqi92/alltobs-desensitization-all</li>
+<li>https://github.com/mingyang66/spring-parent/tree/master/emily-project/oceansky-desensitize 代码简洁清晰</li>
+<li>https://gitee.com/l0km/beanfilter 大神作品，功能全面，包括 RPC 的</li>
+</ul>
+<p>更复杂的参考这个<a href="https://www.secrss.com/articles/13856">《大数据隐私保护关键技术解析：数据脱敏、匿名化、差分隐私和同态加密》</a>。</p>
+
+            </article>
+        </div>
+
+        <footer>
+    SqlMan, a part of <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> open source. Mail:
+    frank@ajaxjs.com, visit <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>.
+    <br />
+    <br />
+     Copyright © 2025 Frank Cheung. All rights reserved.
+</footer>
+    </body>
+</html>

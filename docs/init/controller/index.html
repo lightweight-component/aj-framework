@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Framework-基于 Java 接口的控制器</title>
+        <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
+        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
+        <link rel="stylesheet" href="/style/docs/main.css"/>
+        <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
+        <script src="/asset/common.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 Home</a>
+                    |
+                                    ⚙️ Source:
+                    <a target="_blank" href="https://github.com/lightweight-component/SqlMan">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/SqlMan/overview">Gitcode</a>
+                    |
+                    <a href="/docs/common/contact">✉️ Contact</a>
+                </div>
+                <h1>
+                    <img src="/asset/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> 
+                    AJ Framework
+                </h1>
+                <h3>轻量级 Java 快速开发框架
+                </h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                
+                <ul>
+                    <li class="selected">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="/quick-start">快速开始</a>
+                    </li>
+                </ul>
+                <h3>开始</h3>
+                <ul>
+                    <li>
+                        <a href="pages/api/init.html">初始化一个项目</a>
+                    </li>
+                    <li>
+                        <a href="/init/controller">简化控制器为接口</a>
+                    </li>
+                    <li>
+                        <a href="/init/global">统一返回、统一异常</a>
+                    </li>
+                    <li>
+                        <a href="pages/api/package.html">打包与部署</a>
+                    </li>
+                </ul>
+                <h3>API 功能</h3>
+                <ul>
+                    <li class="data">
+                        <a href="/api/api-limit/">API 限流</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-encode/">API 加密/解密</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-security/">API 安全</a>
+                    </li>
+                    <li>
+                        <a href="/api/bean-validator/">Bean 实体校验</a>
+                    </li>
+                </ul>
+                <h3>其他模块</h3>
+                <ul>
+                    <li>
+                        <a href="/misc/cache">使用多级缓存</a>
+                    </li>
+                    <li>
+                        <a href="/misc/desensitize">脱敏组件</a>
+                    </li>
+                    <li>
+                        <a href="/misc/trace">链路跟踪</a>
+                    </li>
+                    <li>
+                        <a href="/misc/dlock">分布式锁、延迟消息</a>
+                    </li>
+                </ul>
+    
+                <h3>Misc</h3>
+                <ul>
+                    <li><a href="/common/versions">Release History</a></li>
+                    <li><a href="/common/contact">Contact</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h1>基于 Java 接口的控制器</h1>
+    <p>问题的提出：一般情况下，我们是这样定义一个 Spring Boot/MVC 控制器的：
+    </p>
+
+    <pre class="code java-code">@PostMapping("/save/{id}")
+@ResponseBody
+public Book save(@RequestBody Book book, @PathVariable int id) {
+    // 调用你的业务类
+}</pre>
+    <p>一直如此没啥问题。但我们渐渐发现，这个 Controller 里面只有一行调用 Service 的方法……于是我们考虑能不能把这一行代码都省呢？——答案是肯定的！我们就来看看怎么做。</p>
+
+    <h2>把接口作控制器</h2>
+
+    <p>Spring MVC 5.1 引入了<span class="external-link">
+        <span>↗</span>
+    </span> <a
+            href="https://github.com/spring-projects/spring-framework/wiki/What%27s-New-in-Spring-Framework-5.x#general-web-revision-1"
+            target="_blank">新功能</a>：</p>
+    <div class="ref">
+        Controller parameter annotations get detected on interfaces as well: Allowing for complete mapping contracts in
+        controller interfaces.
+        <br />
+        在接口上的控制器注解也能检测到，并自动映射到实现类上。
+    </div>
+
+    <p>说白了就是控制器只是个 Java Interface，对应的实现却不是控制器，而是业务类。这有点控制器与业务类合二为一的味道。实际上为我们减少不少编码量，还是相当值得使用的。这样相当于简化了 Controller 编写。我们用一个用户的例子来看看。首先定义控制器，这里提供了相关的 MVC 的注解。</p>
+
+    <pre class="code java-code">import com.ajaxjs.user.model.User;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/user")
+public interface UserController {
+    @GetMapping("/{id}")
+    User info(@PathVariable Long id);
+
+    @PostMapping
+    Long create(@RequestBody User user);
+
+    /**
+        * 检查用户某个值是否已经存在一样的值
+        *
+        * @param field 字段名，当前只能是 username/email/phone 中的任意一种
+        * @param value 字段值，要校验的值
+        * @return 是否已经存在一样的值，true 表示存在
+        */
+    @GetMapping("/checkRepeat")
+    Boolean checkRepeat(@RequestParam String field, @RequestParam Object value);
+
+    @PutMapping
+    Boolean update(@RequestBody User user);
+
+    @DeleteMapping("/{id}")
+    Boolean delete(@PathVariable Long id);
+}</pre>
+
+    <p>接着我们实现这个接口，特别地，这是个业务类。当然你也可以说他是控制器类，但这样就失去简化的意义了，只是把之前类上的注解搬到接口身上，并没有简化控制器。我们看看实现类：</p>
+
+    <pre class="code java-code">import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.entity.CrudUtils;
+import com.ajaxjs.framework.entity.BaseEntityConstants;
+import com.ajaxjs.sass.SaasUtils;
+import com.ajaxjs.user.controller.UserController;
+import com.ajaxjs.user.model.User;
+import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+
+@Service
+public class UserService implements UserController {
+    @Override
+    public User info(Long id) {
+        String sql = "SELECT * FROM user WHERE stat != 1 AND id = ?";
+        sql = SaasUtils.addTenantIdQuery(sql);
+
+        return CRUD.info(User.class, sql, id);
+    }
+
+    @Override
+    public Long create(@Valid User user) {
+        if (checkRepeat("username", user.getUsername()))
+            throw new IllegalArgumentException("用户的登录名" + user.getUsername() + "重复");
+
+        return CRUD.create(user);
+    }
+
+    @Override
+    public Boolean checkRepeat(String field, Object value) {
+        String sql = "SELECT * FROM user WHERE stat != 1 AND " + field + " = ?";
+        sql = SaasUtils.addTenantIdQuery(sql);
+        sql += "LIMIT 1";
+
+        return CRUD.info(sql, value) != null;
+    }
+
+    @Override
+    public Boolean update(User user) {
+        CrudUtils.checkId(user);
+
+        return CRUD.update(user);
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        // 逻辑删除
+        User user = new User();
+        user.setId(id);
+        user.setStat(BaseEntityConstants.STATUS_DELETED);
+
+        return update(user);
+    }
+}</pre>
+
+    <p>这有点控制器与业务类合二为一的味道。实际上为我们减少不少编码量，还是相当值得使用的。</p>
+            </article>
+        </div>
+
+        <footer>
+    SqlMan, a part of <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> open source. Mail:
+    frank@ajaxjs.com, visit <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>.
+    <br />
+    <br />
+     Copyright © 2025 Frank Cheung. All rights reserved.
+</footer>
+    </body>
+</html>
