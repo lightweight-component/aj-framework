@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Framework-统一返回、统一异常</title>
+        <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
+        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
+        <link rel="stylesheet" href="/style/docs/main.css"/>
+        <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
+        <script src="/asset/common.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 Home</a>
+                    | ⚙️ Source:
+                    <a target="_blank" href="https://github.com/lightweight-component/aj-framework">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-framework">Gitcode</a>
+                    |
+                    <a href="/common/contact">✉️ Contact</a>
+                </div>
+                <h1>
+                    <img src="/asset/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> 
+                    AJ Framework
+                </h1>
+                <h3>轻量级 Java 快速开发框架
+                </h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                
+                <ul>
+                    <li class="selected">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="/quick-start">快速开始</a>
+                    </li>
+                </ul>
+                <h3>开始</h3>
+                <ul>
+                    <li>
+                        <a href="pages/api/init.html">初始化一个项目</a>
+                    </li>
+                    <li>
+                        <a href="/init/controller">简化控制器为接口</a>
+                    </li>
+                    <li>
+                        <a href="/init/global">统一返回、统一异常</a>
+                    </li>
+                    <li>
+                        <a href="pages/api/package.html">打包与部署</a>
+                    </li>
+                </ul>
+                <h3>API 功能</h3>
+                <ul>
+                    <li class="data">
+                        <a href="/api/api-limit/">API 限流</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-encode/">API 加密/解密</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-security/">API 安全</a>
+                    </li>
+                    <li>
+                        <a href="/api/bean-validator/">Bean 实体校验</a>
+                    </li>
+                </ul>
+                <h3>其他模块</h3>
+                <ul>
+                    <li>
+                        <a href="/misc/cache">使用多级缓存</a>
+                    </li>
+                    <li>
+                        <a href="/misc/desensitize">脱敏组件</a>
+                    </li>
+                    <li>
+                        <a href="/misc/trace">链路跟踪</a>
+                    </li>
+                    <li>
+                        <a href="/misc/dlock">分布式锁、延迟消息</a>
+                    </li>
+                </ul>
+    
+                <h3>Misc</h3>
+                <ul>
+                    <li><a href="/common/versions">Release History</a></li>
+                    <li><a href="/common/contact">Contact</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h1>统一返回、统一异常</h1>
+<h1>统一返回结果</h1>
+<p>开发 REST API 接口时往往需要和前端对接定义返回的数据结构，例如所有返回 JSON 格式数据的接口都需要返回下面格式的数据。</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;code&quot;: null,
+  &quot;msg&quot;: &quot;操作成功!&quot;,
+  &quot;data&quot;: 具体的数据
+}
+</code></pre>
+<p>但是咱们系统中所有的接口返回值都是下面这种格式的，难道咱们要一个个去手动改一下接口的返回值么？</p>
+<pre><code class="language-java">@PostMapping(&quot;/submit&quot;)
+boolean jsonSubmit(@RequestBody User user);
+
+@GetMapping(&quot;/user&quot;)
+User User();
+
+@GetMapping(&quot;/user_desensitize&quot;)
+User UserDesensitize();
+</code></pre>
+<p>Spring 为我们提供了更简单的方法，此时我们可以使用<code>RequestBodyAdvice</code>来拦截所有接口，将接口的返回值包装一下，包装为统一的格式返回，下面来看具体代码如何实现。</p>
+<blockquote>
+<p>这里我们不主张使用<code>ResponseResultWrapper&lt;T&gt;</code>来包装返回值，而是“隐式”使用<code>ResponseResultWrapper</code>，没有泛型，不用出现在控制器上。控制器直接使用业务对象或者<code>boolean</code>、<code>String</code>等返回即可，这样代码显示更清爽，减少心智。</p>
+<p>另外有人采用 AOP 实现拦截，笔者认为大可不必，<code>RequestBodyAdvice</code>本身就可拦截</p>
+</blockquote>
+<pre><code class="language-java">@RestControllerAdvice
+@Component
+public class GlobalResponseResult implements ResponseBodyAdvice&lt;Object&gt; {
+    @Override
+    public boolean supports(MethodParameter returnType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; converterType) {
+//        System.out.println(&quot;supports:&quot; + returnType);
+        return true;
+    }
+
+    private static final String OK = &quot;操作成功&quot;;
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt; selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+        assert method != null;
+
+        if (method.isAnnotationPresent(Desensitize.class))
+            body=  DeSensitize.acquire(body);
+
+        if (method.isAnnotationPresent(IgnoredGlobalReturn.class))
+            return body;
+
+        ResponseResultWrapper responseResult = new ResponseResultWrapper();
+        responseResult.setStatus(1);
+
+        JsonMessage annotation = Objects.requireNonNull(returnType.getMethod()).getAnnotation(JsonMessage.class);
+
+        if (annotation != null)
+            responseResult.setMessage(annotation.value());
+        else
+            responseResult.setMessage(OK);
+
+        responseResult.setData(body);
+
+        return responseResult;
+    }
+}
+</code></pre>
+<p>可见代码不过寥寥数行，简单说就是把控制器所返回的结果（业务结果）嵌入到<code>ResponseResultWrapper</code>，连 JSON 序列化都不用（序列化在另外的地方统一处理）。</p>
+<p>值得注意的是几个注解：</p>
+<ul>
+<li><code>Desensitize</code> 表示该方法返回的结果要进行脱敏</li>
+<li><code>IgnoredGlobalReturn</code> 忽略全局返回，直接返回业务对象</li>
+<li><code>JsonMessage</code> 返回 JSON 结构时候，自定义 message 内容</li>
+</ul>
+<h1>统一异常处理</h1>
+<h2>使用全局异常处理器</h2>
+<p>有些小伙伴，经常喜欢在 Controller、Service 代码中捕获异常。不管是普通异常 Exception，还是运行时异常 RuntimeException，都使用<code>try/catch</code>把它们捕获。
+反例：</p>
+<pre><code class="language-java">try {
+    checkParam(param);
+} catch (BusinessException e) {
+    return ApiResultUtil.error(1,&quot;参数错误&quot;);
+}
+</code></pre>
+<p>显然这种做法会造成大量重复的代码。我们在 Controller、Service 等业务代码中，尽可能少捕获异常。这种业务异常处理，应该交给拦截器统一处理。有了这个全局的异常处理器，之前我们在 Controller 或者 Service 中的<code>try/catch</code>代码可以去掉。</p>
+<p>如果在接口中出现异常，全局的异常处理器<code>HandlerExceptionResolver</code>会帮我们封装结果，返回给用户。具体实现请看<span class="external-link">
+<span>↗</span>
+</span><a href="https://gitcode.com/zhangxin09/aj-framework/blob/master/aj-framework/src/main/java/com/ajaxjs/springboot/GlobalExceptionHandler.java"><code>GlobalExceptionHandler</code></a>，非常简单。所有异常到跑到这里来打印，根据具体的异常返回特定的 HTTP Status Code，比如 <code>SecurityException</code>、<code>IllegalAccessError</code>、<code>IllegalAccessException</code> 返回 403。</p>
+<h2>优先使用标准异常</h2>
+<p>在 Java 中已经定义了许多比较常用的标准异常，比如下面这张图中列出的这些异常。</p>
+<ul>
+<li><code>IllegalArgumentException</code> 入参不合法</li>
+<li><code>IllegalStateException</code> 入参的状态不合法</li>
+<li><code>UnsupportedOperationException</code> 不支持的操作</li>
+<li><code>SecurityException</code> 安全异常 返回 401/403</li>
+<li><code>NullPointerException</code> 空指针异常 返回 500</li>
+</ul>
+<p>反例：</p>
+<pre><code class="language-java">public void checkValue(int value) {
+    if (value &lt; 0) {
+        throw new MyIllegalArgumentException(&quot;值不能为负&quot;);
+    }
+}
+</code></pre>
+<p>自定义了一个异常表示参数错误。其实我们可以直接复用已有的标准异常。</p>
+<p>正例：</p>
+<pre><code class="language-java">public void checkValue(int value) {
+    if (value &lt; 0) {
+        throw new IllegalArgumentException(&quot;值不能为负&quot;);
+    }
+}
+</code></pre>
+<h2>尽可能捕获具体异常</h2>
+<p>在你的业务逻辑方法中，有可能需要去处理多种不同的异常。 你可能你会觉得比较麻烦，而直接捕获<code>Exception</code>。</p>
+<p>反例：</p>
+<pre><code class="language-java">try {
+    doSomething();
+} catch(Exception e) {
+    log.error(&quot;doSomething处理失败，原因：&quot;,e);
+}
+</code></pre>
+<p>这样捕获异常太笼统了。 其实<code>doSomething</code>方法中，会抛出<code>FileNotFoundException</code>和<code>IOException</code>。 这种情况我们最好捕获具体的异常，然后分别做处理。</p>
+<p>正例：</p>
+<pre><code class="language-java">try {
+   doSomething();
+} catch(FileNotFoundException e) {
+  log.error(&quot;doSomething处理失败，文件找不到，原因：&quot;,e);
+} catch(IOException e) {
+  log.error(&quot;doSomething处理失败，IO出现了异常，原因：&quot;,e);
+}
+</code></pre>
+<p>这样如果后面出现了上面的异常，我们就非常方便知道是什么原因了。</p>
+
+            </article>
+        </div>
+
+        <footer>
+    SqlMan, a part of <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> open source. Mail:
+    frank@ajaxjs.com, visit <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>.
+    <br />
+    <br />
+     Copyright © 2025 Frank Cheung. All rights reserved.
+</footer>
+    </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Framework-Bean 实体校验</title>
+        <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
+        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
+        <link rel="stylesheet" href="/style/docs/main.css"/>
+        <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
+        <script src="/asset/common.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 Home</a>
+                    | ⚙️ Source:
+                    <a target="_blank" href="https://github.com/lightweight-component/aj-framework">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-framework">Gitcode</a>
+                    |
+                    <a href="/common/contact">✉️ Contact</a>
+                </div>
+                <h1>
+                    <img src="/asset/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> 
+                    AJ Framework
+                </h1>
+                <h3>轻量级 Java 快速开发框架
+                </h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                
+                <ul>
+                    <li class="selected">
+                        <a href="/">首页</a>
+                    </li>
+                    <li>
+                        <a href="/quick-start">快速开始</a>
+                    </li>
+                </ul>
+                <h3>开始</h3>
+                <ul>
+                    <li>
+                        <a href="pages/api/init.html">初始化一个项目</a>
+                    </li>
+                    <li>
+                        <a href="/init/controller">简化控制器为接口</a>
+                    </li>
+                    <li>
+                        <a href="/init/global">统一返回、统一异常</a>
+                    </li>
+                    <li>
+                        <a href="pages/api/package.html">打包与部署</a>
+                    </li>
+                </ul>
+                <h3>API 功能</h3>
+                <ul>
+                    <li class="data">
+                        <a href="/api/api-limit/">API 限流</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-encode/">API 加密/解密</a>
+                    </li>
+                    <li>
+                        <a href="/api/api-security/">API 安全</a>
+                    </li>
+                    <li>
+                        <a href="/api/bean-validator/">Bean 实体校验</a>
+                    </li>
+                </ul>
+                <h3>其他模块</h3>
+                <ul>
+                    <li>
+                        <a href="/misc/cache">使用多级缓存</a>
+                    </li>
+                    <li>
+                        <a href="/misc/desensitize">脱敏组件</a>
+                    </li>
+                    <li>
+                        <a href="/misc/trace">链路跟踪</a>
+                    </li>
+                    <li>
+                        <a href="/misc/dlock">分布式锁、延迟消息</a>
+                    </li>
+                </ul>
+    
+                <h3>Misc</h3>
+                <ul>
+                    <li><a href="/common/versions">Release History</a></li>
+                    <li><a href="/common/contact">Contact</a></li>
+                </ul>
+            </menu>
+            <article>
+                <h1>Bean 实体校验</h1>
+
+    <p>利用 Spring 自带校验器结合 JSR 注解实现轻量级的 Bean 实体校验器。轻捷、简单、很容易上手，也容易扩展。
+        三个核心类 ValidatorInitializing、ValidatorImpl、ValidatorEnum 去掉注释不超过共200行源码实现 10多MB的
+        Hibernate Validator 多数功能。
+    </p>
+
+    <div class="ref">
+        <span class="c">javax.validation</span> 2.0 是 JSR 380 的版本。JSR 380 是 Java 规范请求的缩写，它定义了 Java Bean 验证
+        API（Java Bean Validation API）。Java Bean 验证 API
+        提供了一组用于验证对象属性的注解和接口，帮助开发人员进行数据验证和约束。
+    </div>
+    <p>组件源码在：<span class="external-link">
+            <span>↗</span>
+        </span> <a
+            href="https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/springboot/validator"
+            target="_blank">https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/springboot/validator</a>。
+    </p>
+
+    <h2>配置方式</h2>
+    <p>
+        首先要在 YAML 配置文件中增加默认的出错提示信息。
+    </p>
+    <pre class="code yaml-code">javax-validation:
+    javax.validation.constraints.AssertTrue.message: 值必须为 true
+    javax.validation.constraints.AssertFalse.message: 值必须为 false
+    javax.validation.constraints.DecimalMax.message: 值不能大于 {value}
+    javax.validation.constraints.DecimalMin.message: 值不能小于 {value}
+    javax.validation.constraints.Digits.message: 数字值超出范围（应为 [{integer} digits].[{fraction} digits]）
+    javax.validation.constraints.Email.message: 值必须为有效的电子邮箱地址
+    javax.validation.constraints.Future.message: 值必须为将来的日期
+    javax.validation.constraints.FutureOrPresent.message: 值必须为当前或将来的日期
+    javax.validation.constraints.Max.message: 值不能大于 {value}
+    javax.validation.constraints.Min.message: 值不能小于 {value}
+    javax.validation.constraints.Negative.message: 值必须为负数
+    javax.validation.constraints.NegativeOrZero.message: 值必须为非正数
+    javax.validation.constraints.NotBlank.message: 值不能为空值或空白字符串
+    javax.validation.constraints.NotEmpty.message: 值不能为空值、null 或空集合
+    javax.validation.constraints.NotNull.message: 值不能为空
+    javax.validation.constraints.Null.message: 值必须为空
+    javax.validation.constraints.Past.message: 值必须为过去的日期
+    javax.validation.constraints.PastOrPresent.message: 值必须为当前或过去的日期
+    javax.validation.constraints.Positive.message: 值必须为正数
+    javax.validation.constraints.PositiveOrZero.message: 值必须为非负数
+    javax.validation.constraints.Pattern.message: 值必须与指定正则表达式匹配
+    javax.validation.constraints.Size.message: 大小必须小于 {max}，大于 {min}        
+</pre>
+
+    <h3>初始化校验组件</h3>
+    <p>
+        接着注入<span class="c">ValidatorContextAware</span>。这是在 Spring 应用程序上下文初始化完成后设置验证器和参数解析器。这个类的作用是在 Spring
+        启动时，拦截并修改<span class="c">RequestMappingHandlerAdapter</span>的行为。通过设置自定义的验证器和参数解析器，可以对路径变量进行验证。
+    </p>
+    <pre class="code java-code">
+@Bean
+public ValidatorContextAware initValidatorContextAware() {
+    return new ValidatorContextAware();
+}
+</pre>
+
+    <h2>使用方法</h2>
+    <p>首先在参数实体属性上添加对应的注解。</p>
+    <pre class="code java-code">import javax.validation.constraints.NotNull;
+
+@Data
+public class JvmInfo implements IBaseModel {
+    private String name;
+
+    @NotNull
+    private String classPath;
+    
+    ……
+}</pre>
+
+    <p>然后在 controller 里面方法参数上添加<span class="c">@Validated</span>注解，注意是<span
+            class="c">org.springframework.validation.annotation.Validated</span>。</p>
+    <pre class="code java-code">@PostMapping("/test")
+public boolean test(@Validated JvmInfo info) {
+    System.out.println(info);
+    return true;
+}
+</pre>
+
+
+    <h3>路径参数的校验</h3>
+
+    这是基于 POST 方法提交实体的校验，那么对于路径上的参数是否支持校验呢？答案是支持的。
+
+    在 controller 里面方法参数上直接添加你要校验的注解：
+
+    <pre class="code java-code">@RequestMapping("/test/{mobileNo}/{idNo}")
+public Map&lt;String, Object> test(@PathVariable @MobileNo String mobileNo, @PathVariable @IdCard String idNo) { 
+    ……
+}
+</pre>
+
+    <p>便可完成对路径参数的校验了。一般来说既然是路径的参数，那么就是必填非空的了。</p>
+    <p>
+        值得注意的是，这里的<span class="c">@MobileNo</span>、<span class="c">@IdCard</span>都是自定义的注解，而非标准的 JSR 380
+        所提供的。这里顺便说说自定义的校验注解的写法。</p>
+    <h3>自定义的校验注解</h3>
+
+    <p>首先定义注解。</p>
+
+    <pre class="code java-code">import java.lang.annotation.*;
+
+@Documented
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface IdCard {
+    String message() default "身份证号格式不正确";
+
+    boolean required() default true;
+}</pre>
+
+    <p>然后在枚举类 ValidatorEnum 中增加具体的校验方法，如果不通过就抛出 ValidatorException 异常。</p>
+    <img src="../../../asset/aj-docs/bean-v.png" />
+    <p> 至此就完成了自定义注解的定义。</p>
+
+    <h2>原理分析</h2>
+    <p>有关原理的分析，请移步至博客文章：
+        <span class="external-link">
+            <span>↗</span>
+        </span>
+        <a href="https://zhangxin.blog.csdn.net/article/details/132255031" target="_blank">
+            https://zhangxin.blog.csdn.net/article/details/132255031</a>。
+    </p>
+            </article>
+        </div>
+
+        <footer>
+    SqlMan, a part of <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> open source. Mail:
+    frank@ajaxjs.com, visit <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>.
+    <br />
+    <br />
+     Copyright © 2025 Frank Cheung. All rights reserved.
+</footer>
+    </body>
+</html>
