@@ -7,7 +7,7 @@ import java.io.StringReader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class YylexTest  {
+public class YylexTest {
 
     public void testYylex() throws Exception {
         String s = "\"\\/\"";

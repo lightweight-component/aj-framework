@@ -1,9 +1,9 @@
 package com.ajaxjs.business.json.parser;
 
 
+import com.ajaxjs.business.json.parser.util.HexUtils;
 import com.ajaxjs.business.json.parser.util.JsonEscapeChar;
 import com.ajaxjs.business.json.parser.util.TextCharIterator;
-import com.ajaxjs.business.json.parser.util.HexUtils;
 
 public class Tokenizer {
     private final TextCharIterator iterator;

@@ -7,7 +7,7 @@ public class JsonBoolean implements JsonValue {
         this.value = value;
     }
 
-    public boolean getValue(){
+    public boolean getValue() {
         return value;
     }
 

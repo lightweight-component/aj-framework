@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>JS判断鼠标从什么方向进入一个容器</title>
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #wrap {
+            width: 300px;
+            height: 300px;
+            background: #33aa00;
+            margin: 50px;
+            display: inline-block;
+            font-size: 50px;
+            text-align: center;
+            line-height: 300px;
+        }
+    </style>
+    <div id="wrap">
+        方向反馈
+    </div>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+    <script>
+        const wrap = document.getElementById('wrap');
+        const dirName = ['上方', '右侧', '下方', '左侧'];
+
+        const hoverDir = (e) => {
+            const w = wrap.offsetWidth, h = wrap.offsetHeight;
+            const x = (e.clientX - wrap.offsetLeft - (w / 2)) * (w > h ? (h / w) : 1);
+            const y = (e.clientY - wrap.offsetTop  - (h / 2)) * (h > w ? (w / h) : 1);
+            const direction = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+            
+            wrap.innerHTML = dirName[direction] + ((e.type == 'mouseover' || e.type == 'mouseenter') ? '进入' : '离开');
+        }
+
+        wrap.addEventListener('mouseover', hoverDir, false);
+        wrap.addEventListener('mouseout', hoverDir, false);
+    </script>
+</body>
+
+</html>

@@ -20,6 +20,7 @@ public class PingUtils {
 
     /**
      * 检测 ip 和 端口 是否能连接
+     *
      * @param timeOut 多少毫秒超时
      */
     public static boolean connect(String host, int port, int timeOut) {

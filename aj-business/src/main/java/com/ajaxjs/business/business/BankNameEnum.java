@@ -1,7 +1,5 @@
 package com.ajaxjs.generator;
 
-import lombok.Data;
-
 /**
  * 常见银行名称枚举类
  */

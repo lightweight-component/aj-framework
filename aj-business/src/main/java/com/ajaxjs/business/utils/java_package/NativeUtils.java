@@ -15,16 +15,16 @@ import java.nio.file.StandardCopyOption;
  * "https://gitee.com/l0km/common-java/blob/master/common-base/src/main/java/net/gdface/utils/Platform.java">...</a>
  *
  * @see <a href=
- *      "http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar">http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar</a>
+ * "http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar">http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar</a>
  * @see <a href=
- *      "https://github.com/adamheinrich/native-utils">https://github.com/adamheinrich/native-utils</a>
- *      A simple library class which helps with loading dynamic libraries stored
- *      in the JAR archive. These libraries usually contain implementation of
- *      some methods in native code (using JNI - Java Native Interface).
+ * "https://github.com/adamheinrich/native-utils">https://github.com/adamheinrich/native-utils</a>
+ * A simple library class which helps with loading dynamic libraries stored
+ * in the JAR archive. These libraries usually contain implementation of
+ * some methods in native code (using JNI - Java Native Interface).
  * @see <a href=
- *      "http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar">http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar</a>
+ * "http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar">http://adamheinrich.com/blog/2012/how-to-load-native-jni-library-from-jar</a>
  * @see <a href=
- *      "https://github.com/adamheinrich/native-utils">https://github.com/adamheinrich/native-utils</a>
+ * "https://github.com/adamheinrich/native-utils">https://github.com/adamheinrich/native-utils</a>
  */
 public class NativeUtils {
 

@@ -1,16 +1,17 @@
 package com.ajaxjs.business.json.simple2.tokenizer;
+
 /**
- BEGIN_OBJECT（{）
- END_OBJECT（}）
- BEGIN_ARRAY（[）
- END_ARRAY（]）
- NULL（null）
- NUMBER（数字）
- STRING（字符串）
- BOOLEAN（true/false）
- SEP_COLON（:）
- SEP_COMMA（,）
- END_DOCUMENT（表示JSON文档结束）
+ * BEGIN_OBJECT（{）
+ * END_OBJECT（}）
+ * BEGIN_ARRAY（[）
+ * END_ARRAY（]）
+ * NULL（null）
+ * NUMBER（数字）
+ * STRING（字符串）
+ * BOOLEAN（true/false）
+ * SEP_COLON（:）
+ * SEP_COMMA（,）
+ * END_DOCUMENT（表示JSON文档结束）
  */
 
 public enum TokenType {

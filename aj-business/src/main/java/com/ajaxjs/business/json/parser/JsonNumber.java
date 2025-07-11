@@ -15,6 +15,7 @@ public class JsonNumber implements JsonValue {
     public String toString() {
         return String.valueOf(value);
     }
+
     @Override
     public String toJson() {
         return String.valueOf(value);

@@ -1,17 +1,24 @@
 package com.ajaxjs.business.datastru;
 
 
-import java.sql.*;
-import java.lang.reflect.*;
-import java.util.*;
-import java.io.*;
+import java.io.PrintStream;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * 1 连接池的缓存/分配策略。需要考虑最小连接数目，最大连接数目， 管理正在被使用的连接和未使用的连接， 处理因为网络超使等特别原因而无效的连接，
  * 什么时候再次申请连接等等，这些问题实现起来不难，就是繁琐。
  * 2 Connection关闭问题。当程序调用Connection.close()之后，则这个连接对应的tcp/ip 连接就消失了，所以必须替换掉这种行为。这个问题解决起来也不难，
  * jdk 动态代理就可以。pool里面不要放原生的Connection，而放被代理之后的, close方法被替换之后的Connection包装类
-
+ * <p>
  * author:<a href="https://blog.csdn.net/sunxing007/article/details/5833085">...</a>
  **/
 public class SimpleConnectionPool {

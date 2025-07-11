@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+.marquee {
+    overflow: hidden;
+}
+
+.marquee .marquee-wrap {
+    width: 100%;
+    animation: marquee-wrap 4s infinite linear;
+}
+
+.marquee .marquee-content {
+    float: left;
+    white-space: nowrap;
+    min-width: 100%;
+    animation: marquee-content 4s infinite linear;
+}
+
+@keyframes marquee-wrap {
+    0%,
+    30% {
+        transform: translateX(0);
+    }
+    70%,
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes marquee-content {
+    0%,
+    30% {
+        transform: translateX(0);
+    }
+    70%,
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.marquee-y {
+    overflow: hidden;
+}
+
+.marquee-y .marquee-wrap-y {
+    height: 100%;
+    animation: marquee-wrap-y 4s infinite linear;
+}
+
+.marquee-y .marquee-content-y {
+    float: left;
+    min-height: 100%;
+    max-width: 100%;
+    white-space: pre-wrap;
+    animation: marquee-content-y 4s infinite linear;
+}
+
+@keyframes marquee-wrap-y {
+    0%,
+    30% {
+        transform: translateY(0);
+    }
+    70%,
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes marquee-content-y {
+    0%,
+    30% {
+        transform: translateY(0);
+    }
+    70%,
+    100% {
+        transform: translateY(-100%);
+    }
+}
+</style>
+</head>
+<body>
+<!-- https://blog.allbs.cn/posts/27950/ -->
+<div class="marquee">
+    <div class="marquee-wrap" style="width: 430px;text-align: center">
+        <span class="yellow marquee-content">这是一断横向滚动的文字</span>
+    </div>
+</div>
+
+
+<div class="marquee-y">
+    <div class="marquee-wrap-y" style="height: 330px;width:2360px;text-align: center">
+        <span class="marquee-content-y"><mark class="zyyjxx-index">{{index+1}} 、</mark>自旋锁的提出主要也是为了解决多核系统的同步问题。当锁要保护的代码块执行很快的时候，
+        并且争抢不是非常激烈的时候，自旋锁的比之重量级的需要切换上下文的互斥锁能带来更好的性能表现。对于非多核系统，用户态的自旋锁空耗 CPU，
+        反而降低了整个系统的 progress，作用反而不大。</span>
+    </div>
+</div>
+</body>
+</html>

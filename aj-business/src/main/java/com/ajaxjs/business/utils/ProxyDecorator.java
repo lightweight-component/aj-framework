@@ -99,6 +99,6 @@ public class ProxyDecorator<I, T> implements InvocationHandler {
      */
     public final I proxyInstance() {
         return interfaceClass
-                .cast(Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[] { interfaceClass }, this));
+                .cast(Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, this));
     }
 }

@@ -1,8 +1,6 @@
 package com.ajaxjs.business.json.simple5;
 
 
-
-
 import com.ajaxjs.business.json.simple5.tokenizer.Token;
 import com.ajaxjs.business.json.simple5.tokenizer.TokenType;
 import com.ajaxjs.business.json.simple5.tokenizer.Tokenizer;

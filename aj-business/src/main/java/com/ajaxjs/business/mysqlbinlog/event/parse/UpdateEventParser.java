@@ -1,7 +1,6 @@
 package com.ajaxjs.business.mysqlbinlog.event.parse;
 
 
-
 import com.ajaxjs.business.mysqlbinlog.event.UpdateEvent;
 
 import java.nio.charset.Charset;

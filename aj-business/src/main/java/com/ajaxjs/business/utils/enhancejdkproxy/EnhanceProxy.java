@@ -7,8 +7,6 @@ import java.lang.reflect.Proxy;
  * 提供静态方法来创建代理类实例
  * <a href="https://blog.csdn.net/qq_18515155/article/details/118031761">...</a>
  * <a href="https://blog.csdn.net/qq_18515155/article/details/117334651">...</a>
- *
- *
  **/
 public class EnhanceProxy {
     /**

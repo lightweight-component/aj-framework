@@ -29,7 +29,7 @@ public class HttpUtil {
                 InputStream in = urlConnection.getInputStream();
                 byte[] buffer = new byte[4 * 1024];
                 int len = -1;
-                while((len = in.read(buffer)) != -1) {
+                while ((len = in.read(buffer)) != -1) {
                     bos.write(buffer, 0, len);
                 }
                 close(in);

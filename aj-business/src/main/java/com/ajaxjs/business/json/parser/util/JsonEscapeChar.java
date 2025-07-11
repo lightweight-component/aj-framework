@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonEscapeChar {
-    private static final Map<Character, Character> ESCAPE_CHARS =  new HashMap<>();
+    private static final Map<Character, Character> ESCAPE_CHARS = new HashMap<>();
 
     static {
         ESCAPE_CHARS.put('b', '\b');

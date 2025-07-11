@@ -11,7 +11,6 @@ A Web Framework for Spring Boot has these features:
 ## Tech stack
 
 - JDK8/Tomcat 9/Spring Boot 2.7/JPA
-- Dubbo 3.3 RPC API/Redis 6/Redisson
 - Spring-native build with GraalVM
 
 # Core Library
