@@ -1,7 +1,8 @@
 package org.example.controller;
 
-import com.ajaxjs.api.security.referer.HttpRefererCheck;
 //import com.ajaxjs.desensitize.annotation.Desensitize;
+
+import com.ajaxjs.security.referer.HttpRefererCheck;
 import org.example.model.Foo;
 import org.example.model.User;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,6 @@ public interface FooController {
     @GetMapping
     @HttpRefererCheck
     Foo getFoo();
-
-    @GetMapping("/lock")
-    boolean rLock();
 
     @PostMapping("/submit")
     boolean jsonSubmit(@RequestBody User user);

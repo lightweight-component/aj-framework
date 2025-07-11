@@ -8,10 +8,16 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>common</module>
-        <module>core</module>
-        <module>components</module>
-        <module>aj-sample-app</module>
+        <module>pom/common-project-parent</module>
+        <module>pom/opensource-parent</module>
+        <module>aj-spring</module>
+        <module>aj-framework</module>
         <module>aj-base</module>
+        <module>aj-business</module>
+        <module>aj-message/aj-message-common</module>
+        <module>aj-message/aj-message</module>
+        <module>aj-sample-app</module>
+        <!--<module>aj-redis</module>-->
+        <!--<module>aj-web</module>-->
     </modules>
 </project>
