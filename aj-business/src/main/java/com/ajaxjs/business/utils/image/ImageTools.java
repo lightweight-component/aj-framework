@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-public class Image {
+public class ImageTools {
     /**
      * 图像顺时针旋转90度
      *
