@@ -1,33 +1,52 @@
 package com.ajaxjs.business.algorithm;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Random;
 
 /**
  * 带权重的随机选择
  *
- * @author https://www.zifangsky.cn/1545.html
+ * @author <a href="https://www.zifangsky.cn/1545.html">...</a>
  */
 public class WeightRandom {
     /**
      * 选项数组
      */
-    private Item[] options;
+    private final Item[] options;
 
     /**
      * 权重的临界值
      */
     private BigDecimal[] criticalWeight;
 
-    private Random rnd;
+    private final Random rnd = new Random();
 
     public WeightRandom(Item[] options) {
         if (options == null || options.length < 1)
             throw new IllegalArgumentException("选项数组存在异常！");
 
         this.options = options;
-        rnd = new Random();
-        init();
+
+        // 总权重
+        BigDecimal sumWeights = BigDecimal.ZERO;
+        // 权重的临界值
+        criticalWeight = new BigDecimal[options.length + 1];
+
+        // 1. 计算总权重
+        for (Item item : options)
+            sumWeights = sumWeights.add(BigDecimal.valueOf(item.getWeight()));
+
+        // 2. 计算每个选项的临界值
+        BigDecimal tmpSum = BigDecimal.ZERO;
+        criticalWeight[0] = tmpSum;
+
+        for (int i = 0; i < options.length; i++) {
+            tmpSum = tmpSum.add(BigDecimal.valueOf(options[i].getWeight()));
+            criticalWeight[i + 1] = tmpSum.divide(sumWeights, 2, BigDecimal.ROUND_HALF_UP);
+        }
     }
 
     /**
@@ -36,31 +55,20 @@ public class WeightRandom {
     public String nextItem() {
         double randomValue = rnd.nextDouble();
         // 查找随机值所在区间
-        int index = this.searchIndex(randomValue);
 
-        return this.options[index].getName();
-    }
-
-    /**
-     * 查找随机值所在区间
-     *
-     * @param randomValue
-     * @return
-     */
-    private int searchIndex(double randomValue) {
         BigDecimal rndValue = new BigDecimal(randomValue);
         int high = criticalWeight.length - 1;
         int low = 0;
         int median = (high + low) / 2;
-
-        BigDecimal medianValue = null;
+        int index;
+        BigDecimal medianValue;
 
         while (median != low && median != high) {
-            medianValue = this.criticalWeight[median];
+            medianValue = criticalWeight[median];
 
             if (rndValue.compareTo(medianValue) == 0)
-                return median;
-            else if (rndValue.compareTo(medianValue) > 0) {
+                break;
+             else if (rndValue.compareTo(medianValue) > 0) {
                 low = median;
                 median = (high + low) / 2;
             } else {
@@ -69,35 +77,16 @@ public class WeightRandom {
             }
         }
 
-        return median;
-    }
+        index = median;
 
-    /**
-     * 初始化
-     */
-    private void init() {
-        // 总权重
-        BigDecimal sumWeights = BigDecimal.ZERO;
-        // 权重的临界值
-        this.criticalWeight = new BigDecimal[options.length + 1];
-
-        // 1. 计算总权重
-        for (Item item : this.options)
-            sumWeights = sumWeights.add(new BigDecimal(item.getWeight()));
-
-        // 2. 计算每个选项的临界值
-        BigDecimal tmpSum = BigDecimal.ZERO;
-        this.criticalWeight[0] = tmpSum;
-
-        for (int i = 0; i < this.options.length; i++) {
-            tmpSum = tmpSum.add(new BigDecimal(options[i].getWeight()));
-            criticalWeight[i + 1] = tmpSum.divide(sumWeights, 2, BigDecimal.ROUND_HALF_UP);
-        }
+        return options[index].getName();
     }
 
     /**
      * 需要随机的 item
      */
+    @Data
+    @AllArgsConstructor
     public static class Item {
         /**
          * 名称
@@ -109,17 +98,5 @@ public class WeightRandom {
          */
         private double weight;
 
-        public Item(String name, double weight) {
-            this.name = name;
-            this.weight = weight;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public double getWeight() {
-            return weight;
-        }
     }
 }

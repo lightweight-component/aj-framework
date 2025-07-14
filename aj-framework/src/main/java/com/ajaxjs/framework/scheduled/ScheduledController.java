@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.TimeZone;
 
-@RestController
-@RequestMapping("/scheduled")
+//@RestController
+//@RequestMapping("/scheduled")
 @Slf4j
 public class ScheduledController {
 

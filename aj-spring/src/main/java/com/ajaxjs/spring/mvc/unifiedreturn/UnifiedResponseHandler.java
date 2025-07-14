@@ -51,11 +51,6 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
     @Autowired(required = false)
     CustomReturnConverter<?> customReturnConverter;
 
-    {
-        CustomReturnConverter bean = DiContextUtil.getBean(CustomReturnConverter.class);
-        System.out.println(bean);
-    }
-
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Method method = returnType.getMethod();

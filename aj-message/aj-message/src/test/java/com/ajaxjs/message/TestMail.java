@@ -3,6 +3,7 @@ package com.ajaxjs.message;
 
 import com.ajaxjs.message.email.MailWithConfig;
 import com.ajaxjs.message.email.Sender;
+import com.ajaxjs.message.email.SenderSSL;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -52,6 +53,22 @@ public class TestMail {
         mail.setContent("xccx我希望可以跟你做朋友34354344");
 
         assertTrue(Sender.send(mail));
+    }
+
+    @Test
+    public void testYM1632() {
+        MailWithConfig mail = new MailWithConfig();
+        mail.setMailServer("smtp.exmail.qq.com");
+        mail.setPort(465);
+        mail.setAccount("2220746@qq.com");
+        mail.setPassword("bcmlrwvxkvczbifb");
+        mail.setFrom("2220746@qq.com");
+        mail.setTo("sp42@qq.com");
+        mail.setSubject("你好容祯");
+        mail.setHtmlBody(false);
+        mail.setContent("xccx我希望可以跟你做朋友34354344");
+
+        assertTrue(SenderSSL.send(mail));
     }
 
     @Test

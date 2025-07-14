@@ -8,7 +8,7 @@ import java.util.Stack;
  * <p>
  * 分别将数字和符号放入两个栈，然后再根据条件出栈并计算表达式即可
  *
- * @author https://www.zifangsky.cn/1341.html
+ * @author <a href="https://www.zifangsky.cn/1341.html">...</a>
  */
 public class SimpleCalc {
     /**
@@ -18,42 +18,32 @@ public class SimpleCalc {
      */
     public static void print(List<String> array) {
         for (String string : array) {
-            // 数字栈
-            Stack<Double> numStack = new Stack<>();
-            // 符号栈
-            Stack<Character> opeStack = new Stack<>();
-            // 读取的每个临时数字
-            int n = 0;
-            // 标识当前读取的是否是数字
-            boolean flag = false;
+            Stack<Double> numStack = new Stack<>(); // 数字栈
+            Stack<Character> opeStack = new Stack<>();// 符号栈
+            int n = 0;  // 读取的每个临时数字
+            boolean flag = false; // 标识当前读取的是否是数字
             char[] cs = string.toCharArray();
 
             for (char temp : cs) {
                 if (Character.isDigit(temp)) {
-                    // 读取的是数字
-                    n = 10 * n + Integer.parseInt(String.valueOf(temp));
-                    // 表示已经有数字了
-                    flag = true;
+                    n = 10 * n + Integer.parseInt(String.valueOf(temp)); // 读取的是数字
+                    flag = true; // 表示已经有数字了
                 } else {
-                    // 数字入栈，且重置标识
-                    if (flag) {
+                    if (flag) { // 数字入栈，且重置标识
                         numStack.push((double) n);
                         n = 0;
                         flag = false;
                     }
 
-                    // 碰到左括号，符号栈入栈
-                    if (temp == '(')
+                    if (temp == '(')  // 碰到左括号，符号栈入栈
                         opeStack.push(temp);
                     else if (temp == ')') {
-                        // 碰到右括号，符号栈不断出栈，并计算括号里面的表达式
-                        while (opeStack.peek() != '(') {
+                        while (opeStack.peek() != '(') {// 碰到右括号，符号栈不断出栈，并计算括号里面的表达式
                             double result = cal(numStack.pop(), numStack.pop(), opeStack.pop());
                             numStack.push(result);
                         }
 
-                        // 把左括号出栈了
-                        opeStack.pop();
+                        opeStack.pop(); // 把左括号出栈了
                     } else if (isType(temp) > 0) {
                         // 栈为空直接入栈
                         if (opeStack.isEmpty())
@@ -61,8 +51,7 @@ public class SimpleCalc {
                         else {
                             // 若符号栈顶元素优先级大于或等于要入栈的符号元素,将数字栈顶元素弹出并计算,然后入栈
                             if (isType(opeStack.peek()) >= isType(temp)) {
-                                // 计算表达式
-                                double result = cal(numStack.pop(), numStack.pop(), opeStack.pop());
+                                double result = cal(numStack.pop(), numStack.pop(), opeStack.pop()); // 计算表达式
                                 numStack.push(result);
                             }
 
@@ -89,9 +78,6 @@ public class SimpleCalc {
 
     /**
      * 返回运算符的优先级
-     *
-     * @param c
-     * @return
      */
     private static int isType(char c) {
         if (c == '+' || c == '-')
@@ -104,25 +90,19 @@ public class SimpleCalc {
 
     /**
      * 运算次序是反的,跟入栈出栈次序有关
-     *
-     * @param rightNum
-     * @param leftNum
-     * @param c
-     * @return
      */
     private static double cal(double rightNum, double leftNum, char c) {
-        if (c == '+') {
+        if (c == '+')
             return leftNum + rightNum;
-        } else if (c == '-') {
+         else if (c == '-')
             return leftNum - rightNum;
-        } else if (c == '*') {
+         else if (c == '*')
             return leftNum * rightNum;
-        } else if (c == '/') {
+         else if (c == '/') {
             if (rightNum == 0)
                 throw new RuntimeException("除数不能为0");
             else
                 return leftNum / rightNum;
-
         } else
             throw new RuntimeException("程序不支持输入的符号");
     }

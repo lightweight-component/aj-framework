@@ -13,23 +13,21 @@ import java.util.regex.Pattern;
  * <p>
  * 用自定义的compare()方法对Map中的value进行比较排序，最后将结果写入文件
  *
- * @author https://www.zifangsky.cn/163.html
+ * @author <a href="https://www.zifangsky.cn/163.html">...</a>
  */
 public class WordStatistics {
-    private BufferedReader bufferedReader = null;
-
-    private BufferedWriter bufferedWriter = null;
 
     /**
      * 从指定路径读取英文文章，并形成Map集合
      */
     public Map<String, Integer> readFile() {
         // 读文件
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         try {
-            bufferedReader = new BufferedReader(new FileReader(new File("F:\\text1.txt"))); // 文件路径可自定义
-            String line = "";
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("F:\\text1.txt")); // 文件路径可自定义
+            String line;
+
             while ((line = bufferedReader.readLine()) != null)
                 sb.append(line);
 
@@ -61,8 +59,7 @@ public class WordStatistics {
     public void sortAndWrite(Map<String, Integer> word_map) {
         // 排序
         List<Entry<String, Integer>> list = new ArrayList<>(word_map.entrySet());
-
-        Collections.sort(list, new Comparator<Entry<String, Integer>>() {
+        list.sort(new Comparator<Entry<String, Integer>>() {
             @Override
             public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
                 return o1.getValue().compareTo(o2.getValue());
@@ -71,10 +68,11 @@ public class WordStatistics {
 
         // 写入文件
         try {
-            bufferedWriter = new BufferedWriter(new FileWriter(new File("F:\\words.txt")));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("F:\\words.txt"));
             bufferedWriter.write("一共出现了 " + word_map.size() + " 个单词，每个单词和它出现的频率分别是：");
             bufferedWriter.flush();
             bufferedWriter.newLine();
+
             for (Entry<String, Integer> mapping : list) {
                 bufferedWriter.write(mapping.getKey() + " : " + mapping.getValue());
                 bufferedWriter.flush();

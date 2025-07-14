@@ -28,7 +28,11 @@ public class TestAlgorithm {
 
     @Test
     public void testWeightRandom() {
-        WeightRandom.Item[] items = new WeightRandom.Item[]{new WeightRandom.Item("A", 0.1), new WeightRandom.Item("B", 0.2), new WeightRandom.Item("C", 0.65), new WeightRandom.Item("D", 0.05),};
+        WeightRandom.Item[] items = new WeightRandom.Item[]{
+                new WeightRandom.Item("A", 0.1),
+                new WeightRandom.Item("B", 0.2),
+                new WeightRandom.Item("C", 0.65),
+                new WeightRandom.Item("D", 0.05),};
         WeightRandom weightRandom = new WeightRandom(items);
 
         for (int i = 0; i < 10; i++)

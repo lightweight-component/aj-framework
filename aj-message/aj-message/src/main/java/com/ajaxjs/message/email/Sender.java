@@ -10,9 +10,9 @@
  */
 package com.ajaxjs.message.email;
 
-
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.RegExpUtils;
+import com.ajaxjs.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -28,8 +28,7 @@ import java.util.Map;
 
 /**
  * 简易邮件发送器
- *
- * @author sp42 frank@ajaxjs.com
+ * 基于 SMTP 协议
  */
 @Slf4j
 public class Sender extends Socket {
@@ -86,6 +85,9 @@ public class Sender extends Socket {
             result = sendCommand(toBase64(bean.getAccount()));
             if (!isOkCode(result, 334))
                 throw new MailException("发信人名称发送失败：" + result, 334);
+
+            if(StrUtil.isEmptyText(bean.getPassword()))
+                log.warn("No password set for SMTP.");
 
             result = sendCommand(toBase64(bean.getPassword()));
             if (!isOkCode(result, 235))
