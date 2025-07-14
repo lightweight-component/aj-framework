@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>aj-spring</artifactId>
+    <name>aj-spring</name>
     <version>1.0</version>
     <packaging>jar</packaging>
 

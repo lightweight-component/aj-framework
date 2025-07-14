@@ -17,7 +17,7 @@
         <module>aj-message/aj-message-common</module>
         <module>aj-message/aj-message</module>
         <module>aj-sample-app</module>
-        <module>aj-dev-tools</module>
+<!--        <module>aj-dev-tools</module>-->
         <!--<module>aj-redis</module>-->
         <!--<module>aj-web</module>-->
     </modules>
