@@ -1,0 +1,36 @@
+package com.ajaxjs.devtools.mysqltools.tools;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+@Slf4j
+public class MysqlUtils {
+    /**
+     * 只能在 Linux 下执行
+     *
+     * @author <a href="https://github.com/535404515/MYSQL-TOMCAT-MONITOR/blob/master/nlpms-task-monitor/src/main/java/com/nuoli/mysqlprotect/timer/MysqlServiceJob.java">...</a>
+     */
+    public static String ping(String username, String password) {
+        Process p;
+
+        try {
+            p = new ProcessBuilder("mysqladmin", "-u" + username, "-p" + password, "ping").start();
+        } catch (IOException e) {
+            return "获取 mysql 是否停止异常";
+        }
+
+        byte[] b = new byte[1024];
+        int readBytes;
+        StringBuilder sb = new StringBuilder();
+
+        try (InputStream in = p.getInputStream()) {
+            while ((readBytes = in.read(b)) != -1) sb.append(new String(b, 0, readBytes));
+        } catch (IOException e) {
+            return "读取流异常";
+        }
+
+        return sb.toString();
+    }
+}

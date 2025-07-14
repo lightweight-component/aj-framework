@@ -1,5 +1,6 @@
 package com.ajaxjs.framework;
 
+import com.ajaxjs.util.StrUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -76,7 +77,7 @@ public class PrintBanner implements ApplicationRunner {
                     printStream.println(s2);
 
 
-                version = (version != null) ? " (v" + version + ")" : "";
+                version = (version != null) ? " (v" + version + ")" : StrUtil.EMPTY_STRING;
 
                 StringBuilder padding = new StringBuilder();
                 while (padding.length() < 24 - (version.length() + bannerName.length()))

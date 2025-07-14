@@ -17,6 +17,7 @@ public class TailLog extends BaseTail {
     public TailLog() {
         // 执行tail -f命令
         Process process;
+
         try {
             process = Runtime.getRuntime().exec("tail -f /var/log/syslog");
         } catch (IOException e) {
