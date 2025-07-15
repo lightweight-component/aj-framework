@@ -3,7 +3,7 @@ package com.ajaxjs.spring.mvc.unifiedreturn;
 //import com.ajaxjs.desensitize.DeSensitize;
 //import com.ajaxjs.desensitize.annotation.Desensitize;
 
-import com.ajaxjs.spring.DiContextUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -79,7 +79,10 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         else
             responseResult.setMessage(isOk ? OK : "操作失败");
 
-        responseResult.setData(body);
+        if (body instanceof ResponseResultWrapper)
+            BeanUtils.copyProperties(body, responseResult);
+        else
+            responseResult.setData(body);
 
         if (customReturnConverter != null)
             return customReturnConverter.convert(responseResult);
