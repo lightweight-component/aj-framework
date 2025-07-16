@@ -1,4 +1,6 @@
 @echo off
+chcp 65001 >nul
+title Git 一键推送 - UTF-8 模式
 setlocal enabledelayedexpansion
 
 REM 一键 Push 到所有 Remote
