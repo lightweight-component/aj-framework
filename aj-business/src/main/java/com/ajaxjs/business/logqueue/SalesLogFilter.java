@@ -6,8 +6,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Map;
 
 /**
  * 消息入队可以在任何需要保存日志的地方操作，如aop统一拦截日志处理，filter过滤请求日志处理，或者耦合的业务日志，记住，不阻塞入队操作，不然将影响正常的业务操作，如下为filter统一处理请求日志

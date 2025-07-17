@@ -12,8 +12,8 @@
 
 package com.ajaxjs.business.nlp;
 
-import com.ajaxjs.nlp.parsedoc.ReadDir;
-import com.ajaxjs.nlp.parsedoc.ReadFile;
+import com.ajaxjs.business.nlp.parsedoc.ReadDir;
+import com.ajaxjs.business.nlp.parsedoc.ReadFile;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
 import com.hankcs.hanlp.seg.common.Term;

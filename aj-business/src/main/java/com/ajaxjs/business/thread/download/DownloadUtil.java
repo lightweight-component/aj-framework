@@ -1,7 +1,6 @@
 package com.ajaxjs.business.thread.download;
 
 
-
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -127,7 +126,7 @@ public class DownloadUtil {
                 latch.await();
             }
         } catch (Exception e) {
-            log.warn("",e);
+            log.warn("", e);
         }
 
         log.info("Download resource map is all done");

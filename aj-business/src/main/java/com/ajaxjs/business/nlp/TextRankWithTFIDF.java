@@ -13,7 +13,6 @@
 package com.ajaxjs.business.nlp;
 
 
-
 import com.ajaxjs.business.nlp.parsedoc.ReadDir;
 import com.ajaxjs.business.nlp.parsedoc.ReadFile;
 

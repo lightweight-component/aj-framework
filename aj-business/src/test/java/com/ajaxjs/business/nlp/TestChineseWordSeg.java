@@ -3,7 +3,6 @@ package com.ajaxjs.business.nlp;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-
 import org.junit.jupiter.api.Test;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 

@@ -32,7 +32,7 @@ public class LoadBalance {
         Set<String> keySet = serverMap.keySet();
         ArrayList<String> keyList = new ArrayList<>(keySet);
 
-        String server ;
+        String server;
 
         synchronized (pos) {
             if (pos > keySet.size())

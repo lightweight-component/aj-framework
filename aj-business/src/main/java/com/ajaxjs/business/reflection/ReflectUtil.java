@@ -54,7 +54,8 @@ public class ReflectUtil {
     public static <T> T newInstance(Constructor<T> constructor, Object... args) {
         try {
             return constructor.newInstance(args); // 实例化
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException e) {
             log.warn("实例化对象失败：" + constructor.getDeclaringClass(), e);
             return null;
         }

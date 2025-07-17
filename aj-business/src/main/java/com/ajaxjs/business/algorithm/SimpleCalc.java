@@ -94,11 +94,11 @@ public class SimpleCalc {
     private static double cal(double rightNum, double leftNum, char c) {
         if (c == '+')
             return leftNum + rightNum;
-         else if (c == '-')
+        else if (c == '-')
             return leftNum - rightNum;
-         else if (c == '*')
+        else if (c == '*')
             return leftNum * rightNum;
-         else if (c == '/') {
+        else if (c == '/') {
             if (rightNum == 0)
                 throw new RuntimeException("除数不能为0");
             else

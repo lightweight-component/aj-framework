@@ -68,7 +68,7 @@ public class WeightRandom {
 
             if (rndValue.compareTo(medianValue) == 0)
                 break;
-             else if (rndValue.compareTo(medianValue) > 0) {
+            else if (rndValue.compareTo(medianValue) > 0) {
                 low = median;
                 median = (high + low) / 2;
             } else {

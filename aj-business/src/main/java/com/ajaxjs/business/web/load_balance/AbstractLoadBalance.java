@@ -2,10 +2,9 @@ package com.ajaxjs.business.web.load_balance;
 
 import lombok.Data;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Resource;
 
 
 /**

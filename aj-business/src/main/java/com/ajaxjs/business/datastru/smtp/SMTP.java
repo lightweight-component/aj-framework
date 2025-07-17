@@ -1,8 +1,5 @@
 package com.ajaxjs.business.datastru.smtp;
 
-import java.io.*;
-import java.net.*;
-
 public class SMTP extends Thread {
     private static final Queue queue = new Queue();
     private static int nowHave;
