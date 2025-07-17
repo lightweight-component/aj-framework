@@ -37,6 +37,19 @@
             <systemPath>${basedir}/jar/IKAnalyzer2012.jar</systemPath> <!--项目根目录下的lib文件夹下，也可以是本机其它目录的绝对路径-->
         </dependency>
 
+        <!--NLP-->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.7.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
         <!-- 编译为 jar 包时依赖的 -->
         <dependency>
             <groupId>javax.servlet</groupId>
