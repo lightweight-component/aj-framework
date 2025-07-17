@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
@@ -90,6 +91,18 @@ public class DiContextUtil implements ApplicationContextAware {
             return context.getBean(beanName);
         } catch (NoSuchBeanDefinitionException e) {
             log.warn("No such bean {}.", beanName);
+            return null;
+        }
+    }
+
+    public static <T> T getBean(HttpServletRequest request, Class<T> clazz) {
+        ApplicationContext cxt = WebApplicationContextUtils.getWebApplicationContext(request.getServletContext());
+
+        try {
+            return cxt == null ? null : cxt.getBean(clazz);
+        } catch (NoSuchBeanDefinitionException e) {
+            log.warn("No such bean of class {}.", clazz);
+
             return null;
         }
     }
