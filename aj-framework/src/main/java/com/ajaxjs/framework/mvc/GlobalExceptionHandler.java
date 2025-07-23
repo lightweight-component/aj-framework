@@ -20,7 +20,7 @@ import java.io.IOException;
  * 统一异常处理
  */
 @Slf4j
-@Component
+//@Component
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
     /**
      * Let other knows there is an exception.
@@ -30,6 +30,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse resp, Object handler, Exception ex) {
         log.warn("ERROR>>", ex);
+        System.out.println("resp.isCommitted():" + resp.isCommitted());
 
         Throwable _ex = ex.getCause() != null ? ex.getCause() : ex;
         String msg = _ex.getMessage();
@@ -74,7 +75,11 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
             log.warn("ERROR>>", e);
         }
 
-        return new ModelAndView();
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("error"); // 确保视图名有效
+        mav.addObject("errorMessage", ex.getMessage());
+
+        return mav;
     }
 
     /**
