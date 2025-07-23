@@ -14,7 +14,7 @@
 
 <body>
     <h1>初始化一个项目</h1>
-    <p>你可以直接依赖 AJ 的 Maven（参见<a href="../install.html">《安装》</a>），不过更推荐通过父 pom.xml 依赖方式整合，包含 MySQL 驱动、Tomcat、Spring 等的依赖。
+    <p>你可以直接依赖 AJ 的 Maven（参见<a href="install.html">《安装》</a>），不过更推荐通过父 pom.xml 依赖方式整合，包含 MySQL 驱动、Tomcat、Spring 等的依赖。
         如下是一个 pom.xml 的例子，使用了 aj-common-parent 的 <code>1.7</code>
         版本。整个工程的结构跟普通的 Spring Boot
         一样，都是<code>main()</code>函数启动。你需要在节点<code>project.mainClass</code>指定项目主类运行入口，也就是<code>main()</code>函数所在的类。
@@ -62,7 +62,7 @@ server:
     context-path: /iam  # 项目名，如果不设定，默认是 /
     localFileUpload: false # 是否支持本地文件上传</pre>
     <p>代码结构按照惯常开发的模式即可。必须要有启动类和相关的配置类。</p>
-    <img src="../../imgs/api/3.jpg" />
+    <img src="../imgs/api/3.jpg" />
 
     <p><code>main()</code>函数内的<code>start()</code>必须传入配置类参数；指定<code>@ComponentScan</code>扫描包的范围。</p>
     <pre class="code java-code">import com.ajaxjs.embeded_tomcat.EmbeddedTomcatStarter;
@@ -133,9 +133,9 @@ public class FooApplication extends BaseWebMvcConfigure {
     <p>在实际使用环境中，我们同一个应用环境可能需要在不同环境运行（开发、测试、生产等），每个环境的参数都有可能不同（连接参数、日志级别等），使用 profiles 可以将不同环境下的参数进行拆分，并指定加载。</p>
 
     <p>IDEA 配置，在 src 目录下创建 profiles 目录，安排如下图的配置文件。</p>
-    <img src="../../imgs/api/1.png" />
+    <img src="../imgs/api/1.png" />
     <p>要选择哪个 profile，在 IDEA 里面选 Maven Profile 打勾即可。</p>
-    <img src="../../imgs/api/2.png" />
+    <img src="../imgs/api/2.png" />
 </body>
 
 </html>
