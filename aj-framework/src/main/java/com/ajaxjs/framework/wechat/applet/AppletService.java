@@ -4,7 +4,7 @@ import com.ajaxjs.framework.wechat.applet.model.Code2SessionResult;
 import com.ajaxjs.util.http_request.Get;
 import com.ajaxjs.util.http_request.Post;
 import lombok.extern.slf4j.Slf4j;
-import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;

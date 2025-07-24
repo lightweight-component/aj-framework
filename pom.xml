@@ -10,7 +10,6 @@
     <modules>
         <module>pom/common-project-parent</module>
         <module>pom/opensource-parent</module>
-        <module>aj-spring</module>
         <module>aj-framework</module>
         <module>aj-base</module>
         <module>aj-business</module>

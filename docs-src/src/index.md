@@ -11,7 +11,7 @@ layout: layouts/aj-docs.njk
 # AJ Framework 简介
 
 一个基于 SpringBoot 的轻量级框架，旨在增强 SpringBoot 特性。它拥有许多小型组件，非常易于使用。
-
+它与 SpringBoot 深度绑定，尽量复用 Spring 的组件。如不能满足需求，自行开发的组件也默认是 Spring 组件，写成 Spring Starter 的方式耦合。
 ## Source Code
 
 Under GNU GENERAL PUBLIC LICENSE v3.0.

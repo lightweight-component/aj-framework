@@ -1,6 +1,7 @@
 package com.ajaxjs.framework;
 
 import com.ajaxjs.framework.database.DataBaseConnection;
+import com.ajaxjs.framework.mvc.filter.RequestLogger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,6 +23,8 @@ public class AutoConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RequestLogger()).order(0);
+
         if (!disableAutoConnect)
             registry.addInterceptor(new DataBaseConnection());
     }

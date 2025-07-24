@@ -2,7 +2,7 @@ package com.ajaxjs.base.service.watchlog;
 
 
 import com.ajaxjs.base.service.watchlog.impl.ReadFile;
-import com.ajaxjs.spring.mvc.unifiedreturn.IgnoredGlobalReturn;
+import com.ajaxjs.framework.mvc.unifiedreturn.IgnoredGlobalReturn;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

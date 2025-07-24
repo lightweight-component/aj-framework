@@ -21,8 +21,7 @@ layout: layouts/aj-docs.njk
 
 可以通过 Maven 插件一键部署到 SSH 服务器。在 `pom.xml` 中添加 `build` 节点并修改相关配置。
 
-具体参阅：  
-↗ [Maven 一键部署到 SSH 服务器](https://blog.csdn.net/zhangxin09/article/details/132456075)
+具体参阅： ↗ [Maven 一键部署到 SSH 服务器](https://blog.csdn.net/zhangxin09/article/details/132456075)
 
 ```xml
 <build>
