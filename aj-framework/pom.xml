@@ -16,6 +16,17 @@
     <packaging>jar</packaging>
     <description>Lightweight Java Web Framework</description>
 
+    <url>https://aj-docs.ajaxjs.com/</url>
+    <scm>
+        <url>https://github.com/lightweight-component/aj-framework</url>
+        <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
+    </scm>
+
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/lightweight-component/aj-framework/issues</url>
+    </issueManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.ajaxjs</groupId>
@@ -46,6 +57,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
 
     </dependencies>

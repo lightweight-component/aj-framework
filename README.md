@@ -1,4 +1,26 @@
+[![Maven Central](https://img.shields.io/maven-central/v/com.ajaxjs/ajaxjs-framework?label=Latest%20Release)](https://central.sonatype.com/artifact/com.ajaxjs/ajaxjs-framework)
+![Java Version](https://img.shields.io/badge/Java-8-blue)
+[![Javadoc](https://img.shields.io/badge/javadoc-1.0-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/ajaxjs-framework )
+![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?maxAge=2592000)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lightweight-component/aj-framework)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
+[![中文](https://img.shields.io/badge/lang-中文-red)](./README.zh-CN.md)
+
 # AJ-Framework Global Readme
+
+What we have done for AJAXJS framework are:
+
+- Logback and Slf4j
+- Jackson JSON parser/Global JSON Response Data
+- Unified Exception Handler
+- Unified Controller Interceptor for better logging
+- A Spring Ioc Helper/A PrintBanner for logging startup time
+- A Cache system
+- Server-side form validation
+- Database Auto Connection for all HTTP connections, based on Tomcat JDBC Connection Pool
+- Base Model and Page Model
+
 
 A Web Framework for Spring Boot has these features:
 
@@ -10,29 +32,8 @@ A Web Framework for Spring Boot has these features:
 
 ## Tech stack
 
-- JDK8/Tomcat 9/Spring Boot 2.7/JPA
+- JDK8/Tomcat 9/Spring Boot 2.7
 - Spring-native build with GraalVM
-
-# Core Library
-
-Core Library is Core Library.
-
-# Components
-
-| Name                                                  | Detail                         |
-|-------------------------------------------------------|--------------------------------|
-| [aj-json](/components/aj-json)                        | Small JSON parser & serializer |
-| [aj-net](/components/aj-net)                          | Small HTTP Request Component   |
-| [aj-ftp](/components/aj-ftp)                          | A Lightweight FTP Client       |
-| [aj-qrcode](/components/aj-qrcode)                    | QR Code Generator              |
-| [aj-s3client](/components/aj-s3client)                | A Lightweight S3 Client        |
-| [aj-web](/components/aj-web)                          | Classic Java Website in JSP    |
-| [Delayed Task Queue](/components/aj-delayedtaskqueue) | Delayed Task Queue             |
-| [Desensitize](/components/aj-desensitize)             | Data Desensitize               |
-| [Monitor](/components/aj-monitor)                     | Spring Monitor                 |
-| [Trace](/components/aj-trace)                         | Trace                          |
-
-
 
 
 

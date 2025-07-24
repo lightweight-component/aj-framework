@@ -87,4 +87,8 @@ public class PrintBanner implements ApplicationRunner {
             }
         }
     }
+
+    public static void showOk(String app) {
+        System.out.println("\u001B[32m======================================(♥◠‿◠)ﾉﾞ【" + app + " 启动成功】ლ(´ڡ`ლ)ﾞ==============================================\u001B[0m"); // 绿色文本
+    }
 }

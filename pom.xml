@@ -12,7 +12,7 @@
         <module>pom/opensource-parent</module>
         <module>aj-framework</module>
         <module>aj-base</module>
-        <module>aj-business</module>
+       <!-- <module>aj-business</module>-->
         <module>aj-message/aj-message-common</module>
         <module>aj-message/aj-message</module>
         <module>aj-sample-app</module>
