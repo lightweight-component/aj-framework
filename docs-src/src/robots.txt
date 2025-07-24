@@ -1,0 +1,4 @@
+Sitemap: https://aj-docs.ajaxjs.com/sitemap.xml
+
+User-agent: *
+Disallow:

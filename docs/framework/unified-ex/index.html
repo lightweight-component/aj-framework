@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Framework-Contact Us</title>
+        <title>AJ Framework-统一异常</title>
         <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
         <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -84,27 +84,64 @@
                 </ul>
             </menu>
             <article>
-                <p><h1>联系</h1>
-作者： Frank Cheung
-<br />
-<br />
-Email：<a href="mailto:support@ajaxjs.com">support@ajaxjs.com</a>
-<br />
-<br />
-作者 Blog：<a href="https://blog.csdn.net/zhangxin09">https://blog.csdn.net/zhangxin09</a>
-<br />
-<br />
-QQ 群：<a target="_blank"
-        href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">3150067</a>
-<br />
-<br />
-💬 微信群，扫描二维码加好友，说明：加群<br />
-<br />
-<img src="/asset/docs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
-<br />
-<br />
-微信公众号：<br />
-<img src="/asset/docs/contact/qrcode_gzh.jpg" /></p>
+                <h1>统一异常处理</h1>
+<h2>使用全局异常处理器</h2>
+<p>有些小伙伴，经常喜欢在 Controller、Service 代码中捕获异常。不管是普通异常 Exception，还是运行时异常 RuntimeException，都使用<code>try/catch</code>把它们捕获。
+反例：</p>
+<pre><code class="language-java">try {
+    checkParam(param);
+} catch (BusinessException e) {
+    return ApiResultUtil.error(1,&quot;参数错误&quot;);
+}
+</code></pre>
+<p>显然这种做法会造成大量重复的代码。我们在 Controller、Service 等业务代码中，尽可能少捕获异常。这种业务异常处理，应该交给拦截器统一处理。有了这个全局的异常处理器，之前我们在 Controller 或者 Service 中的<code>try/catch</code>代码可以去掉。</p>
+<p>如果在接口中出现异常，全局的异常处理器<code>HandlerExceptionResolver</code>会帮我们封装结果，返回给用户。具体实现请看<span class="external-link">
+<span>↗</span>
+</span><a href="https://gitcode.com/zhangxin09/aj-framework/blob/master/aj-framework/src/main/java/com/ajaxjs/springboot/GlobalExceptionHandler.java"><code>GlobalExceptionHandler</code></a>，非常简单。所有异常到跑到这里来打印，根据具体的异常返回特定的 HTTP Status Code，比如 <code>SecurityException</code>、<code>IllegalAccessError</code>、<code>IllegalAccessException</code> 返回 403。</p>
+<h2>优先使用标准异常</h2>
+<p>在 Java 中已经定义了许多比较常用的标准异常，比如下面这张图中列出的这些异常。</p>
+<ul>
+<li><code>IllegalArgumentException</code> 入参不合法</li>
+<li><code>IllegalStateException</code> 入参的状态不合法</li>
+<li><code>UnsupportedOperationException</code> 不支持的操作</li>
+<li><code>SecurityException</code> 安全异常 返回 401/403</li>
+<li><code>NullPointerException</code> 空指针异常 返回 500</li>
+</ul>
+<p>反例：</p>
+<pre><code class="language-java">public void checkValue(int value) {
+    if (value &lt; 0) {
+        throw new MyIllegalArgumentException(&quot;值不能为负&quot;);
+    }
+}
+</code></pre>
+<p>自定义了一个异常表示参数错误。其实我们可以直接复用已有的标准异常。</p>
+<p>正例：</p>
+<pre><code class="language-java">public void checkValue(int value) {
+    if (value &lt; 0) {
+        throw new IllegalArgumentException(&quot;值不能为负&quot;);
+    }
+}
+</code></pre>
+<h2>尽可能捕获具体异常</h2>
+<p>在你的业务逻辑方法中，有可能需要去处理多种不同的异常。 你可能你会觉得比较麻烦，而直接捕获<code>Exception</code>。</p>
+<p>反例：</p>
+<pre><code class="language-java">try {
+    doSomething();
+} catch(Exception e) {
+    log.error(&quot;doSomething处理失败，原因：&quot;,e);
+}
+</code></pre>
+<p>这样捕获异常太笼统了。 其实<code>doSomething</code>方法中，会抛出<code>FileNotFoundException</code>和<code>IOException</code>。 这种情况我们最好捕获具体的异常，然后分别做处理。</p>
+<p>正例：</p>
+<pre><code class="language-java">try {
+   doSomething();
+} catch(FileNotFoundException e) {
+  log.error(&quot;doSomething处理失败，文件找不到，原因：&quot;,e);
+} catch(IOException e) {
+  log.error(&quot;doSomething处理失败，IO出现了异常，原因：&quot;,e);
+}
+</code></pre>
+<p>这样如果后面出现了上面的异常，我们就非常方便知道是什么原因了。</p>
 
             </article>
         </div>

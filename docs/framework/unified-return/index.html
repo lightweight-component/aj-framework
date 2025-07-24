@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Framework-Contact Us</title>
+        <title>AJ Framework-统一返回结果</title>
         <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
         <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -84,27 +84,52 @@
                 </ul>
             </menu>
             <article>
-                <p><h1>联系</h1>
-作者： Frank Cheung
-<br />
-<br />
-Email：<a href="mailto:support@ajaxjs.com">support@ajaxjs.com</a>
-<br />
-<br />
-作者 Blog：<a href="https://blog.csdn.net/zhangxin09">https://blog.csdn.net/zhangxin09</a>
-<br />
-<br />
-QQ 群：<a target="_blank"
-        href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">3150067</a>
-<br />
-<br />
-💬 微信群，扫描二维码加好友，说明：加群<br />
-<br />
-<img src="/asset/docs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
-<br />
-<br />
-微信公众号：<br />
-<img src="/asset/docs/contact/qrcode_gzh.jpg" /></p>
+                <h1>统一返回结果</h1>
+<p>开发 REST API 接口时往往需要和前端对接定义返回的数据结构，例如返回下面 JSON 格式的数据。</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;code&quot;: null,
+  &quot;msg&quot;: &quot;操作成功!&quot;,
+  &quot;data&quot;: 具体的数据
+}
+</code></pre>
+<p>Java 控制器中一般都一个统一返回对象，例如 Spring 自带的<code>ResponseEntity&lt;T&gt;</code>，其中泛型<code>T</code>是具体返回的数据类型。
+但是每个控制器方法都返回这个实体，略显有点啰嗦，那么直接返回数据但又是统一结构的——那行不行？也就是写成这样：</p>
+<pre><code class="language-java">@PostMapping(&quot;/submit&quot;)
+boolean jsonSubmit(@RequestBody User user);
+
+@GetMapping(&quot;/user&quot;)
+User User();
+
+@GetMapping(&quot;/user_desensitize&quot;)
+User UserDesensitize();
+</code></pre>
+<p>其实可以的——这样代码显示更清爽，减少心智。我们整理一下有哪些情况：</p>
+<ul>
+<li>如果控制器方法返回的类型是<code>ResponseEntity&lt;T&gt;</code>，那么好，很简单，直接处理返回这个对象；</li>
+<li>如果控制器方法没有返回 <code>ResponseEntity&lt;T&gt;</code>，则最终统一返回机制会自动加上。于是你的控制器返回的类型可以直接是 String/int/long/boolean/void/Object/Map/List/Array 等任意类型，当然也包括 Java Bean（POJO）（上述的例子）；</li>
+<li>如果控制器方法返回的对象实现了接口<code>IUnifiedReturn</code>，那么表示这是一个自定义的返回对象，那么也简单，直接处理返回这个对象。这种适合比较特殊的返回结构，数量不是很多的</li>
+<li>如果数量太多，希望是全局自定义返回对象的，我们也允许。同时可以达到类似第二点的效果，即忽略声明容器类，统一返回机制会自动加上。</li>
+</ul>
+<p>下面我们逐个实现。</p>
+<h2>隐式返回</h2>
+<p>框架的<code>ResponseResultWrapper</code>即是统一返回结果封装类。如下控制器写法自动返回。</p>
+<pre><code class="language-java">@PostMapping(&quot;/submit&quot;)
+boolean jsonSubmit(@RequestBody User user);
+
+@GetMapping(&quot;/user&quot;)
+User User();
+
+@GetMapping(&quot;/user_desensitize&quot;)
+User UserDesensitize();
+</code></pre>
+<p>框架提供两个特别的注解：</p>
+<ul>
+<li><code>@IgnoredGlobalReturn</code> 忽略全局返回，直接返回业务对象</li>
+<li><code>@JsonMessage</code> 返回 JSON 结构时候，自定义 message 内容</li>
+</ul>
+<h2>自定义返回对象</h2>
+<p>TODO</p>
 
             </article>
         </div>

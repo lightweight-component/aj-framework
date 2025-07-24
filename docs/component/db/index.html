@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Framework-Contact Us</title>
+        <title>AJ Framework-数据库访问</title>
         <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
         <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -84,27 +84,21 @@
                 </ul>
             </menu>
             <article>
-                <p><h1>联系</h1>
-作者： Frank Cheung
-<br />
-<br />
-Email：<a href="mailto:support@ajaxjs.com">support@ajaxjs.com</a>
-<br />
-<br />
-作者 Blog：<a href="https://blog.csdn.net/zhangxin09">https://blog.csdn.net/zhangxin09</a>
-<br />
-<br />
-QQ 群：<a target="_blank"
-        href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">3150067</a>
-<br />
-<br />
-💬 微信群，扫描二维码加好友，说明：加群<br />
-<br />
-<img src="/asset/docs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
-<br />
-<br />
-微信公众号：<br />
-<img src="/asset/docs/contact/qrcode_gzh.jpg" /></p>
+                <h1>数据库访问</h1>
+<p>几乎每个 Web 应用程序都要访问数据库，相当多的日常工作亦是围绕着数据库 CRUD 进行。
+许多 Web 框架都有针对数据访问提出自己的解决方案，要么整合 MyBatis/JPA 这类 ORM 或 半 ORM 的框架，要么自研一个 ORM——AJ Framework 倾向于后者。
+但我们更希望实现轻量级的 JDBC 封装与普通 SQL 增强，于是便有了一个名为 SqlMan 的数据库访问组件。
+SqlMan 提供便捷的数据访问，首先是类似 Spring JDBCTemplate 的 CRUD 功能，轻松将 SQL 数据库数据获取到 Java Bean 或 Map/List 中。
+然后在此基础上提供类似 MyBatis 的 XML 管理 SQL。SqlMan 建议使用经典方式编写原生 SQL 以满足更复杂的业务逻辑。</p>
+<p>故而整个数据库操作的内容便交给 SqlMan 处理了，本文就不作过多介绍，大家可以到 SqlMan 官网了解更多 <a href="https://sqlman.ajaxjs.com">sqlman.ajaxjs.com</a>。</p>
+<h3>数据服务组件</h3>
+<p>数据服务（DataService）的作用是，只需写 SQL 业务逻辑（甚至零代码不写！），即可快速搭建 CRUD 接口服务
+——最简单的方式：零代码，在页面上配置好参数，自动生成 SQL 并且直接转化成 HTTP API。大家可以到 DataService 官网了解更多 <a href="https://dataservice.ajaxjs.com/cn">dataservice.ajaxjs.com</a>。</p>
+<p><img src="https://dataservice.ajaxjs.com/asset/imgs/ds.jpg" alt=""></p>
+<h2>配置数据库连接</h2>
+<p>TODO</p>
+<h2>全局的数据库连接</h2>
+<p>一般情况下，每个控制器都会产生数据库连接，因为默认每个接口所对应的方法都会涉及数据库操作。这是由框架对 Spring 的<code>HandlerInterceptor</code>拦截器默认全局配置的。但是你的控制器方法如果无须数据库连接，可以添加一个注解<code>@IgnoreDataBaseConnect</code>忽略数据库连接，减少资源消耗。</p>
 
             </article>
         </div>

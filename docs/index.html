@@ -11,7 +11,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
-        <link rel="stylesheet" href="/style/docs/main.css"/>
+        <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
         <script src="/asset/common.js"></script>
     </head>
@@ -19,11 +19,11 @@
         <nav>
             <div>
                 <div class="links">
-                    <a href="/">🏠 Home</a>
-                    | ⚙️ Source:
+                    <a href="/">🏠 首页</a>
+                    | ⚙️ 源码:
                     <a target="_blank" href="https://github.com/lightweight-component/aj-framework">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-framework">Gitcode</a>
                     |
-                    <a href="/common/contact">✉️ Contact</a>
+                    <a href="/common/contact">✉️ 联系</a>
                 </div>
                 <h1>
                     <img src="/asset/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> 
@@ -40,65 +40,53 @@
                     <li class="selected">
                         <a href="/">首页</a>
                     </li>
-                    <li>
-                        <a href="/quick-start">快速开始</a>
-                    </li>
                 </ul>
-                <h3>开始</h3>
+                <h3>框架基本用法</h3>
                 <ul>
                     <li>
-                        <a href="pages/api/init.html">初始化一个项目</a>
+                        <a href="/framework/init">初始化一个项目</a>
                     </li>
                     <li>
-                        <a href="/init/controller">简化控制器为接口</a>
+                        <a href="/framework/controller">简化控制器为接口</a>
                     </li>
                     <li>
-                        <a href="/init/global">统一返回、统一异常</a>
+                        <a href="/framework/unified-return">统一对象返回</a>
                     </li>
                     <li>
-                        <a href="pages/api/package.html">打包与部署</a>
+                        <a href="/framework/unified-ex">统一异常处理</a>
+                    </li>
+                    <li>
+                        <a href="/framework/package">打包与部署</a>
                     </li>
                 </ul>
-                <h3>API 功能</h3>
+                <h3>常用组件</h3>
                 <ul>
-                    <li class="data">
-                        <a href="/api/api-limit/">API 限流</a>
+                    <li>
+                        <a href="/component/db">数据库访问</a>
                     </li>
                     <li>
-                        <a href="/api/api-encode/">API 加密/解密</a>
+                        <a href="/component/bean-validator/">Bean 实体校验</a>
                     </li>
                     <li>
-                        <a href="/api/api-security/">API 安全</a>
+                        <a href="/component/security">安全组件、用户系统</a>
                     </li>
                     <li>
-                        <a href="/api/bean-validator/">Bean 实体校验</a>
+                        <a href="/component/lite-c/">使用简单本地缓存</a>
                     </li>
+                  <li>
+                       <a href="/component/cache/">使用多级缓存</a>
+                   </li>
                 </ul>
-                <h3>其他模块</h3>
+
+                <h3>其他</h3>
                 <ul>
-                    <li>
-                        <a href="/misc/cache">使用多级缓存</a>
-                    </li>
-                    <li>
-                        <a href="/misc/desensitize">脱敏组件</a>
-                    </li>
-                    <li>
-                        <a href="/misc/trace">链路跟踪</a>
-                    </li>
-                    <li>
-                        <a href="/misc/dlock">分布式锁、延迟消息</a>
-                    </li>
-                </ul>
-    
-                <h3>Misc</h3>
-                <ul>
-                    <li><a href="/common/versions">Release History</a></li>
-                    <li><a href="/common/contact">Contact</a></li>
+                    <li><a href="/common/contact">联系</a></li>
                 </ul>
             </menu>
             <article>
                 <h1>AJ Framework 简介</h1>
-<p>一个基于 SpringBoot 的轻量级框架，旨在增强 SpringBoot 特性。它拥有许多小型组件，非常易于使用。</p>
+<p>一个基于 SpringBoot 的轻量级框架，旨在增强 SpringBoot 特性。它拥有许多小型组件，非常易于使用。
+它与 SpringBoot 深度绑定，尽量复用 Spring 的组件。如不能满足需求，自行开发的组件也默认是 Spring 组件，写成 Spring Starter 的方式耦合。</p>
 <h2>Source Code</h2>
 <p>Under GNU GENERAL PUBLIC LICENSE v3.0.</p>
 <ul>
@@ -111,12 +99,6 @@
             </article>
         </div>
 
-        <footer>
-    SqlMan, a part of <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> open source. Mail:
-    frank@ajaxjs.com, visit <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>.
-    <br />
-    <br />
-     Copyright © 2025 Frank Cheung. All rights reserved.
-</footer>
+
     </body>
 </html>

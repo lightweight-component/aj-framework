@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Framework-Contact Us</title>
+        <title>AJ Framework-打包与部署</title>
         <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
         <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -84,27 +84,52 @@
                 </ul>
             </menu>
             <article>
-                <p><h1>联系</h1>
-作者： Frank Cheung
-<br />
-<br />
-Email：<a href="mailto:support@ajaxjs.com">support@ajaxjs.com</a>
-<br />
-<br />
-作者 Blog：<a href="https://blog.csdn.net/zhangxin09">https://blog.csdn.net/zhangxin09</a>
-<br />
-<br />
-QQ 群：<a target="_blank"
-        href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">3150067</a>
-<br />
-<br />
-💬 微信群，扫描二维码加好友，说明：加群<br />
-<br />
-<img src="/asset/docs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
-<br />
-<br />
-微信公众号：<br />
-<img src="/asset/docs/contact/qrcode_gzh.jpg" /></p>
+                <h1>打包与部署</h1>
+<h2>打包</h2>
+<p>最终打包为 JAR 包。执行 Maven <code>package</code> 命令即可。</p>
+<blockquote>
+<p>⚠️ 注意：依赖包会拷贝到 <code>lib</code> 目录，而不是打包成一个巨大的 Fat Jar。相关插件已在 <code>aj-common-parent</code> 中集成。</p>
+</blockquote>
+<h2>一键部署</h2>
+<p>可以通过 Maven 插件一键部署到 SSH 服务器。在 <code>pom.xml</code> 中添加 <code>build</code> 节点并修改相关配置。</p>
+<p>具体参阅： ↗ <a href="https://blog.csdn.net/zhangxin09/article/details/132456075">Maven 一键部署到 SSH 服务器</a></p>
+<pre><code class="language-xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;!-- 一键部署到服务器 SSH --&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+            &lt;artifactId&gt;wagon-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;2.0.2&lt;/version&gt;
+
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;id&gt;upload-deploy&lt;/id&gt;
+                    &lt;!-- 运行 package 打包的同时运行 upload-single 和 sshexec --&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;upload-single&lt;/goal&gt;
+                        &lt;goal&gt;sshexec&lt;/goal&gt;
+                    &lt;/goals&gt;
+                    &lt;configuration&gt;
+                        &lt;!-- 指定 SSH 账号 --&gt;
+                        &lt;serverId&gt;high.ajaxjs.com&lt;/serverId&gt;
+                        &lt;!-- 要更新的 jar 包 --&gt;
+                        &lt;fromFile&gt;target/aj-iam-server.jar&lt;/fromFile&gt;
+                        &lt;!-- 服务器部署位置 --&gt;
+                        &lt;url&gt;${ssh.url.iam}&lt;/url&gt;
+                        &lt;!-- 重启脚本：先切换目录，才能正确执行脚本 --&gt;
+                        &lt;commands&gt;
+                            &lt;command&gt;cd /home/service/aj-iam; ./startup.sh&lt;/command&gt;
+                        &lt;/commands&gt;
+                        &lt;!-- 显示运行命令的输出结果 --&gt;
+                        &lt;displayCommandOutputs&gt;true&lt;/displayCommandOutputs&gt;
+                    &lt;/configuration&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
 
             </article>
         </div>
