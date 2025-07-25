@@ -62,7 +62,7 @@ public class UserController extends BaseOidcClientUserController {
     }
 
     @Override
-    public JwtAccessToken onAccessTokenGot(JwtAccessToken token, HttpSession session) {
+    public JwtAccessToken onAccessTokenGot(JwtAccessToken token, HttpServletResponse resp, HttpSession session) {
         String idToken = token.getId_token();
         JWebTokenMgr mgr = jWebTokenMgr();
         JWebToken jwt = mgr.parse(idToken);

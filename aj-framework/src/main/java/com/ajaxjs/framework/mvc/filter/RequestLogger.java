@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * 全局的控制器拦截器
  * 记录请求入参和执行时间统计
+ * 可以参考 Spring 的 CommonsRequestLoggingFilter
  */
 @Slf4j
 public class RequestLogger implements HandlerInterceptor {
