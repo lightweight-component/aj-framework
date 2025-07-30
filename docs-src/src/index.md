@@ -21,4 +21,4 @@ Under GNU GENERAL PUBLIC LICENSE v3.0.
 
 ## Links
 
-[Website](https://framework.ajaxjs.com) | [Documents](https://aj-docs.ajaxjs.com/)  | [JavaDoc](https://github.com/lightweight-component/SqlMan)
+[Website](https://framework.ajaxjs.com) | [Documents](https://aj-docs.ajaxjs.com/)  | [JavaDoc](https://javadoc.io/doc/com.ajaxjs/ajaxjs-framework)
