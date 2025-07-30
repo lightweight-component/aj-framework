@@ -28,6 +28,7 @@ public class AutoConfiguration implements WebMvcConfigurer {
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        // TODO 能否设置 TimeZone.getTimeZone("Asia/Shanghai")，因为有时 GMT+8 是当时时区+8
         return builder -> builder.timeZone("GMT+8");
     }
 

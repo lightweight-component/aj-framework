@@ -14,6 +14,15 @@
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
         <script src="/asset/common.js"></script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?a3dec1d9b9415edd86b54c1fb3d02f19";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
     </head>
     <body>
         <nav>
@@ -86,23 +95,53 @@
             <article>
                 <h1>数据库访问</h1>
 <p>几乎每个 Web 应用程序都要访问数据库，相当多的日常工作亦是围绕着数据库 CRUD 进行。
-许多 Web 框架都有针对数据访问提出自己的解决方案，要么整合 MyBatis/JPA 这类 ORM 或 半 ORM 的框架，要么自研一个 ORM——AJ Framework 倾向于后者。
+许多 Web 框架都有针对数据访问提出自己的解决方案，要么整合 MyBatis/JPA 这类 ORM 或 半 ORM 的框架，要么自研一个 ORM——AJ
+Framework 倾向于后者。
 但我们更希望实现轻量级的 JDBC 封装与普通 SQL 增强，于是便有了一个名为 SqlMan 的数据库访问组件。
-SqlMan 提供便捷的数据访问，首先是类似 Spring JDBCTemplate 的 CRUD 功能，轻松将 SQL 数据库数据获取到 Java Bean 或 Map/List 中。
+SqlMan 提供便捷的数据访问，首先是类似 Spring JDBCTemplate 的 CRUD 功能，轻松将 SQL 数据库数据获取到 Java Bean 或 Map/List
+中。
 然后在此基础上提供类似 MyBatis 的 XML 管理 SQL。SqlMan 建议使用经典方式编写原生 SQL 以满足更复杂的业务逻辑。</p>
-<p>故而整个数据库操作的内容便交给 SqlMan 处理了，本文就不作过多介绍，大家可以到 SqlMan 官网了解更多 <a href="https://sqlman.ajaxjs.com">sqlman.ajaxjs.com</a>。</p>
+<p>故而整个数据库操作的内容便交给 SqlMan 处理了，本文就不作过多介绍，大家可以到 SqlMan
+官网了解更多 <a href="https://sqlman.ajaxjs.com">sqlman.ajaxjs.com</a>。</p>
 <h3>数据服务组件</h3>
 <p>数据服务（DataService）的作用是，只需写 SQL 业务逻辑（甚至零代码不写！），即可快速搭建 CRUD 接口服务
-——最简单的方式：零代码，在页面上配置好参数，自动生成 SQL 并且直接转化成 HTTP API。大家可以到 DataService 官网了解更多 <a href="https://dataservice.ajaxjs.com/cn">dataservice.ajaxjs.com</a>。</p>
+——最简单的方式：零代码，在页面上配置好参数，自动生成 SQL 并且直接转化成 HTTP API。大家可以到 DataService
+官网了解更多 <a href="https://dataservice.ajaxjs.com/cn">dataservice.ajaxjs.com</a>。</p>
 <p><img src="https://dataservice.ajaxjs.com/asset/imgs/ds.jpg" alt=""></p>
 <h2>配置数据库连接</h2>
-<p>TODO</p>
+<h3>创建数据源 DataSource</h3>
+<p>JDBC 标准数据源 DataSource，一个项目至少有一个这个的数据源来完成数据库的连接。可以维护多个 DataSource 数据源。</p>
+<p>使用数据源的好处：</p>
+<ul>
+<li>标准 JDBC 对象，不是直接创建 JDBC Connection，而是从 DataSource 上获取 Connection 对象</li>
+<li>只要是 DataSource 则已经是带池化的数据源，线程安全，且自动管理连接的关闭。且隐藏了后面连接池的细节</li>
+<li>当前 AJ Framework 默认使用 Tomcat JDBC Connection Pool 数据源，可配置其他数据源</li>
+</ul>
+<h4>配置数据库连接</h4>
+<p>接入了 AJ Framework 包，则自动读取数据库连接的相关配置，自动创建 DataSource，无须手动编码。</p>
+<p>在 yaml 中配置：</p>
+<pre><code class="language-yaml"># 数据库连接
+db:
+    url: jdbc:mysql://xxxx:3306/foo?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Asia/Shanghai
+    user: root
+    psw: xxxxxxxxxxx
+</code></pre>
+<h4>禁止自动创建数据源</h4>
+<p>接入了 AJ Framework 包，则通过 Spring Starter 自定加载 DataSource。如果想禁止改特性，可以 yaml 中配置：
+<code>db.isDisableAutoConnect: true</code> 即可。</p>
 <h2>全局的数据库连接</h2>
-<p>一般情况下，每个控制器都会产生数据库连接，因为默认每个接口所对应的方法都会涉及数据库操作。这是由框架对 Spring 的<code>HandlerInterceptor</code>拦截器默认全局配置的。但是你的控制器方法如果无须数据库连接，可以添加一个注解<code>@IgnoreDataBaseConnect</code>忽略数据库连接，减少资源消耗。</p>
+<p>一般情况下，每个控制器都会产生数据库连接，因为默认每个接口所对应的方法都会涉及数据库操作。这是由框架对 Spring
+的<code>HandlerInterceptor</code>拦截器默认全局配置的。但是你的控制器方法如果无须数据库连接，可以添加一个注解<code>@IgnoreDataBaseConnect</code>
+忽略数据库连接，减少资源消耗。</p>
 
             </article>
         </div>
-
-
+        <footer>
+             AJ-IAM，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
+             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
+             <br />
+             <br />
+             Copyright © 2025 Frank Cheung. All rights reserved.
+         </footer>
     </body>
 </html>

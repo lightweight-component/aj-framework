@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8087
 
 spring:
   #  main:
@@ -28,6 +28,9 @@ spring:
   jackson:
     time-zone: GMT+8
 
+auth:
+  clientId: lKi9p9FyicBd6eB
+  clientSecret: fvccgrfl3fzADLklrFyCpDAx6b87
 
 dubbo:
   application:

@@ -14,6 +14,15 @@
         <link rel="stylesheet" href="/asset/style/main.css"/>
         <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
         <script src="/asset/common.js"></script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?a3dec1d9b9415edd86b54c1fb3d02f19";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
     </head>
     <body>
         <nav>
@@ -88,12 +97,16 @@
 <h2>打包</h2>
 <p>最终打包为 JAR 包。执行 Maven <code>package</code> 命令即可。</p>
 <blockquote>
-<p>⚠️ 注意：依赖包会拷贝到 <code>lib</code> 目录，而不是打包成一个巨大的 Fat Jar。相关插件已在 <code>aj-common-parent</code> 中集成。</p>
+<p>⚠️ 注意：依赖包会拷贝到 <code>lib</code> 目录，而不是打包成一个巨大的 Fat Jar。相关插件已在父 POM 引用的 <code>aj-common-parent</code> 中集成。</p>
 </blockquote>
+<p>Maven 依赖是一个复杂的过程，很容易导致依赖出问题（版本冲突、Scope定义错误等等）就导致程序起不来，头都大，明明运行 ok
+的，这时候你就要检测一下 jar 里面的<code>MANIFEST.MF</code>定义，
+与正常的文件 text 对比一下，看缺那些包或者版本不对。</p>
 <h2>一键部署</h2>
 <p>可以通过 Maven 插件一键部署到 SSH 服务器。在 <code>pom.xml</code> 中添加 <code>build</code> 节点并修改相关配置。</p>
 <p>具体参阅： ↗ <a href="https://blog.csdn.net/zhangxin09/article/details/132456075">Maven 一键部署到 SSH 服务器</a></p>
-<pre><code class="language-xml">&lt;build&gt;
+<pre><code class="language-xml">
+&lt;build&gt;
     &lt;plugins&gt;
         &lt;!-- 一键部署到服务器 SSH --&gt;
         &lt;plugin&gt;
@@ -104,22 +117,22 @@
             &lt;executions&gt;
                 &lt;execution&gt;
                     &lt;id&gt;upload-deploy&lt;/id&gt;
-                    &lt;!-- 运行 package 打包的同时运行 upload-single 和 sshexec --&gt;
-                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;!-- 运行 install 打包的同时运行 upload-single 和 sshexec --&gt;
+                    &lt;phase&gt;install&lt;/phase&gt;
                     &lt;goals&gt;
                         &lt;goal&gt;upload-single&lt;/goal&gt;
                         &lt;goal&gt;sshexec&lt;/goal&gt;
                     &lt;/goals&gt;
                     &lt;configuration&gt;
                         &lt;!-- 指定 SSH 账号 --&gt;
-                        &lt;serverId&gt;high.ajaxjs.com&lt;/serverId&gt;
+                        &lt;serverId&gt;xxx.com&lt;/serverId&gt;
                         &lt;!-- 要更新的 jar 包 --&gt;
-                        &lt;fromFile&gt;target/aj-iam-server.jar&lt;/fromFile&gt;
+                        &lt;fromFile&gt;target/xxx.jar&lt;/fromFile&gt;
                         &lt;!-- 服务器部署位置 --&gt;
                         &lt;url&gt;${ssh.url.iam}&lt;/url&gt;
                         &lt;!-- 重启脚本：先切换目录，才能正确执行脚本 --&gt;
                         &lt;commands&gt;
-                            &lt;command&gt;cd /home/service/aj-iam; ./startup.sh&lt;/command&gt;
+                            &lt;command&gt;cd /xxx/service/aj-iam; ./startup.sh&lt;/command&gt;
                         &lt;/commands&gt;
                         &lt;!-- 显示运行命令的输出结果 --&gt;
                         &lt;displayCommandOutputs&gt;true&lt;/displayCommandOutputs&gt;
@@ -130,10 +143,16 @@
     &lt;/plugins&gt;
 &lt;/build&gt;
 </code></pre>
+<p>不知为何不能选择<code>deploy</code>阶段，只能选择<code>package</code>或<code>install</code>。</p>
 
             </article>
         </div>
-
-
+        <footer>
+             AJ-IAM，开源框架 <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a> 的一部分。联系方式：
+             frank@ajaxjs.com，<a href="https://blog.csdn.net/zhangxin09" target="_blank">作者博客</a>
+             <br />
+             <br />
+             Copyright © 2025 Frank Cheung. All rights reserved.
+         </footer>
     </body>
 </html>
