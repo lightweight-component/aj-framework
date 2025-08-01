@@ -8,6 +8,8 @@ public class ResponseResultWrapper {
 
     private String errorCode;
 
+    private String traceId;
+
     private String message;
 
     private Object data;

@@ -5,6 +5,7 @@ import com.ajaxjs.framework.mvc.unifiedreturn.ResponseResultWrapper;
 import com.ajaxjs.util.EncodeTools;
 import com.ajaxjs.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -77,6 +78,8 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("error"); // 确保视图名有效
         mav.addObject("errorMessage", ex.getMessage());
+
+        MDC.clear();
 
         return mav;
     }

@@ -3,6 +3,15 @@ package com.ajaxjs.framework.mvc.unifiedreturn;
 //import com.ajaxjs.desensitize.DeSensitize;
 //import com.ajaxjs.desensitize.annotation.Desensitize;
 
+import com.ajaxjs.framework.mvc.filter.RequestLogger;
+import com.ajaxjs.security.traceid.TraceXFilter;
+import com.ajaxjs.sqlman.util.PrettyLogger;
+import com.ajaxjs.util.BoxLogger;
+import com.ajaxjs.util.DateHelper;
+import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -10,16 +19,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @RestControllerAdvice
+@Slf4j
 public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
     //不支持的类型列表
     private static final Set<Class<?>> NO_SUPPORTED_CLASSES = new HashSet<>(8);
@@ -84,10 +96,50 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         else
             responseResult.setData(body);
 
-        if (customReturnConverter != null)
+        responseResult.setTraceId(MDC.get(BoxLogger.TRACE_KEY));
+
+        try {
+            logRequestCompletion(request, responseResult);
+            MDC.clear();
+        } catch (Throwable e) {
+            log.warn("logRequestCompletion", e);
+        }
+
+        if (customReturnConverter != null) {
             return customReturnConverter.convert(responseResult);
+        }
 
         return responseResult;
+    }
+
+    public static void logRequestCompletion(ServerHttpRequest req, Object responseResult) {
+        if (!(req instanceof ServletServerHttpRequest))
+            return;
+
+        HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
+
+        String title = " Request Completion ";
+        String sb = "\n" + PrettyLogger.ANSI_BLUE + RequestLogger.boxLine('┌', '─', '┐', title) + '\n' +
+                RequestLogger.boxContent("Time:            ", DateHelper.now()) + '\n' +
+                RequestLogger.boxContent("TraceId:         ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
+                RequestLogger.boxContent("Request URI:     ", req.getMethod() + " " + request.getRequestURI()) + '\n' +
+                RequestLogger.boxContent("Response Result: ", JsonUtil.toJson(responseResult)) + '\n' +
+                RequestLogger.boxContent("Execution Time:  ", getExecutionTime(request)) + '\n' +
+                RequestLogger.boxLine('└', '─', '┘', StrUtil.EMPTY_STRING) + PrettyLogger.ANSI_RESET;
+
+        log.info(sb);
+    }
+
+    static String getExecutionTime(HttpServletRequest request) {
+        Object o = request.getAttribute(RequestLogger.START_TIME_ATTRIBUTE);
+
+        if (o == null)
+            return "N/A";
+        else {
+            long executionTime = System.currentTimeMillis() - (Long) o;
+
+            return executionTime + "ms";
+        }
     }
 
     // Helper method to build error responses

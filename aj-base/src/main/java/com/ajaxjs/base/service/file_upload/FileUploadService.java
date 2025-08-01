@@ -24,13 +24,13 @@ public class FileUploadService implements FileUploadController {
     /**
      * 保存文件的目录
      */
-    @Value("${FileUpload.saveFolder}")
+    @Value("${FileUpload.saveFolder: }")
     private String saveFolder;
 
     /**
      * 上传之后访问的 url 前缀
      */
-    @Value("${FileUpload.FILE_URL_ROOT}")
+    @Value("${FileUpload.FILE_URL_ROOT: }")
     private String FILE_URL_ROOT;
 
     /**
@@ -43,13 +43,13 @@ public class FileUploadService implements FileUploadController {
     /**
      * 允许上传的文件类型，如果为空数组则不限制上传类型。格式如 {".jpg", ".png", ...}
      */
-    @Value("${FileUpload.allowExtFilenames}")
+    @Value("${FileUpload.allowExtFilenames: }")
     private String[] allowExtFilenames;
 
     /**
      * 上传之后访问的 url 前缀
      */
-    @Value("${S3Storage.LocalStorage.absoluteSavePath}")
+    @Value("${S3Storage.LocalStorage.absoluteSavePath: }")
     private String absoluteSavePath;
 
     @Override

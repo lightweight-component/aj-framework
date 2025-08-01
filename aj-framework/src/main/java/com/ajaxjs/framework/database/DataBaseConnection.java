@@ -75,7 +75,7 @@ public class DataBaseConnection implements HandlerInterceptor {
             JdbcConnection.setConnection(conn); // 设置连接到库，使其可用
 
             if (Version.isDebug)
-                log.info("数据库连接成功。详情：[{}]", conn.getMetaData().getURL());
+                log.info("Database [{}...] connected.", conn.getMetaData().getURL().substring(0, 60));
         } catch (SQLException e) {
             log.error("Error when init database connection.", e);
         }

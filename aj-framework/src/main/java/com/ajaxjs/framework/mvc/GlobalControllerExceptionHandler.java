@@ -3,6 +3,7 @@ package com.ajaxjs.framework.mvc;
 import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.framework.mvc.unifiedreturn.ResponseResultWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,6 +53,7 @@ public class GlobalControllerExceptionHandler {
         }
 
         resultWrapper.setMessage(msg);
+        MDC.clear();
 
         return resultWrapper;
     }

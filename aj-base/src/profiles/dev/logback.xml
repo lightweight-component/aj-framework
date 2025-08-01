@@ -1,0 +1,16 @@
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <appender name="log_pattern" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) %cyan(%logger{20}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 系统模块日志级别控制  -->
+    <logger name="com.ajaxjs" level="debug" />
+    <!-- Spring日志级别控制  -->
+    <logger name="org.springframework" level="warn" />
+
+<!--    <root level="DEBUG">
+        <appender-ref ref="log_pattern"/>
+    </root>-->
+</configuration>
