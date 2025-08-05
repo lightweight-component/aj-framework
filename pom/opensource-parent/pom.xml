@@ -6,9 +6,9 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>aj-parent</name>
-    <version>1.32</version>
+    <version>1.33</version>
     <packaging>pom</packaging>
-    <description>Public Maven config for AJAXJS OpenSource Library</description>
+    <description>Public Maven Config for AJAXJS OpenSource</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

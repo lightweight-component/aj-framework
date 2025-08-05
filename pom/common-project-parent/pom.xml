@@ -5,9 +5,9 @@
 
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-common-parent</artifactId>
-    <version>2.6</version>
+    <version>2.7</version>
     <packaging>pom</packaging>
-    <description>业务工程的依赖</description>
+    <description>Parent POM for common projects</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,6 +17,32 @@
         <springboot.version>2.7.18</springboot.version>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
+
+    <url>https://framework.ajaxjs.com</url>
+    <inceptionYear>2016</inceptionYear>
+    <organization>
+        <name>AJAXJS</name>
+        <url>https://framework.ajaxjs.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>sp42</id>
+            <name>Frank Cheung</name>
+            <email>frank@ajaxjs.com</email>
+            <url>https://blog.csdn.net/zhangxin09</url>
+            <roles>
+                <role>Project Lead Developer</role>
+                <role>Architect</role>
+            </roles>
+            <organization>ajaxjs.com</organization>
+            <organizationUrl>https://framework.ajaxjs.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/lightweight-component</url>
+    </scm>
 
     <profiles>
         <!--开发环境-->
@@ -127,7 +153,7 @@
             <dependency>
                 <groupId>com.ajaxjs</groupId>
                 <artifactId>ajaxjs-parent</artifactId>
-                <version>1.32</version>
+                <version>1.33</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

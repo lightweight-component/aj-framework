@@ -7,11 +7,12 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.32</version>
+        <version>1.33</version>
         <relativePath/>
     </parent>
 
     <artifactId>ajaxjs-framework</artifactId>
+    <name>aj-framework</name>
     <version>1.2.2</version>
     <packaging>jar</packaging>
     <description>Lightweight Java Web Framework</description>
@@ -31,13 +32,13 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>sqlman</artifactId>
-            <version>1.4</version>
+            <version>1.6</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-security</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>
@@ -64,6 +65,5 @@
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
-
     </dependencies>
 </project>
