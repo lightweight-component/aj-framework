@@ -26,10 +26,9 @@ public class PingUtils {
     public static boolean connect(String host, int port, int timeOut) {
         try (Socket socket = new Socket()) {
             socket.connect(new InetSocketAddress(host, port), timeOut);
-            //boolean res = socket.isConnected();//通过现有方法查看连通状态
+            //boolean res = socket.isConnected();// 通过现有方法查看连通状态
         } catch (IOException e) {
-            //当连不通时，直接抛异常，异常捕获即可
-            e.printStackTrace();
+            e.printStackTrace();// 当连不通时，直接抛异常，异常捕获即可
             return false;
         }
 
@@ -37,10 +36,10 @@ public class PingUtils {
     }
 
     /**
-     * windows 和linux 总和
+     * windows 和 linux 总和
      *
      * @param ipAddress ip
-     * @param pingTimes ping的次数
+     * @param pingTimes ping 的次数
      * @param timeOut   多少秒超时
      */
     public static boolean ping(String ipAddress, int pingTimes, int timeOut) {
@@ -49,22 +48,21 @@ public class PingUtils {
         String osArch = props.getProperty("os.arch"); //操作系统构架
         String osVersion = props.getProperty("os.version"); //操作系统版本
 
-        System.out.println(osName);
-        System.out.println(osArch);
-        System.out.println(osVersion);
         boolean result = false;
 
-        if (osName.contains(LINUX)) result = pingForLinux(ipAddress, pingTimes, timeOut);
-        else if (osName.contains(WINDOWS)) result = pingForWindows(ipAddress, pingTimes, timeOut);
+        if (osName.contains(LINUX))
+            result = pingForLinux(ipAddress, pingTimes, timeOut);
+        else if (osName.contains(WINDOWS))
+            result = pingForWindows(ipAddress, pingTimes, timeOut);
 
         return result;
     }
 
     /**
-     * windows 相当于cmd运行 ping 127.0.0.1 -n 5 -w 3000
+     * Windows 相当于 cmd 运行 ping 127.0.0.1 -n 5 -w 3000
      *
      * @param ipAddress ip
-     * @param pingTimes ping的次数
+     * @param pingTimes ping 的次数
      * @param timeOut   多少秒超时
      * @return
      */
@@ -74,8 +72,7 @@ public class PingUtils {
         try {
             Process p = Runtime.getRuntime().exec(pingCommand);// 执行命令并获取输出
             try (InputStreamReader inputStreamReader = new InputStreamReader(p.getInputStream()); BufferedReader in = new BufferedReader(inputStreamReader)) {
-                // 逐行检查输出,计算类似出现=23ms TTL=62字样的次数
-                int connectedCount = 0;
+                int connectedCount = 0;// 逐行检查输出,计算类似出现=23ms TTL=62字样的次数
                 String line;
 
                 while ((line = in.readLine()) != null) connectedCount += getCheckResultForWindows(line);
@@ -87,7 +84,6 @@ public class PingUtils {
             return false;
         }
     }
-
 
     /**
      * 相当于 Linux执行  timeout 10s ping 192.168.1.124 -c 5 -i 0
@@ -104,9 +100,10 @@ public class PingUtils {
             try (InputStreamReader r = new InputStreamReader(process.getInputStream())) {
                 LineNumberReader returnData = new LineNumberReader(r);
                 int connectedCount = 0;
-                String line = "";
+                String line ;
 
-                while ((line = returnData.readLine()) != null) connectedCount += getCheckResultForLinux(line);
+                while ((line = returnData.readLine()) != null)
+                    connectedCount += getCheckResultForLinux(line);
 
                 //log.info("connectedCount===="+connectedCount);
                 return connectedCount == pingTimes; // 出现的次数=测试次数则返回真
@@ -121,7 +118,8 @@ public class PingUtils {
     private static int getCheckResultForWindows(String line) {  // System.out.println("控制台输出的结果为:"+line);
         Matcher matcher = Pattern.compile("(\\d+ms)(\\s+)(TTL=\\d+)", Pattern.CASE_INSENSITIVE).matcher(line);
 
-        while (matcher.find()) return 1;
+        while (matcher.find())
+            return 1;
 
         return 0;
     }
@@ -130,7 +128,8 @@ public class PingUtils {
     public static int getCheckResultForLinux(String line) {  // System.out.println("控制台输出的结果为:"+line);
         Matcher matcher = Pattern.compile("(ttl=\\d+)(\\s+)(time=+\\w)", Pattern.CASE_INSENSITIVE).matcher(line);
 
-        while (matcher.find()) return 1;
+        while (matcher.find())
+            return 1;
 
         return 0;
     }

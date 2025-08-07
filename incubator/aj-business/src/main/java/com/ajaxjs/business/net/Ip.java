@@ -7,6 +7,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class Ip {
     public static Set<String> resolveLocalIps() {
         Set<String> ret = new HashSet<>();
 
-        for (InetAddress addr : resolveLocalAddresses())
+        for (InetAddress addr : Objects.requireNonNull(resolveLocalAddresses()))
             ret.add(addr.getHostAddress());
 
         return ret;
