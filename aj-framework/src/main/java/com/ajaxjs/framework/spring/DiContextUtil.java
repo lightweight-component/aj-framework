@@ -248,7 +248,6 @@ public class DiContextUtil implements ApplicationContextAware {
         return getAnnotationFromMethod((HandlerMethod) handler, annotationClass);
     }
 
-
     /**
      * Get the annotation from the method or its interface
      *

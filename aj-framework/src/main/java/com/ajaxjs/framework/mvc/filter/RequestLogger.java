@@ -57,8 +57,10 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
 
         String httpInfo = req.getMethod() + " " + req.getRequestURI();
         String controllerInfo = handlerMethod.toString();
+        System.out.println("Content-Length: " + req.getHeader("Content-Length"));
+        String body = TraceXFilter.getRequestBody(req);
 
-        printLog(httpInfo, null, sb.toString(), controllerInfo);
+        printLog(httpInfo, null, sb.toString(), body, controllerInfo);
     }
 
 //    @Override
@@ -83,7 +85,7 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
      * @param ip       实际执行SQL（带参数）
      * @param params   参数（字符串，或者拼接好的参数描述）
      */
-    public static void printLog(String httpInfo, String ip, String params, String controllerInfo) {
+    public static void printLog(String httpInfo, String ip, String params, String body, String controllerInfo) {
         String title = " Request Information ";
         String sb = "\n" + ANSI_YELLOW + boxLine('┌', '─', '┐', title) + '\n' +
                 boxContent("Time:       ", DateHelper.now()) + '\n' +
@@ -91,6 +93,7 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
                 boxContent("Request:    ", httpInfo) + '\n' +
                 boxContent("IP:         ", StrUtil.hasText(ip) ? params : "unknown") + '\n' +
                 boxContent("Params:     ", StrUtil.hasText(params) ? params : NONE) + '\n' +
+                boxContent("Body:       ", StrUtil.hasText(body) ? body : NONE) + '\n' +
                 boxContent("Controller: ", controllerInfo) + '\n' +
                 boxLine('└', '─', '┘', StrUtil.EMPTY_STRING) + ANSI_RESET;
 

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(name = "aj-framework.startupTimeMetric.enable", havingValue = "false", matchIfMissing = false)
+@ConditionalOnProperty(name = "aj-framework.startupTimeMetric.enabled", havingValue = "true")
 public class StartupTimeMetric implements InstantiationAwareBeanPostProcessor, PriorityOrdered, ApplicationListener<ContextRefreshedEvent>, MergedBeanDefinitionPostProcessor {
     private final Map<String, Statistics> statisticsMap = new TreeMap<>();
 
