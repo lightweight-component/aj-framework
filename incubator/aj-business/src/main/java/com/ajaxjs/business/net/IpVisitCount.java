@@ -1,6 +1,5 @@
 package com.ajaxjs.business.net;
 
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,9 +82,9 @@ public class IpVisitCount {
 
     private static final String CONST_FORMAT_VALUE_JSON = "json";
 
-    private static final String CONST_ATTR_NAME_CLIENTIP = "clientIp";
+    private static final String CONST_ATTR_NAME_CLIENT_IP = "clientIp";
 
-    private static final String CONST_ATTR_NAME_VISITCOUNT = "visitCount";
+    private static final String CONST_ATTR_NAME_VISIT_COUNT = "visitCount";
 
     public static void count(HttpServletRequest request) {
         // 获取客户端IP地址
@@ -107,8 +106,8 @@ public class IpVisitCount {
         if (CONST_FORMAT_VALUE_JSON.equalsIgnoreCase(format)) {
             // 返回JSON
             Map<String, Object> result = new HashMap<>();
-            result.put(CONST_ATTR_NAME_CLIENTIP, clientIp);
-            result.put(CONST_ATTR_NAME_VISITCOUNT, visitCount);
+            result.put(CONST_ATTR_NAME_CLIENT_IP, clientIp);
+            result.put(CONST_ATTR_NAME_VISIT_COUNT, visitCount);
         }
     }
 
