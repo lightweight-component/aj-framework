@@ -1,4 +1,6 @@
-package com.ajaxjs.framework.cache.smallredis;
+package com.ajaxjs.business.cache.lfu;
+
+import com.ajaxjs.business.cache.Cache;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -19,7 +21,7 @@ public class LFUCache<K, V> implements Cache<K, V> {
     /**
      * 存储缓存对象
      */
-    private final Map<K, LRUCacheItem<V>> cacheMap;
+    private final Map<K, LFUCacheItem<V>> cacheMap;
 
     public LFUCache(int capacity) {
         this.capacity = capacity;
@@ -31,12 +33,12 @@ public class LFUCache<K, V> implements Cache<K, V> {
         if (isFull())
             pruneCache();
 
-        cacheMap.put(key, new LRUCacheItem<>(value, timeout));
+        cacheMap.put(key, new LFUCacheItem<>(value, timeout));
     }
 
     @Override
     public synchronized V get(K key) {
-        LRUCacheItem<V> cacheObject = cacheMap.get(key);
+        LFUCacheItem<V> cacheObject = cacheMap.get(key);
 
         if (cacheObject == null)
             return null;
@@ -66,10 +68,10 @@ public class LFUCache<K, V> implements Cache<K, V> {
      */
     int pruneCache() {
         int count = 0;
-        LRUCacheItem<V> coMin = null;
+        LFUCacheItem<V> coMin = null;
         // 清理过期对象并找出访问最少的对象
-        Iterator<LRUCacheItem<V>> values = cacheMap.values().iterator();
-        LRUCacheItem<V> co;
+        Iterator<LFUCacheItem<V>> values = cacheMap.values().iterator();
+        LFUCacheItem<V> co;
 
         while (values.hasNext()) {
             co = values.next();
@@ -89,7 +91,7 @@ public class LFUCache<K, V> implements Cache<K, V> {
         if (isFull() && coMin != null) {
             long minAccessCount = coMin.count;
             values = cacheMap.values().iterator();
-            LRUCacheItem<V> co1;
+            LFUCacheItem<V> co1;
 
             while (values.hasNext()) {
                 co1 = values.next();

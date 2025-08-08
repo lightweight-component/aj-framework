@@ -1,4 +1,6 @@
-package com.ajaxjs.framework.cache.smallredis;
+package com.ajaxjs.framework.cache.delayqueue;
+
+import com.ajaxjs.framework.cache.CacheItem;
 
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;

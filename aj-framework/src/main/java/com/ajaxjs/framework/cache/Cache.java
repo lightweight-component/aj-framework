@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.cache.smallredis;
+package com.ajaxjs.framework.cache;
 
 /**
  * 缓存接口
@@ -15,6 +15,14 @@ public interface Cache<K, V> {
      * @param timeout 过期时间，单位：毫秒， 0表示无限长
      */
     void put(K key, V value, long timeout);
+
+    default void put(K key, V value, int timeout) {
+        put(key, value, timeout * 1000L);
+    }
+
+    default void put(K key, V value) {
+        put(key, value, 0);
+    }
 
     /**
      * 从缓存中获得对象

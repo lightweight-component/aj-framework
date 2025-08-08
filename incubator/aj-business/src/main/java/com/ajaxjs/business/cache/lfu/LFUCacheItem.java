@@ -1,6 +1,6 @@
-package com.ajaxjs.framework.cache.smallredis;
+package com.ajaxjs.business.cache.lfu;
 
-public class LRUCacheItem<V> {
+public class LFUCacheItem<V> {
     /**
      * 缓存对象
      */
@@ -30,7 +30,7 @@ public class LRUCacheItem<V> {
      * @param value 值
      * @param ttl   超时时长
      */
-    public LRUCacheItem(V value, long ttl) {
+    public LFUCacheItem(V value, long ttl) {
         this.value = value;
         this.ttl = ttl;
         this.latestTime = System.currentTimeMillis();

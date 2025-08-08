@@ -73,5 +73,4 @@ public abstract class BaseModel {
         Object obj = getExtractData().get(key);
         return obj != null ? (int) obj : 0;
     }
-
 }

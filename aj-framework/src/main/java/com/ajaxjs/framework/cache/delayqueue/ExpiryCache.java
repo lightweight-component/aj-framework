@@ -1,5 +1,6 @@
-package com.ajaxjs.framework.cache.smallredis;
+package com.ajaxjs.framework.cache.delayqueue;
 
+import com.ajaxjs.framework.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class ExpiryCache<K, V> implements Cache<K, V> {
     /**
-     * 使用阻塞队列中的等待队列，因为DelayQueue是基于PriorityQueue实现的，而PriorityQueue底层是一个最小堆，可以按过期时间排序，
+     * 使用阻塞队列中的等待队列，因为 DelayQueue 是基于 PriorityQueue 实现的，而 PriorityQueue 底层是一个最小堆，可以按过期时间排序，
      * 所以等待队列本身只需要维护根节点的一个定时器就可以了，而且插入和删除都是时间复杂度都是 logN，资源消耗很少
      */
     private final DelayQueue<ExpiryCacheItem<K>> DELAY = new DelayQueue<>();
