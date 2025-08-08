@@ -100,7 +100,7 @@ public class PingUtils {
             try (InputStreamReader r = new InputStreamReader(process.getInputStream())) {
                 LineNumberReader returnData = new LineNumberReader(r);
                 int connectedCount = 0;
-                String line ;
+                String line;
 
                 while ((line = returnData.readLine()) != null)
                     connectedCount += getCheckResultForLinux(line);

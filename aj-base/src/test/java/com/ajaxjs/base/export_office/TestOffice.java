@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static com.ajaxjs.util.io.ZipHelper.zip;
 
 public class TestOffice {
     @Test

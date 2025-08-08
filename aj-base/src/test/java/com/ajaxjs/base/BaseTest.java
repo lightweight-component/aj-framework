@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public abstract class BaseTest {
     @BeforeEach
     void initAll() {
+
         DataBaseConnection.initDb();
     }
 

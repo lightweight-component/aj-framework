@@ -44,7 +44,7 @@ public class Sender extends Socket {
         this.bean = bean;
     }
 
-    public static final String LINEFEET = "\r\n"; // 换行符常量
+    public static final String LINE_FEET = "\r\n"; // 换行符常量
 
     private static final int OK_250_CODE = 250;// 成功标识
 
@@ -146,36 +146,36 @@ public class Sender extends Socket {
         Map<String, byte[]> attachment = bean.getAttachment();
 
         StringBuilder sb = new StringBuilder();
-        sb.append("From:<").append(bean.getFrom()).append(">").append(LINEFEET);
-        sb.append("To:<").append(bean.getTo()).append(">").append(LINEFEET);
-        sb.append("Subject:=?UTF-8?B?").append(toBase64(bean.getSubject())).append("?=").append(LINEFEET);
+        sb.append("From:<").append(bean.getFrom()).append(">").append(LINE_FEET);
+        sb.append("To:<").append(bean.getTo()).append(">").append(LINE_FEET);
+        sb.append("Subject:=?UTF-8?B?").append(toBase64(bean.getSubject())).append("?=").append(LINE_FEET);
 //		sb.append("Date:2016/10/27 17:30" + LINEFEET);
         // sb.append("MIME-Version: 1.0" + lineFeet);
 
         if (attachment != null) {
-            sb.append("Content-Type: multipart/mixed;boundary=\"").append(boundary).append("\"").append(LINEFEET);
-            sb.append(LINEFEET);
-            sb.append("--").append(boundary).append(LINEFEET);
+            sb.append("Content-Type: multipart/mixed;boundary=\"").append(boundary).append("\"").append(LINE_FEET);
+            sb.append(LINE_FEET);
+            sb.append("--").append(boundary).append(LINE_FEET);
         }
 
-        sb.append(bean.isHtmlBody() ? "Content-Type:text/html;charset=\"utf-8\"" : "Content-Type:text/plain;charset=\"utf-8\"").append(LINEFEET);
-        sb.append("Content-Transfer-Encoding: base64" + LINEFEET);
-        sb.append(LINEFEET);
+        sb.append(bean.isHtmlBody() ? "Content-Type:text/html;charset=\"utf-8\"" : "Content-Type:text/plain;charset=\"utf-8\"").append(LINE_FEET);
+        sb.append("Content-Transfer-Encoding: base64" + LINE_FEET);
+        sb.append(LINE_FEET);
         sb.append(toBase64(bean.getContent()));
 
         if (attachment != null) {
             for (String fileName : attachment.keySet()) {
-                sb.append(LINEFEET);
-                sb.append("--").append(boundary).append(LINEFEET);
-                sb.append("Content-Type: application/octet-stream; name=\"").append(fileName).append("\"").append(LINEFEET);
-                sb.append("Content-Disposition: attachment; filename=\"").append(fileName).append("\"").append(LINEFEET);
-                sb.append("Content-Transfer-Encoding: base64").append(LINEFEET);
-                sb.append(LINEFEET);
+                sb.append(LINE_FEET);
+                sb.append("--").append(boundary).append(LINE_FEET);
+                sb.append("Content-Type: application/octet-stream; name=\"").append(fileName).append("\"").append(LINE_FEET);
+                sb.append("Content-Disposition: attachment; filename=\"").append(fileName).append("\"").append(LINE_FEET);
+                sb.append("Content-Transfer-Encoding: base64").append(LINE_FEET);
+                sb.append(LINE_FEET);
                 sb.append(Base64.getEncoder().encodeToString(attachment.get(fileName)));
             }
         }
 
-        sb.append(LINEFEET + ".");
+        sb.append(LINE_FEET + ".");
 
         return sb.toString();
     }
@@ -209,7 +209,7 @@ public class Sender extends Socket {
      */
     private String sendCommand(String msg) {
         try {
-            os.writeBytes(msg + LINEFEET);
+            os.writeBytes(msg + LINE_FEET);
             os.flush();
 
             return in.readLine(); // 读取服务器端响应信息

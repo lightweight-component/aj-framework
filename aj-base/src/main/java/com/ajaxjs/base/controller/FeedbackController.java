@@ -1,9 +1,7 @@
 package com.ajaxjs.base.controller;
 
 import com.ajaxjs.base.model.Feedback;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 留言反馈
@@ -18,5 +16,6 @@ public interface FeedbackController {
      * @return 是否成功
      */
     @PostMapping
-    boolean addFeedback(Feedback feedback);
+    @CrossOrigin
+    boolean addFeedback(@RequestBody Feedback feedback);
 }
