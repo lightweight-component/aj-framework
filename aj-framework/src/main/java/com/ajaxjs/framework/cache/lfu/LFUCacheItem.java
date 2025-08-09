@@ -4,8 +4,8 @@ import com.ajaxjs.framework.cache.CacheItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class LFUCacheItem<V> extends CacheItem<V> {
     private int frequency;
 

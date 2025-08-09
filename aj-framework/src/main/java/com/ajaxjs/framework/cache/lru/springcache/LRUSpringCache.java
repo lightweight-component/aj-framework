@@ -1,17 +1,19 @@
-package com.ajaxjs.framework.cache.springcache;
+package com.ajaxjs.framework.cache.lru.springcache;
 
+import com.ajaxjs.framework.cache.lru.LRUCache;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 
 import java.util.concurrent.Callable;
 
-public class ConcurrentLruSpringCache implements Cache {
+public class LRUSpringCache implements Cache {
     private final String name;
-    private final SimpleLRUCache<Object, Object> lruCache;
 
-    public ConcurrentLruSpringCache(String name, int maxSize) {
+    private final LRUCache<Object, Object> lruCache;
+
+    public LRUSpringCache(String name, int maxSize) {
         this.name = name;
-        this.lruCache = new SimpleLRUCache<>(maxSize);
+        this.lruCache = new LRUCache<>(maxSize);
     }
 
     @Override

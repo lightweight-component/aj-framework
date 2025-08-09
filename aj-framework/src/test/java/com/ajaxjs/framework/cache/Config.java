@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.cache;
 
-import com.ajaxjs.framework.cache.lfu.springcache.LfuSpringCacheManager;
+import com.ajaxjs.framework.cache.lfu.springcache.LFUSpringCacheManager;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
     @Bean
     public CacheManager cacheManager() {
-        return new LfuSpringCacheManager(100); // LRU 容量为 100，可自行调整
+        return new LFUSpringCacheManager(100); // LRU 容量为 100，可自行调整
     }
 }

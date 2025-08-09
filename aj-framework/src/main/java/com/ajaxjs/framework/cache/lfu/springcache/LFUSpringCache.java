@@ -6,12 +6,12 @@ import org.springframework.cache.support.SimpleValueWrapper;
 
 import java.util.concurrent.Callable;
 
-public class LfuSpringCache implements Cache {
+public class LFUSpringCache implements Cache {
     private final String name;
 
     private final LFUCache<String, Object> lfuCache;
 
-    public LfuSpringCache(String name, int maxSize) {
+    public LFUSpringCache(String name, int maxSize) {
         this.name = name;
         this.lfuCache = new LFUCache<>(maxSize);
     }

@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 @Slf4j
 @SpringBootTest
 @ContextConfiguration(classes = Config.class)
-public class TestCache {
+public class TestSpringCache {
     @Autowired
     EmpService service;
 

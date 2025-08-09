@@ -11,9 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 可自动移除过期的缓存项
+ * DelayQueue是一个无界的BlockingQueue，用于放置实现了Delayed接口的对象，其中的对象只能在其到期时才能从队列中取走。这种队列是有序的，即队头对象的延迟到期时间最长。注意：不能将null元素放置到这种队列中。
+ * 因为DelayQueue是基于PriorityQueue实现的,PriorityQueue底层是一个堆,可以按时间排序，所以等待队列本身只需要维护根节点的一个定时器就可以了，而且插入和删除都是时间复杂度都是logN，资源消耗很少，作为一个缓存的定时装置是非常适合的
+ * 使用 DelayQueue 需要传入一个Delayed对象，要实现两个方法
+ * 1 getDelay(TimeUnit unit) 表示当前对象关联的延时，在本例中表示生存时间
+ * 2 compareTo(Delayed o) 堆在进行删除和插入时需要进行对比，所以要传入一个比较器
  * <a href="https://www.jianshu.com/p/28d3efa0c1d0">...</a>
- * 比较复杂，<a href="https://blog.csdn.net/jgteng/article/details/56015699">...</a>
- * 原理介绍 延迟阻塞队列 DelayQueue <a href="https://juejin.cn/post/6844903721390833678">...</a>
  */
 @Slf4j
 public class ExpiryCache<K, V> implements Cache<K, V> {
@@ -105,5 +108,4 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
 
         return INSTANCE;
     }
-
 }
