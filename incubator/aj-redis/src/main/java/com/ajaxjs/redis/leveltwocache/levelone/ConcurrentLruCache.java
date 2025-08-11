@@ -25,8 +25,8 @@ public class ConcurrentLruCache<K, V> {
     private final ConcurrentHashMap<K, V> cache = new ConcurrentHashMap<>();
 
     /**
-     *  当前实现为队列尾部为最近访问的节点
-     *  p.s 一般 LRU 会用链表做，而塔这里用了队列
+     * 当前实现为队列尾部为最近访问的节点
+     * p.s 一般 LRU 会用链表做，而塔这里用了队列
      */
     private final ConcurrentLinkedDeque<K> queue = new ConcurrentLinkedDeque<>();
 

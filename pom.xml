@@ -12,12 +12,12 @@
         <module>pom/opensource-parent</module>
         <module>aj-framework</module>
         <module>aj-base</module>
-        <module>incubator/aj-business</module>
         <module>aj-message/aj-message-common</module>
         <module>aj-message/aj-message</module>
         <module>aj-sample-app</module>
-<!--        <module>aj-dev-tools</module>-->
-        <!--<module>aj-redis</module>-->
+        <module>incubator/aj-business</module>
+        <module>incubator/aj-redis</module>
+        <!--        <module>aj-dev-tools</module>-->
         <!--<module>aj-web</module>-->
     </modules>
 </project>

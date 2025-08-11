@@ -18,10 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
  * 好处是前端提交考试后执行第一步操作即可完成提交，提高了请求的响应时间；后台异步将redis中的数据入库，减少了服务器和数据库的压力。
  * <p>
  * <a href="https://blog.xinpapa.com/2020/03/30/redis-queue/">...</a>
- *
- 例子中使用了一个线程来消费队列，如果数据库性能允许也可以启用多个线程消费队列。
- 因为rpop操作是原子性的，所以即使多个线程消费一个队列，也不会出现重复消费的问题。
-
+ * <p>
+ * 例子中使用了一个线程来消费队列，如果数据库性能允许也可以启用多个线程消费队列。
+ * 因为rpop操作是原子性的，所以即使多个线程消费一个队列，也不会出现重复消费的问题。
  */
 @Service
 public class ExamQueueService implements InitializingBean {

@@ -4,6 +4,7 @@ import com.ajaxjs.redis.leveltwocache.LevelOneCache;
 import org.springframework.cache.Cache.ValueWrapper;
 
 import java.util.concurrent.ConcurrentHashMap;
+
 public class LevelOneSimpleCache implements LevelOneCache<String, ValueWrapper> {
     private final ConcurrentHashMap<String, ValueWrapper> cache = new ConcurrentHashMap<>();
 
