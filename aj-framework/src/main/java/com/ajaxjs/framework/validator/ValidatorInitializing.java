@@ -1,6 +1,8 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.spring.DiContextUtil;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
@@ -9,7 +11,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +20,9 @@ import java.util.Objects;
  * 这个类的作用是在 Spring MVC 启动时，拦截并修改 RequestMappingHandlerAdapter 的行为。通过设置自定义的验证器和参数解析器，可以对路径变量进行验证
  */
 @Component
-public class ValidatorInitializing /*implements InitializingBean*/ {
-    /*@Override*/
-    @PostConstruct
-    public void afterPropertiesSet() {
+public class ValidatorInitializing {
+    @EventListener
+    public void handleContextRefresh(ContextRefreshedEvent event) {
         RequestMappingHandlerAdapter adapter = DiContextUtil.getBean(RequestMappingHandlerAdapter.class);
         ConfigurableWebBindingInitializer init = (ConfigurableWebBindingInitializer) adapter.getWebBindingInitializer();
         init.setValidator(new ValidatorImpl());

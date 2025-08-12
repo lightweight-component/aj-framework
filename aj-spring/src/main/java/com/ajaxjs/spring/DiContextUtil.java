@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.spring;
+package com.ajaxjs.spring;
 
 
 import lombok.extern.slf4j.Slf4j;

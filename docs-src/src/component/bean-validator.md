@@ -11,15 +11,23 @@ layout: layouts/aj-docs.njk
 
 # Bean 实体校验
 
-利用 Spring 自带校验器结合 JSR 注解实现轻量级的 Bean 实体校验器。轻捷、简单、很容易上手，也容易扩展。  
-三个核心类 `ValidatorInitializing`、`ValidatorImpl`、`ValidatorEnum`，去掉注释后总共不超过 200 行源码，实现 10 多 MB 的 Hibernate Validator 的多数功能。
+对于前端的入参，无论是查询的参数还是写入的数据，都需要对其进行合法性的校验，避免数据错误，过滤一些明显不合法的请求。
+
+在 Spring 体系中存在这两种校验机制：
+
+- 基于 JSR-303 标准的实体校验，注解是`@Valid`，有下面两种实现
+  - Hibernate Validator，最常见的实现，但是笨重，可达 13mb 的 JAR 包 
+  - Apache BVal，比较小众的实现，但轻量级得多，我之前也使用，详见[文章](https://blog.csdn.net/zhangxin09/article/details/50600575)
+- Spring 自带的校验器 Validator，注解是`@Validated`
+
+可见 Spring 的更简单和轻量级，但是默认不支持 JSR 注解。怎么结合 JSR-303 注解发挥其作用呢？这正是文本所介绍的组件要解决的问题。 这个组件三个核心类 `ValidatorInitializing`、`ValidatorImpl`、`ValidatorEnum`，去掉注释后总共不超过 200 行源码，实现 10 多 MB 的 Hibernate Validator 的多数功能。
 
 <div class="ref">
     <span class="c">javax.validation</span> 2.0 是 JSR 380 的版本。JSR 380 是 Java 规范请求的缩写，它定义了 Java Bean 验证 API（Java Bean Validation API）。Java Bean 验证 API 提供了一组用于验证对象属性的注解和接口，帮助开发人员进行数据验证和约束。
 </div>
 
-组件源码在：  
-↗ [GitHub 项目地址](https://gitcode.com/zhangxin09/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/springboot/validator)
+
+组件源码：[https://gitcode.com/lightweight-component/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/framework/validator](https://gitcode.com/lightweight-component/aj-framework/tree/master/aj-framework/src/main/java/com/ajaxjs/framework/validator)。
 
 ## 配置方式
 
@@ -52,13 +60,12 @@ javax-validation:
 ```
 
 ### 初始化校验组件
-
-接着注入 `ValidatorContextAware`。这是在 Spring 应用程序上下文初始化完成后设置验证器和参数解析器。这个类的作用是在 Spring 启动时，拦截并修改 `RequestMappingHandlerAdapter` 的行为。通过设置自定义的验证器和参数解析器，可以对路径变量进行验证。
+引入 aj-framework 即可自动装配该组件。如果单独使用请注入 `ValidatorInitializing`。这是在 Spring 应用程序上下文初始化完成后设置验证器和参数解析器。这个类的作用是在 Spring 启动时，拦截并修改 `RequestMappingHandlerAdapter` 的行为。通过设置自定义的验证器和参数解析器，可以对路径变量进行验证。
 
 ```java
 @Bean
-public ValidatorContextAware initValidatorContextAware() {
-    return new ValidatorContextAware();
+public ValidatorInitializing initValidator() {
+    return new ValidatorInitializing();
 }
 ```
 
@@ -132,9 +139,4 @@ public @interface IdCard {
 
 ## 原理分析
 
-有关原理的分析，请移步至博客文章：  
-↗ [CSDN 博客文章](https://zhangxin.blog.csdn.net/article/details/132255031)
-
---- 
-
-如需我将该 Markdown 转换为 HTML、PDF 或其他格式，也可以告诉我 😊
+有关原理的分析，请移步至博客文章：↗ [CSDN 博客文章](https://zhangxin.blog.csdn.net/article/details/132255031)。

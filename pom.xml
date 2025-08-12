@@ -17,6 +17,7 @@
         <module>aj-sample-app</module>
         <module>incubator/aj-business</module>
         <module>incubator/aj-redis</module>
+        <module>aj-spring</module>
         <!--        <module>aj-dev-tools</module>-->
         <!--<module>aj-web</module>-->
     </modules>

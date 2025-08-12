@@ -6,7 +6,7 @@ public class SMTP extends Thread {
 
     public static void showProgress() {
 //        SpeedBar sb = new SpeedBar("待送郵件數目");
-        while (queue.size > 0) {
+        while (queue.getSize() > 0) {
 //            sb.setSpeed(queue.size, "待送郵件數目:");
             try {
                 sleep(3000);

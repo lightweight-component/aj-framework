@@ -1,7 +1,7 @@
 package com.ajaxjs.framework.database;
 
 import com.ajaxjs.framework.mvc.GlobalExceptionHandler;
-import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.JdbcConnection;
 import com.ajaxjs.util.Version;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,27 @@
 server:
   port: 8081
+  tomcat:
+    max-connections: 10000  # 最大连接数
+    threads:
+      max: 800              # 最大工作线程数
+      min-spare: 100        # 最小空闲线程数
+    accept-count: 100       # 等待队列长度
+    connection-timeout: 20000
+
+logging:
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 3GB # 日志文件进行滚动和清理
+
 
 spring:
+  servlet:
+    multipart: # 文件上传设置
+      max-file-size: 10MB
+      max-request-size: 10MB
+      file-size-threshold: 2KB # 决定了多大的文件会直接写入内存
   #  main:
   #    lazy-initialization: true
   #  autoconfigure:
@@ -39,11 +59,6 @@ api:
     enable: true
     publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCmkKluNutOWGmAK2U80hM9JtzsgLAlgvHqncakqwhruE9TIXUQFDRKsIBQwN+3rLC76kyOl4U+eBefLaGQGJBZVq0qwIHBe4kfH0eJXaHyG/i9H2Iph1cyY6cn6ocPta6ZmSuOIcx4yLlpCgq5eDRigHs0AR418ZTlRItlhrY9+wIDAQAB
     privateKey: MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKaQqW42605YaYArZTzSEz0m3OyAsCWC8eqdxqSrCGu4T1MhdRAUNEqwgFDA37essLvqTI6XhT54F58toZAYkFlWrSrAgcF7iR8fR4ldofIb+L0fYimHVzJjpyfqhw+1rpmZK44hzHjIuWkKCrl4NGKAezQBHjXxlOVEi2WGtj37AgMBAAECgYBj9sX4o3UtG9qVVXX4votVVBGaztDocmIF0JL7GLqBC6hv19CNydJoUO1xiY+6iCW5YbB4k28gQqrKmXQxKszWFdd1NTHOKS3nti8I2QNc4T9FF34YvYh/WQlRw7dHmYUl/MCm6U6yVE7XK8GoYYOyAyclXuFR+SRw8/gHsoAYoQJBAPQ3L+K47QSujMSzu8ZcdRingN25VS8r790A18WNxtK9l/7b3l8aTUXmeGcjLpQDnx158jQ32fTUki5aa2eGDp0CQQCumkCpTgcvx0Ys66aXKnpaexWGWDK/ui9hY7lRdd2XijK30Uo2TlQ1ujXYjodbJJUAELE3UAC+0yj8W8Edf093AkAzrHWyaGSmZ/SbLlieCTQxqkenIq72kzpmreX6BBy8vKcrowQzZVJSZwi08gnKAdYqG4J3MBYrKstfiXxOZFw1AkA6+3radrRwzHWFWTnWmQ/qHug/kO3b3M6CrMh+nz1zIslNVVMnk0BZQgVMmaFaBbqb4gerssf9rqGK1ogfKdGzAkBQzGcbSAtTlCAMNMnOXphIvFQ/GnxlPwwr23ysyt0k14SOwGNfND4rXM2rTzjz+2yF20tGdGgmXfwnvKOaCc1N
-
-
-logging:
-  level:
-    com.example.service.JSONPlaceHolderClient: DEBUG
 
 feign:
   client:

@@ -1,4 +1,4 @@
 /**
- * Local LFU cache for Spring, it's level one cache.
+ * Local LFU cache.
  */
 package com.ajaxjs.framework.cache.lfu;

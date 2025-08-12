@@ -110,7 +110,6 @@ public class LFUCache<K, V> implements Cache<K, V> {
         LFUCacheItem<V> oldEntry = cache.get(key);
 
         if (oldEntry != null && !isExpired(oldEntry)) {
-            V oldValue = oldEntry.getValue();
             oldEntry.setValue(value);
             oldEntry.setExpire(expireTime);
             increaseFrequency(key, oldEntry);

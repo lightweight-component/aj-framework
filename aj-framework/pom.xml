@@ -31,6 +31,12 @@
     <dependencies>
         <dependency>
             <groupId>com.ajaxjs</groupId>
+            <artifactId>base</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
             <artifactId>sqlman</artifactId>
             <version>1.6</version>
         </dependency>

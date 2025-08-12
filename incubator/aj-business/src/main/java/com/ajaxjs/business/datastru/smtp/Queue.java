@@ -1,20 +1,31 @@
 package com.ajaxjs.business.datastru.smtp;
 
+import lombok.Data;
+
 /**
  * 队列类，用于存储和管理邮件发送请求
  * 该类实现了典型的环形缓冲区逻辑，以高效地处理请求的入队和出队操作
  */
+@Data
 public class Queue {
-    // 队列数据数组，存储邮件发送请求
+    /**
+     * 队列数据数组，存储邮件发送请求
+     */
     private final Request[] data;
 
-    // 队列中当前元素的数量
-    int size;
+    /**
+     * 队列中当前元素的数量
+     */
+    private int size;
 
-    // 队列头部索引，用于出队操作
+    /**
+     * 队列头部索引，用于出队操作
+     */
     private int head;
 
-    // 队列尾部索引，用于入队操作
+    /**
+     * 队列尾部索引，用于入队操作
+     */
     private int tail;
 
     /**
@@ -47,8 +58,7 @@ public class Queue {
         head = (head + 1) % data.length;
         size--;
 
-        // 当队列即将满时，通知可能等待入队的线程
-        if (size == data.length - 1)
+        if (size == data.length - 1)// 当队列即将满时，通知可能等待入队的线程
             notifyAll();
 
         return tmp;
