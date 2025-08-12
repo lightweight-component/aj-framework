@@ -35,7 +35,7 @@ layout: layouts/aj-docs.njk
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-framework</artifactId>
-    <version>1.1.8</version>
+    <version>1.2.3</version>
 </dependency>
 ```
 
