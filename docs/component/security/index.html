@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>AJ Framework-Cache</title>
+        <title>AJ Framework-安全组件</title>
         <meta name="description" content="AJ Framework 一个基于 SpringMVC 构建的轻量级框架，旨在增强 SpringMVC 并使其更具 SpringBoot 的特性。它拥有许多小型组件，非常易于使用。" />
-        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framewwork" />
+        <meta name="keywords" content="AJ Framework, ajaxjs, ajaxjs framework, java framework, web framework" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -93,34 +93,55 @@
                 </ul>
             </menu>
             <article>
-                <h1>使用多级缓存</h1>
-<p>单纯使用进程内缓存和分布式缓存都存在各自的不足。如果需要更高的性能以及更好的可用性，我们可以将缓存设计为多级结构。将最热的数据使用进程内缓存存储在内存中，进一步提升访问速度。</p>
-<p>这个设计思路在计算机系统中也存在，比如 CPU 使用 L1、L2、L3 多级缓存，用来减少对内存的直接访问，从而加快访问速度。一般来说，多级缓存架构使用二级缓存已可以满足大部分业务需求，过多的分级会增加系统的复杂度以及维护的成本。因此，多级缓存不是分级越多越好，需要根据实际情况进行权衡。</p>
-<p>一个典型的二级缓存架构，可以使用进程内缓存（如：Caffeine/Google Guava/Ehcache/HashMap）作为一级缓存；使用 Redis 缓存作为二级缓存。有童鞋可能好奇，Redis 已经那么快了为什么不直接使用它呢？这又回到前面的问题上，具体说，是因为访问 Redis 需要网络传输，增加了网络开销。因此 Redis 作为二级缓存，应该尽量减少 Redis 的访问次数，尽量减少网络传输的成本。说白了，就算 Redis 再快也快不过本地进程内（也就是内存内）的速度。</p>
-<h2>缓存查询</h2>
-<p>多级缓存查询流程如下：</p>
-<ol>
-<li>首先，查询 L1 缓存，如果缓存命中，直接返回结果；如果没有命中，执行下一步。</li>
-<li>接下来，查询 L2 缓存，如果缓存命中，直接返回结果并回填 L1 缓存；如果没有命中，执行下一步。</li>
-<li>最后，查询数据库，返回结果并依次回填 L2 缓存、L1 缓存。</li>
-</ol>
-<p><img src="/asset/aj-docs/cache/1.png" alt=""></p>
-<h2>多级缓存更新</h2>
-<p>对于 L1 缓存，如果有数据更新，只能删除并更新所在机器上的缓存，其他机器只能通过超时机制来刷新缓存。超时设定可以有两种策略:</p>
+                <h1>用户系统</h1>
+<p>用户管理、单点登录、权限管理，请参阅独立的组件 AJ-IAM：<a href="https://iam.ajaxjs.com">https://iam.ajaxjs.com</a>。</p>
+<h1>安全组件</h1>
+<p>请参阅独立的组件：aj-security：<a href="https://security.ajaxjs.com">https://security.ajaxjs.com</a>。</p>
+<p>基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。</p>
+<p>本框架的功能有：</p>
 <ul>
-<li>设置成写入后多少时间后过期；</li>
-<li>设置成写入后多少时间刷新。</li>
-</ul>
-<p>对于 L2 缓存，如果有数据更新，其他机器立马可见。但是，也必须要设置超时时间，其时间应该比 L1 缓存的有效时间长。为了解决进程内缓存不一致的问题，设计可以进一步优化；</p>
-<p><img src="/asset/aj-docs/cache/2.png" alt=""></p>
-<p>通过消息队列的发布、订阅机制，可以通知其他应用节点对进程内缓存进行更新。使用这种方案，即使消息队列服务挂了或不可靠，由于先执行了数据库更新，但进程内缓存过期，刷新缓存时，也能保证数据的最终一致性。</p>
-<h1>现实一个吧~</h1>
-<p>受到前辈一文<a href="https://my.oschina.net/xiandafu/blog/847147">《SpringBoot，用 200 行代码完成一个一二级分布式缓存》</a>所启发，于是尝试直接实现一个，但过程中发现若干问题：</p>
+<li>HTTP Web 安全
 <ul>
-<li>文中 Spring Redis 版本较久，2.x API 已经发生较大变化</li>
-<li>强耦合 JDK 的 <code>ConcurrentHashMap</code>，如同文中评论所讲，此乃“吸星大法”，缓存没有淘汰会撑死内存</li>
+<li>HTTP Referer 校验</li>
+<li>时间戳加密 Token 校验</li>
+<li>IP 白名单/黑名单</li>
+<li>防止重复提交数据</li>
+<li>根据 IP 地域限制（TODO）</li>
 </ul>
-<p>因此须考虑一个淘汰算法实现的，例如常见的 LRU 算法。另外，这里加入带过期时间的缓存，能否解决问题呢？笔者认为是否定的，因为虽然可以加入自动过期时间的缓存，但缓存总数的上限没有限制，可以加入成千上万甚至更多的缓存，这是不行的。</p>
+</li>
+<li>一般性 Web 校验
+<ul>
+<li>防止 XSS 跨站攻击</li>
+<li>防止 CRLF 攻击</li>
+<li>Cookie 容量检查</li>
+</ul>
+</li>
+<li>HTTP 标准认证
+<ul>
+<li>HTTP Basic Auth 认证</li>
+<li>HTTP Digest Auth 认证</li>
+</ul>
+</li>
+<li>验证码 Captcha 机制
+<ul>
+<li>简单 Java 图片验证码</li>
+<li>基于 kaptcha 的图片验证码</li>
+<li>基于 Google Recaptcha 的验证码</li>
+<li>基于 CloudFlare Turnstile 的验证码</li>
+</ul>
+</li>
+<li>API 接口功能
+<ul>
+<li>限流限次数</li>
+</ul>
+</li>
+<li>其他实用功能
+<ul>
+<li>实体字段脱敏</li>
+<li>API 接口加解密</li>
+</ul>
+</li>
+</ul>
 
             </article>
         </div>
