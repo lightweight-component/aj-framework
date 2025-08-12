@@ -1188,7 +1188,9 @@ public class TestCache {
 
 ```
 
-![在这里插入图片描述](https://i-blog.csdnimg.cn/direct/5a4f0612e3be42bab45d4f98076c6070.png)
+![在这里插入图片描述](/imgs/cache/spring-cache.png)
+
+
 可见第二次执行的时候，命中了缓存。
 
 Spring Cache 还有其他强大的用法，这里就不展开介绍了。

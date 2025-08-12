@@ -23,8 +23,8 @@ layout: layouts/aj-docs.njk
     <br />
     💬 微信群，扫描二维码加好友，说明：加群<br />
     <br />
-    <img src="/asset/docs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
+    <img src="/imgs/contact/qr-group.jpg" width="230" style="margin-left: 15px;" />
     <br />
     <br />
     微信公众号：<br />
-    <img src="/asset/docs/contact/qrcode_gzh.jpg" />
+    <img src="/imgs/contact/qrcode_gzh.jpg" />

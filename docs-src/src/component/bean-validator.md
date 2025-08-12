@@ -133,7 +133,7 @@ public @interface IdCard {
 
 然后在枚举类 `ValidatorEnum` 中增加具体的校验方法，如果不通过就抛出 `ValidatorException` 异常。
 
-![Bean Validation](../../../asset/aj-docs/bean-v.png)
+![Bean Validation](../../../imgs/bean-v.png)
 
 至此就完成了自定义注解的定义。
 

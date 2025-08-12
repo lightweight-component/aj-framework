@@ -11,9 +11,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap&family=Noto+Sans+SC:wght@100..900&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" /> 
-        <link rel="stylesheet" href="/asset/style/main.css"/>
+        <link rel="stylesheet" href="/asset/main.css"/>
         <link rel="icon" type="image/x-icon" href="/asset/logo.ico"/>
-        <script src="/asset/common.js"></script>
+        <script src="https://framework.ajaxjs.com/static/aj-docs/common.js"></script>
         <script>
             var _hmt = _hmt || [];
             (function() {
@@ -104,7 +104,7 @@
 <li>接下来，查询 L2 缓存，如果缓存命中，直接返回结果并回填 L1 缓存；如果没有命中，执行下一步。</li>
 <li>最后，查询数据库，返回结果并依次回填 L2 缓存、L1 缓存。</li>
 </ol>
-<p><img src="/asset/aj-docs/cache/1.png" alt=""></p>
+<p><img src="/imgs/cache/1.png" alt=""></p>
 <h2>多级缓存更新</h2>
 <p>对于 L1 缓存，如果有数据更新，只能删除并更新所在机器上的缓存，其他机器只能通过超时机制来刷新缓存。超时设定可以有两种策略:</p>
 <ul>
@@ -112,7 +112,7 @@
 <li>设置成写入后多少时间刷新。</li>
 </ul>
 <p>对于 L2 缓存，如果有数据更新，其他机器立马可见。但是，也必须要设置超时时间，其时间应该比 L1 缓存的有效时间长。为了解决进程内缓存不一致的问题，设计可以进一步优化；</p>
-<p><img src="/asset/aj-docs/cache/2.png" alt=""></p>
+<p><img src="/imgs/cache/2.png" alt=""></p>
 <p>通过消息队列的发布、订阅机制，可以通知其他应用节点对进程内缓存进行更新。使用这种方案，即使消息队列服务挂了或不可靠，由于先执行了数据库更新，但进程内缓存过期，刷新缓存时，也能保证数据的最终一致性。</p>
 <h1>现实一个吧~</h1>
 <p>受到前辈一文<a href="https://my.oschina.net/xiandafu/blog/847147">《SpringBoot，用 200 行代码完成一个一二级分布式缓存》</a>所启发，于是尝试直接实现一个，但过程中发现若干问题：</p>
