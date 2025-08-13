@@ -1,6 +1,7 @@
 package com.ajaxjs.base.controller;
 
 import com.ajaxjs.base.model.Feedback;
+import com.ajaxjs.framework.model.PageVO;
 import com.ajaxjs.security.SecurityInterceptor;
 import com.ajaxjs.security.captcha.image.ImageCaptcha;
 import com.ajaxjs.security.captcha.image.ImageCaptchaCheck;
@@ -32,4 +33,7 @@ public interface FeedbackController {
     @CrossOrigin
     @ImageCaptchaCheck
     boolean addFeedback(@RequestBody Feedback feedback);
+
+    @GetMapping("/page")
+    PageVO<Feedback> page();
 }
