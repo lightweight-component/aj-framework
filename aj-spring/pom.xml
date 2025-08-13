@@ -41,5 +41,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>ajaxjs-util</artifactId>
+            <version>1.2.7</version>
+        </dependency>
     </dependencies>
 </project>
