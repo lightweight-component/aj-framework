@@ -1,9 +1,7 @@
 package com.ajaxjs.message;
 
-import com.ajaxjs.message.email.EmailService;
+import com.ajaxjs.message.email.EmailRemoteService;
 import com.ajaxjs.message.email.EmailServiceImpl;
-import com.ajaxjs.message.file.FileService;
-import com.ajaxjs.message.file.FileServiceImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -18,10 +16,8 @@ public class App {
             LocateRegistry.createRegistry(1099);
 
             // 创建远程服务对象并绑定到 RMI 注册表
-            FileService fileService = new FileServiceImpl();
-            Naming.rebind("FileService", fileService);
 
-            EmailService emailService = new EmailServiceImpl();
+            EmailRemoteService emailService = new EmailServiceImpl();
             Naming.rebind("EmailService", emailService);
 
             System.out.println("Server is running...");

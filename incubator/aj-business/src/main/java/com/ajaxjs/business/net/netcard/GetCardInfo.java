@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 多网卡环境下获取MAC地址
  * <p>
- * https://blog.csdn.net/10km/article/details/78569962
+ * <a href="https://blog.csdn.net/10km/article/details/78569962">...</a>
  */
 public class GetCardInfo {
     public static boolean doFilter(Filter filter, NetworkInterface input) {
@@ -34,7 +34,7 @@ public class GetCardInfo {
                 case LOOPBACK:
                     return input.isLoopback();
 
-                case PHYICAL_ONLY: {
+                case PHYSICAL_ONLY: {
                     hardwareAddress = input.getHardwareAddress();
                     return null != hardwareAddress
                             && hardwareAddress.length > 0
@@ -179,7 +179,7 @@ public class GetCardInfo {
      * @return 所有物理网卡
      */
     public static Set<NetworkInterface> getPhysicalNICs() {
-        return getNICs(Filter.PHYICAL_ONLY, Filter.UP);
+        return getNICs(Filter.PHYSICAL_ONLY, Filter.UP);
     }
 
     /**

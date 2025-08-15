@@ -25,7 +25,7 @@ public enum Filter {
     /**
      * 过滤器:物理网卡
      */
-    PHYICAL_ONLY,
+    PHYSICAL_ONLY,
     /**
      * 过滤器:本地以太网卡
      */

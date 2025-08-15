@@ -1,12 +1,12 @@
 package com.ajaxjs.message.email;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Map;
 
 @Data
-@Builder
+@Accessors(chain = true)
 public class Email {
     /**
      * 发件人账号

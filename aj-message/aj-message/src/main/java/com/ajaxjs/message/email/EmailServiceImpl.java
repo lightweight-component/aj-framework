@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EmailServiceImpl extends UnicastRemoteObject implements EmailService {
+public class EmailServiceImpl extends UnicastRemoteObject implements EmailRemoteService {
     public EmailServiceImpl() throws RemoteException {
         super();
     }

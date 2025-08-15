@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.mvc.filter;
 
-import com.ajaxjs.security.traceid.TraceXFilter;
+import com.ajaxjs.spring.traceid.TraceXFilter;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.DateHelper;
 import com.ajaxjs.util.StrUtil;

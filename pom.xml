@@ -11,13 +11,13 @@
         <module>pom/common-project-parent</module>
         <module>pom/opensource-parent</module>
         <module>aj-framework</module>
+        <module>aj-spring</module>
         <module>aj-base</module>
         <module>aj-message/aj-message-common</module>
         <module>aj-message/aj-message</module>
         <module>aj-sample-app</module>
-        <module>incubator/aj-business</module>
-        <module>incubator/aj-redis</module>
-        <module>aj-spring</module>
+        <!--       <module>incubator/aj-business</module>
+               <module>incubator/aj-redis</module>-->
         <!--        <module>aj-dev-tools</module>-->
         <!--<module>aj-web</module>-->
     </modules>
