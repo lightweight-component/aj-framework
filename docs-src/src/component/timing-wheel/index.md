@@ -76,3 +76,13 @@ tick=17%8=1
 各种定时器时间复杂度和内存复杂度比较
 
 ![](20170118181036753.png)
+
+
+## 参考文章
+http://www.cse.wustl.edu/~cdgill/courses/cs6874/TimingWheels.ppt
+http://cseweb.ucsd.edu/users/varghese/PAPERS/twheel.ps.Z
+http://www.cnblogs.com/zhongwencool/p/timing_wheel.html
+https://www.confluent.io/blog/apache-kafka-purgatory-hierarchical-timing-wheels/
+https://my.oschina.net/u/565871/blog/157056
+http://www.ibm.com/developerworks/cn/linux/l-cn-timers/
+

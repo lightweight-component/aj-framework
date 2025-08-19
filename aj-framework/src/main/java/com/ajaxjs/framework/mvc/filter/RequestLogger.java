@@ -57,7 +57,6 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
 
         String httpInfo = req.getMethod() + " " + req.getRequestURI();
         String controllerInfo = handlerMethod.toString();
-        System.out.println("Content-Length: " + req.getHeader("Content-Length"));
         String body = TraceXFilter.getRequestBody(req);
 
         printLog(httpInfo, null, sb.toString(), body, controllerInfo);

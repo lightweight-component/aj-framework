@@ -2,7 +2,6 @@ package com.ajaxjs.base.config;
 
 import com.ajaxjs.framework.cache.Cache;
 import com.ajaxjs.framework.cache.lfu.LFUCache;
-import com.ajaxjs.security.captcha.image.ImageCaptcha;
 import com.ajaxjs.security.captcha.image.ImageCaptchaConfig;
 import com.ajaxjs.security.captcha.image.impl.SimpleCaptchaImage;
 import org.springframework.context.annotation.Bean;
