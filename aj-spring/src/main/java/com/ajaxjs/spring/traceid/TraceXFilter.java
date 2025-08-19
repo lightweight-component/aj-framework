@@ -3,6 +3,7 @@ package com.ajaxjs.spring.traceid;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.http_request.model.HttpConstants;
+import com.ajaxjs.util.uuid.MonotonicULID;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -15,7 +16,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 /**
  * Adds TraceId on every single Request, and adds ContentCachingRequestWrapper/ContentCachingResponseWrapper
@@ -32,7 +32,8 @@ public class TraceXFilter implements Filter {
         String traceId = req.getHeader(X_TRACE);
 
         if (!StringUtils.hasLength(traceId))
-            traceId = UUID.randomUUID().toString().replace("-", StrUtil.EMPTY_STRING).toUpperCase();
+//            traceId = UUID.randomUUID().toString().replace("-", StrUtil.EMPTY_STRING).toUpperCase();
+            traceId = MonotonicULID.random().toString();
 
         MDC.put(BoxLogger.TRACE_KEY, traceId);
 
