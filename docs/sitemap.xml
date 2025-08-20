@@ -82,11 +82,6 @@
         </url>
     
         <url>
-            <loc>https://aj-docs.ajaxjs.com/asset/style/main.css</loc>
-            <lastmod>2025-07-24T00:59:19.142Z</lastmod>
-        </url>
-    
-        <url>
             <loc>https://aj-docs.ajaxjs.com/pages/home/</loc>
             <lastmod>2025-07-24T00:59:19.146Z</lastmod>
         </url>
@@ -109,6 +104,11 @@
         <url>
             <loc>https://aj-docs.ajaxjs.com/Spring/</loc>
             <lastmod>2025-08-01T01:49:47.022Z</lastmod>
+        </url>
+    
+        <url>
+            <loc>https://aj-docs.ajaxjs.com/component/timing-wheel/</loc>
+            <lastmod>2025-08-19T06:26:22.814Z</lastmod>
         </url>
     
 </urlset>
