@@ -44,7 +44,7 @@ public interface Cache<K, V> {
     default <T> T get(K key, Class<T> clz) {
         V v = get(key);
 
-        return (T) v;
+        return v == null ? null : (T) v;
     }
 
     /**
