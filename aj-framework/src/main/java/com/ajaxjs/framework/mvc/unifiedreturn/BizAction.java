@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 统一返回对象自定义 message 内容
+ * 为业务操作添加一段可读的、描述性的文字，用于快速理解这次调用的业务意图或上下文
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface JsonMessage {
+public @interface BizAction {
     /**
      * message 内容，必填
      *

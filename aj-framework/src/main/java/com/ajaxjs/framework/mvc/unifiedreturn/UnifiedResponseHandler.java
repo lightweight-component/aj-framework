@@ -26,7 +26,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @RestControllerAdvice
@@ -86,7 +85,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
             isOk = true;
         }
 
-        JsonMessage annotation = method.getAnnotation(JsonMessage.class);
+        BizAction annotation = method.getAnnotation(BizAction.class);
 
         if (annotation != null)
             responseResult.setMessage(annotation.value());
@@ -129,6 +128,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         String sb = "\n" + PrettyLogger.ANSI_BLUE + RequestLogger.boxLine('┌', '─', '┐', title) + '\n' +
                 RequestLogger.boxContent("Time:            ", DateHelper.now()) + '\n' +
                 RequestLogger.boxContent("TraceId:         ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
+                RequestLogger.boxContent("BizAction:       ", MDC.get(BoxLogger.BIZ_ACTION)) + '\n' +
                 RequestLogger.boxContent("Request URI:     ", req.getMethod() + " " + request.getRequestURI()) + '\n' +
                 RequestLogger.boxContent("Response Result: ", JsonUtil.toJson(responseResult)) + '\n' +
                 RequestLogger.boxContent("Execution Time:  ", getExecutionTime(request)) + '\n' +

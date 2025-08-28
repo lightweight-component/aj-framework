@@ -9,6 +9,7 @@ public class TestRequestLogger {
     void print() {
         printLog(
                 "SELECT",
+                "TEST",
                 "SELECT COUNT(*) FROM user WHERE 1 = 1 AND tenant_id = 3",
                 "33ms","",
                 "{COUNT(*)=1}"

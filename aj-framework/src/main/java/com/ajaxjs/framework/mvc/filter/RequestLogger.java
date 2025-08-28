@@ -1,5 +1,7 @@
 package com.ajaxjs.framework.mvc.filter;
 
+import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.traceid.TraceXFilter;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.DateHelper;
@@ -55,11 +57,17 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
 //            log.info("{} 请求参数：\n{}", req.getMethod(), s);
         }
 
+        BizAction bizAction = DiContextUtil.getAnnotationFromMethod(handlerMethod, BizAction.class);
+
+        if (bizAction != null)
+            MDC.put(BoxLogger.BIZ_ACTION, bizAction.value());
+
+        String bizActionName = bizAction != null ? bizAction.value() : "unknown";
         String httpInfo = req.getMethod() + " " + req.getRequestURI();
         String controllerInfo = handlerMethod.toString();
         String body = TraceXFilter.getRequestBody(req);
 
-        printLog(httpInfo, null, sb.toString(), body, controllerInfo);
+        printLog(httpInfo, bizActionName, null, sb.toString(), body, controllerInfo);
     }
 
 //    @Override
@@ -84,11 +92,12 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
      * @param ip       实际执行SQL（带参数）
      * @param params   参数（字符串，或者拼接好的参数描述）
      */
-    public static void printLog(String httpInfo, String ip, String params, String body, String controllerInfo) {
+    public static void printLog(String httpInfo, String bizActionName, String ip, String params, String body, String controllerInfo) {
         String title = " Request Information ";
         String sb = "\n" + ANSI_YELLOW + boxLine('┌', '─', '┐', title) + '\n' +
                 boxContent("Time:       ", DateHelper.now()) + '\n' +
                 boxContent("TraceId:    ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
+                boxContent("BizAction:  ", bizActionName) + '\n' +
                 boxContent("Request:    ", httpInfo) + '\n' +
                 boxContent("IP:         ", StrUtil.hasText(ip) ? params : "unknown") + '\n' +
                 boxContent("Params:     ", StrUtil.hasText(params) ? params : NONE) + '\n' +
