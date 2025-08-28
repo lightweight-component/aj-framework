@@ -14,7 +14,6 @@ import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -71,6 +70,9 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
 //        if (method.isAnnotationPresent(Desensitize.class))
 //            body = DeSensitize.acquire(body);
 
+        if(method.isAnnotationPresent(PureOutput.class))
+            return body;
+
         ResponseResultWrapper responseResult = new ResponseResultWrapper();
         boolean isOk;
         int statusCode = ((ServletServerHttpResponse) response).getServletResponse().getStatus(); // Get the HTTP status code
@@ -84,12 +86,17 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
             isOk = true;
         }
 
-        JsonMessage annotation = Objects.requireNonNull(returnType.getMethod()).getAnnotation(JsonMessage.class);
+        JsonMessage annotation = method.getAnnotation(JsonMessage.class);
 
         if (annotation != null)
             responseResult.setMessage(annotation.value());
         else
             responseResult.setMessage(isOk ? OK : "操作失败");
+
+        if (body instanceof String) {
+            System.out.println("This is String");
+            System.out.println(body);
+        }
 
         if (body instanceof ResponseResultWrapper)
             BeanUtils.copyProperties(body, responseResult);
