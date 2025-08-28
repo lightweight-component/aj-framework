@@ -4,6 +4,7 @@ import com.ajaxjs.message.email.Email;
 import com.ajaxjs.message.email.ISendEmail;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.http_request.Post;
+import com.ajaxjs.util.http_request.model.HttpConstants;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class Resend implements ISendEmail {
         params.put("html", email.getContent());
 
         Map<String, Object> map = Post.apiJsonBody(RESEND_API, params, (head) -> {
-            head.setRequestProperty("Content-Type", "application/json");
+            head.setRequestProperty("Content-Type", HttpConstants.CONTENT_TYPE_JSON);
             head.setRequestProperty("Authorization", "Bearer " + apiKey);
         });
 
