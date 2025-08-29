@@ -44,15 +44,6 @@ public class DiContextUtil implements ApplicationContextAware {
     }
 
     /**
-     * 获取上下文
-     *
-     * @return 上下文对象
-     */
-    public static ApplicationContext getApplicationContext() {
-        return context;
-    }
-
-    /**
      * 获取已注入的对象
      *
      * @param <T> 对象类型
@@ -61,7 +52,7 @@ public class DiContextUtil implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> clz) {
         if (context == null) {
-            log.warn("Spring Bean 未准备好，不能返回 {} 类", clz);
+            log.warn("Spring Bean System is not ready, can not return by the class: {}", clz);
             return null;
         }
 
@@ -74,6 +65,17 @@ public class DiContextUtil implements ApplicationContextAware {
         }
     }
 
+    public static <T> T getBeanSlient(Class<T> clz) {
+        if (context == null)
+            return null;
+
+        try {
+            return context.getBean(clz);
+        } catch (NoSuchBeanDefinitionException e) {
+            return null;
+        }
+    }
+
     /**
      * 获取已注入的对象
      *
@@ -82,14 +84,14 @@ public class DiContextUtil implements ApplicationContextAware {
      */
     public static Object getBean(String beanName) {
         if (context == null) {
-            log.warn("Spring Bean 未准备好，不能返回 {} Bean.", beanName);
+            log.warn("Spring Bean System is not ready, can not return by the name: {}", beanName);
             return null;
         }
 
         try {
             return context.getBean(beanName);
         } catch (NoSuchBeanDefinitionException e) {
-            log.warn("No such bean {}.", beanName);
+            log.warn("No such bean of name {}.", beanName);
             return null;
         }
     }

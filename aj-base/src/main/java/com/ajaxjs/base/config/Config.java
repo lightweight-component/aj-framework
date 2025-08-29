@@ -17,8 +17,8 @@ public class Config {
         config.setCaptchaImageProvider(new SimpleCaptchaImage());
         config.setSaveToRam(CACHE::put);
         config.setCaptchaCodeFromRam(key -> {
-            Object o = CACHE.get( key);
-            return o.toString();
+            Object o = CACHE.get(key);
+            return o == null ? null : o.toString();
         });
         config.setRemoveByKey(CACHE::remove);
 
