@@ -14,6 +14,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -69,7 +70,9 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
 //        if (method.isAnnotationPresent(Desensitize.class))
 //            body = DeSensitize.acquire(body);
 
-        if(method.isAnnotationPresent(PureOutput.class))
+//        if (method.isAnnotationPresent(PureOutput.class))
+//            return body;
+        if (returnType.hasMethodAnnotation(PureOutput.class))
             return body;
 
         ResponseResultWrapper responseResult = new ResponseResultWrapper();
@@ -85,7 +88,8 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
             isOk = true;
         }
 
-        BizAction annotation = method.getAnnotation(BizAction.class);
+//        BizAction annotation = AnnotationUtils.findAnnotation(method, BizAction.class);
+        BizAction annotation = returnType.getMethodAnnotation(BizAction.class);
 
         if (annotation != null)
             responseResult.setMessage(annotation.value());
