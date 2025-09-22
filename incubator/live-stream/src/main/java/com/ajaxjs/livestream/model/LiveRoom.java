@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 直播间实体
+ */
 @Data
 @Table("live_room")
 public class LiveRoom {

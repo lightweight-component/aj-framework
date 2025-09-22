@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 直播流信息实体
+ */
 @Data
 @Table("live_stream")
 public class LiveStream {

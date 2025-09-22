@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * 直播回放实体
+ */
 @Data
 @Table("live_recording")
 public class LiveRecording {
