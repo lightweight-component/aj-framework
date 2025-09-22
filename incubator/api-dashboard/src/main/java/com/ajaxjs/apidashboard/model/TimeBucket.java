@@ -1,6 +1,7 @@
 package com.ajaxjs.apidashboard.model;
 
 import lombok.Data;
+
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -22,12 +23,11 @@ public class TimeBucket {
 
     public synchronized void record(long duration, boolean success) {
         totalCount.incrementAndGet();
-        if (success) {
+        if (success)
             successCount.incrementAndGet();
-        } else {
+        else
             failCount.incrementAndGet();
-        }
-        
+
         totalTime.add(duration);
         maxTime = Math.max(maxTime, duration);
         minTime = Math.min(minTime, duration);
@@ -36,6 +36,7 @@ public class TimeBucket {
 
     public double getAvgTime() {
         long total = totalCount.get();
+
         return total == 0 ? 0.0 : (double) totalTime.sum() / total;
     }
 
@@ -54,15 +55,15 @@ public class TimeBucket {
 
     public TimeBucketSnapshot toSnapshot() {
         return new TimeBucketSnapshot(
-            bucketStartTime,
-            totalCount.get(),
-            successCount.get(),
-            failCount.get(),
-            totalTime.sum(),
-            maxTime,
-            getMinTime(),
-            getAvgTime(),
-            getSuccessRate()
+                bucketStartTime,
+                totalCount.get(),
+                successCount.get(),
+                failCount.get(),
+                totalTime.sum(),
+                maxTime,
+                getMinTime(),
+                getAvgTime(),
+                getSuccessRate()
         );
     }
 

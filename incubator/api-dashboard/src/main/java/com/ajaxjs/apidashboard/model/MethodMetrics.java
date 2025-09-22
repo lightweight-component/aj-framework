@@ -1,6 +1,7 @@
 package com.ajaxjs.apidashboard.model;
 
 import lombok.Data;
+
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -26,7 +27,7 @@ public class MethodMetrics {
         } else {
             failCount.incrementAndGet();
         }
-        
+
         totalTime.add(duration);
         maxTime = Math.max(maxTime, duration);
         minTime = Math.min(minTime, duration);

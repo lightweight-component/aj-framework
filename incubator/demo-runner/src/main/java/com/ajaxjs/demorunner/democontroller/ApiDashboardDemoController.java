@@ -1,4 +1,4 @@
-package com.ajaxjs.apidashboard.controller;
+package com.ajaxjs.demorunner.democontroller;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -8,8 +8,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/api/demo")
-public class DemoController {
-
+public class ApiDashboardDemoController {
     private final Random random = new Random();
 
     @GetMapping("/hello")

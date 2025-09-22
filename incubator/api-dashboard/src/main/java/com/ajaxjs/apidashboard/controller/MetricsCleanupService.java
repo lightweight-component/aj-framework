@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MetricsCleanupService {
-
     private final MethodMetricsAspect metricsAspect;
 
     @Value("${dashboard.metrics.max-age:3600000}")
@@ -22,10 +21,10 @@ public class MetricsCleanupService {
         try {
             log.debug("Starting metrics cleanup task...");
             metricsAspect.removeStaleMetrics(maxAge);
-            
+
             int currentMethodCount = metricsAspect.getMetricsSnapshot().size();
             log.info("Metrics cleanup completed. Current methods being monitored: {}", currentMethodCount);
-            
+
         } catch (Exception e) {
             log.error("Error during metrics cleanup", e);
         }
@@ -35,13 +34,13 @@ public class MetricsCleanupService {
     public void dailyCleanup() {
         try {
             log.info("Starting daily metrics cleanup...");
-            
+
             // 清理7天以上的数据
             long sevenDaysAgo = 7 * 24 * 60 * 60 * 1000L;
             metricsAspect.removeStaleMetrics(sevenDaysAgo);
-            
+
             log.info("Daily metrics cleanup completed");
-            
+
         } catch (Exception e) {
             log.error("Error during daily metrics cleanup", e);
         }

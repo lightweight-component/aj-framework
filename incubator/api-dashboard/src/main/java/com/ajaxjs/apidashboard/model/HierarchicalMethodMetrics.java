@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.LongAdder;
 @Slf4j
 @Data
 public class HierarchicalMethodMetrics {
-    
+
     // 基础统计信息（兼容旧版本）
     private final AtomicLong totalCount = new AtomicLong(0);
     private final AtomicLong successCount = new AtomicLong(0);
@@ -47,7 +47,7 @@ public class HierarchicalMethodMetrics {
 
     public synchronized void record(long duration, boolean success) {
         long currentTime = System.currentTimeMillis();
-        
+
         // 更新基础统计
         totalCount.incrementAndGet();
         if (success) {
@@ -62,7 +62,7 @@ public class HierarchicalMethodMetrics {
 
         // 分级记录到不同时间桶
         recordToTimeBuckets(currentTime, duration, success);
-        
+
         // 清理过期桶
         cleanupExpiredBuckets(currentTime);
     }
@@ -71,22 +71,22 @@ public class HierarchicalMethodMetrics {
         // 秒级桶
         long secondKey = currentTime / SECOND_MILLIS;
         secondBuckets.computeIfAbsent(secondKey, k -> new TimeBucket(k * SECOND_MILLIS))
-                     .record(duration, success);
+                .record(duration, success);
 
         // 分钟级桶
         long minuteKey = currentTime / MINUTE_MILLIS;
         minuteBuckets.computeIfAbsent(minuteKey, k -> new TimeBucket(k * MINUTE_MILLIS))
-                     .record(duration, success);
+                .record(duration, success);
 
         // 小时级桶
         long hourKey = currentTime / HOUR_MILLIS;
         hourBuckets.computeIfAbsent(hourKey, k -> new TimeBucket(k * HOUR_MILLIS))
-                   .record(duration, success);
+                .record(duration, success);
 
         // 天级桶
         long dayKey = currentTime / DAY_MILLIS;
         dayBuckets.computeIfAbsent(dayKey, k -> new TimeBucket(k * DAY_MILLIS))
-                  .record(duration, success);
+                .record(duration, success);
     }
 
     private void cleanupExpiredBuckets(long currentTime) {
@@ -161,14 +161,14 @@ public class HierarchicalMethodMetrics {
         return result;
     }
 
-    private TimeRangeMetrics aggregateSnapshots(List<TimeBucket.TimeBucketSnapshot> snapshots, 
-                                               long startTime, long endTime) {
+    private TimeRangeMetrics aggregateSnapshots(List<TimeBucket.TimeBucketSnapshot> snapshots,
+                                                long startTime, long endTime) {
         if (snapshots.isEmpty()) {
             return new TimeRangeMetrics(methodName, startTime, endTime, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         long totalCount = 0;
-        long successCount = 0; 
+        long successCount = 0;
         long failCount = 0;
         long totalTime = 0;
         long maxTime = 0;
@@ -187,10 +187,10 @@ public class HierarchicalMethodMetrics {
         double successRate = totalCount > 0 ? (double) successCount / totalCount * 100 : 0;
 
         return new TimeRangeMetrics(
-            methodName, startTime, endTime,
-            totalCount, successCount, failCount,
-            totalTime, maxTime, minTime == Long.MAX_VALUE ? 0 : minTime,
-            avgTime, successRate
+                methodName, startTime, endTime,
+                totalCount, successCount, failCount,
+                totalTime, maxTime, minTime == Long.MAX_VALUE ? 0 : minTime,
+                avgTime, successRate
         );
     }
 

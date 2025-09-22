@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Aspect
 @Component
 public class MethodMetricsAspect {
-    
     private final ConcurrentHashMap<String, HierarchicalMethodMetrics> metricsMap = new ConcurrentHashMap<>();
 
     @Around("@within(org.springframework.web.bind.annotation.RestController) || " +
@@ -23,28 +22,26 @@ public class MethodMetricsAspect {
         String methodName = buildMethodName(joinPoint);
         long startTime = System.nanoTime();
         boolean success = true;
-        
+
         try {
-            Object result = joinPoint.proceed();
-            return result;
+            return joinPoint.proceed();
         } catch (Throwable throwable) {
             success = false;
             throw throwable;
         } finally {
             long duration = (System.nanoTime() - startTime) / 1_000_000; // Convert to milliseconds
-            
-            metricsMap.computeIfAbsent(methodName, HierarchicalMethodMetrics::new)
-                     .record(duration, success);
-                     
-            if (log.isDebugEnabled()) {
+
+            metricsMap.computeIfAbsent(methodName, HierarchicalMethodMetrics::new).record(duration, success);
+
+            if (log.isDebugEnabled())
                 log.debug("Method {} executed in {}ms, success: {}", methodName, duration, success);
-            }
         }
     }
 
     private String buildMethodName(ProceedingJoinPoint joinPoint) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
+
         return className + "." + methodName + "()";
     }
 
@@ -59,7 +56,6 @@ public class MethodMetricsAspect {
 
     public void removeStaleMetrics(long maxAgeMs) {
         long currentTime = System.currentTimeMillis();
-        metricsMap.entrySet().removeIf(entry -> 
-            currentTime - entry.getValue().getLastAccessTime() > maxAgeMs);
+        metricsMap.entrySet().removeIf(entry -> currentTime - entry.getValue().getLastAccessTime() > maxAgeMs);
     }
 }
