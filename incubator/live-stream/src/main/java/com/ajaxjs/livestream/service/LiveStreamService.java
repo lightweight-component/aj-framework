@@ -1,8 +1,12 @@
 package com.ajaxjs.livestream.service;
 
 
+import com.ajaxjs.livestream.controller.LiveController;
+import com.ajaxjs.livestream.model.LiveRecording;
 import com.ajaxjs.livestream.model.LiveRoom;
 import com.ajaxjs.livestream.model.LiveStream;
+import com.ajaxjs.sqlman.Sql;
+import com.ajaxjs.sqlman.crud.Entity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,113 +24,117 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class LiveStreamService {
-    
-    @Autowired
-    private LiveRoomMapper liveRoomMapper;
-    
-    @Autowired
-    private LiveStreamMapper liveStreamMapper;
-    
+public class LiveStreamService implements LiveController {
     @Autowired
     private StringRedisTemplate redisTemplate;
-    
+
+    @Autowired
+    LiveRecordingService liveRecordingService;
+
     @Value("${live.srs.server-url}")
     private String srsServerUrl;
-    
+
     @Value("${live.srs.api-url}")
     private String srsApiUrl;
-    
+
     @Value("${live.srs.http-flv-url}")
     private String httpFlvUrl;
-    
+
     @Value("${live.srs.hls-url}")
     private String hlsUrl;
-    
+
     @Value("${live.push.key-check-enabled}")
     private boolean keyCheckEnabled;
-    
+
     @Value("${live.push.auth-expire}")
     private long authExpire;
-    
+
     @Value("${live.push.auth-key}")
     private String authKey;
-    
-    private RestTemplate restTemplate = new RestTemplate();
-    
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
     /**
      * 创建直播间
      */
     @Transactional
+    @Override
     public LiveRoom createLiveRoom(LiveRoom liveRoom) {
         // 生成推流密钥
         String streamKey = generateStreamKey(liveRoom.getUserId());
         liveRoom.setStreamKey(streamKey);
-        
+
         // 构建推流地址
         String pushUrl = buildPushUrl(streamKey);
         liveRoom.setStreamUrl(pushUrl);
-        
         // 构建播放地址
-        liveRoom.setHlsUrl(hlsUrl + "/" + streamKey +"/" + streamKey + ".m3u8");
+        liveRoom.setHlsUrl(hlsUrl + "/" + streamKey + "/" + streamKey + ".m3u8");
         liveRoom.setFlvUrl(httpFlvUrl + "/" + streamKey + "/" + streamKey + ".flv");
-        
         // 设置初始状态
         liveRoom.setStatus(0);
         liveRoom.setViewCount(0L);
         liveRoom.setLikeCount(0L);
         liveRoom.setCreatedAt(LocalDateTime.now());
         liveRoom.setUpdatedAt(LocalDateTime.now());
-        
-        // 保存到数据库
-        liveRoomMapper.insert(liveRoom);
-        
+        Entity.instance().input(liveRoom).create();// 保存到数据库
+
         return liveRoom;
     }
-    
+
+    @Override
+    public LiveRoom getLiveRoom(Long roomId) {
+        return getLiveRoomById(roomId);
+    }
+
+    public static LiveRoom getLiveRoomById(Long roomId) {
+        LiveRoom liveRoom = Sql.instance().input("SELECT * FROM live_room WHERE id = ?", roomId).query(LiveRoom.class);
+
+        if (liveRoom == null)
+            throw new IllegalArgumentException("直播间不存在");
+
+        return liveRoom;
+    }
+
     /**
      * 生成推流密钥
      */
     private String generateStreamKey(Long userId) {
-        // 生成基于用户ID和时间戳的唯一密钥
-        String baseKey = userId + "_" + System.currentTimeMillis();
+        String baseKey = userId + "_" + System.currentTimeMillis(); // 生成基于用户ID和时间戳的唯一密钥
         return DigestUtils.md5DigestAsHex(baseKey.getBytes());
     }
-    
+
     /**
      * 构建推流地址
      */
     private String buildPushUrl(String streamKey) {
         StringBuilder sb = new StringBuilder(srsServerUrl);
         sb.append("/").append(streamKey);
-        
+
         // 如果启用了推流验证
         if (keyCheckEnabled) {
             long expireTimestamp = System.currentTimeMillis() / 1000 + authExpire;
             String authString = streamKey + "-" + expireTimestamp + "-" + authKey;
             String authToken = DigestUtils.md5DigestAsHex(authString.getBytes());
-            
-            sb.append("?auth_key=").append(authToken)
-              .append("&expire=").append(expireTimestamp);
+
+            sb.append("?auth_key=").append(authToken).append("&expire=").append(expireTimestamp);
         }
-        
+
         return sb.toString();
     }
-    
+
     /**
      * 开始直播
      */
     @Transactional
+    @Override
     public LiveRoom startLiveStream(Long roomId) {
-        LiveRoom liveRoom = liveRoomMapper.selectById(roomId);
-        if (liveRoom == null)
-            throw new IllegalArgumentException("直播间不存在");
-        
+        LiveRoom liveRoom = getLiveRoom(roomId);
+
         // 更新直播间状态为直播中
         liveRoom.setStatus(1);
         liveRoom.setStartTime(LocalDateTime.now());
-        liveRoomMapper.updateById(liveRoom);
-        
+        Entity.instance().input(liveRoom).update();
+
         // 创建直播流记录
         LiveStream liveStream = new LiveStream();
         liveStream.setRoomId(roomId);
@@ -135,65 +143,62 @@ public class LiveStreamService {
         liveStream.setStatus(1);
         liveStream.setCreatedAt(LocalDateTime.now());
         liveStream.setUpdatedAt(LocalDateTime.now());
-        liveStreamMapper.insert(liveStream);
-        
+        Entity.instance().input(liveStream).create();
+
         // 更新Redis缓存中的活跃直播间
         redisTemplate.opsForSet().add("live:active_rooms", String.valueOf(roomId));
-        
+
         return liveRoom;
     }
-    
+
     /**
      * 结束直播
      */
     @Transactional
+    @Override
     public LiveRoom endLiveStream(Long roomId) {
-        LiveRoom liveRoom = liveRoomMapper.selectById(roomId);
-        if (liveRoom == null || liveRoom.getStatus() != 1) {
-            throw new IllegalArgumentException("直播间不存在或未开播");
-        }
-        
+        LiveRoom liveRoom = getLiveRoom(roomId);
+
         // 更新直播间状态为已结束
         liveRoom.setStatus(2);
         liveRoom.setEndTime(LocalDateTime.now());
-        liveRoomMapper.updateById(liveRoom);
-        
+        Entity.instance().input(liveRoom).update();
+
         // 更新直播流状态
-        QueryWrapper<LiveStream> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("room_id", roomId).eq("status", 1);
-        
-        LiveStream liveStream = liveStreamMapper.selectOne(queryWrapper);
+        LiveStream liveStream = Sql.instance().input("SELECT * FROM live_stream WHERE room_id = ? AND status = ?", roomId, 1).query(LiveStream.class);
+
         if (liveStream != null) {
             liveStream.setStatus(2);
             liveStream.setUpdatedAt(LocalDateTime.now());
-            liveStreamMapper.updateById(liveStream);
+            Entity.instance().input(liveStream).update();
         }
-        
-        // 从Redis中移除活跃直播间
-        redisTemplate.opsForSet().remove("live:active_rooms", String.valueOf(roomId));
-        
+
+        redisTemplate.opsForSet().remove("live:active_rooms", String.valueOf(roomId));  // 从Redis中移除活跃直播间
+
         return liveRoom;
     }
-    
+
     /**
      * 获取当前活跃的直播间列表
      */
+    @Override
     public List<LiveRoom> getActiveLiveRooms(int page, int size) {
         Page<LiveRoom> pageParam = new Page<>(page, size);
         QueryWrapper<LiveRoom> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 1).orderByDesc("view_count");
-        
+
         return liveRoomMapper.selectPage(pageParam, queryWrapper).getRecords();
     }
-    
+
     /**
      * 获取热门直播间
      */
+    @Override
     public List<LiveRoom> getHotLiveRooms(int limit) {
         // "SELECT * FROM live_room WHERE status = 1 ORDER BY view_count DESC LIMIT #{limit}"
-        return liveRoomMapper.findHotLiveRooms(limit);
+        return Sql.instance().input("SELECT * FROM live_room WHERE status = 1 ORDER BY view_count DESC LIMIT ?", limit).queryList(LiveRoom.class);
     }
-    
+
     /**
      * 增加直播间观看人数
      */
@@ -201,92 +206,89 @@ public class LiveStreamService {
         // 使用Redis进行计数
         String key = "live:room:" + roomId + ":view_count";
         redisTemplate.opsForValue().increment(key);
-        
+
         // 定期同步到数据库
         if (Math.random() < 0.1) {  // 10%概率同步，减少数据库压力
             String countStr = redisTemplate.opsForValue().get(key);
             if (countStr != null) {
                 long count = Long.parseLong(countStr);
-                
+
                 LiveRoom room = new LiveRoom();
                 room.setId(roomId);
                 room.setViewCount(count);
-                liveRoomMapper.updateById(room);
+                Entity.instance().input(room).update();
             }
         }
     }
-    
+
+    @Override
+    public LiveRecording startRecording(Long roomId) {
+        return liveRecordingService.startRecording(roomId);
+    }
+
+    @Override
+    public LiveRecording stopRecording(Long recordingId) {
+        return liveRecordingService.stopRecording(recordingId);
+    }
+
+    @Override
+    public List<LiveRecording> getRecordings(Long roomId, int page, int size) {
+        return liveRecordingService.getRecordings(roomId, page, size);
+    }
+
     /**
      * 校验推流密钥
      */
     public boolean validateStreamKey(String streamKey, String token, String expire) {
-        if (!keyCheckEnabled) {
+        if (!keyCheckEnabled)
             return true;
-        }
-        
+
         try {
             long expireTimestamp = Long.parseLong(expire);
             long currentTime = System.currentTimeMillis() / 1000;
-            
+
             // 检查是否过期
-            if (currentTime > expireTimestamp) {
+            if (currentTime > expireTimestamp)
                 return false;
-            }
-            
+
             // 验证token
             String authString = streamKey + "-" + expire + "-" + authKey;
             String calculatedToken = DigestUtils.md5DigestAsHex(authString.getBytes());
-            
+
             return calculatedToken.equals(token);
-            
         } catch (Exception e) {
             log.error("验证推流密钥异常", e);
             return false;
         }
     }
-    
+
     /**
      * 处理SRS回调 - 流发布
      */
     public void handleStreamPublish(String app, String stream) {
-        try {
-            // 查找对应的直播间
-            QueryWrapper<LiveRoom> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("stream_key", stream);
-            
-            LiveRoom liveRoom = liveRoomMapper.selectOne(queryWrapper);
-            if (liveRoom != null && liveRoom.getStatus() == 0) {
-                // 更新直播间状态
-                startLiveStream(liveRoom.getId());
-                
-                log.info("直播流发布成功: app={}, stream={}, roomId={}", app, stream, liveRoom.getId());
-            }
-        } catch (Exception e) {
-            log.error("处理流发布回调异常", e);
+        // 查找对应的直播间
+        LiveRoom liveRoom = Sql.instance().input("SELECT * FROM live_room WHERE stream_key = ?", stream).query(LiveRoom.class);
+
+        if (liveRoom != null && liveRoom.getStatus() == 0) {
+            startLiveStream(liveRoom.getId()); // 更新直播间状态
+            log.info("直播流发布成功: app={}, stream={}, roomId={}", app, stream, liveRoom.getId());
         }
     }
-    
+
     /**
      * 处理SRS回调 - 流关闭
      */
     public void handleStreamClose(String app, String stream) {
-        try {
-            // 查找对应的直播间
-            QueryWrapper<LiveRoom> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("stream_key", stream);
-            
-            LiveRoom liveRoom = liveRoomMapper.selectOne(queryWrapper);
-            if (liveRoom != null && liveRoom.getStatus() == 1) {
-                // 更新直播间状态
-                endLiveStream(liveRoom.getId());
-                
-                log.info("直播流关闭: app={}, stream={}, roomId={}", app, stream, liveRoom.getId());
-            }
-        } catch (Exception e) {
-            log.error("处理流关闭回调异常", e);
+        // 查找对应的直播间
+        LiveRoom liveRoom = Sql.instance().input("SELECT * FROM live_room WHERE stream_key = ?", stream).query(LiveRoom.class);
+
+        if (liveRoom != null && liveRoom.getStatus() == 1) {
+            // 更新直播间状态
+            endLiveStream(liveRoom.getId());
+            log.info("直播流关闭: app={}, stream={}, roomId={}", app, stream, liveRoom.getId());
         }
     }
-    
+
     /**
      * 获取SRS服务器信息
      */

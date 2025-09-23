@@ -19,7 +19,6 @@ import java.util.Map;
 @RequestMapping("/api/srs/callback")
 @Slf4j
 public class SrsCallbackController {
-    
     @Autowired
     private LiveStreamService liveStreamService;
     
@@ -32,7 +31,6 @@ public class SrsCallbackController {
         log.info("SRS on_publish回调: app={}, stream={}", callbackDto.getApp(), callbackDto.getStream());
         
         Map<String, Object> result = new HashMap<>();
-
         String param = callbackDto.getParam();
         Map<String, String> paramMap = HttpUtil.decodeParamMap(param, StandardCharsets.UTF_8);
         String token = paramMap.get("auth_key");
@@ -49,6 +47,7 @@ public class SrsCallbackController {
         if (!valid) {
             result.put("code", 403);
             result.put("message", "Forbidden");
+
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
         }
         
@@ -57,6 +56,7 @@ public class SrsCallbackController {
         
         result.put("code", 0);
         result.put("message", "Success");
+
         return ResponseEntity.ok(result);
     }
     
@@ -74,6 +74,7 @@ public class SrsCallbackController {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("message", "Success");
+
         return ResponseEntity.ok(result);
     }
     
@@ -88,6 +89,7 @@ public class SrsCallbackController {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("message", "Success");
+
         return ResponseEntity.ok(result);
     }
     
@@ -102,6 +104,7 @@ public class SrsCallbackController {
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);
         result.put("message", "Success");
+
         return ResponseEntity.ok(result);
     }
     
@@ -111,8 +114,7 @@ public class SrsCallbackController {
      */
     @PostMapping("/on_dvr")
     public ResponseEntity<Map<String, Object>> onDvr(@RequestBody SrsCallbackDto callbackDto) {
-        log.info("SRS on_dvr回调: app={}, stream={}, file={}", 
-                callbackDto.getApp(), callbackDto.getStream(), callbackDto.getFile());
+        log.info("SRS on_dvr回调: app={}, stream={}, file={}", callbackDto.getApp(), callbackDto.getStream(), callbackDto.getFile());
         
         Map<String, Object> result = new HashMap<>();
         result.put("code", 0);

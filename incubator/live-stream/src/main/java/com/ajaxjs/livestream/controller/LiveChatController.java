@@ -1,6 +1,8 @@
 package com.ajaxjs.livestream.controller;
 
 import com.ajaxjs.livestream.model.LiveRoom;
+import com.ajaxjs.livestream.service.LiveStreamService;
+import com.ajaxjs.sqlman.crud.Entity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -15,10 +17,6 @@ import java.util.Map;
 
 @Controller
 public class LiveChatController {
-    
-    @Autowired
-    private LiveRoomMapper liveRoomMapper;
-    
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
@@ -30,19 +28,13 @@ public class LiveChatController {
      */
     @MessageMapping("/chat/{roomId}")
     public void sendMessage(@DestinationVariable Long roomId, ChatMessage message) {
-        // 检查直播间是否存在
-        LiveRoom liveRoom = liveRoomMapper.selectById(roomId);
-        if (liveRoom == null || liveRoom.getStatus() != 1)
-            return;
-
-        
+        LiveRoom liveRoom = LiveStreamService.getLiveRoomById(roomId);
         // 设置消息时间
         message.setTimestamp(LocalDateTime.now());
-        
         // 发送消息到订阅该直播间的所有客户端
         messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
     }
-    
+
     /**
      * 直播间状态变更通知
      */
@@ -51,40 +43,41 @@ public class LiveChatController {
         payload.put("roomId", roomId);
         payload.put("status", status);
         payload.put("timestamp", LocalDateTime.now());
-        
+
         messagingTemplate.convertAndSend("/topic/room/" + roomId + "/status", payload);
     }
-    
+
     /**
      * 发送直播点赞通知
      */
     @MessageMapping("/like/{roomId}")
     public void sendLike(@DestinationVariable Long roomId, Map<String, Object> payload) {
         // 检查直播间是否存在
-        LiveRoom liveRoom = liveRoomMapper.selectById(roomId);
-        if (liveRoom == null || liveRoom.getStatus() != 1)
+        LiveRoom liveRoom = LiveStreamService.getLiveRoomById(roomId);
+
+        if (liveRoom.getStatus() != 1)
             return;
 
         // 增加点赞数
         String key = "live:room:" + roomId + ":like_count";
         Long likeCount = redisTemplate.opsForValue().increment(key);
-        
+
         // 定期同步到数据库
         if (likeCount % 100 == 0) {  // 每100个点赞同步一次
             LiveRoom room = new LiveRoom();
             room.setId(roomId);
             room.setLikeCount(likeCount);
-            liveRoomMapper.updateById(room);
+            Entity.instance().input(room).update();
         }
-        
+
         // 添加时间戳
         payload.put("timestamp", LocalDateTime.now());
         payload.put("likeCount", likeCount);
-        
+
         // 发送点赞通知
         messagingTemplate.convertAndSend("/topic/room/" + roomId + "/like", payload);
     }
-    
+
     @Data
     public static class ChatMessage {
         private String username;
