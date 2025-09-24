@@ -1,6 +1,5 @@
 package com.ajaxjs.danmaku;
 
-
 import com.ajaxjs.danmaku.model.Danmaku;
 import com.ajaxjs.danmaku.model.DanmakuDTO;
 import org.springframework.messaging.handler.annotation.MessageMapping;

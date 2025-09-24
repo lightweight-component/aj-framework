@@ -1,0 +1,11 @@
+# 数据库连接
+db:
+  url: jdbc:h2:./data/test
+
+spring:
+  h2:
+    console:
+      enabled: true          # 启用 H2 控制台
+      path: /h2-console      # 控制台的访问路径 (默认就是 /h2-console)
+      settings:
+        web-allow-others: true # 允许其他 IP 访问

@@ -41,7 +41,7 @@ public abstract class JspSpringStarter implements WebApplicationInitializer {
         PropertySourcesPlaceholderConfigurer cfg = new CustomPropertySources();
         cfg.setIgnoreUnresolvablePlaceholders(true); // Don't fail if @Value is not supplied in properties. Ignore if not found
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        ClassPathResource c = new ClassPathResource("application.yml");
+        ClassPathResource c = new ClassPathResource("application.yaml");
 
         if (c.exists()) {
             yaml.setResources(c);

@@ -63,5 +63,15 @@
             <version>1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-danmaku</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 </project>

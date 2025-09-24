@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-//@TestPropertySource(locations = "classpath:application.yml")
+//@TestPropertySource(locations = "classpath:application.yaml")
 public class TestLevelTwoCache {
     //    @Resource
     LevelTwoCacheManager cacheManager;

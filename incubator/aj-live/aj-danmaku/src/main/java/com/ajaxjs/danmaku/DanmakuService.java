@@ -21,6 +21,8 @@ public class DanmakuService implements DanmakuController {
      */
     @Override
     public Danmaku sendDanmaku(DanmakuDTO danmakuDTO) {
+        // webSocket 不会自动链接数据库
+//        DataBaseConnection.initDb();
         // 内容过滤（简单示例）
         String filteredContent = filterContent(danmakuDTO.getContent());
 

@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(danmakus => {
                 // 记录历史弹幕，用于播放到相应时间点时显示
-                window.historyDanmakus = danmakus;
-                console.log(`已加载${danmakus.length}条历史弹幕`);
+                window.historyDanmakus = danmakus.data;
+                console.log(`已加载${window.historyDanmakus.length}条历史弹幕`);
             })
             .catch(error => console.error('获取历史弹幕失败:', error));
     }

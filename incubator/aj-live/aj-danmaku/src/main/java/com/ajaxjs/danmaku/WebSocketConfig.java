@@ -21,8 +21,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 注册STOMP端点，客户端通过这个端点连接到WebSocket服务器
-        registry.addEndpoint("/ws-danmaku")
-                .setAllowedOriginPatterns("*")
-                .withSockJS(); // 启用SockJS fallback选项
+        registry.addEndpoint("/ws-danmaku").setAllowedOriginPatterns("*").withSockJS(); // 启用SockJS fallback选项
     }
 }
