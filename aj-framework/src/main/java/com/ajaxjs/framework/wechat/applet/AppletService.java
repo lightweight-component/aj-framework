@@ -28,7 +28,7 @@ public class AppletService {
         this.appletCfg = appletCfg;
     }
 
-    private final static String LOGIN_API = "https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s&js_code=%s";
+    public final static String LOGIN_API = "https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s&js_code=%s";
 
     private Code2SessionResult login(String code) {
         String url = String.format(LOGIN_API, appletCfg.getAccessKeyId(), appletCfg.getAccessSecret(), code);

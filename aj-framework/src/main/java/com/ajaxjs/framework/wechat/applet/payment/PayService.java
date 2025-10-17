@@ -9,8 +9,8 @@ import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.CommonUtil;
 import com.ajaxjs.util.cryptography.WeiXinCrypto;
+import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -197,8 +197,7 @@ public class PayService extends CommonService {
                 rp.getNonceStr() + "\n" +
                 rp.getPrepayIdPackage() + "\n";
 
-//        PrivateKey key = PemUtil.loadPrivateKeyByPath(privateKey);
-        PrivateKey key = CommonUtil.loadPrivateKeyByPath(privateKey);
+        PrivateKey key = PrivateKeyUtils.loadPrivateKeyByPath(privateKey);
 
         return WeiXinCrypto.rsaSign(key, sb.getBytes(StandardCharsets.UTF_8));
     }

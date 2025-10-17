@@ -2,8 +2,8 @@ package com.ajaxjs.framework.wechat.merchant;
 
 
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.CommonUtil;
 import com.ajaxjs.util.cryptography.WeiXinCrypto;
+import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -27,7 +27,7 @@ public class SignerMaker {
     public SignerMaker(MerchantConfig cfg) {
         this.cfg = cfg;
 //        this.privateKey = PemUtil.loadPrivateKey(cfg.getPrivateKey());
-        this.privateKey = CommonUtil.loadPrivateKeyByPath(cfg.getPrivateKey());
+        this.privateKey = PrivateKeyUtils.loadPrivateKeyByPath(cfg.getPrivateKey());
     }
 
     /**
