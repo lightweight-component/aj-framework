@@ -4,12 +4,13 @@ import com.ajaxjs.framework.license.context.HardwareUtil;
 import com.ajaxjs.framework.license.entity.License;
 import com.ajaxjs.framework.license.entity.LicenseVerifyResult;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.cryptography.RsaCrypto;
+import com.ajaxjs.util.cryptography.Constant;
+import com.ajaxjs.util.cryptography.rsa.DoSignature;
+import com.ajaxjs.util.cryptography.rsa.DoVerify;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public class LicenseService {
         String licenseData = createStandardizedLicenseJson(license); // 创建标准化的JSON数据（按固定顺序）
         log.debug("用于签名的许可证数据: {}", licenseData);
 
-        String signature = RsaCrypto.sign(RsaCrypto.SHA256_SIGNATURE_ALGORITHM, licenseData, privateKey);  // 使用私钥签名
+        String signature = new DoSignature(Constant.SHA256_RSA).setPrivateKey(privateKey).setStrData(licenseData).signToString();  // 使用私钥签名
         JsonNode jsonNode = JsonUtil.json2Node(licenseData);  // 创建包含签名的完整许可证
         ((ObjectNode) jsonNode).put("signature", signature);
 
@@ -55,7 +56,7 @@ public class LicenseService {
 
         String licenseData = createStandardizedLicenseJson(license);// 重新生成标准化的JSON数据用于验证
         log.debug("用于验证的许可证数据: {}", licenseData);
-        boolean signatureValid = RsaCrypto.verify(RsaCrypto.SHA256_SIGNATURE_ALGORITHM, licenseData.getBytes(StandardCharsets.UTF_8), signature, publicKey);// 验证签名
+        boolean signatureValid = new DoVerify(Constant.SHA256_RSA).setSignatureBase64(signature).setPublicKey(publicKey).setStrData(licenseData).verify();// 验证签名
 
         if (!signatureValid) {
             log.warn("签名验证失败 - 原始数据: {}", licenseData);
