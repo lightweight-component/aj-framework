@@ -6,10 +6,12 @@ import com.ajaxjs.framework.wechat.applet.payment.payment.PayResult;
 import com.ajaxjs.framework.wechat.applet.payment.payment.PreOrder;
 import com.ajaxjs.framework.wechat.applet.payment.payment.RequestPayment;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
+import com.ajaxjs.framework.wechat.merchant.SignerMaker;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.WeiXinCrypto;
+import com.ajaxjs.util.cryptography.Constant;
+import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.Map;
 
@@ -197,9 +198,10 @@ public class PayService extends CommonService {
                 rp.getNonceStr() + "\n" +
                 rp.getPrepayIdPackage() + "\n";
 
-        PrivateKey key = PrivateKeyUtils.loadPrivateKeyByPath(privateKey);
+        PrivateKey key = SignerMaker.loadPrivateKeyByPath(privateKey);
+        String signature = new DoSignature(Constant.SHA256_RSA).setPrivateKey(key).setStrData(sb).signToString();
 
-        return WeiXinCrypto.rsaSign(key, sb.getBytes(StandardCharsets.UTF_8));
+        return signature;
     }
 
     @Override

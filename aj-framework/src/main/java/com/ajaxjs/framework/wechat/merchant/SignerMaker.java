@@ -2,11 +2,13 @@ package com.ajaxjs.framework.wechat.merchant;
 
 
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.WeiXinCrypto;
+import com.ajaxjs.util.cryptography.Constant;
+import com.ajaxjs.util.cryptography.rsa.DoSignature;
+import com.ajaxjs.util.cryptography.rsa.KeyMgr;
 import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
+import com.ajaxjs.util.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 
 /**
@@ -14,10 +16,9 @@ import java.security.PrivateKey;
  */
 @Slf4j
 public class SignerMaker {
-
     private final MerchantConfig cfg;
 
-    protected final PrivateKey privateKey;
+    public final PrivateKey privateKey;
 
     /**
      * 创建签名生成器
@@ -26,8 +27,22 @@ public class SignerMaker {
      */
     public SignerMaker(MerchantConfig cfg) {
         this.cfg = cfg;
-//        this.privateKey = PemUtil.loadPrivateKey(cfg.getPrivateKey());
-        this.privateKey = PrivateKeyUtils.loadPrivateKeyByPath(cfg.getPrivateKey());
+        this.privateKey = loadPrivateKeyByPath(cfg.getPrivateKey());
+    }
+
+    private static String privateKeyContent;
+
+    /**
+     * 从 classpath 上指定私钥文件的路径
+     *
+     * @param privateKeyPath 私钥文件的路径
+     * @return 私钥文件 PrivateKey
+     */
+    public static PrivateKey loadPrivateKeyByPath(String privateKeyPath) {
+        if (privateKeyContent == null)
+            privateKeyContent = Resources.getResourceText(privateKeyPath); // cache it
+
+        return KeyMgr.restorePrivateKey(privateKeyContent);
     }
 
     /**
@@ -41,8 +56,7 @@ public class SignerMaker {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(request, nonceStr, timestamp);
 		log.debug("authorization message=[{}]", message);
-//        String signature = RsaCryptoUtil.sign(privateKey, message.getBytes(StandardCharsets.UTF_8));
-        String signature = WeiXinCrypto.rsaSign(privateKey, message.getBytes(StandardCharsets.UTF_8));
+        String signature = new DoSignature(Constant.SHA256_RSA).setPrivateKey(privateKey).setStrData(message).signToString();
 
         // @formatter:off
         String token = "mchid=\"" + cfg.getMchId() + "\","
