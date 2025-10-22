@@ -3,7 +3,7 @@ package com.ajaxjs.framework.wechat.applet.payment;
 
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.cryptography.WeiXinCrypto;
+import com.ajaxjs.util.cryptography.CertificateUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -13,7 +13,6 @@ import java.util.Map;
  */
 @Slf4j
 public abstract class CommonService {
-
     abstract public MerchantConfig getMchCfg();
 
     /**
@@ -32,19 +31,11 @@ public abstract class CommonService {
         log.info(ciphertext);
 
         byte[] apiV3KeyByte = StrUtil.getUTF8_Bytes(getMchCfg().getApiV3Key());
-        byte[] associatedData = StrUtil.getUTF8_Bytes(resource.get("associated_data").toString());
-        byte[] nonce = StrUtil.getUTF8_Bytes(resource.get("nonce").toString());
+        String associatedData = resource.get("associated_data").toString();
+        String nonce = resource.get("nonce").toString();
 
         // 解密
-//        AesUtil aesUtil = new AesUtil(apiV3KeyByte);
-//        String cert;
-//
-//        try {
-//            cert = aesUtil.decryptToString(associatedData, nonce, ciphertext);
-//        } catch (GeneralSecurityException e) {
-//            log.warn("decrypt", e);
-//        }
-        String cert = WeiXinCrypto.aesDecryptToString(apiV3KeyByte, associatedData, nonce, ciphertext);
+        String cert = CertificateUtils.aesDecryptToString(apiV3KeyByte, associatedData, nonce, ciphertext);
 
         log.info(cert);
 

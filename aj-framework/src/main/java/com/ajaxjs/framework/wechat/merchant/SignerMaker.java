@@ -1,11 +1,9 @@
 package com.ajaxjs.framework.wechat.merchant;
 
-
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import com.ajaxjs.util.cryptography.rsa.KeyMgr;
-import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
 import com.ajaxjs.util.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 

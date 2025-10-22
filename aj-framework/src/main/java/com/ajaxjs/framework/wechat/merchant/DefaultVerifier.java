@@ -1,17 +1,16 @@
 package com.ajaxjs.framework.wechat.merchant;
 
+import lombok.RequiredArgsConstructor;
+
 import java.security.cert.X509Certificate;
 import java.util.NoSuchElementException;
 
 /**
  * 内部验签器
  */
+@RequiredArgsConstructor
 public class DefaultVerifier {
 	private final String merchantId;
-
-	private DefaultVerifier(String merchantId) {
-        this.merchantId = merchantId;
-	}
 //
 //	public boolean verify(String serialNumber, byte[] message, String signature) {
 //		if (serialNumber.isEmpty() || message.length == 0 || signature.isEmpty())
