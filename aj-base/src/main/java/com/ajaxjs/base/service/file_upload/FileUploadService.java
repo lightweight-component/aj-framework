@@ -152,7 +152,8 @@ public class FileUploadService implements FileUploadController {
      * 文件校验
      */
     private void fileCheck(MultipartFile file) throws IOException {
-        if (file.isEmpty()) throw new IllegalArgumentException("没有上传任何文件");
+        if (file.isEmpty())
+            throw new IllegalArgumentException("没有上传任何文件");
 
         if (file.getSize() > ((long) maxSingleFileSize * 1024 * 1024)) // MB 转字节
             throw new IOException("文件大小超过系统限制！");
@@ -171,7 +172,8 @@ public class FileUploadService implements FileUploadController {
                 }
             }
 
-            if (!isFound) throw new IllegalArgumentException(ext + " 上传类型不允许上传");
+            if (!isFound)
+                throw new IllegalArgumentException(ext + " 上传类型不允许上传");
         }
     }
 }

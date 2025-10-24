@@ -37,12 +37,6 @@ public class FileUploadController {
             @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "type", required = false) String type,
             HttpServletRequest request) {
-        if (file.isEmpty()) // 校验文件
-            throw new IllegalArgumentException("文件不能为空");
-
-//        if (!file.getContentType().startsWith("audio/")) {
-//            return Result.error("文件类型不合法");
-//        }
 
         // 2. 创建上传目录
         Path uploadDir = Paths.get(uploadPath);
@@ -80,7 +74,7 @@ public class FileUploadController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return Result.error("文件保存失败：" + e.getMessage());
+            return null;
         }
     }
 }

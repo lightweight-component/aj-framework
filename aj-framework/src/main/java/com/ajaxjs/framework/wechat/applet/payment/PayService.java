@@ -12,7 +12,6 @@ import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
-import com.ajaxjs.util.cryptography.rsa.PrivateKeyUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
