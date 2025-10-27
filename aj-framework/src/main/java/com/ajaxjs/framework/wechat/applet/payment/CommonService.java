@@ -1,11 +1,10 @@
 package com.ajaxjs.framework.wechat.applet.payment;
 
-
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cryptography.CertificateUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -30,7 +29,7 @@ public abstract class CommonService {
         String ciphertext = resource.get("ciphertext").toString();
         log.info(ciphertext);
 
-        byte[] apiV3KeyByte = StrUtil.getUTF8_Bytes(getMchCfg().getApiV3Key());
+        byte[] apiV3KeyByte = getMchCfg().getApiV3Key().getBytes(StandardCharsets.UTF_8);
         String associatedData = resource.get("associated_data").toString();
         String nonce = resource.get("nonce").toString();
 

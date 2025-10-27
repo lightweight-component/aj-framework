@@ -1,12 +1,12 @@
 package com.ajaxjs.framework.wechat.applet;
 
-import com.ajaxjs.util.http_request.Get;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
+import com.ajaxjs.util.httpremote.Get;
 
 /**
  * 获取小程序 AccessToken

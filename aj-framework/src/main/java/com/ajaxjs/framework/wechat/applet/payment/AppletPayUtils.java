@@ -5,9 +5,9 @@ import com.ajaxjs.framework.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.framework.wechat.merchant.SignerMaker;
 import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.http_request.Get;
-import com.ajaxjs.util.http_request.Post;
-import com.ajaxjs.util.http_request.model.HttpConstants;
+import com.ajaxjs.util.httpremote.Get;
+import com.ajaxjs.util.httpremote.Post;
+import com.ajaxjs.util.httpremote.HttpConstant;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -35,10 +35,8 @@ public class AppletPayUtils {
      */
     public static void setSign2Header(HttpURLConnection conn, String signToken) {
         conn.addRequestProperty("Authorization", SCHEMA + " " + signToken);
-        conn.addRequestProperty("Accept", HttpConstants.CONTENT_TYPE_JSON
-        );
-        conn.addRequestProperty("Content-Type", HttpConstants.CONTENT_TYPE_JSON
-        );
+        conn.addRequestProperty("Accept", HttpConstant.CONTENT_TYPE_JSON);
+        conn.addRequestProperty("Content-Type", HttpConstant.CONTENT_TYPE_JSON);
 
 //        ProfitSharingServiceImpl s = DiContextUtil.getBean(ProfitSharingServiceImpl.class);// 写死
 //        conn.addRequestProperty("Wechatpay-Serial", s.platformCertSerialNo);
@@ -85,7 +83,7 @@ public class AppletPayUtils {
 
     public static Map<String, Object> postMap(MerchantConfig mchCfg, String url, Object params) {
         String rawJson = JsonUtil.toJson(params);
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstants.POST, url, rawJson);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.POST, url, rawJson);
 
         System.out.println(":::请求参数：" + rawJson);
         Map<String, Object> result = Post.api(API_DOMAIN + url, rawJson, getSetHeadFn(mchCfg, rw));
@@ -111,7 +109,7 @@ public class AppletPayUtils {
 
     @SuppressWarnings("unchecked")
     public static <T> T get(MerchantConfig mchCfg, String url, Class<T> resultClz) {
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstants.GET, url);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.GET, url);
         Map<String, Object> result = Get.api(API_DOMAIN + url, getSetHeadFn(mchCfg, rw));
 
         if (result.containsKey("code") && result.containsKey("message"))

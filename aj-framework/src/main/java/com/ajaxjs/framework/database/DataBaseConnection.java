@@ -3,7 +3,7 @@ package com.ajaxjs.framework.database;
 import com.ajaxjs.framework.mvc.GlobalExceptionHandler;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.JdbcConnection;
-import com.ajaxjs.util.Version;
+import com.ajaxjs.util.DebugTools;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.lang.Nullable;
@@ -76,7 +76,7 @@ public class DataBaseConnection implements HandlerInterceptor {
             conn = ds.getConnection();
             JdbcConnection.setConnection(conn); // 设置连接到库，使其可用
 
-            if (Version.isDebug)
+            if (DebugTools.isDebug)
                 log.info("Database [{}...] connected.", conn.getMetaData().getURL().substring(0, 60));
         } catch (SQLException e) {
             log.error("Error when init database connection.", e);

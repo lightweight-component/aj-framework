@@ -7,10 +7,8 @@
  */
 package com.ajaxjs.base.service.file_upload;
 
-
-import com.ajaxjs.util.BytesHelper;
 import com.ajaxjs.util.DateHelper;
-import com.ajaxjs.util.MessageDigestHelper;
+import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.http_request.Delete;
 import com.ajaxjs.util.http_request.Get;
 import com.ajaxjs.util.http_request.Post;
@@ -135,7 +133,7 @@ public class NsoHttpUpload implements IFileUpload {
             filename = file.getName();
 
         // 将文件以字节流形式打开，并计算其 MD5 值，然后调用 upload 方法进行上传
-        return upload(FileHelper.readFileBytes(file.getPath()), filename, MessageDigestHelper.calcFileMD5(file, null));
+        return upload(FileHelper.readFileBytes(file.getPath()), filename, HashHelper.calcFileMD5(file));
     }
 
     /**
@@ -177,7 +175,7 @@ public class NsoHttpUpload implements IFileUpload {
      */
     @Override
     public boolean upload(String filename, byte[] bytes) {
-        return upload(bytes, filename, MessageDigestHelper.calcFileMD5(null, bytes));
+        return upload(bytes, filename, HashHelper.calcFileMD5(null, bytes));
     }
 
     /**
@@ -188,8 +186,23 @@ public class NsoHttpUpload implements IFileUpload {
      * @return 是否成功
      */
     public boolean save(byte[] bytes, int offset, int length, String filename) {
-        bytes = BytesHelper.subBytes(bytes, offset, length); // 内存中的字节数组上传到空间中
+        bytes = subBytes(bytes, offset, length); // 内存中的字节数组上传到空间中
 
         return upload(filename, bytes);
+    }
+
+    /**
+     * 在字节数组中截取指定长度数组
+     *
+     * @param data   输入的数据
+     * @param off    偏移
+     * @param length 长度
+     * @return 指定 范围的字节数组
+     */
+    public static byte[] subBytes(byte[] data, int off, int length) {
+        byte[] bs = new byte[length];
+        System.arraycopy(data, off, bs, 0, length);
+
+        return bs;
     }
 }

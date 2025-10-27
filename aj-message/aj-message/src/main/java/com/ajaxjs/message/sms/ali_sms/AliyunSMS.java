@@ -10,8 +10,6 @@
  */
 package com.ajaxjs.message.sms.ali_sms;
 
-import com.ajaxjs.util.EncodeTools;
-import com.ajaxjs.util.MessageDigestHelper;
 import org.springframework.util.AlternativeJdkIdGenerator;
 
 import java.text.SimpleDateFormat;

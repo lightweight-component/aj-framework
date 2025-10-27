@@ -8,7 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import com.ajaxjs.util.http_request.Get;
+import com.ajaxjs.util.httpremote.Get;
 
 import java.util.HashMap;
 import java.util.List;

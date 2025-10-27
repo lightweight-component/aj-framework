@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.mvc;
 
+import com.ajaxjs.util.CommonConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
@@ -196,7 +197,7 @@ public class Download {
      */
     public static HttpHeaders getHeader(String filename, long fileLength, String contentType) {
         HttpHeaders headers = new HttpHeaders();
-        String encodedFileName = UriUtils.encode(filename, "UTF-8");
+        String encodedFileName = UriUtils.encode(filename, CommonConstant.UTF8);
 
         // 指定文件名和附件方式，告知浏览器这是一个下载文件而非直接显示的内容。
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + encodedFileName);

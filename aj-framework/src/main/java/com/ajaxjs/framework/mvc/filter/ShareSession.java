@@ -1,13 +1,12 @@
 package com.ajaxjs.framework.mvc.filter;
 
 import com.ajaxjs.framework.cache.Cache;
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.uuid.MonotonicULID;
+import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.RandomTools;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.*;
@@ -44,7 +43,7 @@ public class ShareSession implements Filter {
             else {
                 String sessionId = cookie.getValue();
 
-                if (StrUtil.hasText(sessionId)) {
+                if (ObjectHelper.hasText(sessionId)) {
                     Object o = sessionCache.get(CACHE_PREFIX + sessionId);
 
                     if (o != null) {
@@ -64,7 +63,7 @@ public class ShareSession implements Filter {
     }
 
     private void setNewSession(HttpServletRequest request, ServletResponse servletResponse) {
-        String sessionId = MonotonicULID.random().toString();
+        String sessionId = RandomTools.uuidStr();
         Map<String, Object> attribute = new ConcurrentHashMap<>();
         sessionCache.put(CACHE_PREFIX + sessionId, attribute, SESSION_TIMEOUT);
         request.setAttribute(SHARE_SESSION, attribute);
@@ -90,7 +89,7 @@ public class ShareSession implements Filter {
             if (cookie != null) {
                 String sessionId = cookie.getValue();
 
-                if (StrUtil.hasText(sessionId))
+                if (ObjectHelper.hasText(sessionId))
                     sessionCache.remove(CACHE_PREFIX + sessionId);
             }
         }

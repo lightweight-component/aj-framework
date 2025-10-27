@@ -30,10 +30,10 @@ public class LicenseStartupValidator implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("开始执行许可证启动验证...");
 
-        String licenseJson = FileHelper.readFileContent(licenseFilePath);
+        String licenseJson = new FileHelper(licenseFilePath).getFileContent();
         log.debug("许可证文件读取成功，文件大小: {} 字节", licenseJson.length());
 
-        keyManagementService.loadPublicKey(FileHelper.readFileContent(publicKeyPath));// 加载公钥
+        keyManagementService.loadPublicKey(new FileHelper(publicKeyPath).getFileContent());// 加载公钥
         log.info("公钥文件加载成功");
 
         // 验证许可证

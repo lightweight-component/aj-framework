@@ -12,7 +12,6 @@ package com.ajaxjs.base.service.file_upload;
 
 
 import com.ajaxjs.util.DateHelper;
-import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.http_request.Get;
 import com.ajaxjs.util.http_request.Post;

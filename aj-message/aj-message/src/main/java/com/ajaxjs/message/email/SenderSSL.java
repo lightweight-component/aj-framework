@@ -1,8 +1,8 @@
 package com.ajaxjs.message.email;
 
 import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RegExpUtils;
-import com.ajaxjs.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLSocket;
@@ -100,7 +100,7 @@ public class SenderSSL {
                 if (!isOkCode(result, 334))
                     throw new MailException("发信人名称发送失败：" + result, 334);
 
-                if (StrUtil.isEmptyText(bean.getPassword()))
+                if (ObjectHelper.isEmptyText(bean.getPassword()))
                     log.warn("No password set for SMTP.");
 
                 result = sendCommand(toBase64(bean.getPassword()));

@@ -1,8 +1,7 @@
 package com.ajaxjs.framework.wechat.applet;
 
 import com.ajaxjs.framework.wechat.applet.model.Code2SessionResult;
-import com.ajaxjs.util.http_request.Get;
-import com.ajaxjs.util.http_request.Post;
+import com.ajaxjs.util.httpremote.Get;
 import lombok.extern.slf4j.Slf4j;
 import com.ajaxjs.spring.DiContextUtil;
 import java.io.IOException;
@@ -32,7 +31,8 @@ public class AppletService {
 
     private Code2SessionResult login(String code) {
         String url = String.format(LOGIN_API, appletCfg.getAccessKeyId(), appletCfg.getAccessSecret(), code);
-        return Get.api2bean(url, Code2SessionResult.class);
+
+        return Get.api(url, Code2SessionResult.class);
     }
 
     /**
@@ -80,14 +80,14 @@ public class AppletService {
         System.out.println(requestJson);
 
         // 请求
-        Post.showPic(url, conn -> {
-            try (OutputStream outputStream = conn.getOutputStream()) {
-                outputStream.write(requestJson.getBytes(StandardCharsets.UTF_8));
-                outputStream.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }, DiContextUtil.getResponse());
+//        Post.showPic(url, conn -> {
+//            try (OutputStream outputStream = conn.getOutputStream()) {
+//                outputStream.write(requestJson.getBytes(StandardCharsets.UTF_8));
+//                outputStream.flush();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }, DiContextUtil.getResponse());
     }
 
     public static String mapToQueryString(Map<String, Object> map) {

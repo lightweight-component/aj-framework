@@ -3,9 +3,7 @@ package com.ajaxjs.framework.mvc.filter;
 import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.traceid.TraceXFilter;
-import com.ajaxjs.util.BoxLogger;
-import com.ajaxjs.util.DateHelper;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
@@ -99,11 +97,11 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
                 boxContent("TraceId:    ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
                 boxContent("BizAction:  ", bizActionName) + '\n' +
                 boxContent("Request:    ", httpInfo) + '\n' +
-                boxContent("IP:         ", StrUtil.hasText(ip) ? params : "unknown") + '\n' +
-                boxContent("Params:     ", StrUtil.hasText(params) ? params : NONE) + '\n' +
-                boxContent("Body:       ", StrUtil.hasText(body) ? body : NONE) + '\n' +
+                boxContent("IP:         ", ObjectHelper.hasText(ip) ? params : "unknown") + '\n' +
+                boxContent("Params:     ", ObjectHelper.hasText(params) ? params : NONE) + '\n' +
+                boxContent("Body:       ", ObjectHelper.hasText(body) ? body : NONE) + '\n' +
                 boxContent("Controller: ", controllerInfo) + '\n' +
-                boxLine('└', '─', '┘', StrUtil.EMPTY_STRING) + ANSI_RESET;
+                boxLine('└', '─', '┘', CommonConstant.EMPTY_STRING) + ANSI_RESET;
 
         log.info(sb);
     }

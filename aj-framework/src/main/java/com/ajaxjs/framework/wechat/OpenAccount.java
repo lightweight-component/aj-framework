@@ -10,9 +10,9 @@
  */
 package com.ajaxjs.framework.wechat;
 
-import com.ajaxjs.util.MessageDigestHelper;
+import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.http_request.Get;
+import com.ajaxjs.util.httpremote.Get;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -112,7 +112,7 @@ public class OpenAccount {
         }
 
 //        return Digest.getSHA1(sb.toString());
-        return MessageDigestHelper.getSHA1(sb.toString());
+        return HashHelper.getSHA1(sb.toString());
     }
 
     public static void main(String[] args) {

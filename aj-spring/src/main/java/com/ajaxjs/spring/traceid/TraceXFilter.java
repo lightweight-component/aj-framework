@@ -1,9 +1,6 @@
 package com.ajaxjs.spring.traceid;
 
-import com.ajaxjs.util.BoxLogger;
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.http_request.model.HttpConstants;
-import com.ajaxjs.util.uuid.MonotonicULID;
+import com.ajaxjs.util.*;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,6 +23,8 @@ import java.nio.charset.StandardCharsets;
 public class TraceXFilter implements Filter {
     private final static String X_TRACE = "x-trace";
 
+    private final static  String CONTENT_TYPE_JSON = "application/json";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -33,7 +32,7 @@ public class TraceXFilter implements Filter {
 
         if (!StringUtils.hasLength(traceId))
 //            traceId = UUID.randomUUID().toString().replace("-", StrUtil.EMPTY_STRING).toUpperCase();
-            traceId = MonotonicULID.random().toString();
+            traceId = RandomTools.uuid().toString();
 
         MDC.put(BoxLogger.TRACE_KEY, traceId);
 
@@ -41,7 +40,7 @@ public class TraceXFilter implements Filter {
         // Spring 的无效
 //        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
 //        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
-        if (!HttpConstants.GET.equals(req.getMethod()) && StrUtil.hasText(request.getContentType()) && request.getContentType().contains(HttpConstants.CONTENT_TYPE_JSON))
+        if (!"GET".equals(req.getMethod()) && ObjectHelper.hasText(request.getContentType()) && request.getContentType().contains(CONTENT_TYPE_JSON))
             chain.doFilter(new BufferedRequestWrapper(req), response);
         else
             chain.doFilter(req, response); // GET 请求不记录
@@ -58,7 +57,7 @@ public class TraceXFilter implements Filter {
             }
         }
 
-        return StrUtil.EMPTY_STRING;
+        return CommonConstant.EMPTY_STRING;
     }
 
 //    public static String getRequestBody(HttpServletRequest request) {

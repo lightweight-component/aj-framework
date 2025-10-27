@@ -5,16 +5,12 @@ package com.ajaxjs.framework.mvc.unifiedreturn;
 
 import com.ajaxjs.framework.mvc.filter.RequestLogger;
 import com.ajaxjs.sqlman.util.PrettyLogger;
-import com.ajaxjs.util.BoxLogger;
-import com.ajaxjs.util.DateHelper;
-import com.ajaxjs.util.JsonUtil;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -136,7 +132,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
                 RequestLogger.boxContent("Request URI:     ", req.getMethod() + " " + request.getRequestURI()) + '\n' +
                 RequestLogger.boxContent("Response Result: ", JsonUtil.toJson(responseResult)) + '\n' +
                 RequestLogger.boxContent("Execution Time:  ", getExecutionTime(request)) + '\n' +
-                RequestLogger.boxLine('└', '─', '┘', StrUtil.EMPTY_STRING) + PrettyLogger.ANSI_RESET;
+                RequestLogger.boxLine('└', '─', '┘', CommonConstant.EMPTY_STRING) + PrettyLogger.ANSI_RESET;
 
         log.info(sb);
     }

@@ -2,7 +2,7 @@ package com.ajaxjs.framework.mvc;
 
 import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.framework.mvc.unifiedreturn.ResponseResultWrapper;
-import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -64,8 +64,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         }
 
         resultWrapper.setMessage(javaValue2jsonValue(msg));
-
-        resp.setCharacterEncoding(EncodeTools.UTF8_SYMBOL); // 避免乱码
+        resp.setCharacterEncoding(CommonConstant.UTF8); // 避免乱码
         resp.setHeader("Cache-Control", "no-cache, must-revalidate");
         resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
