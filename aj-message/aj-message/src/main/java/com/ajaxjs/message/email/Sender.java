@@ -10,7 +10,7 @@
  */
 package com.ajaxjs.message.email;
 
-import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.Base64Utils;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RegExpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +86,7 @@ public class Sender extends Socket {
             if (!isOkCode(result, 334))
                 throw new MailException("发信人名称发送失败：" + result, 334);
 
-            if(ObjectHelper.isEmptyText(bean.getPassword()))
+            if (ObjectHelper.isEmptyText(bean.getPassword()))
                 log.warn("No password set for SMTP.");
 
             result = sendCommand(toBase64(bean.getPassword()));
@@ -226,7 +226,7 @@ public class Sender extends Socket {
      * @return 已编码的字符串
      */
     public static String toBase64(String str) {
-        return EncodeTools.base64EncodeToString(str);
+        return new Base64Utils(str).encodeAsString();
     }
 
     /**

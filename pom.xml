@@ -16,7 +16,7 @@
         <module>aj-message/aj-message-common</module>
         <module>aj-message/aj-message</module>
         <module>aj-sample-app</module>
-        <module>incubator/demo-runner</module>
+<!--        <module>incubator/demo-runner</module>
         <module>incubator/api-dashboard</module>
         <module>incubator/aj-live/live-stream</module>
         <module>incubator/aj-live/aj-danmaku</module>
@@ -28,7 +28,7 @@
         <module>incubator/aj-logview</module>
         <module>incubator/aj-memviz</module>
         <module>incubator/aj-config-hot-reload</module>
-        <module>incubator/aj-dependency-scanner</module>
+        <module>incubator/aj-dependency-scanner</module>-->
         <!--       <module>incubator/aj-business</module>
                <module>incubator/aj-redis</module>-->
         <!--        <module>aj-dev-tools</module>-->

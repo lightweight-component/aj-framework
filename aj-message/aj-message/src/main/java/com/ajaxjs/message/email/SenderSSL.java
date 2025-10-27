@@ -1,6 +1,7 @@
 package com.ajaxjs.message.email;
 
-import com.ajaxjs.util.EncodeTools;
+import com.ajaxjs.util.Base64Utils;
+import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RegExpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -280,9 +281,9 @@ public class SenderSSL {
     public static String toBase64(String str) {
         // 假设 EncodeTools.base64EncodeToString 已经处理了 null 和编码问题
         if (str == null)
-            return ""; // 或者抛出异常，取决于 EncodeTools 的行为
+            return CommonConstant.EMPTY_STRING; // 或者抛出异常，取决于 EncodeTools 的行为
 
-        return EncodeTools.base64EncodeToString(str);
+        return new Base64Utils(str).encodeAsString();
     }
 
     /**

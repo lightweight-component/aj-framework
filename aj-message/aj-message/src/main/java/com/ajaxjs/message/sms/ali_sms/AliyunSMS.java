@@ -10,6 +10,8 @@
  */
 package com.ajaxjs.message.sms.ali_sms;
 
+import com.ajaxjs.util.HashHelper;
+import com.ajaxjs.util.UrlEncode;
 import org.springframework.util.AlternativeJdkIdGenerator;
 
 import java.text.SimpleDateFormat;
@@ -76,7 +78,7 @@ public class AliyunSMS {
 
         while (it.hasNext()) {
             String key = it.next();
-            sb.append("&").append(EncodeTools.urlEncodeQuery(key)).append("=").append(EncodeTools.urlEncodeQuery(paras.get(key)));
+            sb.append("&").append(new UrlEncode(key).encodeQuery()).append("=").append(new UrlEncode(paras.get(key)).encodeQuery());
         }
 
         return sb.toString();
@@ -91,13 +93,13 @@ public class AliyunSMS {
      */
     private static String makeSignature(String sortQueryStringTmp, String accessSecret) {
         String stringToSign = "GET" + "&" +
-                EncodeTools.urlEncodeQuery("/") + "&" +
-                EncodeTools.urlEncodeQuery(sortQueryStringTmp.substring(1));// 去除第一个多余的&符号
+                new UrlEncode("/").encodeQuery() + "&" +
+                new UrlEncode(sortQueryStringTmp.substring(1)).encodeQuery();// 去除第一个多余的&符号
 
 //        String sign = Digest.doHmacSHA1(accessSecret + "&", stringToSign);
-        String sign = MessageDigestHelper.getHmacSHA1AsBase64(accessSecret + "&", stringToSign);
+        String sign = HashHelper.getHmacMD5(accessSecret + "&", stringToSign).hashAsBase64();
 
         // 6. 签名最后也要做特殊 URL 编码
-        return EncodeTools.urlEncodeQuery(sign);
+        return new UrlEncode(sign).encodeQuery();
     }
 }
