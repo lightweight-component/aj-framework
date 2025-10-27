@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.scheduled;
 
-import com.ajaxjs.util.DateHelper;
+import com.ajaxjs.util.date.Formatter;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -25,14 +25,14 @@ public class TestScheduleHandler {
         List<Date> points = ScheduleHandler.calNextPoint("0 0 10 * * ?", now, 5);
 
         for (Date point : points)
-            System.out.println(DateHelper.formatDateTime(point));
+            System.out.println(new Formatter(point).format());
 
 
         System.out.println("-----");
         List<Date> points2 = ScheduleHandler.calNextPoint("0 0 0/2 * * ?", now, 6);
 
         for (Date date : points2)
-            System.out.println(DateHelper.formatDateTime(date));
+            System.out.println(new Formatter(date).format());
     }
 
 }

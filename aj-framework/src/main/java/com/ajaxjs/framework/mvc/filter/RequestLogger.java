@@ -4,6 +4,7 @@ import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.traceid.TraceXFilter;
 import com.ajaxjs.util.*;
+import com.ajaxjs.util.date.DateTools;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.method.HandlerMethod;
@@ -93,7 +94,7 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
     public static void printLog(String httpInfo, String bizActionName, String ip, String params, String body, String controllerInfo) {
         String title = " Request Information ";
         String sb = "\n" + ANSI_YELLOW + boxLine('┌', '─', '┐', title) + '\n' +
-                boxContent("Time:       ", DateHelper.now()) + '\n' +
+                boxContent("Time:       ", DateTools.now()) + '\n' +
                 boxContent("TraceId:    ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
                 boxContent("BizAction:  ", bizActionName) + '\n' +
                 boxContent("Request:    ", httpInfo) + '\n' +

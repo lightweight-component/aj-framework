@@ -10,9 +10,8 @@
  */
 package com.ajaxjs.base.service.file_upload;
 
-
-import com.ajaxjs.util.DateHelper;
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.http_request.Get;
 import com.ajaxjs.util.http_request.Post;
 import com.ajaxjs.util.http_request.SetConnection;
@@ -49,7 +48,7 @@ public class OssUpload implements IFileUpload {
      */
     @Override
     public boolean upload(String filename, byte[] content) {
-        String date = DateHelper.getGMTDate();// 获取当前 GMT 时间，用于请求头 Date 字段
+        String date = DateTools.nowGMTDate();// 获取当前 GMT 时间，用于请求头 Date 字段
         String signResourcePath = "/" + ossBucket + "/" + filename;   // 构建资源签名路径
         String signature = MessageDigestHelper.getHmacSHA1AsBase64(secretAccessKey, buildPutSignData(date, signResourcePath));// 计算请求签名
         String url = "http://" + ossBucket + "." + endpoint + "/" + filename;// 构建上传 URL
@@ -72,7 +71,7 @@ public class OssUpload implements IFileUpload {
      */
     public String getOssObj(String key) {
         String signResourcePath = "/" + ossBucket + key; // 构造资源路径，包括 bucket 名称和 key
-        String date = DateHelper.getGMTDate();// 获取当前时间，用于签名
+        String date = DateTools.nowGMTDate();// 获取当前时间，用于签名
         String signature = MessageDigestHelper.getHmacSHA1AsBase64(secretAccessKey, buildGetSignData(date, signResourcePath));   // 使 用HMAC-SHA1 算法生成签名
 
         // 构建请求头，包括日期和授权信息

@@ -7,16 +7,14 @@
  */
 package com.ajaxjs.base.service.file_upload;
 
-import com.ajaxjs.util.DateHelper;
 import com.ajaxjs.util.HashHelper;
-import com.ajaxjs.util.http_request.Delete;
-import com.ajaxjs.util.http_request.Get;
-import com.ajaxjs.util.http_request.Post;
-import com.ajaxjs.util.http_request.model.ResponseEntity;
+import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.io.FileHelper;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
@@ -49,7 +47,7 @@ public class NsoHttpUpload implements IFileUpload {
      * @return XML 结果
      */
     public Map<String, String> listBuk() {
-        String now = DateHelper.getGMTDate();
+        String now = DateTools.nowGMTDate();
         String canonicalHeaders = "", canonicalResource = "/";
         String data = "GET\n" + "\n" + "\n" + now + "\n" + canonicalHeaders + canonicalResource;
 
@@ -79,7 +77,7 @@ public class NsoHttpUpload implements IFileUpload {
      * @param filename 文件名
      */
     public void createEmptyFile(String filename) {
-        String now = DateHelper.getGMTDate();
+        String now = DateTools.nowGMTDate();
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;
         String data = "PUT\n" + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource;
 
@@ -98,7 +96,7 @@ public class NsoHttpUpload implements IFileUpload {
      * @return 总是返回 false，可能用于未来扩展。
      */
     public boolean delete(String filename) {
-        String now = DateHelper.getGMTDate();// 获取当前时间，用于请求头
+        String now = DateTools.nowGMTDate();// 获取当前时间，用于请求头
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;// 构建规范化的请求头和资源路径
         String data = "DELETE\n" + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource; // 构建用于授权认证的数据字符串
 
@@ -133,7 +131,11 @@ public class NsoHttpUpload implements IFileUpload {
             filename = file.getName();
 
         // 将文件以字节流形式打开，并计算其 MD5 值，然后调用 upload 方法进行上传
-        return upload(FileHelper.readFileBytes(file.getPath()), filename, HashHelper.calcFileMD5(file));
+        try {
+            return upload(new FileHelper(file).readFileBytes(), filename, HashHelper.calcFileMD5(new FileInputStream(file)));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -144,7 +146,7 @@ public class NsoHttpUpload implements IFileUpload {
      * @param md5      MD5 值
      */
     public boolean upload(byte[] bytes, String filename, String md5) {
-        String now = DateHelper.getGMTDate();
+        String now = DateTools.nowGMTDate();
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;
         String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource;
 

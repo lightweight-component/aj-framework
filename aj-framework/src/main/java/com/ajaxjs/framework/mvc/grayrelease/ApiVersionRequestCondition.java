@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.mvc.grayrelease;
 
-import com.ajaxjs.util.DateHelper;
+import com.ajaxjs.util.date.DateTools;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 
@@ -117,8 +117,8 @@ public class ApiVersionRequestCondition implements RequestCondition<ApiVersionRe
         if (!grayRelease.startTime().isEmpty() && !grayRelease.endTime().isEmpty()) {
             try {
                 Date now = new Date();
-                Date startTime = DateHelper.object2Date(grayRelease.startTime());
-                Date endTime = DateHelper.object2Date(grayRelease.endTime());
+                Date startTime = DateTools.object2Date(grayRelease.startTime());
+                Date endTime = DateTools.object2Date(grayRelease.endTime());
 
                 if (now.before(startTime) || now.after(endTime))
                     return "1.0"; // 不在灰度时间范围内，使用旧版本

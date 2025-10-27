@@ -5,7 +5,10 @@ package com.ajaxjs.framework.mvc.unifiedreturn;
 
 import com.ajaxjs.framework.mvc.filter.RequestLogger;
 import com.ajaxjs.sqlman.util.PrettyLogger;
-import com.ajaxjs.util.*;
+import com.ajaxjs.util.BoxLogger;
+import com.ajaxjs.util.CommonConstant;
+import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.date.DateTools;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
@@ -126,7 +129,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
 
         String title = " Request Completion ";
         String sb = "\n" + PrettyLogger.ANSI_BLUE + RequestLogger.boxLine('┌', '─', '┐', title) + '\n' +
-                RequestLogger.boxContent("Time:            ", DateHelper.now()) + '\n' +
+                RequestLogger.boxContent("Time:            ", DateTools.now()) + '\n' +
                 RequestLogger.boxContent("TraceId:         ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
                 RequestLogger.boxContent("BizAction:       ", MDC.get(BoxLogger.BIZ_ACTION)) + '\n' +
                 RequestLogger.boxContent("Request URI:     ", req.getMethod() + " " + request.getRequestURI()) + '\n' +
