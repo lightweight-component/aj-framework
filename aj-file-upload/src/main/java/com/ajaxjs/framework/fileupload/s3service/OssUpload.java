@@ -8,14 +8,13 @@
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package com.ajaxjs.base.service.file_upload;
+package com.ajaxjs.framework.fileupload.s3service;
 
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.date.DateTools;
-import com.ajaxjs.util.http_request.Get;
-import com.ajaxjs.util.http_request.Post;
-import com.ajaxjs.util.http_request.SetConnection;
-import com.ajaxjs.util.http_request.model.ResponseEntity;
+import com.ajaxjs.util.httpremote.Get;
+import com.ajaxjs.util.httpremote.Put;
+import com.ajaxjs.util.httpremote.Response;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
@@ -25,7 +24,6 @@ import java.util.Map;
  * <p>
  * 阿里云官方文档地址：<a href="https://helpcdn.aliyun.com/document_detail/31947.html">...</a>
  */
-@Deprecated
 public class OssUpload implements IFileUpload {
     @Value("${S3Storage.Oss.bucket}")
     private String ossBucket;
@@ -53,7 +51,7 @@ public class OssUpload implements IFileUpload {
         String signature = MessageDigestHelper.getHmacSHA1AsBase64(secretAccessKey, buildPutSignData(date, signResourcePath));// 计算请求签名
         String url = "http://" + ossBucket + "." + endpoint + "/" + filename;// 构建上传 URL
 
-        ResponseEntity result = Post.put(url, content, conn -> {  // 执行 PUT 请求上传文件
+        Response result = Put.api(url, content, conn -> {  // 执行 PUT 请求上传文件
             conn.setRequestProperty("Date", date); // 设置请求头 Date
             conn.setRequestProperty("Authorization", "OSS " + accessKeyId + ":" + signature); // 设置请求头 Authorization
         });
@@ -78,7 +76,7 @@ public class OssUpload implements IFileUpload {
         Map<String, String> head = ObjectHelper.mapOf("Date", date, "Authorization", "OSS " + accessKeyId + ":" + signature);
         String url = "http://" + ossBucket + "." + endpoint;// 构造请求的 URL
 
-        return Get.get(url + key, SetConnection.map2header(head)).toString(); // 发起 GET 请求并返回结果
+        return Get.api(url + key, SetConnection.map2header(head)).toString(); // 发起 GET 请求并返回结果
     }
 
     /**
@@ -95,5 +93,4 @@ public class OssUpload implements IFileUpload {
     private static String buildPutSignData(String date, String canonicalResource) {
         return "PUT" + "\n\n\n" + date + "\n" + canonicalResource;
     }
-
 }

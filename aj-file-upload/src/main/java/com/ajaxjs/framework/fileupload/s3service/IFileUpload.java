@@ -1,4 +1,4 @@
-package com.ajaxjs.base.service.file_upload;
+package com.ajaxjs.framework.fileupload.s3service;
 
 /**
  * 云空间的文件上传

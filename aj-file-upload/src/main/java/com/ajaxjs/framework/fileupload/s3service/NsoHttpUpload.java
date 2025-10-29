@@ -5,10 +5,14 @@
  * 除非因适用法律需要或书面同意，根据许可证分发的软件是基于"按原样"基础提供，
  * 无任何明示的或暗示的保证或条件。详见根据许可证许可下，特定语言的管辖权限和限制。
  */
-package com.ajaxjs.base.service.file_upload;
+package com.ajaxjs.framework.fileupload.s3service;
 
 import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.date.DateTools;
+import com.ajaxjs.util.httpremote.Delete;
+import com.ajaxjs.util.httpremote.Get;
+import com.ajaxjs.util.httpremote.Put;
+import com.ajaxjs.util.httpremote.Response;
 import com.ajaxjs.util.io.FileHelper;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -19,9 +23,9 @@ import java.util.Map;
 
 /**
  * 网易云对象存储 HTTP 文件上传
- *
- * @author sp42 frank@ajaxjs.com
+ * 网易云已经不做这个了
  */
+@Deprecated
 public class NsoHttpUpload implements IFileUpload {
     /**
      * App ID
@@ -51,7 +55,7 @@ public class NsoHttpUpload implements IFileUpload {
         String canonicalHeaders = "", canonicalResource = "/";
         String data = "GET\n" + "\n" + "\n" + now + "\n" + canonicalHeaders + canonicalResource;
 
-        return Get.apiXML("http://nos-eastchina1.126.net", conn -> {
+        return Get.apiXml("http://nos-eastchina1.126.net", conn -> {
             conn.addRequestProperty("Authorization", getAuthorization(data));
             conn.addRequestProperty("Date", now);
             conn.addRequestProperty("Host", "nos-eastchina1.126.net");
@@ -65,7 +69,6 @@ public class NsoHttpUpload implements IFileUpload {
      * @return 验证的字符串
      */
     private String getAuthorization(String data) {
-//        String signature = Digest.doHmacSHA256(accessSecret, data);
         String signature = MessageDigestHelper.getHmacSHA256AsBase64(accessSecret, data);
 
         return "NOS " + accessKeyId + ":" + signature;
@@ -81,7 +84,7 @@ public class NsoHttpUpload implements IFileUpload {
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;
         String data = "PUT\n" + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource;
 
-        Post.put(api + filename, new byte[0], conn -> {
+        Put.api(api + filename, new byte[0], conn -> {
             conn.addRequestProperty("Authorization", getAuthorization(data));
             conn.addRequestProperty("Content-Length", "0");
             conn.addRequestProperty("Date", now);
@@ -100,7 +103,7 @@ public class NsoHttpUpload implements IFileUpload {
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;// 构建规范化的请求头和资源路径
         String data = "DELETE\n" + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource; // 构建用于授权认证的数据字符串
 
-        Delete.del(api + filename, conn -> { // 发起 DELETE 请求删除文件
+        Delete.api(api + filename, conn -> { // 发起 DELETE 请求删除文件
             conn.addRequestProperty("Authorization", getAuthorization(data));   // 设置请求授权头和日期头
             conn.addRequestProperty("Date", now);
         });
@@ -150,7 +153,7 @@ public class NsoHttpUpload implements IFileUpload {
         String canonicalHeaders = "", canonicalResource = "/" + bucket + "/" + filename;
         String data = "PUT\n" + md5 + "\n\n" + now + "\n" + canonicalHeaders + canonicalResource;
 
-        ResponseEntity result = Post.put(api + filename, bytes, conn -> {
+        Response result = Put.api(api + filename, bytes, conn -> {
             conn.addRequestProperty("Authorization", getAuthorization(data));
             conn.addRequestProperty("Content-Length", String.valueOf(bytes.length));
             conn.addRequestProperty("Content-MD5", md5);
@@ -177,7 +180,7 @@ public class NsoHttpUpload implements IFileUpload {
      */
     @Override
     public boolean upload(String filename, byte[] bytes) {
-        return upload(bytes, filename, HashHelper.calcFileMD5(null, bytes));
+        return upload(bytes, filename, HashHelper.calcFileMD5(bytes));
     }
 
     /**
