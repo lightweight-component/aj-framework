@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.fileupload.tools;
+package com.ajaxjs.framework.fileupload.magicnumber;
 
 import java.util.Arrays;
 import java.util.HashMap;
