@@ -1,5 +1,6 @@
 package com.ajaxjs.base.service.export_office;
 
+import com.ajaxjs.util.io.DataWriter;
 import com.ajaxjs.util.io.Resources;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -190,7 +191,7 @@ public class Export {
             // 创建输出流
             try (InputStream input = Resources.getResource(resourcePath);
                  OutputStream output = Files.newOutputStream(outputFile.toPath())) {
-                StreamHelper.write(input, output, false);
+                new DataWriter(output).write(input);
             }
 
             return outputFile;

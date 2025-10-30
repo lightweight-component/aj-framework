@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ajaxjs.base.file_upload;
+package com.ajaxjs.framework.fileupload;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

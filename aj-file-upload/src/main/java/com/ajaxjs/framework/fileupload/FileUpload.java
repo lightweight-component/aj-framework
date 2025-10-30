@@ -9,6 +9,7 @@ import com.ajaxjs.framework.fileupload.policy.ShowUrlPolicy;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.function.BiFunction;
 
 @Slf4j
+@Data
 public class FileUpload {
     final MultipartFile file;
 
@@ -119,7 +121,6 @@ public class FileUpload {
     }
 
     BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase;
-
 
     private UploadedResult saveToFileService() {
         UploadedResult result = new UploadedResult();

@@ -49,6 +49,12 @@
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-filupload</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
             <artifactId>aj-cryptography</artifactId>
             <version>1.0</version>
         </dependency>

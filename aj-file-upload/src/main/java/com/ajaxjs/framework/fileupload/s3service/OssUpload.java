@@ -10,9 +10,11 @@
  */
 package com.ajaxjs.framework.fileupload.s3service;
 
+import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.httpremote.Get;
+import com.ajaxjs.util.httpremote.Head;
 import com.ajaxjs.util.httpremote.Put;
 import com.ajaxjs.util.httpremote.Response;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +50,7 @@ public class OssUpload implements IFileUpload {
     public boolean upload(String filename, byte[] content) {
         String date = DateTools.nowGMTDate();// 获取当前 GMT 时间，用于请求头 Date 字段
         String signResourcePath = "/" + ossBucket + "/" + filename;   // 构建资源签名路径
-        String signature = MessageDigestHelper.getHmacSHA1AsBase64(secretAccessKey, buildPutSignData(date, signResourcePath));// 计算请求签名
+        String signature = HashHelper.getHmacSHA256(buildPutSignData(date, signResourcePath), secretAccessKey, false);
         String url = "http://" + ossBucket + "." + endpoint + "/" + filename;// 构建上传 URL
 
         Response result = Put.api(url, content, conn -> {  // 执行 PUT 请求上传文件
@@ -70,13 +72,13 @@ public class OssUpload implements IFileUpload {
     public String getOssObj(String key) {
         String signResourcePath = "/" + ossBucket + key; // 构造资源路径，包括 bucket 名称和 key
         String date = DateTools.nowGMTDate();// 获取当前时间，用于签名
-        String signature = MessageDigestHelper.getHmacSHA1AsBase64(secretAccessKey, buildGetSignData(date, signResourcePath));   // 使 用HMAC-SHA1 算法生成签名
+        String signature = HashHelper.getHmacSHA256(buildGetSignData(date, signResourcePath), secretAccessKey, false);
 
         // 构建请求头，包括日期和授权信息
         Map<String, String> head = ObjectHelper.mapOf("Date", date, "Authorization", "OSS " + accessKeyId + ":" + signature);
         String url = "http://" + ossBucket + "." + endpoint;// 构造请求的 URL
 
-        return Get.api(url + key, SetConnection.map2header(head)).toString(); // 发起 GET 请求并返回结果
+        return Get.api(url + key, Head.map2header(head)).toString(); // 发起 GET 请求并返回结果
     }
 
     /**

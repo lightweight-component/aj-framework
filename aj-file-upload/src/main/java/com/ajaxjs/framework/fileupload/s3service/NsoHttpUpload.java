@@ -69,7 +69,7 @@ public class NsoHttpUpload implements IFileUpload {
      * @return 验证的字符串
      */
     private String getAuthorization(String data) {
-        String signature = MessageDigestHelper.getHmacSHA256AsBase64(accessSecret, data);
+        String signature = HashHelper.getHmacSHA256(data, accessSecret, false);
 
         return "NOS " + accessKeyId + ":" + signature;
     }

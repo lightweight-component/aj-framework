@@ -4,6 +4,7 @@ import com.ajaxjs.util.reflect.Methods;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Method;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -54,6 +55,12 @@ public class UploadUtils {
      * @return Uploaded result
      */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file, Consumer<FileUploadConfig> customConfig) {
+        return doUpload(controllerClz, methodName, file, customConfig, null);
+    }
+
+    public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
+                                          Consumer<FileUploadConfig> customConfig,
+                                          BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
         Method uploadAudio = Methods.getMethod(controllerClz, methodName, MultipartFile.class);
 
         if (uploadAudio == null)
@@ -68,6 +75,9 @@ public class UploadUtils {
         if (customConfig != null)
             customConfig.accept(fileUploadConfig);
 
-        return new FileUpload(file, fileUploadConfig).save();
+        FileUpload fileUpload = new FileUpload(file, fileUploadConfig);
+        fileUpload.setSaveToDatabase(saveToDatabase);
+
+        return fileUpload.save();
     }
 }
