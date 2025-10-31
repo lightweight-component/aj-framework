@@ -63,9 +63,14 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
     CustomReturnConverter<?> customReturnConverter;
 
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                  ServerHttpRequest request, ServerHttpResponse response) {
         Method method = returnType.getMethod();
         assert method != null;
+
+//        Class<?> declaringClass = returnType.getParameterType();
+//        return ResponseEntity.class.isAssignableFrom(declaringClass);
 
         if (body instanceof ResponseEntity ) // 为 Spring 专属的返回对象开绿灯
             return body;
