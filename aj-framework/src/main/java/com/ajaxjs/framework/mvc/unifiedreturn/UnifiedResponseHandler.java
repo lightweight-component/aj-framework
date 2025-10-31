@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -65,6 +66,9 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Method method = returnType.getMethod();
         assert method != null;
+
+        if (body instanceof ResponseEntity ) // 为 Spring 专属的返回对象开绿灯
+            return body;
 
 //        if (method.isAnnotationPresent(Desensitize.class))
 //            body = DeSensitize.acquire(body);
