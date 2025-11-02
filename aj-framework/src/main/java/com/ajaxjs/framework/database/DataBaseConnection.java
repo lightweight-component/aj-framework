@@ -76,8 +76,10 @@ public class DataBaseConnection implements HandlerInterceptor {
             conn = ds.getConnection();
             JdbcConnection.setConnection(conn); // 设置连接到库，使其可用
 
-            if (DebugTools.isDebug)
-                log.info("Database [{}...] connected.", conn.getMetaData().getURL().substring(0, 60));
+            if (DebugTools.isDebug) {
+                String url = conn.getMetaData().getURL();
+                log.info("Database [{}...] connected.", url.length() > 60 ? url.substring(0, 60) : url);
+            }
         } catch (SQLException e) {
             log.error("Error when init database connection.", e);
         }
@@ -172,5 +174,9 @@ public class DataBaseConnection implements HandlerInterceptor {
      */
     public static DataSource setupMySqlJdbcPool(String url, String userName, String password) {
         return setupJdbcPool("com.mysql.cj.jdbc.Driver", url, userName, password);
+    }
+
+    public static DataSource setupH2JdbcPool(String url, String user, String psw) {
+        return setupJdbcPool("org.h2.Driver", url, user, psw);
     }
 }

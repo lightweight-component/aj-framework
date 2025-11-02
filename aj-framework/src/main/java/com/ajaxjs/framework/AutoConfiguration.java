@@ -69,7 +69,10 @@ public class AutoConfiguration implements WebMvcConfigurer {
     @Bean(value = "dataSource", destroyMethod = "close")
     @ConditionalOnProperty(name = "db.isDisableAutoConnect", havingValue = "false", matchIfMissing = true)
     DataSource getDs() {
-        return DataBaseConnection.setupMySqlJdbcPool(url, user, psw);
+        if (url.contains("jdbc:h2"))
+            return DataBaseConnection.setupJdbcPool("org.h2.Driver", url, user, psw);
+        else
+            return DataBaseConnection.setupMySqlJdbcPool(url, user, psw);
     }
 
     @Value("${aj-framework.allowCrossDomain:false}")
