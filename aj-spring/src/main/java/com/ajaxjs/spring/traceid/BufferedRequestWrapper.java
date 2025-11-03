@@ -11,8 +11,10 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * 重复消费 RawBody 内容
+ * 不支持 request 其他的方法，没有处理
  * <a href="https://blog.csdn.net/10km/article/details/140735079">...</a>
  */
+//@Deprecated
 public class BufferedRequestWrapper extends HttpServletRequestWrapper {
     private final byte[] buffer;
 

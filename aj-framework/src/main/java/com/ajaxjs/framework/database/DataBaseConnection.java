@@ -38,8 +38,6 @@ import java.util.Objects;
 public class DataBaseConnection implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
-
-
         if (DispatcherType.ERROR.equals(req.getDispatcherType()) && "/error".equals(req.getRequestURI()))
             // Error page
             return true;

@@ -1,17 +1,23 @@
 package com.ajaxjs.spring.traceid;
 
-import com.ajaxjs.util.*;
+import com.ajaxjs.util.BoxLogger;
+import com.ajaxjs.util.CommonConstant;
+import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.RandomTools;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -19,11 +25,16 @@ import java.nio.charset.StandardCharsets;
  */
 @WebFilter("/**")
 @Component
+@Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)  // 比最高优先级稍低，避免冲突
 public class TraceXFilter implements Filter {
     private final static String X_TRACE = "x-trace";
 
-    private final static  String CONTENT_TYPE_JSON = "application/json";
+    private final static String CONTENT_TYPE_JSON = "application/json";
+
+    private final static String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
+    private final static String GET = "GET";
+    private final static String POST = "POST";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -36,13 +47,22 @@ public class TraceXFilter implements Filter {
 
         MDC.put(BoxLogger.TRACE_KEY, traceId);
 
-        // 包装请求，缓存 body
-        // Spring 的无效
-//        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
-//        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper((HttpServletResponse) response);
-        if (!"GET".equals(req.getMethod()) && ObjectHelper.hasText(request.getContentType()) && request.getContentType().contains(CONTENT_TYPE_JSON))
-            chain.doFilter(new BufferedRequestWrapper(req), response);
-        else
+        String contentType = request.getContentType();
+//        Enumeration<String> parameterNames = req.getParameterNames();
+
+        if (!GET.equals(req.getMethod()) && ObjectHelper.hasText(contentType)) {
+            if (POST.equals(req.getMethod()) && contentType.contains(CONTENT_TYPE_FORM)) {
+                ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
+                /* Manually trigger stream */
+//            wrappedRequest.getParameterNames();
+
+                chain.doFilter(wrappedRequest, response);
+//            System.out.println("Request Body: " + getStreamBodyAsStr(wrappedRequest));
+            } else if (contentType.contains(CONTENT_TYPE_FORM) || contentType.contains(CONTENT_TYPE_JSON)) {
+                BufferedRequestWrapper wrappedRequest = new BufferedRequestWrapper(req);
+                chain.doFilter(wrappedRequest, response);
+            }
+        } else
             chain.doFilter(req, response); // GET 请求不记录
     }
 
@@ -78,4 +98,39 @@ public class TraceXFilter implements Filter {
 //
 //        return "";
 //    }
+
+    /**
+     * Get the stream data as string from request body.
+     * This method is to replace:
+     * <p>
+     * try (ServletInputStream inputStream = req.getInputStream()) {
+     * raw = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+     * } catch (IOException e) {
+     * throw new RuntimeException(e);
+     * }
+     * <p>
+     * Since ContentCachingRequestWrapper is used.
+     *
+     * @return The raw body
+     */
+    public static String getStreamBodyAsStr(HttpServletRequest req) {
+        if (req instanceof ContentCachingRequestWrapper) {
+            ContentCachingRequestWrapper wrappedRequest = (ContentCachingRequestWrapper) req;
+            byte[] cachedBody = wrappedRequest.getContentAsByteArray();
+
+            try {
+                return new String(cachedBody, wrappedRequest.getCharacterEncoding());
+            } catch (UnsupportedEncodingException e) {
+                log.warn("UnsupportedEncodingException", e);
+                throw new RuntimeException(e);
+            }
+        } else {
+            try (ServletInputStream inputStream = req.getInputStream()) {
+                return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                log.warn("getStreamBodyAsStr", e);
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

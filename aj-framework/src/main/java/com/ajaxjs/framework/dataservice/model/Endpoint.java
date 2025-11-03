@@ -34,6 +34,19 @@ public class Endpoint {
      */
     boolean isAutoSql;
 
+    /**
+     * Required when Map data is used and custom SQL is not used, to specify the table name.
+     */
     String tableName;
+
+    /**
+     * Required when doing the creation of an entity, to know if it's auto increment ID.
+     */
+    boolean isAutoIns;
+
+    /**
+     * Required when doing the update of an entity, to know which field is the ID.
+     */
+    String idField;
 
 }

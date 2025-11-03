@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8091
   tomcat:
     max-connections: 10000  # 最大连接数
     threads:
