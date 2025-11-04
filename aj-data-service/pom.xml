@@ -9,15 +9,15 @@
         <relativePath/>
     </parent>
 
-    <artifactId>aj-fileupload</artifactId>
-    <name>aj-fileupload</name>
+    <artifactId>aj-data-service</artifactId>
+    <name>aj-data-service</name>
     <version>1.0</version>
     <description>user</description>
     <packaging>jar</packaging>
 
     <url>https://aj-docs.ajaxjs.com/</url>
     <scm>
-        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-file-upload</url>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-data-service</url>
         <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
     </scm>
 
@@ -27,6 +27,18 @@
     </issueManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>sqlman</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>base</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-net</artifactId>
@@ -44,6 +56,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- 编译为 jar 包时依赖的 -->

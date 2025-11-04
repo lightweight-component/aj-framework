@@ -1,7 +1,7 @@
-package com.ajaxjs.framework.FastCrudController;
+package com.ajaxjs.framework.dataservice.fastcrud;
 
-import com.ajaxjs.framework.model.PageVO;
-import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
+import com.ajaxjs.spring.annotation.BizAction;
+import com.ajaxjs.sqlman.crud.page.PageResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public interface FastCrudController {
      */
     @GetMapping("/{namespace}/page")
     @BizAction("分页获取实体列表")
-    PageVO<Map<String, Object>> page(@PathVariable String namespace);
+    PageResult<Map<String, Object>> page(@PathVariable String namespace);
 
     /**
      * 创建实体

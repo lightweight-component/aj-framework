@@ -1,7 +1,7 @@
-package com.ajaxjs.framework.FastCrudController;
+package com.ajaxjs.framework.dataservice.fastcrud;
 
-import com.ajaxjs.framework.model.PageVO;
 import com.ajaxjs.sqlman.Action;
+import com.ajaxjs.sqlman.crud.page.PageResult;
 import com.ajaxjs.sqlman.sqlgenerator.AutoQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class FastCrudService implements FastCrudController {
     }
 
     @Override
-    public PageVO<Map<String, Object>> page(String namespace) {
+    public PageResult<Map<String, Object>> page(String namespace) {
         return null;
     }
 

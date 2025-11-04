@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.FastCrudController;
+package com.ajaxjs.framework.dataservice.fastcrud;
 
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.util.Utils;

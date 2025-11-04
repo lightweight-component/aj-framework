@@ -19,7 +19,7 @@
 
     <url>https://aj-docs.ajaxjs.com/</url>
     <scm>
-        <url>https://github.com/lightweight-component/aj-framework</url>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-spring</url>
         <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
     </scm>
 
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-util</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.9</version>
         </dependency>
     </dependencies>
 </project>
