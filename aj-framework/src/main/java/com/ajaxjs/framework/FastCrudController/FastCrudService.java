@@ -1,6 +1,5 @@
 package com.ajaxjs.framework.FastCrudController;
 
-import com.ajaxjs.framework.FastCrudController.model.Namespaces;
 import com.ajaxjs.framework.model.PageVO;
 import com.ajaxjs.sqlman_v2.Action;
 import com.ajaxjs.sqlman_v2.sqlgenerator.AutoQuery;

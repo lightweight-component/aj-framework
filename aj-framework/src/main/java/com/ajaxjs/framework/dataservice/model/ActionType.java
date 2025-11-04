@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.dataservice.constant;
+package com.ajaxjs.framework.dataservice.model;
 
 public enum ActionType {
     /**

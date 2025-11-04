@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.FastCrudController.model;
+package com.ajaxjs.framework.FastCrudController;
 
 import com.ajaxjs.sqlman_v2.sqlgenerator.AutoQuery;
 

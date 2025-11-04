@@ -21,7 +21,7 @@ public class DataServiceUtils {
         Map<String, String> params = ObjectHelper.mapOf(paramMap.size());
 
         paramMap.forEach((key, values) -> {
-            String value = values[0];// 只取第一个值
+            String value = values.length > 0 ? values[0] : CommonConstant.EMPTY_STRING;// 只取第一个值
             value = value.replaceAll("\\s+", CommonConstant.EMPTY_STRING); // remove whitespace for avoiding SQL injection
             params.put(key, value);
         });

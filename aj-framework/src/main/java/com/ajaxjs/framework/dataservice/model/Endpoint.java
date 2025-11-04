@@ -1,6 +1,5 @@
 package com.ajaxjs.framework.dataservice.model;
 
-import com.ajaxjs.framework.dataservice.constant.ActionType;
 import com.ajaxjs.util.httpremote.HttpConstant;
 import lombok.Data;
 

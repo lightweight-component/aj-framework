@@ -34,7 +34,7 @@ public class EndpointMgr extends HashMap<String, Endpoint> {
         Endpoint value = super.get(route);
 
         if (value == null) { // list all routes
-            log.info("All the routes:");
+            log.info("All the routes for debug:");
             keySet().forEach(log::info);
 
             throw new UnsupportedOperationException("The route: " + route + " is not found.");

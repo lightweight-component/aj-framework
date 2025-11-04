@@ -5,6 +5,7 @@ import com.ajaxjs.sqlman.JdbcConnection;
 import com.ajaxjs.sqlman_v2.Action;
 import com.ajaxjs.sqlman_v2.crud.Query;
 import com.ajaxjs.sqlman_v2.crud.Update;
+import com.ajaxjs.sqlman_v2.crud.page.PageQuery;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base controller for data service.
+ */
 @Slf4j
 @RequestMapping(DataServiceDispatcher.URL_PREFIX)
 public abstract class DataServiceDispatcher {
     static final String URL_PREFIX = "/ds_api";
 
+    /**
+     * Reuse the AntPathMatcher from Spring.
+     */
     private final static AntPathMatcher ROUTER_MATCHER = new AntPathMatcher();
 
     @Autowired
     EndpointMgr endPointMgr;
 
+    /**
+     * The main endpoint of data service.
+     *
+     * @param req The request object
+     * @return The result could be anything.
+     */
     @RequestMapping("/**")
     public Object request(HttpServletRequest req) {
         String requestUri = req.getRequestURI();
@@ -80,16 +93,22 @@ public abstract class DataServiceDispatcher {
 
                 break;
             case PAGE_LIST:
-//                result = new Action(endpoint.getSql()).query().pageList();
+                action = new Action(endpoint.getSql());
+                Query query = actionQuery(action, patchParams, mapParams);
+
+                result = PageQuery.autoDetectPageWay(req) ? query.pageByStartLimit(req) : query.pageByPageNo(req);
+
                 break;
             case CREATE:
                 result = new WriteData(req, endpoint).setPatchParams(patchParams).create();
+
                 break;
             case UPDATE:
                 result = new WriteData(req, endpoint).setPatchParams(patchParams).update(endpoint.getIdField());
+
                 break;
             case DELETE:
-                if (endpoint.isAutoIns())
+                if (endpoint.isAutoSql())
                     return actionUpdate(new Action(JdbcConnection.getConnection()), patchParams, mapParams).update();
                 else { // plain SQL
                     String sql = endpoint.getSql();
@@ -106,6 +125,10 @@ public abstract class DataServiceDispatcher {
 
     /**
      * To deal with the query string and patch params, make them as one array.
+     *
+     * @param action      The action that applies these parameters to.
+     * @param mapParams   The parameters in Map format, comes from raw body.
+     * @param patchParams The parameters of URL patch.
      */
     Query actionQuery(Action action, Map<String, String> patchParams, Map<String, String> mapParams) {
         if (patchParams == null)
@@ -120,6 +143,13 @@ public abstract class DataServiceDispatcher {
         }
     }
 
+    /**
+     * To deal with the query string and patch params, make them as one array.
+     *
+     * @param action      The action that applies these parameters to.
+     * @param mapParams   The parameters in Map format, comes from raw body.
+     * @param patchParams The parameters of URL patch.
+     */
     Update actionUpdate(Action action, Map<String, String> patchParams, Map<String, String> mapParams) {
         if (patchParams == null)
             if (mapParams.size() > 0)
@@ -133,6 +163,13 @@ public abstract class DataServiceDispatcher {
         }
     }
 
+    /**
+     * Combine query string and patch params as an array.
+     *
+     * @param mapParams   The parameters in Map format, comes from raw body.
+     * @param patchParams The parameters of URL patch.
+     * @return The array.
+     */
     static Object[] getQueryParams(Map<String, String> mapParams, Map<String, String> patchParams) {
         Collection<String> values = patchParams.values();
         Object[] arr;
@@ -149,7 +186,7 @@ public abstract class DataServiceDispatcher {
     }
 
     @Data
-    class Empty {
+    static class Empty {
         String msg = "No data";
     }
 

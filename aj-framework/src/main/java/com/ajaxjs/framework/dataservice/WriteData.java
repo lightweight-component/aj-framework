@@ -17,12 +17,24 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * Write logic for Data service.
+ */
 @RequiredArgsConstructor
 public class WriteData {
+    /**
+     * The request object.
+     */
     final HttpServletRequest req;
 
+    /**
+     * The endpoint object, containing the endpoint info.
+     */
     final Endpoint endpoint;
 
+    /**
+     * The patch params.
+     */
     Map<String, String> patchParams;
 
     public WriteData setPatchParams(Map<String, String> patchParams) {
@@ -31,6 +43,11 @@ public class WriteData {
         return this;
     }
 
+    /**
+     * Do creation.
+     *
+     * @return The newly created id.
+     */
     public Serializable create() {
         if (req.getContentType().contains(HttpConstant.CONTENT_TYPE_JSON))
             return createJson();
@@ -40,6 +57,11 @@ public class WriteData {
             throw new UnsupportedOperationException("Unknown ContentType:" + req.getContentType());
     }
 
+    /**
+     * Do creation by inputting JSON data.
+     *
+     * @return The newly created id.
+     */
     public Serializable createJson() {
         String rawJson = getInputData();
         Map<String, Object> mapParams = JsonUtil.json2map(rawJson);
@@ -57,6 +79,11 @@ public class WriteData {
         }
     }
 
+    /**
+     * Do creation by inputting FORM data.
+     *
+     * @return The newly created id.
+     */
     public Serializable createForm() {
         String raw = getInputData();
         Map<String, String> mapParams = UrlEncode.parseStringToMap(raw);
@@ -72,6 +99,12 @@ public class WriteData {
         }
     }
 
+    /**
+     * Do update
+     *
+     * @param idField The field name of the id.
+     * @return The update result.
+     */
     public UpdateResult update(String idField) {
         if (req.getContentType().contains(HttpConstant.CONTENT_TYPE_JSON))
             return updateJson(idField);
@@ -81,6 +114,12 @@ public class WriteData {
             throw new UnsupportedOperationException("Unknown ContentType:" + req.getContentType());
     }
 
+    /**
+     * Do update by inputting JSON data.
+     *
+     * @param idField The field name of the id.
+     * @return The update result.
+     */
     public UpdateResult updateJson(String idField) {
         String rawJson = getInputData();
         Map<String, Object> mapParams = JsonUtil.json2map(rawJson);
@@ -100,6 +139,12 @@ public class WriteData {
         }
     }
 
+    /**
+     * Do update by inputting FORM data.
+     *
+     * @param idField The field name of the id.
+     * @return The update result.
+     */
     public UpdateResult updateForm(String idField) {
         String raw = getInputData();
         Map<String, String> mapParams = UrlEncode.parseStringToMap(raw);
@@ -127,10 +172,13 @@ public class WriteData {
     /**
      * To deal with the query string and patch params, make them as one array.
      */
-    Update combineParamsUpdate(Action action, Map<String, String> mapParams) {
+    private Update combineParamsUpdate(Action action, Map<String, String> mapParams) {
         return combineParamsUpdate(action, patchParams, mapParams);
     }
 
+    /**
+     * To deal with the query string and patch params, make them as one array.
+     */
     static Update combineParamsUpdate(Action action, Map<String, String> patchParams, Map<String, String> mapParams) {
         if (patchParams == null)
             if (mapParams.size() > 0)
@@ -158,9 +206,5 @@ public class WriteData {
 
             return action.create(arr);
         }
-    }
-
-    public boolean delete() {
-        return false;
     }
 }
