@@ -2,8 +2,8 @@ package org.example.config;
 
 import com.ajaxjs.framework.database.DataBaseConnection;
 import com.ajaxjs.sqlman.model.UpdateResult;
-import com.ajaxjs.sqlman_v2.Action;
-import com.ajaxjs.sqlman_v2.crud.Update;
+import com.ajaxjs.sqlman.Action;
+import com.ajaxjs.sqlman.crud.Update;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;

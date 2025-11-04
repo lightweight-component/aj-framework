@@ -1,9 +1,9 @@
 package com.ajaxjs.framework.scheduled;
 
-
 import com.ajaxjs.framework.model.BusinessException;
-import com.ajaxjs.sqlman.Sql;
-import com.ajaxjs.sqlman.model.PageResult;
+import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.sqlman.Action;
+import com.ajaxjs.sqlman.crud.page.PageResult;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,10 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.util.TimeZone;
@@ -38,7 +41,7 @@ public class ScheduledController {
         if (StringUtils.hasText(name))
             sql += " WHERE job_name LIKE '%" + name + "%'";
 
-        return Sql.instance().input(sql).page(JobInfo.class);
+        return new Action(sql).query().pageByStartLimit(DiContextUtil.getRequest(), JobInfo.class);
     }
 
     /**
@@ -75,10 +78,8 @@ public class ScheduledController {
         JobInfo info = getJobInfo(id);
 
         Class<?> aClass = Clazz.getClassByName(info.getClassName());
-        assert aClass != null;
         Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
         Method method = Methods.getDeclaredMethod(aClass, info.getMethod());
-        assert method != null;
         Assert.isTrue(method.getParameterCount() == 0, "Only no-arg methods may be annotated with @Scheduled");
         Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
 
@@ -86,9 +87,7 @@ public class ScheduledController {
         scheduleHandler.getScheduledTasks().add(scheduleHandler.getScheduledTaskRegistrar().scheduleCronTask(cronTask));
         scheduleHandler.getScheduledTaskRegistrar().addCronTask(cronTask);
 
-        Sql.instance().input(updateStatus, JobInfo.ScheduledConstant.NORMAL_STATUS, id).update();
-
-        return true;
+        return new Action(updateStatus).update(JobInfo.ScheduledConstant.NORMAL_STATUS, id).execute().isOk();
     }
 
     /**
@@ -116,11 +115,11 @@ public class ScheduledController {
         JobInfo info = getJobInfo(id);
         scheduleHandler.cancel(info.getExpress(), info.getClassName(), id, false);
 
-        return Sql.instance().input(updateStatus, JobInfo.ScheduledConstant.DELETE_STATUS, id).update().isOk();
+        return new Action(updateStatus).update(JobInfo.ScheduledConstant.DELETE_STATUS, id).execute().isOk();
     }
 
     private JobInfo getJobInfo(Integer id) {
-        JobInfo info = Sql.instance().input(SQL + " WHERE id = ?", id).query(JobInfo.class);
+        JobInfo info = new Action(SQL + " WHERE id = ?").query(id).one(JobInfo.class);
 
         if (info == null)
             throw new BusinessException("不存在该任务 " + id);

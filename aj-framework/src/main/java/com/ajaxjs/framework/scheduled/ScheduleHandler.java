@@ -2,8 +2,7 @@ package com.ajaxjs.framework.scheduled;
 
 import com.ajaxjs.framework.database.DataBaseConnection;
 import com.ajaxjs.sqlman.JdbcConnection;
-import com.ajaxjs.sqlman.Sql;
-import com.ajaxjs.sqlman.crud.Entity;
+import com.ajaxjs.sqlman.Action;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -94,7 +93,7 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
 
                 try {
                     String sql = "SELECT id FROM schedule_job WHERE class_name = ? AND express = ?";
-                    Integer id = Sql.instance().input(sql, clzName, cronTask.getExpression()).queryOne(Integer.class);
+                    Integer id = new Action(sql).query(clzName, cronTask.getExpression()).one(Integer.class);
 
                     if (id == null) { // 持久化
                         JobInfo info = new JobInfo();
@@ -104,11 +103,11 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
                         info.setMethod(scheduledMethodRunnable.getMethod().getName());
                         info.setStatus(JobInfo.ScheduledConstant.NORMAL_STATUS);
 
-                        Entity.instance().input(info).create();
+                        new Action(info).create().execute(true);
                     }
 
                     String _sql = ScheduledController.SQL + " WHERE `status` IN (1, 2)";
-                    List<JobInfo> list = Sql.instance().input(_sql).queryList(JobInfo.class);
+                    List<JobInfo> list = new Action(_sql).query().list(JobInfo.class);
 
                     if (!CollectionUtils.isEmpty(list)) {
                         for (JobInfo job : list)
@@ -144,8 +143,8 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
                 cronTaskList.remove(cronTask);
                 scheduledTasks0.add(scheduledTask);
 
-                if (isUpdate)
-                    Sql.instance().input(ScheduledController.updateStatus, JobInfo.ScheduledConstant.CANCEL_STATUS, id).update();
+//                if (isUpdate)
+//                    new Action(ScheduledController.updateStatus, JobInfo.ScheduledConstant.CANCEL_STATUS, id).update();
             }
         }
 

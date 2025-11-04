@@ -2,7 +2,7 @@ package com.ajaxjs.framework.dataservice;
 
 import com.ajaxjs.sqlman.JdbcConnection;
 import com.ajaxjs.sqlman.model.UpdateResult;
-import com.ajaxjs.sqlman_v2.crud.page.PageResult;
+import com.ajaxjs.sqlman.crud.page.PageResult;
 import com.ajaxjs.util.httpremote.HttpConstant;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.AfterAll;

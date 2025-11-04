@@ -1,11 +1,10 @@
 package com.ajaxjs.base.controller;
 
 import com.ajaxjs.base.model.Feedback;
-import com.ajaxjs.framework.model.PageVO;
-import com.ajaxjs.security.SecurityInterceptor;
 import com.ajaxjs.security.captcha.image.ImageCaptcha;
 import com.ajaxjs.security.captcha.image.ImageCaptchaCheck;
 import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.sqlman.crud.page.PageResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,5 +34,5 @@ public interface FeedbackController {
     boolean addFeedback(@RequestBody Feedback feedback);
 
     @GetMapping("/page")
-    PageVO<Feedback> page();
+    PageResult<Feedback> page();
 }

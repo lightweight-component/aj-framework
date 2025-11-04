@@ -2,10 +2,10 @@ package com.ajaxjs.framework.dataservice;
 
 import com.ajaxjs.framework.dataservice.model.Endpoint;
 import com.ajaxjs.sqlman.JdbcConnection;
-import com.ajaxjs.sqlman_v2.Action;
-import com.ajaxjs.sqlman_v2.crud.Query;
-import com.ajaxjs.sqlman_v2.crud.Update;
-import com.ajaxjs.sqlman_v2.crud.page.PageQuery;
+import com.ajaxjs.sqlman.Action;
+import com.ajaxjs.sqlman.crud.Query;
+import com.ajaxjs.sqlman.crud.Update;
+import com.ajaxjs.sqlman.crud.page.PageQuery;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

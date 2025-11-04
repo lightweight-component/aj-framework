@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.FastCrudController;
 
-import com.ajaxjs.sqlman_v2.sqlgenerator.AutoQuery;
+import com.ajaxjs.sqlman.sqlgenerator.AutoQuery;
 
 import java.util.HashMap;
 
