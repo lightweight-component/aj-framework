@@ -4,7 +4,7 @@ package com.ajaxjs.framework.mvc.unifiedreturn;
 //import com.ajaxjs.desensitize.annotation.Desensitize;
 
 import com.ajaxjs.framework.mvc.filter.RequestLogger;
-import com.ajaxjs.sqlman.v1.PrettyLogger;
+import com.ajaxjs.sqlman.util.PrettyLogger;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.JsonUtil;
