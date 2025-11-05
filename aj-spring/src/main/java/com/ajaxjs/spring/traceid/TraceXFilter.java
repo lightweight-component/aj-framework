@@ -16,6 +16,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -46,22 +47,20 @@ public class TraceXFilter implements Filter {
             traceId = RandomTools.uuid().toString();
 
         MDC.put(BoxLogger.TRACE_KEY, traceId);
-
         String contentType = request.getContentType();
-//        Enumeration<String> parameterNames = req.getParameterNames();
 
         if (!GET.equals(req.getMethod()) && ObjectHelper.hasText(contentType)) {
+            HttpServletRequestWrapper wrappedRequest = null;
+
             if (POST.equals(req.getMethod()) && contentType.contains(CONTENT_TYPE_FORM)) {
-                ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(req);
+                wrappedRequest = new ContentCachingRequestWrapper(req);
                 /* Manually trigger stream */
 //            wrappedRequest.getParameterNames();
-
-                chain.doFilter(wrappedRequest, response);
 //            System.out.println("Request Body: " + getStreamBodyAsStr(wrappedRequest));
-            } else if (contentType.contains(CONTENT_TYPE_FORM) || contentType.contains(CONTENT_TYPE_JSON)) {
-                BufferedRequestWrapper wrappedRequest = new BufferedRequestWrapper(req);
-                chain.doFilter(wrappedRequest, response);
-            }
+            } else if (contentType.contains(CONTENT_TYPE_FORM) || contentType.contains(CONTENT_TYPE_JSON))
+                wrappedRequest = new BufferedRequestWrapper(req);
+
+            chain.doFilter(wrappedRequest == null ? req : wrappedRequest, response);
         } else
             chain.doFilter(req, response); // GET 请求不记录
     }
