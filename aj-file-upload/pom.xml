@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
 
-    <artifactId>aj-fileupload</artifactId>
+    <artifactId>aj-file-upload</artifactId>
     <name>aj-file-upload</name>
     <version>1.0</version>
-    <description>user</description>
+    <description>Abstraction of file upload with many configurations and safety consider</description>
     <packaging>jar</packaging>
 
     <url>https://aj-docs.ajaxjs.com/</url>
@@ -50,11 +50,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
         </dependency>
     </dependencies>
 </project>

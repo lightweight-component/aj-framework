@@ -4,7 +4,9 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
 
 
-# A small, clean Java cryptography library with AES/DES/PBE/RSA.
+# Java File Upload Component
+
+Based on Spring MVC, it provides a simple way to upload files. Abstraction of file upload with many configurations and safety consider.
 
 
 ## Source code

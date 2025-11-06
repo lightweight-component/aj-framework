@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
-            <artifactId>aj-fileupload</artifactId>
+            <artifactId>aj-file-upload</artifactId>
             <version>1.0</version>
         </dependency>
 

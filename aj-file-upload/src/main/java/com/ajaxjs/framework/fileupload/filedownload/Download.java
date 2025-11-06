@@ -7,7 +7,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
@@ -57,7 +56,7 @@ public class Download {
         }
     }
 
-    public static void downloadServlet(HttpServletRequest request, HttpServletResponse response, File downloadFile) {
+    public static void downloadServlet(HttpServletResponse response, File downloadFile) {
         try (OutputStream out = response.getOutputStream();
              InputStream in = Files.newInputStream(downloadFile.toPath())) {
             new DataWriter(out).write(in);
