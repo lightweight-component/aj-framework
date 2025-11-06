@@ -104,7 +104,7 @@ public class ContentTypePolicy {
         try {
             String expectedByExt = Files.probeContentType(fakePath);
 
-            if (!contentType.equals(expectedByExt))
+            if (!contentType.equalsIgnoreCase(expectedByExt))
                 throw new IllegalArgumentException("The ext type: " + expectedByExt + " doesn't match with: " + contentType);
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);

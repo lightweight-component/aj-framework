@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>aj-fileupload</artifactId>
-    <name>aj-fileupload</name>
+    <name>aj-file-upload</name>
     <version>1.0</version>
     <description>user</description>
     <packaging>jar</packaging>
