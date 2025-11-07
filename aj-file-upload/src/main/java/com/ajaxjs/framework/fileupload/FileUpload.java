@@ -8,6 +8,7 @@ import com.ajaxjs.framework.fileupload.policy.NamePolicy;
 import com.ajaxjs.framework.fileupload.policy.ShowUrlPolicy;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.UrlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -114,8 +115,8 @@ public class FileUpload {
      * @param uploadPath  The upload path, like /uploads
      */
     public void setUrlPrefix(String baseUrl, String contextPath, String uploadPath) {
-        String urlPrefix = StrUtil.concatUrl(baseUrl, contextPath);
-        urlPrefix = StrUtil.concatUrl(urlPrefix, uploadPath);
+        String urlPrefix = UrlHelper.concatUrl(baseUrl, contextPath);
+        urlPrefix = UrlHelper.concatUrl(urlPrefix, uploadPath);
 
         config.setUrlPrefix(urlPrefix);
     }
