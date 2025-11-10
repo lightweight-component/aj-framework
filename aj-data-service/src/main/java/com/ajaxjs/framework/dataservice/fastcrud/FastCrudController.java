@@ -2,9 +2,12 @@ package com.ajaxjs.framework.dataservice.fastcrud;
 
 import com.ajaxjs.spring.annotation.BizAction;
 import com.ajaxjs.sqlman.crud.page.PageResult;
+import com.ajaxjs.sqlman.model.CreateResult;
+import com.ajaxjs.sqlman.model.UpdateResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +58,7 @@ public interface FastCrudController {
      */
     @PostMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @BizAction("创建实体")
-    Long create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+    CreateResult<Serializable> create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
     /**
      * 创建实体
@@ -67,7 +70,7 @@ public interface FastCrudController {
      */
     @PostMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @BizAction("创建实体")
-    Long create(@RequestBody Map<String, Object> params, @PathVariable String namespace);
+    CreateResult<Serializable> create(@RequestBody Map<String, Object> params, @PathVariable String namespace);
 
     /**
      * 修改实体
@@ -79,7 +82,7 @@ public interface FastCrudController {
      */
     @PutMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @BizAction("修改实体")
-    Boolean update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+    UpdateResult update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
     /**
      * 修改实体
@@ -91,7 +94,7 @@ public interface FastCrudController {
      */
     @PutMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @BizAction("修改实体")
-    Boolean update(@RequestBody Map<String, Object> params, @PathVariable String namespace);
+    UpdateResult update(@RequestBody Map<String, Object> params, @PathVariable String namespace);
 
     /**
      * 删除实体

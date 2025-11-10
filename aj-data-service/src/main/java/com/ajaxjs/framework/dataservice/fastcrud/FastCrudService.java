@@ -1,18 +1,22 @@
 package com.ajaxjs.framework.dataservice.fastcrud;
 
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.Action;
 import com.ajaxjs.sqlman.crud.page.PageResult;
+import com.ajaxjs.sqlman.model.CreateResult;
+import com.ajaxjs.sqlman.model.UpdateResult;
 import com.ajaxjs.sqlman.sqlgenerator.AutoQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class FastCrudService implements FastCrudController {
     @Autowired(required = false)
-    Namespaces namespaces;
+    protected Namespaces namespaces;
 
     @Override
     public Map<String, Object> info(String namespace, Long id) {
@@ -33,27 +37,37 @@ public class FastCrudService implements FastCrudController {
 
     @Override
     public PageResult<Map<String, Object>> page(String namespace) {
-        return null;
+        String where = Tools.getWhereClause();
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String sql = autoQuery.list(where);
+
+        return new Action(sql).query().pageByStartLimit(DiContextUtil.getRequest());
     }
 
     @Override
-    public Long create(String namespace, Map<String, Object> params) {
-        return null;
+    public CreateResult<Serializable> create(String namespace, Map<String, Object> params) {
+        return create(params, namespace);
     }
 
     @Override
-    public Long create(Map<String, Object> params, String namespace) {
-        return null;
+    public CreateResult<Serializable> create(Map<String, Object> params, String namespace) {
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String tableName = autoQuery.getTableModel().getTableName();
+
+        return new Action(params, tableName).create().execute(autoQuery.getTableModel().isAutoIns());
     }
 
     @Override
-    public Boolean update(String namespace, Map<String, Object> params) {
-        return null;
+    public UpdateResult update(String namespace, Map<String, Object> params) {
+        return update(params, namespace);
     }
 
     @Override
-    public Boolean update(Map<String, Object> params, String namespace) {
-        return null;
+    public UpdateResult update(Map<String, Object> params, String namespace) {
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String tableName = autoQuery.getTableModel().getTableName();
+
+        return new Action(params, tableName).update().withId(autoQuery.getTableModel().getIdField());
     }
 
     @Override

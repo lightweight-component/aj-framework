@@ -12,6 +12,7 @@ package com.ajaxjs.framework.model;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @author sp42 frank@ajaxjs.com
  */
 @Data
-public abstract class BaseModel {
+public abstract class BaseModelV2 {
     /**
      * 主键
      */
@@ -67,12 +68,12 @@ public abstract class BaseModel {
     /**
      * 创建日期
      */
-    private Date createDate;
+    private LocalDateTime createDate;
 
     /**
      * 修改日期
      */
-    private Date updateDate;
+    private LocalDateTime updateDate;
 
     /**
      * 扩展字段
