@@ -71,7 +71,18 @@ public class FastCrudService implements FastCrudController {
     }
 
     @Override
-    public Boolean delete(String namespace, Long id) {
-        return null;
+    public boolean deletePhysical(String namespace, Long id) {
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String sql = autoQuery.deletePhysicalById();
+
+        return new Action(sql).update(id).execute().isOk();
+    }
+
+    @Override
+    public boolean deleteLogical(String namespace, Long id) {
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String sql = autoQuery.deleteLogicalById();
+
+        return new Action(sql).update(id).execute().isOk();
     }
 }

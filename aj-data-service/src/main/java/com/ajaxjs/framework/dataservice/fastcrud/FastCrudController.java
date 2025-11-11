@@ -97,13 +97,24 @@ public interface FastCrudController {
     UpdateResult update(@RequestBody Map<String, Object> params, @PathVariable String namespace);
 
     /**
-     * 删除实体
+     * 物理删除实体
+     *
+     * @param namespace 实体的命名空间
+     * @param id        实体 id
+     * @return 是否成功
+     */
+    @DeleteMapping("/{namespace}/logical/{id}")
+    @BizAction("物理删除实体")
+    boolean deletePhysical(@PathVariable String namespace, @PathVariable Long id);
+
+    /**
+     * 物理删除实体
      *
      * @param namespace 实体的命名空间
      * @param id        实体 id
      * @return 是否成功
      */
     @DeleteMapping("/{namespace}/{id}")
-    @BizAction("删除实体")
-    Boolean delete(@PathVariable String namespace, @PathVariable Long id);
+    @BizAction("逻辑删除实体")
+    boolean deleteLogical(@PathVariable String namespace, @PathVariable Long id);
 }

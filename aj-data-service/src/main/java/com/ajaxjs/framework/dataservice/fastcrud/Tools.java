@@ -15,6 +15,8 @@ public class Tools {
         return getWhereClause(Objects.requireNonNull(DiContextUtil.getRequest()));
     }
 
+    public static final String SQL_WHERE_CLAUSE = "SQL_WHERE_CLAUSE";
+
     /**
      * 基于 URL 的 QueryString，设计一个条件查询的参数规范，可以转化为 SQL 的 Where 里面的查询
      * usage:
@@ -27,6 +29,12 @@ public class Tools {
      */
     public static String getWhereClause(HttpServletRequest request) {
         Map<String, String[]> parameters = request.getParameterMap();
+
+        if (request.getAttribute(SQL_WHERE_CLAUSE) != null) {
+            Map<String, String[]> sqlWhereClause = (Map<String, String[]>) request.getAttribute("SQL_WHERE_CLAUSE");
+            parameters.putAll(sqlWhereClause);
+        }
+
         List<String> arr = new ArrayList<>();
 
         for (String parameterName : parameters.keySet()) {
