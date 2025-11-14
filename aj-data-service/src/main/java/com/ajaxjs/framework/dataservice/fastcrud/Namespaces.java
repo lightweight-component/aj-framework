@@ -91,7 +91,6 @@ public class Namespaces extends HashMap<String, AutoQuery> {
 
                 TableModel tableModel = new TableModel();
                 tableModel.setTableName(entity.getTableName());
-                log.info("Load namespace: " + entity.getNamespace());
                 put(entity.getNamespace(), new AutoQuery(tableModel, config));
             }
 
