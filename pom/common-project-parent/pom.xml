@@ -85,6 +85,19 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg><!-- IDEA 设置 Javac 编译参数对于 Maven 无效 -->
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
             <!-- 用于将依赖包拷贝到指定的位置 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

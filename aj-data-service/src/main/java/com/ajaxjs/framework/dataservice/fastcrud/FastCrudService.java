@@ -45,6 +45,15 @@ public class FastCrudService implements FastCrudController {
     }
 
     @Override
+    public PageResult<Map<String, Object>> pageByNo(String namespace) {
+        String where = Tools.getWhereClause();
+        AutoQuery autoQuery = namespaces.get(namespace);
+        String sql = autoQuery.list(where);
+
+        return new Action(sql).query().pageByPageNo(DiContextUtil.getRequest());
+    }
+
+    @Override
     public CreateResult<Serializable> create(String namespace, Map<String, Object> params) {
         return create(params, namespace);
     }

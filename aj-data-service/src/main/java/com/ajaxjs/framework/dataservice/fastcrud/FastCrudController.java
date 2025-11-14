@@ -15,7 +15,7 @@ import java.util.Map;
  * FastCRUD 控制器
  */
 @RestController
-@RequestMapping("/common-api")
+@RequestMapping("/common_api")
 public interface FastCrudController {
     /**
      * 获取单笔详情
@@ -47,6 +47,17 @@ public interface FastCrudController {
     @GetMapping("/{namespace}/page")
     @BizAction("分页获取实体列表")
     PageResult<Map<String, Object>> page(@PathVariable String namespace);
+
+    /**
+     * 分页获取实体列表
+     * 按照页码的
+     *
+     * @param namespace 实体的命名空间
+     * @return 实体列表
+     */
+    @GetMapping("/{namespace}/page_no")
+    @BizAction("分页获取实体列表")
+    PageResult<Map<String, Object>> pageByNo(@PathVariable String namespace);
 
     /**
      * 创建实体
