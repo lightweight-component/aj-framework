@@ -70,6 +70,10 @@ public class Namespaces extends HashMap<String, AutoQuery> {
         return result;
     }
 
+    Supplier<Serializable> getCurrentUserId;
+
+    Supplier<Serializable> getTenantId;
+
     /**
      * Load namespace from DB
      *
@@ -77,8 +81,12 @@ public class Namespaces extends HashMap<String, AutoQuery> {
      * @param getTenantId      How to get tenant id
      */
     public void loadFromDB(Supplier<Serializable> getCurrentUserId, Supplier<Serializable> getTenantId) {
+        String sql = "SELECT * FROM ds_namespace WHERE stat != 1";
+
+        this.getCurrentUserId = getCurrentUserId;
+        this.getTenantId = getTenantId;
+
         try {
-            String sql = "SELECT * FROM ds_namespace WHERE stat != 1";
             List<NamespaceDataEntity> list = new Action(sql).query().list(NamespaceDataEntity.class);
 
             if (ObjectHelper.isEmpty(list))
