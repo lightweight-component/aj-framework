@@ -108,4 +108,8 @@ public class Namespaces extends HashMap<String, AutoQuery> {
             // avoid fails to spring startup and JDBC connection manually closing.
         }
     }
+
+    public void reload() {
+        loadFromDB(getCurrentUserId, getTenantId);
+    }
 }

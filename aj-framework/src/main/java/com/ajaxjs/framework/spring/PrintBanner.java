@@ -40,7 +40,7 @@ public class PrintBanner implements ApplicationRunner {
 
     private String version = "1.0";
 
-//    private static final String[] BANNER = {
+    //    private static final String[] BANNER = {
 //            "",
 //            "\033[91m       ___       _       ___  __    __      _   _____        _          __  _____   _____  ",
 //            "\033[92m     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ ",
@@ -70,7 +70,7 @@ public class PrintBanner implements ApplicationRunner {
 //        log.info("Spring App:{} startup time: {} ms", port, elapsedTime);
 
         Log log = LogFactory.getLog(PrintBanner.class);
-        log.info("Spring App: " + contextPath + ":" + port + " startup time: " + elapsedTime + " ms");
+        log.info("Spring App :" + port + contextPath + ", startup time: " + elapsedTime + " ms");
 
         if (isShowBanner) {
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();

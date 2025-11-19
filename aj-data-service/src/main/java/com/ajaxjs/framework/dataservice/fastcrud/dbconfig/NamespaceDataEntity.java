@@ -2,6 +2,8 @@ package com.ajaxjs.framework.dataservice.fastcrud.dbconfig;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class NamespaceDataEntity {
 
@@ -43,5 +45,10 @@ public class NamespaceDataEntity {
      * Default: 1 (true)
      */
     private Boolean filterDeleted;
+
+    /**
+     *
+     */
+    private Map<String, Object> tableJoin;
 
 }

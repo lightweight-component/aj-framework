@@ -1,10 +1,13 @@
 package com.ajaxjs.framework.dataservice.fastcrud.dbconfig;
 
 import com.ajaxjs.sqlman.sqlgenerator.AutoQueryBusiness;
+import com.ajaxjs.sqlman.sqlgenerator.TableJoin;
+import com.ajaxjs.util.JsonUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
@@ -44,5 +47,12 @@ public class AutoQueryBusinessConfig implements AutoQueryBusiness {
     @Override
     public Serializable getTenantId() {
         return getTenantId.get();
+    }
+
+    @Override
+    public TableJoin getTableJoin() {
+        Map<String, Object> tableJoinMap = entity.getTableJoin();
+
+        return tableJoinMap == null ? null : JsonUtil.map2pojo(tableJoinMap, TableJoin.class);
     }
 }
