@@ -20,5 +20,7 @@
         <module>aj-experiment</module>
         <module>aj-validator</module>
         <module>aj-wechat</module>
+        <module>aj-wechat</module>
+        <module>springboot4</module>
     </modules>
 </project>
