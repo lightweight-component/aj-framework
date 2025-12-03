@@ -29,6 +29,8 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.ajaxjs.framework.mvc.filter.RequestLogger.TRUE;
+
 @RestControllerAdvice
 @Slf4j
 public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
@@ -135,6 +137,10 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
             return;
 
         HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
+        String silentLog = request.getParameter("silent_log");
+
+        if (TRUE.equals(silentLog) )
+            return;
 
         String title = " Request Completion ";
         String sb = "\n" + PrettyLogger.ANSI_BLUE + RequestLogger.boxLine('┌', '─', '┐', title) + '\n' +

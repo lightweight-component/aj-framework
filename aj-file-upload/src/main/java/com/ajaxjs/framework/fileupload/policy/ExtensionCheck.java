@@ -21,7 +21,7 @@ public class ExtensionCheck {
                 break;
             case OFFICE_FILE:
                 if (!OFFICE_EXTENSIONS.contains(ext))
-                    throw new IllegalArgumentException("[ExtCheck]The uploaded file(*." + ext + ") is not an image.");
+                    throw new IllegalArgumentException("[ExtCheck]The uploaded file(*." + ext + ") is not an office file.");
                 break;
             case AUDIO:
                 if (!AUDIO_EXTENSIONS.contains(ext))
@@ -60,7 +60,8 @@ public class ExtensionCheck {
      * Common office file extensions
      */
     public static final Set<String> OFFICE_EXTENSIONS = ObjectHelper.setOf(
-            "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx", "doc", "odp", "xls", "odt", "ods"
+            "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
+            "doc", "odp", "xls", "odt", "ods", "md","wps"
     );
     public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III

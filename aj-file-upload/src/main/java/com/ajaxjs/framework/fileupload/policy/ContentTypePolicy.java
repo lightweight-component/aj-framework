@@ -134,7 +134,12 @@ public class ContentTypePolicy {
             "application/pdf", // .pdf
             "application/vnd.oasis.opendocument.text", // .odt
             "application/vnd.oasis.opendocument.spreadsheet", // .ods
-            "application/vnd.oasis.opendocument.presentation" // .odp
+            "application/vnd.oasis.opendocument.presentation", // .odp
+            "text/markdown", // md
+            "application/wps-office.wps", // .wps
+            "application/x-wps-office-document",
+            "application/wps-office.et",
+            "application/wps-office.dps"
     );
 
     static final Set<String> AUDIO_CONTENT_TYPES = ObjectHelper.setOf(

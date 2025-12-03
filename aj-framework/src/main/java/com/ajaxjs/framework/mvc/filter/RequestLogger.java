@@ -3,7 +3,9 @@ package com.ajaxjs.framework.mvc.filter;
 import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.traceid.TraceXFilter;
-import com.ajaxjs.util.*;
+import com.ajaxjs.util.BoxLogger;
+import com.ajaxjs.util.CommonConstant;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.date.DateTools;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -24,9 +26,14 @@ import java.util.Map;
 public class RequestLogger extends BoxLogger implements HandlerInterceptor {
     public static final String START_TIME_ATTRIBUTE = "startTime";
 
+    public static final String TRUE = "true";
+
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
-        if (!(handler instanceof HandlerMethod))
+        // avoid the lots of logs shown, BE CAREFULLY to use for missing the logs
+        String silentLog = req.getParameter("silent_log");
+
+        if (TRUE.equals(silentLog) || !(handler instanceof HandlerMethod))
             return true;
 
         HandlerMethod handlerMethod = (HandlerMethod) handler; // 接口上的方法
