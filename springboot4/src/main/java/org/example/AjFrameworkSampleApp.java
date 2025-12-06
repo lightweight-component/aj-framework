@@ -1,5 +1,6 @@
 package org.example;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,5 +11,6 @@ public class AjFrameworkSampleApp {
     public static void main(String[] args) {
         SpringApplication.run(AjFrameworkSampleApp.class, args);
         log.warn("okoko----------------cbvcbv---");
+        HttpServletRequest l;
     }
 }
