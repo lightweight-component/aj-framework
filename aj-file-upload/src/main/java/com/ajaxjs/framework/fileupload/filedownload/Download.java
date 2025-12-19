@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.fileupload.filedownload;
 
+import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.io.DataWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -49,7 +51,12 @@ public class Download {
             if (contentType == null)
                 contentType = "application/octet-stream"; // fallback
 
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, contentType).body(resource);
+            String f = "attachment; filename=\"" + URLEncoder.encode(filename, CommonConstant.UTF8).replaceAll("\\+", "%20") + "\"";
+            log.info("下载文件：{}", f);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, contentType)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, f)
+                    .body(resource);
         } catch (IOException e) {
             log.warn("文件读取异常：{}", filename);
             return ResponseEntity.badRequest().build();
