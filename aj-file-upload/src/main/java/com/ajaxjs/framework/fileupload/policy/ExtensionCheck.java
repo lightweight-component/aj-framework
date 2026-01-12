@@ -61,7 +61,7 @@ public class ExtensionCheck {
      */
     public static final Set<String> OFFICE_EXTENSIONS = ObjectHelper.setOf(
             "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
-            "doc", "odp", "xls", "odt", "ods", "md","wps"
+            "doc", "odp", "xls", "odt", "ods", "md", "wps", "txt"
     );
     public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III

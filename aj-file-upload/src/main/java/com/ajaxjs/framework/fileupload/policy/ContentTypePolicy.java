@@ -104,8 +104,8 @@ public class ContentTypePolicy {
         try {
             String expectedByExt = Files.probeContentType(fakePath);
 
-            if (!contentType.equalsIgnoreCase(expectedByExt))
-                throw new IllegalArgumentException("The ext type: " + expectedByExt + " doesn't match with: " + contentType);
+//            if (!contentType.equalsIgnoreCase(expectedByExt))
+//                throw new IllegalArgumentException("The ext type: " + expectedByExt + " doesn't match with: " + contentType);
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);
         }
@@ -136,6 +136,7 @@ public class ContentTypePolicy {
             "application/vnd.oasis.opendocument.spreadsheet", // .ods
             "application/vnd.oasis.opendocument.presentation", // .odp
             "text/markdown", // md
+            "text/plain", // txt
             "application/wps-office.wps", // .wps
             "application/x-wps-office-document",
             "application/wps-office.et",
@@ -147,6 +148,7 @@ public class ContentTypePolicy {
             "audio/x-wav",          // .wav
             "audio/wav",            // .wav (alternative)
             "audio/wave",           // .wav
+            "audio/vnd.wave",
             "audio/x-pn-wav",       // .wav (streaming)
             "audio/aac",            // .aac
             "audio/mp4",            // .m4a, .mp4 (audio)
