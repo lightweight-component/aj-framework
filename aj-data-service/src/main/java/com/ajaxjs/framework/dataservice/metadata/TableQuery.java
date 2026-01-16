@@ -90,7 +90,7 @@ public class TableQuery extends BaseMetaQuery {
             for (String tableName : tableNames) {
                 String t = hasDbName ? dbName + "." + tableName : tableName;
 
-                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + t)) {
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE `" + t + "`")) {
                     String createDDL = null;
 
                     try {
