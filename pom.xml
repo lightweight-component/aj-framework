@@ -8,8 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>pom/common-project-parent</module>
-        <module>pom/opensource-parent</module>
+        <module>aj-project-parent</module>
         <module>aj-framework</module>
         <module>aj-spring</module>
         <module>aj-message/aj-message-common</module>
