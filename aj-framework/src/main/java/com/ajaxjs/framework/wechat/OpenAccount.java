@@ -18,13 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * 微信公众号
@@ -35,47 +30,95 @@ public class OpenAccount {
     /**
      * AppId
      */
-    private String accessKeyId;
+    private String appId;
 
     /**
      * App 密钥
      */
     private String accessSecret;
 
+    private final static String TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token";
 
-    private final static String ACCESS_TOKEN_API = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+    /**
+     * 当获取到 AccessToken 的时候触发，例如放进 Redis
+     */
+    private Consumer<String> onTokenGet;
 
-    public void getClientAccessToken() {
-        log.info("获取 ClientApp AT");
-        Get.api(String.format(ACCESS_TOKEN_API, getAccessKeyId(), getAccessSecret()));
+    private String accessToken;
+
+    /**
+     * 获取 Client AccessToken
+     */
+    public void getAccessToken() {
+        log.info("获取 Client AccessToken");
+
+        String params = String.format("?grant_type=client_credential&appid=%s&secret=%s", appId, accessSecret);
+        Map<String, Object> map = Get.api(TOKEN_API + params);
+
+        if (map.containsKey("access_token")) {
+            accessToken = map.get("access_token").toString();
+            log.info("获取令牌成功！ AccessToken [{}]", accessToken);
+
+            if (onTokenGet != null) {
+                try {
+                    onTokenGet.accept(accessToken);
+                } catch (Throwable e) {
+                    log.warn("获取 Client AccessToken", e);
+                }
+            }
+        } else if (map.containsKey("errcode"))
+            log.warn("获取令牌失败！ Error [{}:{}]", map.get("errcode"), map.get("errmsg"));
+        else
+            log.warn("获取令牌失败！未知异常 [{}]", map);
+    }
+
+    /**
+     * 获取 Client AccessToken，并加入定时器
+     */
+    public void init() {
+        getAccessToken();
+        setTimeout(this::getAccessToken, 7100);
+    }
+
+    /**
+     * 每隔指定秒数执行一次任务（延迟1秒后开始）
+     *
+     * @param task    要执行的任务（Lambda 表达式）
+     * @param seconds 间隔秒数
+     */
+    public static void setTimeout(Runnable task, int seconds) {
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                task.run(); // 执行传入的 Lambda 任务
+            }
+        };
+
+        // 延迟1秒后开始执行，之后每隔 seconds 秒重复执行
+        new Timer().schedule(timerTask, 1000, (long) seconds * 1000);
     }
 
     public static boolean init(HttpServletRequest req) {
         String ua = req.getHeader("User-Agent");
+
         if (ua != null)
             ua = ua.toLowerCase();// 强制转换为小写字母
 
-        //			try {
-        //				if (TokenMgr.instance == null) {
-        //					String appId = ConfigService.getValueAsString("wx_open.appId");
-        //					String appSecret = ConfigService.getValueAsString("wx_open.appSecret");
-        //					TokenMgr.instance = new TokenMgr(appId, appSecret);
-        //				}
-        //
-        //				// 获取当前页面的 url
-        //				String url = (req.getRemotePort() != 80 ? "https" : req.getScheme()) + "://" + req.getServerName() + req.getRequestURI();
-        //				if (req.getQueryString() != null)
-        //					url += "?" + req.getQueryString();
-        //
-        //				Map<String, String> map = generateSignature(url, TokenMgr.instance.getTicket());
-        //				req.setAttribute("map", map);
-        //			} catch (Exception e) {
-        //				e.printStackTrace();
-        //			}
+        // 获取当前页面的 url
+        String url = (req.getRemotePort() != 80 ? "https" : req.getScheme()) + "://" + req.getServerName() + req.getRequestURI();
+        if (req.getQueryString() != null)
+            url += "?" + req.getQueryString();
+
+        String ticket = "";
+        Map<String, String> map = generateSignature(url, ticket);
+        req.setAttribute("map", map);
+
         return ua.contains("micromessenger");
     }
 
     /**
+     * 生成签名
+     *
      * @param url         页面地址
      * @param jsApiTicket 凭证
      * @return 页面用的数据
@@ -88,8 +131,7 @@ public class OpenAccount {
         map.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         map.put("signature", generateSignature(map));
 
-        return map; // 因为签名用的 noncestr 和 timestamp 必须与 wx.config中的nonceStr 和 timestamp
-        // 相同，所以还需要使用这两个参数
+        return map; // 因为签名用的 noncestr 和 timestamp 必须与 wx.config 中的 nonceStr 和 timestamp 相同，所以还需要使用这两个参数
     }
 
     /**
@@ -113,17 +155,5 @@ public class OpenAccount {
 
 //        return Digest.getSHA1(sb.toString());
         return HashHelper.getSHA1(sb.toString());
-    }
-
-    public static void main(String[] args) {
-        // 获取当前时间的秒数
-        long epochSecond = 1709296663;
-
-        // 将时间戳转换为 LocalDateTime
-        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneId.systemDefault());
-
-        System.out.println("时间戳 " + epochSecond + " 对应的真实时间是：" + dateTime);
-
-
     }
 }

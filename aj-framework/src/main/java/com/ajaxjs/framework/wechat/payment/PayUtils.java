@@ -140,4 +140,20 @@ public class PayUtils {
 
         return "wx-" + date + "-" + randomStr;
     }
+
+    public static String mapToQueryString(Map<String, Object> map) {
+        StringBuilder queryString = new StringBuilder();
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue().toString();
+
+            if (queryString.length() > 0)
+                queryString.append('&');
+
+            queryString.append(key).append('=').append(value);
+        }
+
+        return queryString.toString();
+    }
 }

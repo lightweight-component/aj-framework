@@ -1,8 +1,7 @@
 package com.ajaxjs.framework.wechat.payment;
 
 import com.ajaxjs.framework.model.BusinessException;
-import com.ajaxjs.framework.wechat.applet.payment.CommonService;
-import com.ajaxjs.framework.wechat.applet.payment.payment.PreOrder;
+import com.ajaxjs.framework.wechat.payment.model.PreOrder;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
@@ -55,6 +54,7 @@ public class NativePayService extends CommonService {
         if ((Boolean) result.get("isOk") && result.get("code") == null) {
             String codeUrl = (String) result.get("code_url");
             log.info("Generated QR Code URL: {}", codeUrl);
+
             return codeUrl;
         } else
             throw new BusinessException(result.get("message").toString());
