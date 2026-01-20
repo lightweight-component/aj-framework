@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("shop_payment_transaction")
-public class ShopPayChannelEntity extends BaseModelV2 {
+public class PayChannelEntity extends BaseModelV2 {
     /**
      * 域名
      */

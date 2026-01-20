@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("shop_address")
-public class ShopAddressEntity extends BaseModelV2 {
+public class AddressEntity extends BaseModelV2 {
     /**
      * 说明
      */

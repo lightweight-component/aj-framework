@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("shop_product")
-public class ShopProduct extends BaseModelV2 {
+public class ProductEntity extends BaseModelV2 {
     /**
      * 商品名称
      */

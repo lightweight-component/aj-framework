@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table("shop_payment_transaction")
-public class ShopRefundRecordEntity extends BaseModelV2 {
+public class RefundRecordEntity extends BaseModelV2 {
     /**
      * 交易系统订单号【对于三方来说：商户订单】
      */
