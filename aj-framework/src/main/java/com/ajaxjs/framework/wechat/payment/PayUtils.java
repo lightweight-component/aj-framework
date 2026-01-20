@@ -1,13 +1,16 @@
-package com.ajaxjs.framework.wechat.applet.payment;
+package com.ajaxjs.framework.wechat.payment;
 
 
 import com.ajaxjs.framework.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.framework.wechat.merchant.SignerMaker;
 import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.RandomTools;
+import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.httpremote.Get;
-import com.ajaxjs.util.httpremote.Post;
 import com.ajaxjs.util.httpremote.HttpConstant;
+import com.ajaxjs.util.httpremote.Post;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,7 +22,8 @@ import java.util.function.Consumer;
 /**
  * 工具类
  */
-public class AppletPayUtils {
+@Slf4j
+public class PayUtils {
     public final static String SCHEMA = "WECHATPAY2-SHA256-RSA2048";
 
     /**
@@ -85,7 +89,7 @@ public class AppletPayUtils {
         String rawJson = JsonUtil.toJson(params);
         HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.POST, url, rawJson);
 
-        System.out.println(":::请求参数：" + rawJson);
+        log.info(":::请求参数：" + rawJson);
         Map<String, Object> result = Post.api(API_DOMAIN + url, rawJson, getSetHeadFn(mchCfg, rw));
 
         if (result.containsKey("code ") && result.containsKey("message"))
@@ -121,5 +125,19 @@ public class AppletPayUtils {
             return (T) result;
         else
             return JsonUtil.map2pojo(result, resultClz);
+    }
+
+    private final static String DATE_FORMAT = "yyyyMMddHHmm";
+
+    /**
+     * 创建微信支付的订单号
+     *
+     * @return 微信支付的订单号
+     */
+    public static String createOrderTradeNo() {
+        String randomStr = RandomTools.generateRandomString(6);
+        String date = DateTools.now(DATE_FORMAT);
+
+        return "wx-" + date + "-" + randomStr;
     }
 }

@@ -2,11 +2,11 @@ package com.ajaxjs.framework.wechat.applet.payment;
 
 import com.ajaxjs.framework.wechat.applet.payment.profit_sharing.*;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
+import com.ajaxjs.framework.wechat.payment.PayUtils;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class ProfitSharingApiService extends CommonService {
     public RequestOrderResult order(RequestOrder order) {
         String url = "/v3/profitsharing/orders";
 
-        return AppletPayUtils.post(mchCfg, url, order, RequestOrderResult.class);
+        return PayUtils.post(mchCfg, url, order, RequestOrderResult.class);
     }
 
     public static Map<String, String> ORDER_PROFIT = new HashMap<>();
@@ -87,7 +87,7 @@ public class ProfitSharingApiService extends CommonService {
     public RequestOrderResult getOrders(String transactionId, String outOrderNo) {
         String url = "/v3/profitsharing/orders/" + outOrderNo + "?transaction_id=" + transactionId;
 
-        return AppletPayUtils.get(mchCfg, url, RequestOrderResult.class);
+        return PayUtils.get(mchCfg, url, RequestOrderResult.class);
     }
 
     /**
@@ -99,7 +99,7 @@ public class ProfitSharingApiService extends CommonService {
     public ReturnOrderResult returnOrders(ReturnOrder order) {
         String url = "/v3/profitsharing/return-orders";
 
-        return AppletPayUtils.post(mchCfg, url, order, ReturnOrderResult.class);
+        return PayUtils.post(mchCfg, url, order, ReturnOrderResult.class);
     }
 
     /**
@@ -119,7 +119,7 @@ public class ProfitSharingApiService extends CommonService {
     public ReturnOrderResult getReturnOrders(String outReturnNo, String outOrderNo) {
         String url = "/v3/profitsharing/return-orders/" + outReturnNo + "?out_order_no=" + outOrderNo;
 
-        return AppletPayUtils.get(mchCfg, url, ReturnOrderResult.class);
+        return PayUtils.get(mchCfg, url, ReturnOrderResult.class);
     }
 
     /**
@@ -136,7 +136,7 @@ public class ProfitSharingApiService extends CommonService {
 
         Map<String, String> params = ObjectHelper.mapOf("transaction_id", transactionId, "out_order_no", outOrderNo, "description", description);
 
-        return AppletPayUtils.post(mchCfg, url, params, RequestOrderResult.class);
+        return PayUtils.post(mchCfg, url, params, RequestOrderResult.class);
     }
 
     /**
@@ -147,7 +147,7 @@ public class ProfitSharingApiService extends CommonService {
      */
     public int getUnsplitMoney(String transactionId) {
         String url = "/v3/profitsharing/transactions/" + transactionId + "/amounts";
-        Map<String, Object> map = AppletPayUtils.get(mchCfg, url, Map.class);
+        Map<String, Object> map = PayUtils.get(mchCfg, url, Map.class);
 
         if ((Boolean) map.get("isOk")) {
             return (int) map.get("unsplit_amount");
@@ -170,7 +170,7 @@ public class ProfitSharingApiService extends CommonService {
     public ReceiverAddResult addReceivers(ReceiverAdd receiver) {
         String url = "/v3/profitsharing/receivers/add";
 
-        return AppletPayUtils.post(mchCfg, url, receiver, ReceiverAddResult.class);
+        return PayUtils.post(mchCfg, url, receiver, ReceiverAddResult.class);
     }
 
     /**
@@ -187,7 +187,7 @@ public class ProfitSharingApiService extends CommonService {
         String url = "/v3/profitsharing/receivers/delete";
         Map<String, String> params = ObjectHelper.mapOf("appid", appid, "type", type, "account", account);
 
-        return AppletPayUtils.post(mchCfg, url, params, ReceiverResult.class);
+        return PayUtils.post(mchCfg, url, params, ReceiverResult.class);
     }
 
     /**
@@ -217,7 +217,7 @@ public class ProfitSharingApiService extends CommonService {
         if (tarType != null)
             url += "&tar_type=" + tarType;
 
-        Map<String, Object> map = AppletPayUtils.get(mchCfg, url, Map.class);
+        Map<String, Object> map = PayUtils.get(mchCfg, url, Map.class);
 
         if ((Boolean) map.get("isOk")) {
             return map.get("download_url").toString();
@@ -246,7 +246,7 @@ public class ProfitSharingApiService extends CommonService {
      */
     public int getMax() {
         String url = "/v3/profitsharing/merchant-configs/" + mchCfg.getMchId();
-        Map<String, Object> map = AppletPayUtils.get(mchCfg, url, Map.class);
+        Map<String, Object> map = PayUtils.get(mchCfg, url, Map.class);
         int maxRatio = (int) map.get("max_ratio");
 
         return maxRatio / 100;

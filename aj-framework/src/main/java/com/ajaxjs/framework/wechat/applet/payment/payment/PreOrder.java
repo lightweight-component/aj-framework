@@ -6,8 +6,6 @@ import lombok.Data;
  * JSAPI下单 请求对象
  * <p>
  * <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_1.shtml">...</a>
- *
- * @author Frank Cheung
  */
 @Data
 public class PreOrder {

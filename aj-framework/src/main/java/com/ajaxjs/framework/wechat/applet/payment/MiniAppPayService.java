@@ -7,6 +7,7 @@ import com.ajaxjs.framework.wechat.applet.payment.payment.PreOrder;
 import com.ajaxjs.framework.wechat.applet.payment.payment.RequestPayment;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.framework.wechat.merchant.SignerMaker;
+import com.ajaxjs.framework.wechat.payment.PayUtils;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
@@ -25,11 +26,11 @@ import java.util.Map;
 /**
  * 小程序支付业务
  */
-@EqualsAndHashCode(callSuper = true)
 //@Service
-@Data
 @Slf4j
-public class PayService extends CommonService {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class MiniAppPayService extends CommonService {
     @Autowired(required = false)
     private MerchantConfig mchCfg;
 
@@ -73,11 +74,11 @@ public class PayService extends CommonService {
         params.put("settle_info", ObjectHelper.mapOf("profit_sharing", true));
 
         String url = "/v3/pay/transactions/jsapi";
-        Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
+        Map<String, Object> map = PayUtils.postMap(mchCfg, url, params);
 
-        if ((Boolean) map.get("isOk") && map.get("code") == null) {
+        if ((Boolean) map.get("isOk") && map.get("code") == null)
             return map.get("prepay_id").toString();
-        } else
+         else
             throw new BusinessException(map.get("message").toString());
     }
 
@@ -90,7 +91,7 @@ public class PayService extends CommonService {
     public Map<String, Object> getOrderByTransactionId(String transactionId) {
         String url = "/v3/pay/transactions/id/" + transactionId + "?mchid=" + mchCfg.getMchId();
 
-        return AppletPayUtils.get(mchCfg, url, Map.class);
+        return PayUtils.get(mchCfg, url, Map.class);
     }
 
     /**
@@ -102,7 +103,7 @@ public class PayService extends CommonService {
     public Map<String, Object> getOrderByOrderNo(String outTradeNo) {
         String url = "/v3/pay/transactions/out-trade-no/" + outTradeNo + "?mchid=" + mchCfg.getMchId();
 
-        return AppletPayUtils.get(mchCfg, url, Map.class);
+        return PayUtils.get(mchCfg, url, Map.class);
     }
 
     /**
@@ -114,7 +115,7 @@ public class PayService extends CommonService {
     public void closeOrder(String outTradeNo) {
         String url = "/v3/pay/transactions/out-trade-no/" + outTradeNo + "/close";
         Map<String, String> params = ObjectHelper.mapOf("mchid", mchCfg.getMchId());
-        AppletPayUtils.postMap(mchCfg, url, params);// 该接口是无数据返回的
+        PayUtils.postMap(mchCfg, url, params);// 该接口是无数据返回的
     }
 
     private final static String SUCCESS = "TRANSACTION.SUCCESS";
@@ -169,8 +170,7 @@ public class PayService extends CommonService {
     }
 
     /**
-     * 传入预支付交易会话标识 id，生成小程序支付所需参数返回
-     * package 修正，最后转换为 JSON 字符串
+     * 传入预支付交易会话标识 id，生成小程序支付所需参数返回 package 修正，最后转换为 JSON 字符串
      *
      * @param prepayId 预支付交易会话标识
      * @return 小程序支付所需参数

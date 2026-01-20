@@ -74,7 +74,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
 //        Class<?> declaringClass = returnType.getParameterType();
 //        return ResponseEntity.class.isAssignableFrom(declaringClass);
 
-        if (body instanceof ResponseEntity ) // 为 Spring 专属的返回对象开绿灯
+        if (body instanceof ResponseEntity) // 为 Spring 专属的返回对象开绿灯
             return body;
 
 //        if (method.isAnnotationPresent(Desensitize.class))
@@ -106,10 +106,6 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         else
             responseResult.setMessage(isOk ? OK : "操作失败");
 
-        if (body instanceof String) {
-            System.out.println("This is String");
-            System.out.println(body);
-        }
 
         if (body instanceof ResponseResultWrapper)
             BeanUtils.copyProperties(body, responseResult);
@@ -125,9 +121,11 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
             log.warn("logRequestCompletion", e);
         }
 
-        if (customReturnConverter != null) {
+        if (customReturnConverter != null)
             return customReturnConverter.convert(responseResult);
-        }
+
+        if (body instanceof String)
+            return JsonUtil.toJson(responseResult);
 
         return responseResult;
     }
@@ -139,7 +137,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
         String silentLog = request.getParameter("silent_log");
 
-        if (TRUE.equals(silentLog) )
+        if (TRUE.equals(silentLog))
             return;
 
         String title = " Request Completion ";

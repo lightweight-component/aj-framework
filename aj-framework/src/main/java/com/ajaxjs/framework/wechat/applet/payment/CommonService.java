@@ -35,7 +35,6 @@ public abstract class CommonService {
 
         // 解密
         String cert = CertificateUtils.aesDecryptToString(apiV3KeyByte, associatedData, nonce, ciphertext);
-
         log.info(cert);
 
         return cert;

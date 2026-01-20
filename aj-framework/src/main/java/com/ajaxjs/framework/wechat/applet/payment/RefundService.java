@@ -5,12 +5,12 @@ import com.ajaxjs.framework.wechat.applet.payment.payment.RefundNotifyResult;
 import com.ajaxjs.framework.wechat.applet.payment.payment.RefundResult;
 import com.ajaxjs.framework.wechat.applet.payment.payment.RefundResultAmount;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
+import com.ajaxjs.framework.wechat.payment.PayUtils;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +45,7 @@ public class RefundService extends CommonService {
         params.put("amount", ObjectHelper.mapOf("refund", refundMoney, "total", totalMoney, "currency", "CNY"));
 
         String url = "/v3/refund/domestic/refunds";
-        Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
+        Map<String, Object> map = PayUtils.postMap(mchCfg, url, params);
         RefundResult bean = JsonUtil.map2pojo(map, RefundResult.class);
         RefundResultAmount amount = JsonUtil.map2pojo((Map<String, Object>) map.get("amount"), RefundResultAmount.class);
         bean.setAmount(amount);
@@ -62,7 +62,7 @@ public class RefundService extends CommonService {
      */
     public Map<String, Object> queryRefund(String outRefundNo) {
         String url = "/v3/refund/domestic/refunds/" + outRefundNo;
-        return AppletPayUtils.get(mchCfg, url, Map.class);
+        return PayUtils.get(mchCfg, url, Map.class);
     }
 
     private final static String SUCCESS = "REFUND.SUCCESS";

@@ -1,5 +1,7 @@
 package com.ajaxjs.framework.wechat.merchant;
 
+import com.ajaxjs.framework.model.BusinessException;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
@@ -40,6 +42,9 @@ public class SignerMaker {
         if (privateKeyContent == null)
             privateKeyContent = Resources.getResourceText(privateKeyPath); // cache it
 
+        if (ObjectHelper.isEmptyText(privateKeyContent))
+            throw new BusinessException("证书为空，请检查路径是否正确");
+
         return KeyMgr.restorePrivateKey(privateKeyContent);
     }
 
@@ -53,7 +58,7 @@ public class SignerMaker {
         String nonceStr = RandomTools.generateRandomString(32);
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(request, nonceStr, timestamp);
-		log.debug("authorization message=[{}]", message);
+        log.debug("authorization message=[{}]", message);
         String signature = new DoSignature(Constant.SHA256_RSA).setPrivateKey(privateKey).setStrData(message).signToString();
 
         // @formatter:off

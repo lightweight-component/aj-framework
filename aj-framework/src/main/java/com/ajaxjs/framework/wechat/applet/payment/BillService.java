@@ -2,9 +2,9 @@ package com.ajaxjs.framework.wechat.applet.payment;
 
 import com.ajaxjs.framework.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
+import com.ajaxjs.framework.wechat.payment.PayUtils;
 import com.ajaxjs.util.httpremote.Get;
 import com.ajaxjs.util.httpremote.HttpConstant;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class BillService {
         if (tarType != null)
             url += "&tar_type=" + tarType;
 
-        Map<String, Object> map = AppletPayUtils.get(mchCfg, url, Map.class);
+        Map<String, Object> map = PayUtils.get(mchCfg, url, Map.class);
 
         if ((Boolean) map.get("isOk"))
             return map.get("download_url").toString();
@@ -64,7 +64,7 @@ public class BillService {
         if (tarType != null)
             url += "&tar_type=" + tarType;
 
-        Map<String, Object> map = AppletPayUtils.get(mchCfg, url, Map.class);
+        Map<String, Object> map = PayUtils.get(mchCfg, url, Map.class);
 
         if ((Boolean) map.get("isOk"))
             return map.get("download_url").toString();
@@ -79,7 +79,7 @@ public class BillService {
      */
     public void billDownload(String url) {
         HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.GET, url);
-        Map<String, Object> result = Get.api(url, AppletPayUtils.getSetHeadFn(mchCfg, rw));
+        Map<String, Object> result = Get.api(url, PayUtils.getSetHeadFn(mchCfg, rw));
         // 流数据处理
     }
 }
