@@ -3,7 +3,6 @@ package com.ajaxjs.framework.wechat.payment;
 import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.framework.wechat.merchant.SignerMaker;
-import com.ajaxjs.framework.wechat.payment.model.PayResult;
 import com.ajaxjs.framework.wechat.payment.model.PreOrder;
 import com.ajaxjs.framework.wechat.payment.model.RequestPayment;
 import com.ajaxjs.util.JsonUtil;
@@ -12,7 +11,6 @@ import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +22,48 @@ import java.util.Map;
 /**
  * 小程序支付业务
  */
-//@Service
 @Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class MiniAppPayService extends CommonService {
+public class WxPayService {
     @Autowired(required = false)
     private MerchantConfig mchCfg;
 
     @Value("${wechat.merchant.payNotifyUrl}")
     private String appletPayNotifyUrl;
+
+    private final static String NATIVE_PAY_URL = "/v3/pay/transactions/native";
+
+    /**
+     * 发起 Native 支付请求
+     *
+     * @param appId       AppId
+     * @param description 商品简单描述
+     * @param outTradeNo  商户系统内部订单号
+     * @param amount      金额，单位为分
+     * @return 生成的二维码链接 (code_url)，或发生错误时返回 null
+     */
+    public String createNativePayment(String appId, String description, String outTradeNo, int amount) {
+        PreOrder p = new PreOrder();
+        p.setAppid(appId);
+        p.setMchid(mchCfg.getMchId());
+        p.setOut_trade_no(outTradeNo);
+        p.setDescription(description);
+        p.setNotify_url(appletPayNotifyUrl);
+
+        Map<String, Object> params = JsonUtil.pojo2map(p);
+        Map<String, Object> amountParams = ObjectHelper.mapOf("total", amount, "currency", "CNY");
+        params.put("amount", amountParams);
+
+        Map<String, Object> result = PayUtils.postMap(mchCfg, NATIVE_PAY_URL, params);
+
+        if ((Boolean) result.get("isOk") && result.get("code") == null) {
+            String codeUrl = (String) result.get("code_url");
+            log.info("Generated QR Code URL: {}", codeUrl);
+
+            return codeUrl;
+        } else
+            throw new BusinessException(result.get("message").toString());
+    }
 
     /**
      * 下单
@@ -112,57 +142,6 @@ public class MiniAppPayService extends CommonService {
         PayUtils.postMap(mchCfg, url, params);// 该接口是无数据返回的
     }
 
-    private final static String SUCCESS = "TRANSACTION.SUCCESS";
-
-    private final static String TRADE_STATE = "SUCCESS";
-
-    /**
-     * 用户支付后，微信通知我们的接口。
-     * 客户端无须调用该接口，该接口由微信支付中心调用
-     *
-     * @param params 回调参数
-     * @return 支付结果
-     */
-    public PayResult payCallback(Map<String, Object> params) {
-        if (params.containsKey("event_type") && SUCCESS.equals(params.get("event_type"))) {
-            // 支付成功
-            String cert = decrypt(params);
-            return json2PayResultBean(cert);
-
-//            if (TRADE_STATE.equals(bean.getTrade_state())) {// 再次检查
-//                // 业务逻辑判断是否收到钱
-//                log.info("收到钱：" + bean.getPayer_total());
-//
-//                return BaseController.jsonOk();
-//            } else
-//                throw new NullPointerException("解密失败");
-        }
-
-        throw new IllegalArgumentException("返回参数失败！");
-    }
-
-    /**
-     * 官方返回的 JSON 是嵌套的，现在将其扁平化
-     *
-     * @param json JSON
-     * @return PayResult
-     */
-    private static PayResult json2PayResultBean(String json) {
-        Map<String, Object> map = JsonUtil.json2map(json);
-        PayResult bean = JsonUtil.map2pojo(map, PayResult.class);
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> amount = (Map<String, Object>) map.get("amount");
-        bean.setTotal((int) amount.get("total"));
-        bean.setPayer_total((int) amount.get("payer_total"));
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> payer = (Map<String, Object>) map.get("payer");
-        bean.setPayerOpenId(payer.get("openid").toString());
-
-        return bean;
-    }
-
     /**
      * 传入预支付交易会话标识 id，生成小程序支付所需参数返回 package 修正，最后转换为 JSON 字符串
      *
@@ -194,10 +173,5 @@ public class MiniAppPayService extends CommonService {
         PrivateKey key = SignerMaker.loadPrivateKeyByPath(privateKey);
 
         return new DoSignature(Constant.SHA256_RSA).setPrivateKey(key).setStrData(sb).signToString();
-    }
-
-    @Override
-    public MerchantConfig getMchCfg() {
-        return mchCfg;
     }
 }

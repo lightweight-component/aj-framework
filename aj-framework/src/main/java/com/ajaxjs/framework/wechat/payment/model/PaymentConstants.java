@@ -2,6 +2,46 @@ package com.ajaxjs.framework.wechat.payment.model;
 
 public interface PaymentConstants {
     /**
+     * 支付结果的交易状态
+     */
+    interface PayResultTradeState {
+        /**
+         * 支付成功
+         */
+        String SUCCESS = "SUCCESS";
+
+        /**
+         * 转入退款
+         */
+        String REFUND = "REFUND";
+
+        /**
+         * 未支付
+         */
+        String NOTPAY = "NOTPAY";
+
+        /**
+         * 已关闭
+         */
+        String CLOSED = "CLOSED";
+
+        /**
+         * 已撤销（仅付款码支付会返回）
+         */
+        String REVOKED = "REVOKED";
+
+        /**
+         * 用户支付中（仅付款码支付会返回）
+         */
+        String USERPAYING = "USERPAYING";
+
+        /**
+         * 支付失败（仅付款码支付会返回）
+         */
+        String PAYERROR = "PAYERROR";
+    }
+
+    /**
      * 退款渠道
      */
     enum RefundChannel {

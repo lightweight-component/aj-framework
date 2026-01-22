@@ -2,6 +2,8 @@ package com.ajaxjs.framework.wechat.payment.model;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * 由微信支付通知过来的支付结果
  *
@@ -9,6 +11,14 @@ import lombok.Data;
  */
 @Data
 public class PayResult {
+    private String  mchid;
+
+    private String  appid;
+
+    private PayResultPayer payer;
+
+    private PayResultAmount amount;
+
     /**
      * 商户订单号
      */

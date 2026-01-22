@@ -49,7 +49,7 @@ public class OpenAccount {
     /**
      * 获取 Client AccessToken
      */
-    public void getAccessToken() {
+    public void getWxAccessToken() {
         log.info("获取 Client AccessToken");
 
         String params = String.format("?grant_type=client_credential&appid=%s&secret=%s", appId, accessSecret);
@@ -76,8 +76,8 @@ public class OpenAccount {
      * 获取 Client AccessToken，并加入定时器
      */
     public void init() {
-        getAccessToken();
-        setTimeout(this::getAccessToken, 7100);
+        getWxAccessToken();
+        setTimeout(this::getWxAccessToken, 7100);
     }
 
     /**

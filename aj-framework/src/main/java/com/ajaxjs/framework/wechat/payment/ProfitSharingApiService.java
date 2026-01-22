@@ -18,8 +18,7 @@ import java.util.Map;
  */
 //@Service
 @Slf4j
-public class ProfitSharingApiService extends CommonService {
-
+public class ProfitSharingApiService {
     @Autowired(required = false)
     private MerchantConfig mchCfg;
 
@@ -251,17 +250,12 @@ public class ProfitSharingApiService extends CommonService {
         return maxRatio / 100;
     }
 
-    @Override
-    public MerchantConfig getMchCfg() {
-        return mchCfg;
-    }
-
     private final static String SUCCESS = "TRANSACTION.SUCCESS";
 
     @SuppressWarnings("unchecked")
     public ResultNotify notifyCallback(Map<String, Object> params) {
         if (params.containsKey("event_type") && SUCCESS.equals(params.get("event_type"))) {
-            String json = decrypt(params);
+            String json = PayCallback.decrypt(params, mchCfg.getApiV3Key());
 
             Map<String, Object> map = JsonUtil.json2map(json);
             ResultNotify bean = JsonUtil.map2pojo(map, ResultNotify.class);

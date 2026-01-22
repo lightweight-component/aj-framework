@@ -1,10 +1,9 @@
 package com.ajaxjs.framework.wechat.payment;
 
-
+import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.framework.wechat.payment.model.RefundNotifyResult;
 import com.ajaxjs.framework.wechat.payment.model.RefundResult;
 import com.ajaxjs.framework.wechat.payment.model.RefundResultAmount;
-import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +18,10 @@ import java.util.Map;
  */
 //@Service
 @Slf4j
-public class RefundService extends CommonService {
+public class RefundService {
     @Autowired(required = false)
     private MerchantConfig mchCfg;
+
     @Value("${wechat.merchant.refundNotifyUrl}")
     private String refundNotifyUrl;
 
@@ -76,7 +76,7 @@ public class RefundService extends CommonService {
     public RefundNotifyResult refundNotifyCallback(Map<String, Object> params) {
         if (params.containsKey("event_type") && SUCCESS.equals(params.get("event_type"))) {
             // 退款成功
-            String json = decrypt(params);
+            String json = PayCallback.decrypt(params, mchCfg.getApiV3Key());
 
             Map<String, Object> map = JsonUtil.json2map(json);
             RefundNotifyResult bean = JsonUtil.map2pojo(map, RefundNotifyResult.class);
@@ -92,10 +92,5 @@ public class RefundService extends CommonService {
         }
 
         throw new IllegalArgumentException("返回参数失败！");
-    }
-
-    @Override
-    public MerchantConfig getMchCfg() {
-        return mchCfg;
     }
 }
