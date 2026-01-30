@@ -1,5 +1,5 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.ajaxjs/aj-data-service?label=Latest%20Release)](https://central.sonatype.com/artifact/com.ajaxjs/aj-data-service)
-[![Javadoc](https://img.shields.io/badge/javadoc-1.0-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/aj-data-service)
+[![Javadoc](https://img.shields.io/badge/javadoc-1.1-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/aj-data-service)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
 
@@ -23,6 +23,6 @@ Runs on Java 8+. Maven:
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-data-service</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```

@@ -11,7 +11,7 @@
 
     <artifactId>aj-data-service</artifactId>
     <name>aj-data-service</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>user</description>
     <packaging>jar</packaging>
 
@@ -30,19 +30,19 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>sqlman</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>base</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-net</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
         </dependency>
 
         <dependency>
