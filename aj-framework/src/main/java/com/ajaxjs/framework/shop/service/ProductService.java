@@ -12,8 +12,7 @@ import java.util.List;
 
 public class ProductService {
     public ProductListDTO getProductList() {
-        String sql = "SELECT spu.id, spu.name, spu.brand_id, spu.category_id, spu.main_image_url, MIN(sku.price) AS min_price " +
-                "FROM shop_spu spu LEFT JOIN shop_sku sku ON spu.id = sku.spu_id GROUP BY spu.id ORDER BY create_date DESC";
+
         return null;
     }
 
