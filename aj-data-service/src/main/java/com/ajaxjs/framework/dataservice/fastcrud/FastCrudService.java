@@ -6,6 +6,7 @@ import com.ajaxjs.sqlman.crud.page.PageResult;
 import com.ajaxjs.sqlman.model.CreateResult;
 import com.ajaxjs.sqlman.model.UpdateResult;
 import com.ajaxjs.sqlman.sqlgenerator.AutoQuery;
+import com.ajaxjs.sqlman.sqlgenerator.AutoQueryBusiness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,20 @@ public class FastCrudService implements FastCrudController {
     public CreateResult<Serializable> create(Map<String, Object> params, String namespace) {
         AutoQuery autoQuery = namespaces.get(namespace);
         String tableName = autoQuery.getTableModel().getTableName();
+        AutoQueryBusiness autoQueryBusiness = autoQuery.getAutoQueryBusiness();
+        Integer saveUserOnCreate = autoQueryBusiness.getSaveUserOnCreate();
+
+        if (saveUserOnCreate != null) {
+            Serializable userId = autoQueryBusiness.getCurrentUserId();
+
+            if (testBCD(1, saveUserOnCreate) && !params.containsKey("creator_id"))
+                params.put("creator_id", userId);
+
+            if (testBCD(4, saveUserOnCreate) && !params.containsKey("user_id"))
+                params.put("user_id", userId);
+
+            // creator/user_name? TODO
+        }
 
         return new Action(params, tableName).create().execute(autoQuery.getTableModel().isAutoIns());
     }
@@ -93,5 +108,16 @@ public class FastCrudService implements FastCrudController {
         String sql = autoQuery.deleteLogicalById();
 
         return new Action(sql).update(id).execute().isOk();
+    }
+
+    /**
+     * 测试 8421 码是否包含 v
+     *
+     * @param v   当前权限值
+     * @param all 总值
+     * @return true=已包含
+     */
+    public static boolean testBCD(int v, int all) {
+        return (v & all) == v;
     }
 }

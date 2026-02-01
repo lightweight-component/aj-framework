@@ -55,4 +55,9 @@ public class AutoQueryBusinessConfig implements AutoQueryBusiness {
 
         return tableJoinMap == null ? null : JsonUtil.map2pojo(tableJoinMap, TableJoin.class);
     }
+
+    @Override
+    public Integer getSaveUserOnCreate() {
+        return entity.getSaveUserOnCreate();
+    }
 }

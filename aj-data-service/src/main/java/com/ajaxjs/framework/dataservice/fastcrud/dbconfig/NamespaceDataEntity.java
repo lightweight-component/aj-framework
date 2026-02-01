@@ -51,4 +51,21 @@ public class NamespaceDataEntity {
      */
     private Map<String, Object> tableJoin;
 
+    /**
+     * Code 8421, can be:
+     * <pre>
+     * 1=creator_id
+     * 2=creator
+     * 4=user_id
+     * 8=user_name
+     * </pre>
+     * Common cases:
+     * <pre>
+     * 3=creator_id+creator
+     * 7=creator_id+creator+user_id
+     * 15=creator_id+creator+user_id+user_name
+     * </pre>
+     */
+    private Integer saveUserOnCreate;
+
 }
