@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model.dto;
+package com.ajaxjs.framework.shop.model.product;
 
 import com.ajaxjs.framework.shop.model.Sku;
 import com.ajaxjs.framework.shop.model.Spu;

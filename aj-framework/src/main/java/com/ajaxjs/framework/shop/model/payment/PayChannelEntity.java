@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model;
+package com.ajaxjs.framework.shop.model.payment;
 
 import com.ajaxjs.framework.model.BaseModelV2;
 import com.ajaxjs.sqlman.annotation.Table;
@@ -36,14 +36,17 @@ public class PayChannelEntity extends BaseModelV2 {
      * 其他配置
      */
     private String otherConfig;
+
     /**
      * AES混淆密钥
      */
     private String encryptKey;
+
     /**
      * 说明
      */
     private String remark;
+
     /**
      * 回调地址
      */

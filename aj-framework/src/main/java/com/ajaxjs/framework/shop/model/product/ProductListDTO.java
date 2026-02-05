@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model.dto;
+package com.ajaxjs.framework.shop.model.product;
 
 import lombok.Data;
 

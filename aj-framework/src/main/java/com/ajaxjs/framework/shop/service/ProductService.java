@@ -4,8 +4,8 @@ import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.framework.shop.model.Sku;
 import com.ajaxjs.framework.shop.model.SkuAttributeValue;
 import com.ajaxjs.framework.shop.model.Spu;
-import com.ajaxjs.framework.shop.model.dto.ProductDetailDTO;
-import com.ajaxjs.framework.shop.model.dto.ProductListDTO;
+import com.ajaxjs.framework.shop.model.product.ProductDetailDTO;
+import com.ajaxjs.framework.shop.model.product.ProductListDTO;
 import com.ajaxjs.sqlman.Action;
 
 import java.util.List;
