@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model;
+package com.ajaxjs.framework.shop.model.product;
 
 import com.ajaxjs.framework.model.BaseModelV2;
 import com.ajaxjs.sqlman.annotation.Table;
@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * SKU (Stock Keeping Unit)
+ * 库存量单元，具体的一个可售商品实例（如 iPhone 15 Pro 128GB 黑色）。每个 SKU 有唯一标识
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

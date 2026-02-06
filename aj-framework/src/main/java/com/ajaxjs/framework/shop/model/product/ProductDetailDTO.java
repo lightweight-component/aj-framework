@@ -1,7 +1,5 @@
 package com.ajaxjs.framework.shop.model.product;
 
-import com.ajaxjs.framework.shop.model.Sku;
-import com.ajaxjs.framework.shop.model.Spu;
 import lombok.Data;
 
 import java.util.List;

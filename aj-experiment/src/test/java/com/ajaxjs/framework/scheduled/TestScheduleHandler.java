@@ -27,12 +27,10 @@ public class TestScheduleHandler {
         for (Date point : points)
             System.out.println(new Formatter(point).format());
 
-
         System.out.println("-----");
         List<Date> points2 = ScheduleHandler.calNextPoint("0 0 0/2 * * ?", now, 6);
 
         for (Date date : points2)
             System.out.println(new Formatter(date).format());
     }
-
 }

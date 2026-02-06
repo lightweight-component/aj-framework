@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model;
+package com.ajaxjs.framework.shop.model.product;
 
 import com.ajaxjs.sqlman.annotation.Table;
 import lombok.Data;
@@ -6,30 +6,30 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 属性定义 - 如 "颜色", "尺寸"
+ * 属性值 - 如 "红色", "XL"
  */
 @Data
-@Table("shop_attribute_definition")
-public class AttributeDefinition {
+@Table("shop_attribute_value")
+public class AttributeValue {
     /**
      * 主键 id，自增
      */
     private Long id;
 
     /**
-     * 属性名称，如 "颜色", "尺寸"
+     * 关联的属性定义 ID
      */
-    private String name;
+    private Long attrDefId;
+
+    /**
+     * 属性值，如 "红色", "XL"
+     */
+    private String value;
 
     /**
      * 简介
      */
     private String content;
-
-    /**
-     * 所属分类 id
-     */
-    private Long categoryId;
 
     /**
      * 创建人名称（可冗余的）

@@ -138,7 +138,7 @@ public class PayUtils {
         String randomStr = RandomTools.generateRandomString(6);
         String date = DateTools.now(DATE_FORMAT);
 
-        return "wx-" + date + "-" + randomStr;
+        return "WX-" + date + "-" + randomStr.toUpperCase();
     }
 
     public static String mapToQueryString(Map<String, Object> map) {

@@ -1,9 +1,9 @@
 package com.ajaxjs.framework.shop.service;
 
 import com.ajaxjs.framework.model.BusinessException;
-import com.ajaxjs.framework.shop.model.Sku;
-import com.ajaxjs.framework.shop.model.SkuAttributeValue;
-import com.ajaxjs.framework.shop.model.Spu;
+import com.ajaxjs.framework.shop.model.product.Sku;
+import com.ajaxjs.framework.shop.model.product.SkuAttributeValue;
+import com.ajaxjs.framework.shop.model.product.Spu;
 import com.ajaxjs.framework.shop.model.product.ProductDetailDTO;
 import com.ajaxjs.framework.shop.model.product.ProductListDTO;
 import com.ajaxjs.sqlman.Action;

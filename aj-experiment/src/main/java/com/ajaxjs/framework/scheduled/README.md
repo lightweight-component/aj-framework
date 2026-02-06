@@ -1,7 +1,7 @@
 # 基于 Spring Scheduling 的定时任务
 
 ## 配置
-
+Spring Task的调度器默认是线程数为1的 ThreadPoolTaskScheduler，自动装配类为TaskSchedulingAutoConfiguration，多任务之间的执行会相互影响，一定要修改默认值。
 ```java
 @Bean
 public ThreadPoolTaskExecutor taskExecutor() {
@@ -19,7 +19,7 @@ public ScheduleHandler scheduleHandler() {
 }
 ```
 
-Spring Task的调度器默认是线程数为1的ThreadPoolTaskScheduler，自动装配类为TaskSchedulingAutoConfiguration，多任务之间的执行会相互影响，一定要修改默认值。
+
 
 
 

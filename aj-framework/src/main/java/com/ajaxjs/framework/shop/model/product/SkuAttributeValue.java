@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.shop.model;
+package com.ajaxjs.framework.shop.model.product;
 
 import com.ajaxjs.framework.model.BaseModelV2;
 import com.ajaxjs.sqlman.annotation.Table;

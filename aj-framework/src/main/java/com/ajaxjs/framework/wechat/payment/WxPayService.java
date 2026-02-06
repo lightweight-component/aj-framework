@@ -37,12 +37,12 @@ public class WxPayService {
      * 发起 Native 支付请求
      *
      * @param appId       AppId
-     * @param description 商品简单描述
+     * @param totalAmount 金额，单位为分
      * @param outTradeNo  商户系统内部订单号
-     * @param amount      金额，单位为分
+     * @param description 商品简单描述
      * @return 生成的二维码链接 (code_url)，或发生错误时返回 null
      */
-    public String createNativePayment(String appId, String description, String outTradeNo, int amount) {
+    public String createNativePayment(String appId, int totalAmount, String outTradeNo, String description) {
         PreOrder p = new PreOrder();
         p.setAppid(appId);
         p.setMchid(mchCfg.getMchId());
@@ -51,7 +51,7 @@ public class WxPayService {
         p.setNotify_url(appletPayNotifyUrl);
 
         Map<String, Object> params = JsonUtil.pojo2map(p);
-        Map<String, Object> amountParams = ObjectHelper.mapOf("total", amount, "currency", "CNY");
+        Map<String, Object> amountParams = ObjectHelper.mapOf("total", totalAmount, "currency", "CNY");
         params.put("amount", amountParams);
 
         Map<String, Object> result = PayUtils.postMap(mchCfg, NATIVE_PAY_URL, params);
@@ -70,14 +70,15 @@ public class WxPayService {
      * <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_1.shtml">...</a>
      *
      * @param openId      用户 OpenId
-     * @param totalMoney  交易金额，单位是 分
+     * @param appId       AppId
+     * @param totalAmount 交易金额，单位是 分
      * @param outTradeNo  订单号
      * @param description 描述
      * @return 预支付交易会话标识
      */
-    public String preOrder(String openId, String appId, int totalMoney, String outTradeNo, String description) {
+    public String preOrder(String openId, String appId, int totalAmount, String outTradeNo, String description) {
         Map<String, String> payer = ObjectHelper.mapOf("openid", openId);// 支付者
-        Map<String, Integer> amount = ObjectHelper.mapOf("total", totalMoney); // 金额
+        Map<String, Integer> amount = ObjectHelper.mapOf("total", totalAmount); // 金额
 
         log.info(mchCfg.getMchId() + "::::::::" + appletPayNotifyUrl);
 
@@ -95,7 +96,7 @@ public class WxPayService {
         Map<String, Object> params = JsonUtil.pojo2map(p);
         params.put("amount", amount);
         params.put("payer", payer);
-        params.put("settle_info", ObjectHelper.mapOf("profit_sharing", true));
+//        params.put("settle_info", ObjectHelper.mapOf("profit_sharing", true));
 
         String url = "/v3/pay/transactions/jsapi";
         Map<String, Object> map = PayUtils.postMap(mchCfg, url, params);
@@ -148,7 +149,7 @@ public class WxPayService {
      * @param prepayId 预支付交易会话标识
      * @return 小程序支付所需参数
      */
-    public String getRequestPayment(String prepayId, String appId) {
+    public Map<String, Object> getRequestPayment(String prepayId, String appId) {
         RequestPayment rp = new RequestPayment();
         rp.setTimeStamp(String.valueOf(System.currentTimeMillis() / 1000));
         rp.setNonceStr(RandomTools.generateRandomString(10));
@@ -161,7 +162,7 @@ public class WxPayService {
         map.put("package", rp.getPrepayIdPackage());
         map.remove("prepayIdPackage");
 
-        return JsonUtil.toJson(map);
+        return map;
     }
 
     private String getSign(String privateKey, RequestPayment rp, String appId) {
