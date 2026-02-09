@@ -45,15 +45,22 @@ public class PayCallback {
         if (params.containsKey("event_type") && SUCCESS.equals(params.get("event_type"))) {
             String cert = decrypt(params, apiV3Key); // 支付成功
 
-            return json2PayResultBean(cert);
+            // 官方返回的 JSON 是嵌套的，现在将其扁平化
+            Map<String, Object> map = JsonUtil.json2map(cert);
+            PayResult bean = JsonUtil.map2pojo(map, PayResult.class);
 
-//            if (TRADE_STATE.equals(bean.getTrade_state())) {// 再次检查
-//                // 业务逻辑判断是否收到钱
-//                log.info("收到钱：" + bean.getPayer_total());
-//
-//                return BaseController.jsonOk();
-//            } else
-//                throw new NullPointerException("解密失败");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> amount = (Map<String, Object>) map.get("amount");
+            bean.setTotal((int) amount.get("total"));
+            bean.setPayer_total((int) amount.get("payer_total"));
+
+            @SuppressWarnings("unchecked")
+            Map<String, Object> payer = (Map<String, Object>) map.get("payer");
+            bean.setPayerOpenId(payer.get("openid").toString());
+
+            log.info("Parsed notification - {}", bean);
+
+            return bean;
         }
 
         throw new IllegalArgumentException("返回参数失败！");
@@ -84,30 +91,6 @@ public class PayCallback {
         log.info(cert);
 
         return cert;
-    }
-
-    /**
-     * 官方返回的 JSON 是嵌套的，现在将其扁平化
-     *
-     * @param json JSON
-     * @return PayResult
-     */
-    public static PayResult json2PayResultBean(String json) {
-        Map<String, Object> map = JsonUtil.json2map(json);
-        PayResult bean = JsonUtil.map2pojo(map, PayResult.class);
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> amount = (Map<String, Object>) map.get("amount");
-        bean.setTotal((int) amount.get("total"));
-        bean.setPayer_total((int) amount.get("payer_total"));
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> payer = (Map<String, Object>) map.get("payer");
-        bean.setPayerOpenId(payer.get("openid").toString());
-
-        log.info("Parsed notification - {}", bean);
-
-        return bean;
     }
 
     /**
