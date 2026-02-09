@@ -20,7 +20,7 @@ public class PaymentTransactionEntity extends BaseModelV2 {
     /**
      * 交易系统订单号【对于三方来说：商户订单】
      */
-    private Integer orderId;
+    private Long orderId;
 
     /**
      * 第三方支付交易号
@@ -30,7 +30,7 @@ public class PaymentTransactionEntity extends BaseModelV2 {
     /**
      * 支付渠道 id
      */
-    private Integer payChannelId;
+    private Long payChannelId;
 
     /**
      * 交易类型【付款、退款】
@@ -50,7 +50,7 @@ public class PaymentTransactionEntity extends BaseModelV2 {
     /**
      * 收款人账号ID
      */
-    private Integer payeeId;
+    private Long payeeId;
 
     /**
      * 付款人姓名
@@ -60,17 +60,17 @@ public class PaymentTransactionEntity extends BaseModelV2 {
     /**
      * 付款人ID
      */
-    private Integer payerId;
+    private Long payerId;
 
     /**
      * 交易金额，单位：分
      */
-    private Integer tradingAmount;
+    private Long tradingAmount;
 
     /**
      * 退款金额，单位：分
      */
-    private Integer refundAmount;
+    private Long refundAmount;
 
     /**
      * 返回信息
@@ -88,7 +88,7 @@ public class PaymentTransactionEntity extends BaseModelV2 {
     private String placeOrderMsg;
 
     /**
-     * 统一下单返回信息JSON
+     * 回调返回的原消息体
      */
     private String placeOrderJson;
 
@@ -111,5 +111,4 @@ public class PaymentTransactionEntity extends BaseModelV2 {
      * 用户名
      */
     private String userName;
-
 }

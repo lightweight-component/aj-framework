@@ -19,6 +19,7 @@ public class RequestPayment {
 
     /**
      * 订单详情扩展字符串
+     * 本来是 package 但因为这是关键字所以不能用
      */
     private String prepayIdPackage;
 

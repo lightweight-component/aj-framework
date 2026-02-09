@@ -1,12 +1,12 @@
 package com.ajaxjs.framework.wechat.merchant;
 
 import com.ajaxjs.framework.model.BusinessException;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import com.ajaxjs.util.cryptography.rsa.KeyMgr;
-import com.ajaxjs.util.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.PrivateKey;
@@ -40,7 +40,8 @@ public class SignerMaker {
      */
     public static PrivateKey loadPrivateKeyByPath(String privateKeyPath) {
         if (privateKeyContent == null)
-            privateKeyContent = Resources.getResourceText(privateKeyPath); // cache it
+//            privateKeyContent = Resources.getResourceText(privateKeyPath); // cache it
+            privateKeyContent = DiContextUtil.readResourceAsString(privateKeyPath); // cache it
 
         if (ObjectHelper.isEmptyText(privateKeyContent))
             throw new BusinessException("证书为空，请检查路径是否正确");

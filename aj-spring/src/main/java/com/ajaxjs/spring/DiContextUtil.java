@@ -10,7 +10,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -21,8 +23,12 @@ import org.springframework.web.method.HandlerMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -266,5 +272,26 @@ public class DiContextUtil implements ApplicationContextAware {
         Method method = handlerMethod.getMethod(); // The real controller method
 
         return method.getAnnotation(annotationClass);
+    }
+
+    /**
+     * 从 classpath (即 JAR 内部) 读取资源文件内容为字符串
+     *
+     * @param resourcePath 资源文件在 classpath 下的相对路径，例如 "templates/template.sql"
+     * @return 文件内容的字符串
+     */
+    public static String readResourceAsString(String resourcePath) {
+        ClassPathResource resource = new ClassPathResource(resourcePath);
+
+        if (!resource.exists())
+            throw new RuntimeException("Resource not found: " + resourcePath);
+
+        // 获取输入流并转换为字符串
+        try (InputStream inputStream = resource.getInputStream()) {
+            // StreamUtils 是 Spring 提供的便捷工具类
+            return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

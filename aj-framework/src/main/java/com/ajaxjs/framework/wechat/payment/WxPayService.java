@@ -69,14 +69,15 @@ public class WxPayService {
      * 下单
      * <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_1.shtml">...</a>
      *
-     * @param openId      用户 OpenId
-     * @param appId       AppId
-     * @param totalAmount 交易金额，单位是 分
-     * @param outTradeNo  订单号
-     * @param description 描述
+     * @param openId          用户 OpenId
+     * @param appId           AppId
+     * @param totalAmount     交易金额，单位是 分
+     * @param outTradeNo      订单号
+     * @param description     描述
+     * @param isProfitSharing 是否分账
      * @return 预支付交易会话标识
      */
-    public String preOrder(String openId, String appId, int totalAmount, String outTradeNo, String description) {
+    public String preOrder(String openId, String appId, int totalAmount, String outTradeNo, String description, String attach, boolean isProfitSharing) {
         Map<String, String> payer = ObjectHelper.mapOf("openid", openId);// 支付者
         Map<String, Integer> amount = ObjectHelper.mapOf("total", totalAmount); // 金额
 
@@ -96,7 +97,12 @@ public class WxPayService {
         Map<String, Object> params = JsonUtil.pojo2map(p);
         params.put("amount", amount);
         params.put("payer", payer);
-//        params.put("settle_info", ObjectHelper.mapOf("profit_sharing", true));
+
+        if (ObjectHelper.hasText(attach))
+            params.put("attach", attach);
+
+        if (isProfitSharing)
+            params.put("settle_info", ObjectHelper.mapOf("profit_sharing", true));
 
         String url = "/v3/pay/transactions/jsapi";
         Map<String, Object> map = PayUtils.postMap(mchCfg, url, params);

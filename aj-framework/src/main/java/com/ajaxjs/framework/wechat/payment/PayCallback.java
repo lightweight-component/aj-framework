@@ -1,13 +1,23 @@
 package com.ajaxjs.framework.wechat.payment;
 
+import com.ajaxjs.framework.model.BusinessException;
 import com.ajaxjs.framework.wechat.payment.model.PayResult;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.cryptography.CertificateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 支付后的回调处理
@@ -17,6 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PayCallback {
     private final String apiV3Key;
+
+    private final String publicKeyPath;
 
     private final static String SUCCESS = "TRANSACTION.SUCCESS";
 
@@ -97,36 +109,69 @@ public class PayCallback {
     }
 
     /**
-     * 签名验证 (TODO 部分): 这是绝对不能省略的安全步骤。你需要：
-     * <p>
-     * 从请求头获取 Wechatpay-Signature, Wechatpay-Timestamp, Wechatpay-Nonce, Wechatpay-Serial。
-     * 使用 Wechatpay-Serial 找到对应的微信平台公钥证书（证书需要提前获取并缓存）。
-     * 构造待签名字符串：{Wechatpay-Timestamp}\n{Wechatpay-Nonce}\n{RequestBody}\n。
-     * 使用微信平台公钥和 SHA256withRSA 算法验证 Wechatpay-Signature 是否正确。
-     * 如果验证失败，必须返回 "FAIL"。
+     * 签名验证
      */
     public void verifySignature(String signature, String timestamp, String nonce, String serial, String requestBody) {
-//        if (ObjectHelper.isEmptyText(signature) || ObjectHelper.isEmptyText(timestamp) || ObjectHelper.isEmptyText(nonce) || ObjectHelper.isEmptyText(serial)) {
-//            log.warn("Missing required headers for signature verification.");
-//            return "FAIL";
-//        }
+        if (ObjectHelper.isEmptyText(signature) || ObjectHelper.isEmptyText(timestamp) || ObjectHelper.isEmptyText(nonce) || ObjectHelper.isEmptyText(serial)) {
+            log.warn("Missing required headers for signature verification.");
+            throw new BusinessException("Missing required headers for signature verification.");
+        }
 
-// 1.2. 获取微信平台证书 (需要根据 serial 获取对应的证书)
-
-        // String platformPublicKeyContent = getPlatformPublicKey(serial); // 需要实现此方法
-        // X509Certificate platformCert = WeChatPaySignatureUtil.loadCertificate(platformPublicKeyContent);
-
-        // 1.3. 构造待签名字符串
+        // 构造待签名字符串
         String message = timestamp + "\n" + nonce + "\n" + requestBody + "\n";
+        boolean isValid;
 
-        // 1.4. 使用平台证书公钥验证签名 (需要实现)
-        // boolean isValid = verifySignature(message, signature, platformCert.getPublicKey());
+        try {
+            Signature sign = Signature.getInstance("SHA256withRSA");
+            sign.initVerify(loadPublicKeyFromPem(serial, publicKeyPath));
+            sign.update(message.getBytes(StandardCharsets.UTF_8));
 
-        // if (!isValid) {
-        //     logger.warn("Invalid signature in notification.");
-        //     return "FAIL";
-        // }
+            isValid = sign.verify(Base64.getDecoder().decode(signature));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("当前Java环境不支持SHA256withRSA", e);
+        } catch (SignatureException e) {
+            throw new RuntimeException("签名验证过程发生了错误", e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException("无效的证书", e);
+        }
 
-        log.info("Signature verification passed. (This is a placeholder, implement real logic!)");
+        if (isValid)
+            log.info("Signature verification passed. (This is a placeholder, implement real logic!)");
+        else {
+            log.warn("Invalid signature in notification.");
+            throw new BusinessException("Invalid signature in notification.");
+        }
+    }
+
+    private static final Map<String, PublicKey> WECHAT_PAY_PUBLIC_KEY_MAP = new ConcurrentHashMap<>();
+
+    public PublicKey loadPublicKeyFromPem(String key, String publicKeyPath) {
+        if (WECHAT_PAY_PUBLIC_KEY_MAP.containsKey(key))
+            return WECHAT_PAY_PUBLIC_KEY_MAP.get(key);
+
+        log.info("loadPublicKeyFromPem");
+
+        String pemContent = DiContextUtil.readResourceAsString(publicKeyPath); // cache it
+
+        if (ObjectHelper.isEmptyText(pemContent))
+            throw new BusinessException("公钥证书为空，请检查路径 " + publicKeyPath + " 是否正确");
+
+        String publicKeyPEM = pemContent
+                .replace("-----BEGIN CERTIFICATE-----", "")
+                .replace("-----END CERTIFICATE-----", "")
+                .replaceAll("\\s", "");
+
+        byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
+        CertificateFactory certFactory;
+
+        try {
+            certFactory = CertificateFactory.getInstance("X.509");
+            X509Certificate cert = (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(decoded));
+            WECHAT_PAY_PUBLIC_KEY_MAP.put(key, cert.getPublicKey());
+
+            return cert.getPublicKey();
+        } catch (CertificateException e) {
+            throw new RuntimeException("签名验证过程发生了错误", e);
+        }
     }
 }
