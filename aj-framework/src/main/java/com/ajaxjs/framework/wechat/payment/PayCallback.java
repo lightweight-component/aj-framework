@@ -6,16 +6,15 @@ import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.cryptography.CertificateUtils;
+import com.ajaxjs.util.cryptography.Constant;
+import com.ajaxjs.util.cryptography.rsa.DoVerify;
+import com.ajaxjs.util.cryptography.rsa.KeyMgr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Base64;
+import java.security.Key;
+import java.security.PublicKey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,6 +27,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PayCallback {
     private final String apiV3Key;
 
+    /**
+     * 公钥证书路径。注意这只是公钥，不是完整的证书，应该 -----BEGIN PUBLIC KEY----- 开头的
+     */
     private final String publicKeyPath;
 
     private final static String SUCCESS = "TRANSACTION.SUCCESS";
@@ -119,24 +121,14 @@ public class PayCallback {
 
         // 构造待签名字符串
         String message = timestamp + "\n" + nonce + "\n" + requestBody + "\n";
-        boolean isValid;
 
-        try {
-            Signature sign = Signature.getInstance("SHA256withRSA");
-            sign.initVerify(loadPublicKeyFromPem(serial, publicKeyPath));
-            sign.update(message.getBytes(StandardCharsets.UTF_8));
-
-            isValid = sign.verify(Base64.getDecoder().decode(signature));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("当前Java环境不支持SHA256withRSA", e);
-        } catch (SignatureException e) {
-            throw new RuntimeException("签名验证过程发生了错误", e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException("无效的证书", e);
-        }
+        boolean isValid = new DoVerify(Constant.SHA256_RSA)
+                .setStrData(message)
+                .setSignatureBase64(signature)
+                .setPublicKey(loadPublicKeyFromPem(serial)).verify();
 
         if (isValid)
-            log.info("Signature verification passed. (This is a placeholder, implement real logic!)");
+            log.info("Signature verification passed. Powered by AJAX!");
         else {
             log.warn("Invalid signature in notification.");
             throw new BusinessException("Invalid signature in notification.");
@@ -145,7 +137,7 @@ public class PayCallback {
 
     private static final Map<String, PublicKey> WECHAT_PAY_PUBLIC_KEY_MAP = new ConcurrentHashMap<>();
 
-    public PublicKey loadPublicKeyFromPem(String key, String publicKeyPath) {
+    public PublicKey loadPublicKeyFromPem(String key) {
         if (WECHAT_PAY_PUBLIC_KEY_MAP.containsKey(key))
             return WECHAT_PAY_PUBLIC_KEY_MAP.get(key);
 
@@ -156,22 +148,10 @@ public class PayCallback {
         if (ObjectHelper.isEmptyText(pemContent))
             throw new BusinessException("公钥证书为空，请检查路径 " + publicKeyPath + " 是否正确");
 
-        String publicKeyPEM = pemContent
-                .replace("-----BEGIN CERTIFICATE-----", "")
-                .replace("-----END CERTIFICATE-----", "")
-                .replaceAll("\\s", "");
+        Key _key = KeyMgr.restoreKey(true, pemContent);
+        PublicKey publicKey = (PublicKey) _key;
+        WECHAT_PAY_PUBLIC_KEY_MAP.put(key, publicKey);
 
-        byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
-        CertificateFactory certFactory;
-
-        try {
-            certFactory = CertificateFactory.getInstance("X.509");
-            X509Certificate cert = (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(decoded));
-            WECHAT_PAY_PUBLIC_KEY_MAP.put(key, cert.getPublicKey());
-
-            return cert.getPublicKey();
-        } catch (CertificateException e) {
-            throw new RuntimeException("签名验证过程发生了错误", e);
-        }
+        return publicKey;
     }
 }
