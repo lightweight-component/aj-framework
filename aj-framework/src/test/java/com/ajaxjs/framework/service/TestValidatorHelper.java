@@ -1,8 +1,10 @@
-package com.ajaxjs.framework.validator;
+package com.ajaxjs.framework.service;
 
+import com.ajaxjs.framework.validator.ValidatorHelper;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestValidatorHelper {
     @Test

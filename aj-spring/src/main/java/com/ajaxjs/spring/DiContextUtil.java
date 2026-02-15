@@ -50,6 +50,22 @@ public class DiContextUtil implements ApplicationContextAware {
     }
 
     /**
+     * 安全地获取已注入的对象
+     *
+     * @param <T> 对象类型
+     * @param clz 对象类型引用
+     * @return 组件对象
+     */
+    public static <T> T getBeanNonNull(Class<T> clz) {
+        T bean = getBean(clz);
+
+        if (bean == null)
+            throw new NullPointerException("No such bean of class " + clz);
+
+        return bean;
+    }
+
+    /**
      * 获取已注入的对象
      *
      * @param <T> 对象类型

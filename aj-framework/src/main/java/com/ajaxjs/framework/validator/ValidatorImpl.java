@@ -2,6 +2,7 @@ package com.ajaxjs.framework.validator;
 
 //import com.ajaxjs.framework.CustomPropertySources;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -15,6 +16,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class ValidatorImpl implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
@@ -33,6 +35,8 @@ public class ValidatorImpl implements Validator {
                 }
             }
         } catch (Exception e) {
+            log.warn("Validator error", e);
+
             if (e instanceof ValidatorException)
                 throw (ValidatorException) e;
 
@@ -101,7 +105,7 @@ public class ValidatorImpl implements Validator {
         return message;
     }
 
-    private static  Map<String, Object> yamlConfig;
+    private static Map<String, Object> yamlConfig;
 
     /**
      * 将嵌套的 Map 转换为平铺的 Map
@@ -133,10 +137,8 @@ public class ValidatorImpl implements Validator {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> nested = (Map<String, Object>) value;
                 flattenMapHelper(nested, key, flatMap);
-            } else {
-                // 如果值是普通对象，直接放入平铺的 Map 中
-                flatMap.put(key, value);
-            }
+            } else
+                flatMap.put(key, value);  // 如果值是普通对象，直接放入平铺的 Map 中
         }
     }
 }
