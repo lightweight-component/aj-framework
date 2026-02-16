@@ -13,7 +13,10 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Method;
 import java.util.TimeZone;
@@ -23,7 +26,7 @@ import java.util.TimeZone;
 @Slf4j
 public class ScheduledController {
     @Autowired
-    ScheduleHandler scheduleHandler;
+    ScheduleHandlerV2 scheduleHandler;
 
     final static String SQL = "SELECT * FROM `sys_schedule_job`";
 
@@ -52,7 +55,9 @@ public class ScheduledController {
         scheduleHandler.getExecutor().execute(() -> {
             try {
                 Class<?> clazz = Clazz.getClassByName(info.getClassName());
-                clazz.getDeclaredMethod(info.getMethod()).invoke(scheduleHandler.getBeanFactory().getBean(clazz));
+//                Object bean = scheduleHandler.getBeanFactory().getBean(clazz);
+                Object bean = DiContextUtil.getBean(clazz);
+                clazz.getDeclaredMethod(info.getMethod()).invoke(bean);
             } catch (Exception e) {
                 log.warn("Trigger Error", e);
             }
@@ -72,7 +77,8 @@ public class ScheduledController {
         JobInfo info = getJobInfo(id);
 
         Class<?> aClass = Clazz.getClassByName(info.getClassName());
-        Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
+//        Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
+        Object bean = DiContextUtil.getBean(aClass);
         Method method = Methods.getDeclaredMethod(aClass, info.getMethod());
         Assert.isTrue(method.getParameterCount() == 0, "Only no-arg methods may be annotated with @Scheduled");
         Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
