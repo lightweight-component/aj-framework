@@ -1,19 +1,20 @@
 package com.ajaxjs.framework.scheduled;
 
 import com.ajaxjs.framework.database.DataBaseConnection;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.Action;
 import com.ajaxjs.sqlman.JdbcConnection;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.*;
 import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
@@ -23,9 +24,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Data
 @Slf4j
-public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
-    private BeanFactory beanFactory;
-
+@Component
+@ConditionalOnProperty(
+        name = "aj-framework.schedule_mgr.enabled", // 配置属性名
+        havingValue = "true",                   // 期望的值，默认为 "true"
+        matchIfMissing = false                  // 如果配置文件中没有此属性，默认是 false，即不加载组件
+)
+public class ScheduleHandler {
     /**
      * ThreadPoolTaskExecutor 是 Spring 框架提供的一个线程池执行器，用于管理和执行异步任务
      */
@@ -41,27 +46,6 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      */
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        log.info("afterPropertiesSet");
-        executor = beanFactory.getBean(ThreadPoolTaskExecutor.class);
-        scheduledProcessor = beanFactory.getBean(ScheduledAnnotationBeanPostProcessor.class);
-
-        try {
-            Field registrar = scheduledProcessor.getClass().getDeclaredField("registrar");
-            registrar.setAccessible(true);
-            scheduledTaskRegistrar = (ScheduledTaskRegistrar) registrar.get(scheduledProcessor);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            log.warn("ERROR>>", e);
-        }
-    }
-
-    //-----------------Spring 内部处理----------------------------
     private static final String TASK_NAME = "JOB_TASK_";
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);
@@ -71,11 +55,27 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      */
     private Set<ScheduledTask> scheduledTasks;
 
+    @EventListener
+    public void handleContextRefresh(ContextRefreshedEvent event) {
+        log.info("初始化定时任务管理器");
+        executor = DiContextUtil.getBeanNonNull(ThreadPoolTaskExecutor.class);
+        scheduledProcessor = DiContextUtil.getBeanNonNull(ScheduledAnnotationBeanPostProcessor.class);
+
+        try {
+            Field registrar = scheduledProcessor.getClass().getDeclaredField("registrar");
+            registrar.setAccessible(true);
+            scheduledTaskRegistrar = (ScheduledTaskRegistrar) registrar.get(scheduledProcessor);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            log.warn("Failed to initialize the scheduled tasks", e);
+        }
+
+        init();
+    }
+
     /**
      * 初始化
      */
     public void init() {
-        log.info("初始化定时任务管理器");
         scheduledTasks = scheduledProcessor.getScheduledTasks(); // 获取了所有被 @Scheduled 注解修饰的任务列表
 
         if (CollectionUtils.isEmpty(scheduledTasks))

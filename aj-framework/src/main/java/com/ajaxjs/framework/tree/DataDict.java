@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.business.model;
+package com.ajaxjs.framework.tree;
 
 import lombok.Data;
 
@@ -7,8 +7,6 @@ import java.util.Date;
 
 /**
  * 数据字典
- *
- * @author Frank Cheung
  */
 @Data
 public class DataDict   {

@@ -8,25 +8,29 @@ import com.ajaxjs.util.reflect.Methods;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.config.CronTask;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Method;
 import java.util.TimeZone;
 
-//@RestController
-//@RequestMapping("/scheduled")
 @Slf4j
+@RestController
+@RequestMapping("/scheduled")
+@ConditionalOnProperty(
+        name = "aj-framework.schedule_mgr.enabled", // 配置属性名
+        havingValue = "true",                   // 期望的值，默认为 "true"
+        matchIfMissing = false                  // 如果配置文件中没有此属性，默认是 false，即不加载组件
+)
+
 public class ScheduledController {
     @Autowired
-    ScheduleHandlerV2 scheduleHandler;
+    ScheduleHandler scheduleHandler;
 
     final static String SQL = "SELECT * FROM `sys_schedule_job`";
 
