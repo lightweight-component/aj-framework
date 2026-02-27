@@ -8,29 +8,33 @@ import com.ajaxjs.util.reflect.Methods;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.config.CronTask;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Method;
 import java.util.TimeZone;
 
-//@RestController
-//@RequestMapping("/scheduled")
 @Slf4j
+@RestController
+@RequestMapping("/scheduled")
+@ConditionalOnProperty(
+        name = "aj-framework.schedule_mgr.enabled", // 配置属性名
+        havingValue = "true",                   // 期望的值，默认为 "true"
+        matchIfMissing = false                  // 如果配置文件中没有此属性，默认是 false，即不加载组件
+)
+
 public class ScheduledController {
     @Autowired
     ScheduleHandler scheduleHandler;
 
-    final static String SQL = "SELECT * FROM `schedule_job`";
+    final static String SQL = "SELECT * FROM `sys_schedule_job`";
 
-    final static String updateStatus = "UPDATE schedule_job SET `status` = ? WHERE id = ?";
+    final static String UPDATE_STATUS = "UPDATE sys_schedule_job SET `status` = ? WHERE id = ?";
 
     @GetMapping
     public PageResult<JobInfo> list(@RequestParam(required = false) String name) {
@@ -55,7 +59,9 @@ public class ScheduledController {
         scheduleHandler.getExecutor().execute(() -> {
             try {
                 Class<?> clazz = Clazz.getClassByName(info.getClassName());
-                clazz.getDeclaredMethod(info.getMethod()).invoke(scheduleHandler.getBeanFactory().getBean(clazz));
+//                Object bean = scheduleHandler.getBeanFactory().getBean(clazz);
+                Object bean = DiContextUtil.getBean(clazz);
+                clazz.getDeclaredMethod(info.getMethod()).invoke(bean);
             } catch (Exception e) {
                 log.warn("Trigger Error", e);
             }
@@ -75,7 +81,8 @@ public class ScheduledController {
         JobInfo info = getJobInfo(id);
 
         Class<?> aClass = Clazz.getClassByName(info.getClassName());
-        Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
+//        Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
+        Object bean = DiContextUtil.getBean(aClass);
         Method method = Methods.getDeclaredMethod(aClass, info.getMethod());
         Assert.isTrue(method.getParameterCount() == 0, "Only no-arg methods may be annotated with @Scheduled");
         Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
@@ -84,7 +91,7 @@ public class ScheduledController {
         scheduleHandler.getScheduledTasks().add(scheduleHandler.getScheduledTaskRegistrar().scheduleCronTask(cronTask));
         scheduleHandler.getScheduledTaskRegistrar().addCronTask(cronTask);
 
-        return new Action(updateStatus).update(JobInfo.ScheduledConstant.NORMAL_STATUS, id).execute().isOk();
+        return new Action(UPDATE_STATUS).update(JobInfo.ScheduledConstant.NORMAL_STATUS, id).execute().isOk();
     }
 
     /**
@@ -112,7 +119,7 @@ public class ScheduledController {
         JobInfo info = getJobInfo(id);
         scheduleHandler.cancel(info.getExpress(), info.getClassName(), id, false);
 
-        return new Action(updateStatus).update(JobInfo.ScheduledConstant.DELETE_STATUS, id).execute().isOk();
+        return new Action(UPDATE_STATUS).update(JobInfo.ScheduledConstant.DELETE_STATUS, id).execute().isOk();
     }
 
     private JobInfo getJobInfo(Integer id) {

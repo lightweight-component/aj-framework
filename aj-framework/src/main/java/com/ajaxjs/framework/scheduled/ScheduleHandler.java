@@ -1,33 +1,38 @@
 package com.ajaxjs.framework.scheduled;
 
+import com.ajaxjs.framework.database.DataBaseConnection;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sqlman.Action;
 import com.ajaxjs.sqlman.JdbcConnection;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.*;
 import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
 @Slf4j
-public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
-    //-----------------Spring 内部处理-----------------------------
-
-    private BeanFactory beanFactory;
-
+@Component
+@ConditionalOnProperty(
+        name = "aj-framework.schedule_mgr.enabled", // 配置属性名
+        havingValue = "true",                   // 期望的值，默认为 "true"
+        matchIfMissing = false                  // 如果配置文件中没有此属性，默认是 false，即不加载组件
+)
+public class ScheduleHandler {
     /**
-     * ThreadPoolTaskExecutor是 Spring框架提供的一个线程池执行器，用于管理和执行异步任务
+     * ThreadPoolTaskExecutor 是 Spring 框架提供的一个线程池执行器，用于管理和执行异步任务
      */
     private ThreadPoolTaskExecutor executor;
 
@@ -41,26 +46,6 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      */
     private ScheduledTaskRegistrar scheduledTaskRegistrar;
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        executor = beanFactory.getBean(ThreadPoolTaskExecutor.class);
-        scheduledProcessor = beanFactory.getBean(ScheduledAnnotationBeanPostProcessor.class);
-
-        try {
-            Field registrar = scheduledProcessor.getClass().getDeclaredField("registrar");
-            registrar.setAccessible(true);
-            scheduledTaskRegistrar = (ScheduledTaskRegistrar) registrar.get(scheduledProcessor);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            log.warn("ERROR>>", e);
-        }
-    }
-
-    //-----------------Spring 内部处理----------------------------
     private static final String TASK_NAME = "JOB_TASK_";
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);
@@ -70,28 +55,43 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      */
     private Set<ScheduledTask> scheduledTasks;
 
+    @EventListener
+    public void handleContextRefresh(ContextRefreshedEvent event) {
+        log.info("初始化定时任务管理器");
+        executor = DiContextUtil.getBeanNonNull(ThreadPoolTaskExecutor.class);
+        scheduledProcessor = DiContextUtil.getBeanNonNull(ScheduledAnnotationBeanPostProcessor.class);
+
+        try {
+            Field registrar = scheduledProcessor.getClass().getDeclaredField("registrar");
+            registrar.setAccessible(true);
+            scheduledTaskRegistrar = (ScheduledTaskRegistrar) registrar.get(scheduledProcessor);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            log.warn("Failed to initialize the scheduled tasks", e);
+        }
+
+        init();
+    }
+
     /**
      * 初始化
      */
     public void init() {
-        log.info("初始化定时任务管理器");
-        // 获取了所有被 @Scheduled 注解修饰的任务列表
-        scheduledTasks = scheduledProcessor.getScheduledTasks();
+        scheduledTasks = scheduledProcessor.getScheduledTasks(); // 获取了所有被 @Scheduled 注解修饰的任务列表
 
         if (CollectionUtils.isEmpty(scheduledTasks))
             return;
 
-        for (ScheduledTask s : scheduledTasks) {
-            Task task = s.getTask();
+        DataBaseConnection.initDb();
 
-            if (task instanceof CronTask) {
-                CronTask cronTask = (CronTask) s.getTask();
-                ScheduledMethodRunnable scheduledMethodRunnable = (ScheduledMethodRunnable) cronTask.getRunnable();
-//                DataBaseConnection.initDb();
-                String clzName = scheduledMethodRunnable.getMethod().getDeclaringClass().getName();// 类名
+        try {
+            for (ScheduledTask s : scheduledTasks) {
+                Task task = s.getTask();
 
-                try {
-                    String sql = "SELECT id FROM schedule_job WHERE class_name = ? AND express = ?";
+                if (task instanceof CronTask) {
+                    CronTask cronTask = (CronTask) s.getTask();
+                    ScheduledMethodRunnable scheduledMethodRunnable = (ScheduledMethodRunnable) cronTask.getRunnable();
+                    String clzName = scheduledMethodRunnable.getMethod().getDeclaringClass().getName();// 类名
+                    String sql = "SELECT id FROM sys_schedule_job WHERE class_name = ? AND express = ?";
                     Integer id = new Action(sql).query(clzName, cronTask.getExpression()).one(Integer.class);
 
                     if (id == null) { // 持久化
@@ -112,11 +112,12 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
                         for (JobInfo job : list)
                             cancel(job.getExpress(), job.getClassName(), job.getId(), false);
                     }
-                } finally {
-                    JdbcConnection.closeDb();
-                }
-            } else if (task instanceof FixedRateTask)
-                log.info(task + "无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务");
+
+                } else if (task instanceof FixedRateTask)
+                    log.info(task + "无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务");
+            }
+        } finally {
+            JdbcConnection.closeDb();
         }
     }
 
@@ -154,13 +155,6 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
     }
 
     /**
-     * 检验 Cron 表达式是否正确
-     */
-    public static boolean isValidExpression(String cron) {
-        return CronExpression.isValidExpression(cron);
-    }
-
-    /**
      * 获取下次时间点列表
      *
      * @param cron  表达式
@@ -182,23 +176,20 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
     public static List<Date> calNextPoint(String cron, Date date, int count) {
         List<Date> points = new ArrayList<>();
 
-        if (isValidExpression(cron)) {
+        if (CronExpression.isValidExpression(cron)) { // 检验 Cron 表达式是否正确
             CronExpression csg = CronExpression.parse(cron);
             Date nextDate = date;
 
             for (int i = 0; i < count; i++) {
-                nextDate = nextPoint(csg, nextDate);
-                points.add(nextDate);
+                Instant next = csg.next(nextDate.toInstant());
+
+                if (next != null) {
+                    nextDate = Date.from(next);
+                    points.add(nextDate);
+                }
             }
         }
 
         return points;
-    }
-
-    /**
-     * 计算下次时间点
-     */
-    public static Date nextPoint(CronExpression csg, Date date) {
-        return Date.from(Objects.requireNonNull(csg.next(date.toInstant())));
     }
 }

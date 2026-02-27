@@ -2,7 +2,6 @@ package com.ajaxjs.framework.wechat.payment;
 
 import com.ajaxjs.framework.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.framework.wechat.merchant.MerchantConfig;
-import com.ajaxjs.framework.wechat.payment.PayUtils;
 import com.ajaxjs.util.httpremote.Get;
 import com.ajaxjs.util.httpremote.HttpConstant;
 

@@ -21,10 +21,14 @@ import java.util.Objects;
  */
 @Component
 public class ValidatorInitializing {
+    /**
+     * ContextRefreshedEvent 会在 Spring 应用上下文（ApplicationContext）完全初始化并刷新后触发。这通常意味着所有的 Bean 都已经被创建和配置好了
+     *
+     * @param event 事件
+     */
     @EventListener
     public void handleContextRefresh(ContextRefreshedEvent event) {
-        RequestMappingHandlerAdapter adapter = DiContextUtil.getBean(RequestMappingHandlerAdapter.class);
-        assert adapter != null;
+        RequestMappingHandlerAdapter adapter = DiContextUtil.getBeanNonNull(RequestMappingHandlerAdapter.class);
         ConfigurableWebBindingInitializer init = (ConfigurableWebBindingInitializer) adapter.getWebBindingInitializer();
         assert init != null;
         init.setValidator(new ValidatorImpl());

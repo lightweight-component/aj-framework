@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@Table("schedule_job")
+@Table("sys_schedule_job")
 public class JobInfo {
     /**
      * 主键

@@ -16,8 +16,6 @@
         <module>aj-sample-app</module>
         <module>aj-file-upload</module>
         <module>aj-data-service</module>
-        <module>aj-experiment</module>
-        <module>aj-validator</module>
         <module>springboot4</module>
     </modules>
 </project>

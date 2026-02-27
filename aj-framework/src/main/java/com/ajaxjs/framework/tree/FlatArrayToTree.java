@@ -24,9 +24,16 @@ public class FlatArrayToTree extends BaseTreeStrut {
 
         for (Map<String, Object> node : nodes) {
             T parentId = (T) node.get(getParentIdField());
+            Serializable topNodeValue = getTopNodeValue();
 
-            if (!parentId.equals(getTopNodeValue())) {
+            if (getLongValue(parentId) != getLongValue(topNodeValue)) {
                 Map<String, Object> parent = parents.get(parentId);
+
+//                if (parent == null) {
+//                    parent = new HashMap<>();
+//                    parent.put(getIdField(), parentId);
+//                }
+
                 Object _children = parent.get(getChildrenField());
                 List<Map<String, Object>> children;
 
@@ -37,9 +44,19 @@ public class FlatArrayToTree extends BaseTreeStrut {
                     children = (List<Map<String, Object>>) _children;
 
                 children.add(node);
-            } else tree.add(node);
+            } else
+                tree.add(node);
         }
 
         return tree;
     }
+
+    public static long getLongValue(Object obj) {
+        if (obj instanceof Number)
+            return ((Number) obj).longValue();
+
+        throw new IllegalArgumentException("Object is not a Number: " + obj.getClass());
+    }
 }
+
+
