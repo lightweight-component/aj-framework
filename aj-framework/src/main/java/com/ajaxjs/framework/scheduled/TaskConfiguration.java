@@ -15,31 +15,31 @@ public class TaskConfiguration {
      * Spring Task 的调度器默认是线程数为 1 的 ThreadPoolTaskScheduler，
      * 自动装配类为 TaskSchedulingAutoConfiguration，多任务之间的执行会相互影响，一定要修改默认值。
      */
-    @Bean
-    public ThreadPoolTaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-        pool.setCorePoolSize(5); // 指定线程数
-        pool.setMaxPoolSize(10);
-        pool.setWaitForTasksToCompleteOnShutdown(true);
+//    @Bean
+//    public ThreadPoolTaskExecutor taskExecutor() {
+//        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+//        pool.setCorePoolSize(5); // 指定线程数
+//        pool.setMaxPoolSize(10);
+//        pool.setWaitForTasksToCompleteOnShutdown(true);
+//
+//        return pool;
+//    }
 
-        return pool;
-    }
-
-    /**
-     * 初始化任务调度管理
-     */
-    @Bean(initMethod = "init")
-    public ScheduleHandler scheduleHandler() {
-        return new ScheduleHandler();
-    }
-
-    /**
-     * 注入任务调度的控制器
-     */
-    @Bean
-    public ScheduledController scheduledController() {
-        return new ScheduledController();
-    }
+//    /**
+//     * 初始化任务调度管理
+//     */
+//    @Bean(initMethod = "init")
+//    public ScheduleHandler scheduleHandler() {
+//        return new ScheduleHandler();
+//    }
+//
+//    /**
+//     * 注入任务调度的控制器
+//     */
+//    @Bean
+//    public ScheduledController scheduledController() {
+//        return new ScheduledController();
+//    }
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);
 
