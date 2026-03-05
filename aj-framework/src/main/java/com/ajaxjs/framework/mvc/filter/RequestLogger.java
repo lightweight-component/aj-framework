@@ -2,6 +2,7 @@ package com.ajaxjs.framework.mvc.filter;
 
 import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
 import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.spring.traceid.EnableOperationLog;
 import com.ajaxjs.spring.traceid.TraceXFilter;
 import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.CommonConstant;
@@ -28,10 +29,12 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
 
     public static final String TRUE = "true";
 
+    private static final String SILENT_LOG = "silent_log";
+
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         // avoid the lots of logs shown, BE CAREFULLY to use for missing the logs
-        String silentLog = req.getParameter("silent_log");
+        String silentLog = req.getParameter(SILENT_LOG);
 
         if (TRUE.equals(silentLog) || !(handler instanceof HandlerMethod))
             return true;
@@ -45,6 +48,8 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
         return true;
     }
 
+    public static final String ENABLE_OPERATION_LOG = "ENABLE_OPERATION_LOG";
+
     /**
      * 获得 Controller 方法名、请求参数和注解信息
      *
@@ -52,21 +57,22 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
      * @param handlerMethod 方法
      */
     private static void showControllerInfo(HttpServletRequest req, HandlerMethod handlerMethod) {
-//        log.info("请求 URL：{} 对应的控制器方法：{}", req.getRequestURL(), handlerMethod);
         StringBuilder sb = new StringBuilder();
         Map<String, String[]> parameterMap = req.getParameterMap();
 
         if (!parameterMap.isEmpty()) {
             for (String key : parameterMap.keySet())
                 sb.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append(" ");
-
-//            log.info("{} 请求参数：\n{}", req.getMethod(), s);
         }
 
         BizAction bizAction = DiContextUtil.getAnnotationFromMethod(handlerMethod, BizAction.class);
+        EnableOperationLog enableOperationLog = DiContextUtil.getAnnotationFromMethod(handlerMethod, EnableOperationLog.class);
 
         if (bizAction != null)
             MDC.put(BoxLogger.BIZ_ACTION, bizAction.value());
+
+        if (enableOperationLog != null)
+            MDC.put(ENABLE_OPERATION_LOG, "");
 
         String bizActionName = bizAction != null ? bizAction.value() : "unknown";
         String httpInfo = req.getMethod() + " " + req.getRequestURI();
@@ -92,7 +98,7 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
 //    }
 
     /**
-     * 打印数据库操作日志
+     * 打印请求日志
      *
      * @param httpInfo SQL 语句
      * @param ip       实际执行SQL（带参数）
@@ -111,8 +117,13 @@ public class RequestLogger extends BoxLogger implements HandlerInterceptor {
                 boxContent("Controller: ", controllerInfo) + '\n' +
                 boxLine('└', '─', '┘', CommonConstant.EMPTY_STRING) + ANSI_RESET;
 
+        if (MDC.get(ENABLE_OPERATION_LOG) != null) {
+            String log = MDC.get(ENABLE_OPERATION_LOG);
+            log += sb;
+
+            MDC.put(ENABLE_OPERATION_LOG, log);
+        }
+
         log.info(sb);
     }
-
-
 }
