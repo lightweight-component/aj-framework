@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
  * Adds TraceId on every single Request, and adds ContentCachingRequestWrapper/ContentCachingResponseWrapper
@@ -37,22 +39,30 @@ public class TraceXFilter implements Filter {
     private final static String GET = "GET";
     private final static String POST = "POST";
 
+    private final static String OPTIONS = "OPTIONS";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        String traceId = req.getHeader(X_TRACE);
+        String method = req.getMethod();
+
+        if (OPTIONS.equalsIgnoreCase(method)) {// 跳过预检请求（OPTIONS）
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String traceId = req.getHeader(X_TRACE); // let front-end send traceId
 
         if (!StringUtils.hasLength(traceId))
-//            traceId = UUID.randomUUID().toString().replace("-", StrUtil.EMPTY_STRING).toUpperCase();
             traceId = RandomTools.uuid().toString();
 
-        MDC.put(BoxLogger.TRACE_KEY, traceId);
+        MDC.put(BoxLogger.TRACE_KEY, traceId); // saves traceId
         String contentType = request.getContentType();
 
-        if (!GET.equals(req.getMethod()) && ObjectHelper.hasText(contentType)) {
+        if (!GET.equals(method) && ObjectHelper.hasText(contentType)) {
             HttpServletRequestWrapper wrappedRequest = null;
 
-            if (POST.equals(req.getMethod()) && contentType.contains(CONTENT_TYPE_FORM)) {
+            if (POST.equals(method) && contentType.contains(CONTENT_TYPE_FORM)) {
                 wrappedRequest = new ContentCachingRequestWrapper(req);
                 /* Manually trigger stream */
 //            wrappedRequest.getParameterNames();
