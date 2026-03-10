@@ -1,7 +1,7 @@
 package com.ajaxjs.spring.traceid;
 
-import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.RandomTools;
+import com.ajaxjs.util.log.Trace;
 import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -26,8 +26,8 @@ public class TracedThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
     }
 
     private static void setTraceIdIfAbsent() {
-        if (MDC.get(BoxLogger.TRACE_KEY) == null)
-            MDC.put(BoxLogger.TRACE_KEY, RandomTools.uuid().toString());
+        if (MDC.get(Trace.TRACE_KEY) == null)
+            MDC.put(Trace.TRACE_KEY, RandomTools.uuid().toString());
     }
 
     /**

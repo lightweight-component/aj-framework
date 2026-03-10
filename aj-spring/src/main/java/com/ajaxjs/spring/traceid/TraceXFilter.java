@@ -1,9 +1,9 @@
 package com.ajaxjs.spring.traceid;
 
-import com.ajaxjs.util.BoxLogger;
 import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
+import com.ajaxjs.util.log.Trace;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.Ordered;
@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.concurrent.Callable;
 
 /**
  * Adds TraceId on every single Request, and adds ContentCachingRequestWrapper/ContentCachingResponseWrapper
@@ -36,7 +34,9 @@ public class TraceXFilter implements Filter {
     private final static String CONTENT_TYPE_JSON = "application/json";
 
     private final static String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
+
     private final static String GET = "GET";
+
     private final static String POST = "POST";
 
     private final static String OPTIONS = "OPTIONS";
@@ -56,7 +56,7 @@ public class TraceXFilter implements Filter {
         if (!StringUtils.hasLength(traceId))
             traceId = RandomTools.uuid().toString();
 
-        MDC.put(BoxLogger.TRACE_KEY, traceId); // saves traceId
+        MDC.put(Trace.TRACE_KEY, traceId); // saves traceId
         String contentType = request.getContentType();
 
         if (!GET.equals(method) && ObjectHelper.hasText(contentType)) {
