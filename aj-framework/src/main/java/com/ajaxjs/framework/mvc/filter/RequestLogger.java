@@ -56,14 +56,6 @@ public class RequestLogger implements HandlerInterceptor {
      * @param handlerMethod 方法
      */
     private static void showControllerInfo(HttpServletRequest req, HandlerMethod handlerMethod) {
-        StringBuilder sb = new StringBuilder();
-        Map<String, String[]> parameterMap = req.getParameterMap();
-
-        if (!parameterMap.isEmpty()) {
-            for (String key : parameterMap.keySet())
-                sb.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append(" ");
-        }
-
         BizAction bizAction = DiContextUtil.getAnnotationFromMethod(handlerMethod, BizAction.class);
         EnableOperationLog enableOperationLog = DiContextUtil.getAnnotationFromMethod(handlerMethod, EnableOperationLog.class);
 
@@ -72,6 +64,14 @@ public class RequestLogger implements HandlerInterceptor {
 
         if (enableOperationLog != null)
             MDC.put(Trace.ENABLE_OPERATION_LOG, CommonConstant.EMPTY_STRING);
+
+        StringBuilder sb = new StringBuilder();
+        Map<String, String[]> parameterMap = req.getParameterMap();
+
+        if (!parameterMap.isEmpty()) {
+            for (String key : parameterMap.keySet())
+                sb.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append(" ");
+        }
 
         String bizActionName = bizAction != null ? bizAction.value() : "unknown";
         String httpInfo = req.getMethod() + " " + req.getRequestURI();
@@ -88,6 +88,8 @@ public class RequestLogger implements HandlerInterceptor {
         if (log != null && !log.equals(CommonConstant.EMPTY_STRING)) {
 
         }
+
+        MDC.clear();
 //        Object o = request.getAttribute(START_TIME_ATTRIBUTE);
 //
 //        if (o == null)
