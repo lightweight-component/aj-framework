@@ -3,6 +3,9 @@ package com.ajaxjs.framework.shop.service;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 通过状态机严格控制订单状态流转
+ * 每个状态变更都对应特定的Handler处理业务逻辑
+ *
  * 语法糖甜不甜？巧用枚举实现“状态”转换限制
  * <a href="https://cloud.tencent.com/developer/article/1883946">...</a>
  */

@@ -4,11 +4,10 @@ package com.ajaxjs.framework.mvc.unifiedreturn;
 //import com.ajaxjs.desensitize.annotation.Desensitize;
 
 import com.ajaxjs.framework.mvc.filter.RequestLogger;
-import com.ajaxjs.sqlman.util.PrettyLogger;
-import com.ajaxjs.util.BoxLogger;
-import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.date.DateTools;
+import com.ajaxjs.util.log.TextBox;
+import com.ajaxjs.util.log.Trace;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.BeanUtils;
@@ -112,7 +111,7 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         else
             responseResult.setData(body);
 
-        responseResult.setTraceId(MDC.get(BoxLogger.TRACE_KEY));
+        responseResult.setTraceId(MDC.get(Trace.TRACE_KEY));
 
         try {
             logRequestCompletion(request, responseResult);
@@ -140,17 +139,18 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
         if (TRUE.equals(silentLog))
             return;
 
-        String title = " Request Completion ";
-        String sb = "\n" + PrettyLogger.ANSI_BLUE + RequestLogger.boxLine('┌', '─', '┐', title) + '\n' +
-                RequestLogger.boxContent("Time:            ", DateTools.now()) + '\n' +
-                RequestLogger.boxContent("TraceId:         ", MDC.get(BoxLogger.TRACE_KEY)) + '\n' +
-                RequestLogger.boxContent("BizAction:       ", MDC.get(BoxLogger.BIZ_ACTION)) + '\n' +
-                RequestLogger.boxContent("Request URI:     ", req.getMethod() + " " + request.getRequestURI()) + '\n' +
-                RequestLogger.boxContent("Response Result: ", JsonUtil.toJson(responseResult)) + '\n' +
-                RequestLogger.boxContent("Execution Time:  ", getExecutionTime(request)) + '\n' +
-                RequestLogger.boxLine('└', '─', '┘', CommonConstant.EMPTY_STRING) + PrettyLogger.ANSI_RESET;
+        TextBox textBox = new TextBox();
+        textBox.boxStart(" Request Completion ")
+                .line("Time:            ", DateTools.now())
+                .line("TraceId:         ", MDC.get(Trace.TRACE_KEY))
+                .line("BizAction:       ", MDC.get(Trace.BIZ_ACTION))
+                .line("Request URI:     ", req.getMethod() + " " + request.getRequestURI())
+                .line("Response Result: ", JsonUtil.toJson(responseResult))
+                .line("Execution Time:  ", getExecutionTime(request));
 
-        log.info(sb);
+        String _log = textBox.boxEnd();
+        Trace.saveLogToMDC(_log);
+        log.info(_log);
     }
 
     static String getExecutionTime(HttpServletRequest request) {
