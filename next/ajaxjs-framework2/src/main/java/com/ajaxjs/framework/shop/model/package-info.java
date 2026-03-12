@@ -1,0 +1,1 @@
+package com.ajaxjs.framework.shop.model;

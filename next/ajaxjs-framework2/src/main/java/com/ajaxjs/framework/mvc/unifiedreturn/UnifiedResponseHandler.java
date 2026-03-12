@@ -1,0 +1,178 @@
+package com.ajaxjs.framework.mvc.unifiedreturn;
+
+//import com.ajaxjs.desensitize.DeSensitize;
+//import com.ajaxjs.desensitize.annotation.Desensitize;
+
+import com.ajaxjs.framework.mvc.filter.RequestLogger;
+import com.ajaxjs.spring.annotation.BizAction;
+import com.ajaxjs.util.JsonUtil;
+import com.ajaxjs.util.date.DateTools;
+import com.ajaxjs.util.log.TextBox;
+import com.ajaxjs.util.log.Trace;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import jakarta.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.ajaxjs.framework.mvc.filter.RequestLogger.TRUE;
+
+@RestControllerAdvice
+@Slf4j
+public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
+    //不支持的类型列表
+    private static final Set<Class<?>> NO_SUPPORTED_CLASSES = new HashSet<>(8);
+
+    static {
+        NO_SUPPORTED_CLASSES.add(byte[].class);
+        NO_SUPPORTED_CLASSES.add(javax.xml.transform.Source.class);
+    }
+
+    @Override
+    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+        //如果返回值是NO_SUPPORTED_CLASSES中的类型，则不会被当前类的beforeBodyWrite方法处理，即不会被包装为ResultDto类型
+        if (NO_SUPPORTED_CLASSES.contains(returnType.getParameterType()))
+            return false;
+
+        // 若加了 @IgnoredGlobalReturn 则该方法不用做统一的拦截
+//        AnnotatedElement annotatedElement = returnType.getParameterType();
+//        if (annotatedElement.isAnnotationPresent(IgnoredGlobalReturn.class))
+//            return false;
+
+        if (returnType.hasMethodAnnotation(IgnoredGlobalReturn.class) || returnType.getContainingClass().isAnnotationPresent(IgnoredGlobalReturn.class))
+            return false;
+
+        return true;
+    }
+
+    private static final String OK = "操作成功";
+
+    @Autowired(required = false)
+    CustomReturnConverter<?> customReturnConverter;
+
+    @Override
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                  ServerHttpRequest request, ServerHttpResponse response) {
+        Method method = returnType.getMethod();
+        assert method != null;
+
+//        Class<?> declaringClass = returnType.getParameterType();
+//        return ResponseEntity.class.isAssignableFrom(declaringClass);
+
+        if (body instanceof ResponseEntity) // 为 Spring 专属的返回对象开绿灯
+            return body;
+
+//        if (method.isAnnotationPresent(Desensitize.class))
+//            body = DeSensitize.acquire(body);
+
+//        if (method.isAnnotationPresent(PureOutput.class))
+//            return body;
+        if (returnType.hasMethodAnnotation(PureOutput.class))
+            return body;
+
+        ResponseResultWrapper responseResult = new ResponseResultWrapper();
+        boolean isOk;
+        int statusCode = ((ServletServerHttpResponse) response).getServletResponse().getStatus(); // Get the HTTP status code
+
+        if (statusCode != 200) {
+            responseResult.setStatus(0);
+            responseResult.setErrorCode(String.valueOf(statusCode));
+            isOk = false;
+        } else {
+            responseResult.setStatus(1);
+            isOk = true;
+        }
+
+//        BizAction annotation = AnnotationUtils.findAnnotation(method, BizAction.class);
+        BizAction annotation = returnType.getMethodAnnotation(BizAction.class);
+
+        if (annotation != null)
+            responseResult.setMessage(annotation.value());
+        else
+            responseResult.setMessage(isOk ? OK : "操作失败");
+
+
+        if (body instanceof ResponseResultWrapper)
+            BeanUtils.copyProperties(body, responseResult);
+        else
+            responseResult.setData(body);
+
+        responseResult.setTraceId(MDC.get(Trace.TRACE_KEY));
+
+        try {
+            logRequestCompletion(request, responseResult);
+            MDC.clear();
+        } catch (Throwable e) {
+            log.warn("logRequestCompletion", e);
+        }
+
+        if (customReturnConverter != null)
+            return customReturnConverter.convert(responseResult);
+
+        if (body instanceof String)
+            return JsonUtil.toJson(responseResult);
+
+        return responseResult;
+    }
+
+    public static void logRequestCompletion(ServerHttpRequest req, Object responseResult) {
+        if (!(req instanceof ServletServerHttpRequest))
+            return;
+
+        HttpServletRequest request = ((ServletServerHttpRequest) req).getServletRequest();
+        String silentLog = request.getParameter("silent_log");
+
+        if (TRUE.equals(silentLog))
+            return;
+
+        TextBox textBox = new TextBox();
+        textBox.boxStart(" Request Completion ")
+                .line("Time:            ", DateTools.now())
+                .line("TraceId:         ", MDC.get(Trace.TRACE_KEY))
+                .line("BizAction:       ", MDC.get(Trace.BIZ_ACTION))
+                .line("Request URI:     ", req.getMethod() + " " + request.getRequestURI())
+                .line("Response Result: ", JsonUtil.toJson(responseResult))
+                .line("Execution Time:  ", getExecutionTime(request));
+
+        String _log = textBox.boxEnd();
+        Trace.saveLogToMDC(_log);
+        log.info(_log);
+    }
+
+    static String getExecutionTime(HttpServletRequest request) {
+        Object o = request.getAttribute(RequestLogger.START_TIME_ATTRIBUTE);
+
+        if (o == null)
+            return "N/A";
+        else {
+            long executionTime = System.currentTimeMillis() - (Long) o;
+
+            return executionTime + "ms";
+        }
+    }
+
+    // Helper method to build error responses
+    private Object handleErrorResponse(int status, String message) {
+        ResponseResultWrapper errorResponse = new ResponseResultWrapper();
+        errorResponse.setStatus(0);
+        errorResponse.setMessage(message);
+        errorResponse.setData(null); // No data for error
+
+        return errorResponse;
+    }
+}

@@ -5,8 +5,8 @@
 //import sun.font.FontDesignMetrics;
 //
 //import javax.imageio.ImageIO;
-//import javax.servlet.ServletException;
-//import javax.servlet.ServletOutputStream;
+//import jakarta.servlet.ServletException;
+//import jakarta.servlet.ServletOutputStream;
 //import jakarta.servlet.http.HttpServlet;
 //import jakarta.servlet.http.HttpServletRequest;
 //import jakarta.servlet.http.HttpServletResponse;
