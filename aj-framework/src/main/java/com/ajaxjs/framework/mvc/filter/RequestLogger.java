@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.mvc.filter;
 
-import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
+import com.ajaxjs.spring.annotation.BizAction;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.traceid.TraceXFilter;
 import com.ajaxjs.util.CommonConstant;

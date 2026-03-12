@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.tree;
 
-import com.ajaxjs.framework.mvc.unifiedreturn.BizAction;
+import com.ajaxjs.spring.annotation.BizAction;
 import com.ajaxjs.sqlman.Action;
 import com.ajaxjs.util.ObjectHelper;
 import org.springframework.web.bind.annotation.*;

@@ -17,5 +17,7 @@
         <module>aj-file-upload</module>
         <module>aj-data-service</module>
         <module>springboot4</module>
+        <module>next/ajaxjs-base</module>
+<!--        <module>next/ajaxjs-framework2</module>-->
     </modules>
 </project>
