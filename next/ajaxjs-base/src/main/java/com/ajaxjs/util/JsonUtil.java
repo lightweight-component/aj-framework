@@ -1,15 +1,11 @@
 package com.ajaxjs.util;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +22,10 @@ public class JsonUtil {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
-        OBJECT_MAPPER.registerModule(new JavaTimeModule()); // 用于处理 Java 8 时间日期类型（如 LocalDate、LocalDateTime 等）的序列化和反序列化。
-        OBJECT_MAPPER.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION); // 如果 JSON 中存在重复的键，将抛出异常
-        OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        // TODO
+//        OBJECT_MAPPER.registerModule(new JavaTimeModule()); // 用于处理 Java 8 时间日期类型（如 LocalDate、LocalDateTime 等）的序列化和反序列化。
+//        OBJECT_MAPPER.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION); // 如果 JSON 中存在重复的键，将抛出异常
+//        OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
     }
 
     /**
@@ -38,12 +35,7 @@ public class JsonUtil {
      * @return The JSON string representation of the Java object.
      */
     public static String toJson(Object obj) {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            log.warn("Converts a Java object to a JSON string.", e);
-            throw new RuntimeException("Failed to convert object to JSON", e);
-        }
+        return OBJECT_MAPPER.writeValueAsString(obj);
     }
 
     /**
@@ -53,12 +45,7 @@ public class JsonUtil {
      * @return The JSON string representation of the Java object.
      */
     public static String toJsonPretty(Object obj) {
-        try {
-            return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            log.warn("Java Bean, list, array converts to pretty json string.", e);
-            throw new RuntimeException("序列化异常", e);
-        }
+        return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
     }
 
     /**
@@ -176,13 +163,8 @@ public class JsonUtil {
      * @return Returns a list of Map objects converted from the JSON array string
      */
     public static List<Map<String, Object>> json2mapList(String jsonArrayStr) {
-        try {
-            return OBJECT_MAPPER.readValue(jsonArrayStr, new TypeReference<List<Map<String, Object>>>() {
-            });
-        } catch (JsonProcessingException e) {
-            log.warn("Failed to JSON array string:{} converts to list with Java Bean.", jsonArrayStr);
-            throw new RuntimeException(e);
-        }
+        return OBJECT_MAPPER.readValue(jsonArrayStr, new TypeReference<>() {
+        });
     }
 
     /**
@@ -246,11 +228,6 @@ public class JsonUtil {
      * @return JsonNode object converted from the JSON string
      */
     public static JsonNode json2Node(String jsonStr) {
-        try {
-            return OBJECT_MAPPER.readTree(jsonStr);
-        } catch (IOException e) {
-            log.warn("Failed to converts a JSON string:{} to node.", jsonStr);
-            throw new RuntimeException(e);
-        }
+        return OBJECT_MAPPER.readTree(jsonStr);
     }
 }

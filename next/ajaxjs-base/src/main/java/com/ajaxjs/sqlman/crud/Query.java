@@ -7,10 +7,11 @@ import com.ajaxjs.sqlman.crud.page.PageResult;
 import com.ajaxjs.sqlman.util.PrintRealSql;
 import com.ajaxjs.util.log.Trace;
 import com.ajaxjs.util.ConvertBasicValue;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

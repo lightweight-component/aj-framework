@@ -18,6 +18,7 @@
         <module>aj-data-service</module>
         <module>springboot4</module>
         <module>next/ajaxjs-base</module>
-<!--        <module>next/ajaxjs-framework2</module>-->
+        <module>next/pom</module>
+        <module>next/ajaxjs-framework2</module>
     </modules>
 </project>
