@@ -1,0 +1,47 @@
+package util.io;
+
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.Resources;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.util.List;
+
+public class TestFileHelper {
+    final String dir = Resources.getResourcesFromClass(TestFileHelper.class, "");
+    final String fullPath = dir + File.separator + "test.txt";
+
+    @Test
+    public void test() {
+        // 读取文件内容
+        String content = new FileHelper(fullPath).getFileContent();
+        System.out.println("File content: " + content);
+
+        // 写入文件内容
+        new FileHelper(fullPath).writeFileContent("Hello, World! 你好世界");
+
+        // 列出目录内容
+        List<String> directoryContents = new FileHelper(dir).listDirectoryContents();
+        System.out.println("Directory contents: " + directoryContents);
+
+        // 创建目录
+        new FileHelper(dir + File.separator + "newDirectory").createDirectory();
+
+        // 删除文件或目录
+//            FileHelper.deleteFileOrDirectory("output.txt");
+
+        // 检查文件或目录是否存在
+        boolean exists = new File(fullPath).exists();
+        System.out.println("File exists: " + exists);
+
+        // 获取文件或目录的大小
+        long size = new FileHelper(fullPath).getFileSize();
+        System.out.println("File size: " + size + " bytes");
+
+        // 复制文件或目录
+        new FileHelper(fullPath).setTarget("example_copy.txt").copyTo();
+
+        // 移动文件或目录
+        new FileHelper(fullPath).setTarget("moved_example.txt").moveTo();
+    }
+}
