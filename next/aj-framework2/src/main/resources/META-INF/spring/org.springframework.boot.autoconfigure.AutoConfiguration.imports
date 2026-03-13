@@ -1,0 +1,3 @@
+com.ajaxjs.spring.AutoConfiguration
+com.ajaxjs.security.common.AutoConfiguration
+com.ajaxjs.framework.AutoConfiguration
