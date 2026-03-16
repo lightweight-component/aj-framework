@@ -1,3 +1,4 @@
 com.ajaxjs.spring.AutoConfiguration
 com.ajaxjs.security.common.AutoConfiguration
+com.ajaxjs.dataservice.AutoConfiguration
 com.ajaxjs.framework.AutoConfiguration

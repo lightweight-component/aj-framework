@@ -13,7 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Simply check the IP
+ * Check the IP
+ * <a href="https://mp.weixin.qq.com/s/N3GE5yCWaNiKdgsmoDURng">...</a>
  */
 @Data
 @Component
@@ -22,12 +23,12 @@ import java.util.List;
 @ConfigurationProperties(prefix = "security.ip-list")
 public class IpList extends InterceptorAction<IpListCheck> {
     /**
-     * The ip allows to access
+     * The ip allows accessing
      */
     private List<String> whiteList;
 
     /**
-     * The ip disallows to access
+     * The ip disallowing to access
      */
     private List<String> blackList;
 
