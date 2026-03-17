@@ -23,11 +23,6 @@ import java.io.UncheckedIOException;
  */
 @Component
 public class PrintBanner implements ApplicationRunner {
-    /**
-     * Spring 程序启动的时间
-     */
-    public static final long APP_START_TIME = System.currentTimeMillis();
-
     @Value("${server.port:8080}")
     private int port;
 
@@ -65,12 +60,8 @@ public class PrintBanner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-//        log.info(s);
-        long elapsedTime = System.currentTimeMillis() - APP_START_TIME;
-//        log.info("Spring App:{} startup time: {} ms", port, elapsedTime);
-
         Log log = LogFactory.getLog(PrintBanner.class);
-        log.info("Spring App :" + port + contextPath + ", startup time: " + elapsedTime + " ms");
+        log.info("Spring App :" + port + contextPath);
 
         if (isShowBanner) {
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();

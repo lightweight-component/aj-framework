@@ -1,6 +1,5 @@
-package com.ajaxjs.framework.wechat.payment.model;
+package com.ajaxjs.wechat.payment.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 /**
@@ -8,12 +7,11 @@ import lombok.Data;
  *
  * @author Frank Cheung
  */
-@JsonIgnoreProperties(ignoreUnknown = true) // 让 Jackson 忽略未知字段
 @Data
 public class PayResult {
-    private String mchid;
+    private String  mchid;
 
-    private String appid;
+    private String  appid;
 
     private PayResultPayer payer;
 

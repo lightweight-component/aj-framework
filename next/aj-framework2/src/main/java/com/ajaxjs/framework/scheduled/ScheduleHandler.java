@@ -22,6 +22,9 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Spring Boot 4 不再支持
+ */
 @Data
 @Slf4j
 @Component

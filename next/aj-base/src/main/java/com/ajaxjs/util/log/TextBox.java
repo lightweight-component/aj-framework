@@ -34,6 +34,8 @@ public class TextBox {
         return this;
     }
 
+    private static final int VALUE_MAX_LENGTH = 1500;
+
     public TextBox line(String key, Object value) {
         String _value;
 
@@ -50,6 +52,9 @@ public class TextBox {
             _value = NONE;
         else
             _value = value.toString();
+
+        if (_value != null && _value.length() >= VALUE_MAX_LENGTH)
+            _value = _value.substring(0, VALUE_MAX_LENGTH) + "...";
 
         sb.append(boxContent(key, _value)).append('\n');
 
