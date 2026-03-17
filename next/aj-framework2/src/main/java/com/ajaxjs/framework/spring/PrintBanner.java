@@ -61,7 +61,7 @@ public class PrintBanner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         Log log = LogFactory.getLog(PrintBanner.class);
-        log.info("Spring App :" + port + contextPath);
+//        log.info("Spring App :" + port + contextPath);
 
         if (isShowBanner) {
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
