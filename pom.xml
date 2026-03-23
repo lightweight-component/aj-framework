@@ -8,14 +8,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>aj-next-parent</module>
         <module>aj-project-parent</module>
-        <module>aj-framework</module>
-        <module>aj-spring</module>
-        <module>aj-message/aj-message-common</module>
-        <module>aj-message/aj-message</module>
-<!--        <module>aj-sample-app</module>-->
-        <module>aj-file-upload</module>
-        <module>aj-data-service</module>
-        <module>next</module>
+        <module>aj-base</module>
+        <module>aj-framework2</module>
     </modules>
 </project>
