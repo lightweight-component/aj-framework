@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-cms</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <relativePath />
     </parent>
 
@@ -18,7 +18,7 @@
         architecture brought about by the large and bloated,
         emphasizing the lightweight, and fast, very suitable for the Internet fast application.
     </description>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-base</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.9</version>
         </dependency>
     </dependencies>
 </project>
