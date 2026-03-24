@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 /**
- * Simply check the HTTP Referer
+ * Check the HTTP Referer
  */
 @Data
 @Component
