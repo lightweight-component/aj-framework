@@ -14,7 +14,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <springboot.version>4.0.3</springboot.version>
+        <springboot.version>4.0.4</springboot.version>
         <tomcat.version>11.0.14</tomcat.version>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
@@ -202,7 +202,7 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
-                <version>5.8.2</version>
+                <version>6.0.3</version>
                 <scope>test</scope>
             </dependency>
 
@@ -213,14 +213,6 @@
                 <version>2.2.220</version>
                 <scope>runtime</scope>
             </dependency>
-
-            <!-- 编译为 jar 包时依赖的 -->
-<!--            <dependency>-->
-<!--                <groupId>javax.servlet</groupId>-->
-<!--                <artifactId>javax.servlet-api</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <scope>provided</scope>-->
-<!--            </dependency>-->
 
             <dependency>
                 <groupId>tools.jackson.core</groupId>
@@ -234,20 +226,6 @@
                 <version>6.0.0</version>
                 <scope>provided</scope>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>javax.servlet.jsp</groupId>-->
-<!--                <artifactId>javax.servlet.jsp-api</artifactId>-->
-<!--                <version>2.3.3</version>-->
-<!--                <scope>provided</scope>-->
-<!--            </dependency>-->
-
-<!--            <dependency>-->
-<!--                <groupId>javax.websocket</groupId>-->
-<!--                <artifactId>javax.websocket-api</artifactId>-->
-<!--                <version>1.1</version>-->
-<!--                <scope>provided</scope>-->
-<!--            </dependency>-->
 
             <!-- LOGGER/logback -->
             <dependency>
