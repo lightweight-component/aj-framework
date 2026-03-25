@@ -13,12 +13,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <springboot.version>4.0.3</springboot.version>
-        <tomcat.version>11.0.14</tomcat.version>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-
-        <!-- 这里是项目主类运行入口 -->
-        <project.mainClass>org.example.AjFrameworkSampleApp</project.mainClass>
     </properties>
 
     <profiles>
@@ -143,7 +138,7 @@
             <dependency>
                 <groupId>com.ajaxjs</groupId>
                 <artifactId>ajaxjs-cms</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

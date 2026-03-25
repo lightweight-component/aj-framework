@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * 国际化 i18n
@@ -31,7 +32,7 @@ public class Inter18n {
     }
 
     public static Locale extractLocale() {
-        return extractLocale(DiContextUtil.getRequest());
+        return extractLocale(Objects.requireNonNull(DiContextUtil.getRequest()));
     }
 
     @Autowired

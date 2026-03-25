@@ -38,17 +38,14 @@ public class DataBaseConnection implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         if (DispatcherType.ERROR.equals(req.getDispatcherType()) && "/error".equals(req.getRequestURI()))
-            // Error page
-            return true;
+            return true; // Error page
 
         if (handler instanceof HandlerMethod) {
             boolean noIgnoreDataBaseConnect = DiContextUtil.getAnnotationFromMethod(handler, IgnoreDataBaseConnect.class) == null;
             boolean hasEnableTransaction = DiContextUtil.getAnnotationFromMethod(handler, EnableTransaction.class) != null;
-
             Connection connection = null;
 
-            // 默认所有控制器方法，要连接数据库，除了带 IgnoreDataBaseConnect 注解的
-            if (noIgnoreDataBaseConnect)
+            if (noIgnoreDataBaseConnect) // 默认所有控制器方法，要连接数据库，除了带 IgnoreDataBaseConnect 注解的
                 connection = initDb();
 
             if (connection != null && hasEnableTransaction) {
