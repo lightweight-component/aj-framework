@@ -12,5 +12,6 @@
         <module>aj-project-parent</module>
         <module>aj-base</module>
         <module>aj-framework2</module>
+        <module>incubator/aj-experiment</module>
     </modules>
 </project>

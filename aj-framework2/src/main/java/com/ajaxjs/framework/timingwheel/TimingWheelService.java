@@ -6,6 +6,8 @@ import com.ajaxjs.framework.timingwheel.model.TimerTaskWrapper;
 import com.ajaxjs.framework.timingwheel.model.TimingWheelStats;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,10 +23,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(name = "TimingWheel.enabled", havingValue = "true")
+@ConfigurationProperties(prefix = "TimingWheel")
 public class TimingWheelService {
-
     private final TimingWheel timingWheel;
+
     private final Map<String, TimerTaskWrapper> activeTasks = new ConcurrentHashMap<>();
+
     private final AtomicLong taskSequence = new AtomicLong(0);
 
     @Autowired

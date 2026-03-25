@@ -1,0 +1,5 @@
+/**
+ * 配置属性热更新的轻量级实现
+ * https://juejin.cn/post/7528251865864519716
+ */
+package com.ajaxjs.framework.confighotreload;

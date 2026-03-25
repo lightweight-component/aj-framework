@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-
 /**
  * 时间轮核心实现
  */
@@ -207,7 +206,7 @@ public class TimingWheel implements InitializingBean, DisposableBean {
         for (TimerTaskWrapper wrapper : tasksToExecute)
             executeTask(wrapper);
 
-        log.debug("Processed slot {}: {} tasks executed, {} tasks requeued",
+        log.debug("Processed slot {}: {} tasks executed, {} tasks re-queued",
                 slot.getIndex(), tasksToExecute.size(), tasksToRequeue.size());
     }
 
@@ -295,8 +294,7 @@ public class TimingWheel implements InitializingBean, DisposableBean {
     public void destroy() {
         log.info("Stopping timing wheel");
 
-        // 关闭执行器
-        tickerExecutor.shutdown();
+        tickerExecutor.shutdown();  // 关闭执行器
         taskExecutor.shutdown();
 
         try {
