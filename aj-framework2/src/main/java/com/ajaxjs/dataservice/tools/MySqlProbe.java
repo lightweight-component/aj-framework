@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,8 +20,27 @@ public class MySqlProbe {
     /**
      * 获取数据库详情
      */
-    public static DataBaseDetail detail(Connection connect, String database) {
-        MetaQuery q = new MetaQuery(connect);
+    public static DataBaseDetail detail(Connection conn) {
+        return detail(conn, getDatabaseNameByConnection(conn));
+    }
+
+    static String getDatabaseNameByConnection(Connection conn) {
+        String catalog; // catalog 是数据库名
+
+        try {
+            catalog = conn.getCatalog();
+        } catch (SQLException e) {
+            log.warn("Error when MySqlProbe", e);
+            throw new RuntimeException(e);
+        }
+
+        log.info("---------连接成功，数据库：" + catalog);
+
+        return catalog;
+    }
+
+    public static DataBaseDetail detail(Connection conn, String database) {
+        MetaQuery q = new MetaQuery(conn);
 
         Map<String, String> maxConnection = q.getVariables(" SHOW STATUS LIKE 'connections'; ");
         maxConnection.putAll(q.getVariables(" SHOW VARIABLES LIKE '%max_connections%' "));
@@ -38,7 +58,7 @@ public class MySqlProbe {
         Map<String, String> basicInfo;
 
         try {
-            DatabaseMetaData metaData = connect.getMetaData();
+            DatabaseMetaData metaData = conn.getMetaData();
             String url = metaData.getURL();
 
             // 使用正则表达式提取 IP 地址和端口号
@@ -50,11 +70,11 @@ public class MySqlProbe {
                 port = matcher.group(2);
             }
 
-            basicInfo = ObjectHelper.mapOf("name", metaData.getDriverName(), "ip", ip, "database", connect.getCatalog());
+            basicInfo = ObjectHelper.mapOf("name", metaData.getDriverName(), "ip", ip, "database", conn.getCatalog());
             basicInfo.put("port", port);
             basicInfo.put("userName", metaData.getUserName());
         } catch (Exception e) {
-            log.warn("", e);
+            log.warn("Error when MySqlProbe", e);
             throw new RuntimeException(e);
         }
 
@@ -78,9 +98,18 @@ public class MySqlProbe {
         return detail;
     }
 
-    public static List<TableDesc> list(Connection connect, String database) {
-        MetaQuery q = new MetaQuery(connect);
-        // 获取某个库下的所有表信息
+    /**
+     * 获取某个库下的所有表信息
+     */
+    public static List<TableDesc> list(Connection conn) {
+        return list(conn, getDatabaseNameByConnection(conn));
+    }
+
+    /**
+     * 获取某个库下的所有表信息
+     */
+    public static List<TableDesc> list(Connection conn, String database) {
+        MetaQuery q = new MetaQuery(conn);
         List<String> tables = q.getTables("SHOW TABLES IN " + database);
         Map<String, TableDesc> map = q.getTableDesc(database, tables);
         List<TableDesc> tableDescMain = new ArrayList<>(map.size());

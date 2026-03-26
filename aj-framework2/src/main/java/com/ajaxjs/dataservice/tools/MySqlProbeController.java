@@ -27,7 +27,7 @@ public class MySqlProbeController {
     DataBaseDetail test() {
 //        JdbcConnection.getConnection();
         try (Connection connection = ds.getConnection()) {
-            return MySqlProbe.detail(connection, "aj_base");
+            return MySqlProbe.detail(connection);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -36,7 +36,7 @@ public class MySqlProbeController {
     @GetMapping("/table_list")
     List<TableDesc> tableList() {
         try (Connection connection = ds.getConnection()) {
-            return MySqlProbe.list(connection, "aj_base");
+            return MySqlProbe.list(connection);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +45,7 @@ public class MySqlProbeController {
     @GetMapping("/table_info/{tableName}")
     TableDetailRes tableInfo(@PathVariable String tableName) {
         try (Connection connection = ds.getConnection()) {
-            return MySqlProbe.detail(connection, "aj_base", tableName);
+            return MySqlProbe.detail(connection, "robot", tableName);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
