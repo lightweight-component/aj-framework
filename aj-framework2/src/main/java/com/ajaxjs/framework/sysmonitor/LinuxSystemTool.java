@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.sysmonitor;
 
+import com.ajaxjs.framework.sysmonitor.model.DiskIOStats;
 import com.ajaxjs.framework.sysmonitor.model.LinuxMemInfo;
 import com.ajaxjs.util.io.DataReader;
 import lombok.extern.slf4j.Slf4j;
@@ -105,6 +106,81 @@ public class LinuxSystemTool {
             Thread.sleep(seconds * 1000L);
         } catch (InterruptedException e) {
             log.warn("Errors when sleeping.", e);
+        }
+    }
+
+    /**
+     * Linux 磁盘IO统计
+     */
+    private static DiskIOStats getLinuxDiskIOStats() {
+        String line;
+        long readBytes = 0, writeBytes = 0, readOps = 0, writeOps = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("/proc/diskstats"))) {
+
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.trim().split("\\s+");
+                if (fields.length >= 14) {
+                    readOps += Long.parseLong(fields[3]);
+                    writeOps += Long.parseLong(fields[7]);
+                    readBytes += Long.parseLong(fields[5]) * 512; // 扇区数 * 512字节
+                    writeBytes += Long.parseLong(fields[9]) * 512;
+                }
+            }
+
+            DiskIOStats diskIOStats = new DiskIOStats();
+            diskIOStats.setReadBytes(readBytes);
+            diskIOStats.setWriteBytes(writeBytes);
+            diskIOStats.setReadOps(readOps);
+            diskIOStats.setWriteOps(writeOps);
+
+            return diskIOStats;
+        } catch (Exception e) {
+            log.warn("获取Linux磁盘IO统计失败", e);
+            return null;
+        }
+    }
+
+    /**
+     * Linux 网络统计
+     */
+    private static NetworkStats getLinuxNetworkStats() {
+        String line;
+        long rxBytes = 0, txBytes = 0, rxPackets = 0, txPackets = 0, rxErrors = 0, txErrors = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("/proc/net/dev"))) {
+            reader.readLine(); // 跳过前两行头部
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String[] fields = line.trim().split(":\\s+");
+
+                if (fields.length == 2) {
+                    String[] stats = fields[1].trim().split("\\s+");
+
+                    if (stats.length >= 16) {
+                        rxBytes += Long.parseLong(stats[0]);
+                        rxPackets += Long.parseLong(stats[1]);
+                        rxErrors += Long.parseLong(stats[2]);
+                        txBytes += Long.parseLong(stats[8]);
+                        txPackets += Long.parseLong(stats[9]);
+                        txErrors += Long.parseLong(stats[10]);
+                    }
+                }
+            }
+
+            NetworkStats networkStats = new NetworkStats();
+            networkStats.setRxBytes(rxBytes);
+            networkStats.setTxBytes(txBytes);
+            networkStats.setRxPackets(rxPackets);
+            networkStats.setTxPackets(txPackets);
+            networkStats.setRxErrors(rxErrors);
+            networkStats.setTxErrors(txErrors);
+
+            return networkStats;
+        } catch (Exception e) {
+            log.warn("获取Linux网络统计失败", e);
+            return null;
         }
     }
 }
