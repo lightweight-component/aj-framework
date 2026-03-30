@@ -120,6 +120,7 @@ public class LinuxSystemTool {
 
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.trim().split("\\s+");
+
                 if (fields.length >= 14) {
                     readOps += Long.parseLong(fields[3]);
                     writeOps += Long.parseLong(fields[7]);
