@@ -2,6 +2,7 @@ package com.ajaxjs.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.TimeZone;
 
@@ -37,8 +38,19 @@ public class DebugTools {
      */
     public static boolean isDebug;
 
+    public static boolean isChinaTimeZone() {
+        // 获取默认时区
+        ZoneId currentZone = ZoneId.systemDefault();
+
+        // 检查是否为北京时间（中国标准时间）
+        return currentZone.equals(ZoneId.of("Asia/Shanghai")) ||
+                currentZone.getId().equals("Asia/Shanghai") ||
+                currentZone.getId().equals("GMT+08:00") ||
+                currentZone.toString().contains("Shanghai");
+    }
+
     static {
-        if (!"Asia/Shanghai".equals(System.getProperty("user.timezone"))) {
+        if (!isChinaTimeZone()) {
             System.err.println("当前 JVM 非中国大陆时区");
             TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
         }
