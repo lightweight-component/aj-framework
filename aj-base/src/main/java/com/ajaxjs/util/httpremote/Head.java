@@ -134,11 +134,13 @@ public class Head extends Request {
         };
     }
 
-    public static Consumer<HttpURLConnection> json(String token) {
+    public static final Consumer<HttpURLConnection> json = conn -> {
+        conn.setRequestProperty(CONTENT_TYPE, CONTENT_TYPE_JSON);
+    };
+
+    public static Consumer<HttpURLConnection> setBearerToken(String token) {
         return conn -> {
-            conn.setRequestProperty(CONTENT_TYPE, CONTENT_TYPE_JSON);
             conn.setRequestProperty(AUTHORIZATION, "Bearer " + token);
         };
     }
-
 }
