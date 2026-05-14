@@ -1,0 +1,105 @@
+/**
+ * Copyright Sp42 frank@ajaxjs.com Licensed under the Apache License, Version
+ * 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+package com.ajaxjs.message.sms.ali_sms.ali_sms;
+
+import com.ajaxjs.util.HashHelper;
+import com.ajaxjs.util.UrlEncode;
+import org.springframework.util.AlternativeJdkIdGenerator;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+/**
+ * 阿里云发送短信
+ */
+public class AliyunSMS {
+    private final static String SMS_API = "http://dysmsapi.aliyuncs.com/?Signature=";
+
+    /**
+     * @param entity 消息
+     * @return true 表示发送成功
+     */
+    public static String send(AliyunSmsEntity entity) {
+        // 1. 初始化请求参数
+        Map<String, String> paras = new HashMap<>();
+        paras.put("SignatureMethod", "HMAC-SHA1");
+        paras.put("SignatureNonce", new AlternativeJdkIdGenerator().generateId().toString());
+        paras.put("SignatureVersion", "1.0");
+        paras.put("Timestamp", getTimestamp());
+        paras.put("Format", "JSON");
+        paras.put("Action", "SendSms");
+        paras.put("Version", "2017-05-25");
+        paras.put("AccessKeyId", entity.getAccessKeyId()); // 2. 业务 API 参数
+        paras.put("PhoneNumbers", entity.getPhoneNumbers());
+        paras.put("SignName", entity.getSignName());
+        paras.put("TemplateParam", entity.getTemplateParam());
+        paras.put("TemplateCode", entity.getTemplateCode());
+
+        // 3. 去除签名关键字 Key
+        paras.remove("Signature");
+
+        String sortQueryStringTmp = sort(paras);
+        String signature = makeSignature(sortQueryStringTmp, entity.getAccessSecret());
+        return "";
+        // 最终打印出合法 GET 请求的 URL
+//        Map<String, Object> map = Get.api(SMS_API + signature + sortQueryStringTmp);
+//
+//        return "OK".equals(map.get("Code")) ? "OK" : map.get("Message").toString();
+    }
+
+    /**
+     * 请求的时间戳。按照 ISO8601 标准表示，并需要使用 UTC 时间，格式为 yyyy-MM-ddTHH:mm:ssZ。
+     */
+    static String getTimestamp() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        df.setTimeZone(new SimpleTimeZone(0, "GMT"));// 这里一定要设置 GMT 时区
+
+        return df.format(new Date());
+    }
+
+    /**
+     * 根据参数 Key 排序（顺序）
+     */
+    private static String sort(Map<String, String> paras) {
+        // 4. 参数 KEY 排序
+        TreeMap<String, String> sortParas = new TreeMap<>(paras);
+
+        // 5. 构造待签名的字符串
+        Iterator<String> it = sortParas.keySet().iterator();
+        StringBuilder sb = new StringBuilder();
+
+        while (it.hasNext()) {
+            String key = it.next();
+            sb.append("&").append(new UrlEncode(key).encodeQuery()).append("=").append(new UrlEncode(paras.get(key)).encodeQuery());
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * 构造待签名的请求串
+     *
+     * @param sortQueryStringTmp 测试
+     * @param accessSecret       测试
+     * @return 待签名的请求串
+     */
+    private static String makeSignature(String sortQueryStringTmp, String accessSecret) {
+        String stringToSign = "GET" + "&" +
+                new UrlEncode("/").encodeQuery() + "&" +
+                new UrlEncode(sortQueryStringTmp.substring(1)).encodeQuery();// 去除第一个多余的&符号
+
+//        String sign = Digest.doHmacSHA1(accessSecret + "&", stringToSign);
+        String sign = HashHelper.getHmacMD5(accessSecret + "&", stringToSign).hashAsBase64();
+
+        // 6. 签名最后也要做特殊 URL 编码
+        return new UrlEncode(sign).encodeQuery();
+    }
+}

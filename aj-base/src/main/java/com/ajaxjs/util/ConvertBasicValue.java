@@ -1,6 +1,6 @@
 package com.ajaxjs.util;
 
-import com.ajaxjs.util.date.DateTools;
+import com.ajaxjs.util.date.DateTypeConvert;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,9 +78,26 @@ public class ConvertBasicValue {
             return object2float(value);
         else if (clz == double.class || clz == Double.class)
             return object2double(value);
-        else if (clz == Date.class || clz == LocalDateTime.class || clz == LocalDate.class)
-            return DateTools.object2Date(value);
-        else if (clz == BigDecimal.class) {
+        else if (clz == Date.class || clz == LocalDateTime.class || clz == LocalDate.class) {
+            DateTypeConvert dc = null;
+
+            if (value instanceof java.sql.Date)
+                dc = new DateTypeConvert((java.sql.Date) value);
+            else if (value instanceof Date)
+                dc = new DateTypeConvert((Date) value);
+            else if (value instanceof LocalDateTime)
+                dc = new DateTypeConvert((LocalDateTime) value);
+            else if (value instanceof LocalDate)
+                dc = new DateTypeConvert((LocalDate) value);
+            else
+                log.warn("value: [{}] type:[{}] can not be converted to Date", value, value.getClass().getName());
+
+            if (dc == null) {
+                log.warn("DateTypeConvert is null, value: [{}] type:[{}] can not be converted to Date", value, value.getClass().getName());
+                return null;
+            } else
+                return dc.to(clz, null);
+        } else if (clz == BigDecimal.class) {
             if (value instanceof String || value instanceof Number)
                 return new BigDecimal(value.toString());
             else
