@@ -41,7 +41,7 @@ public class NamePolicy {
     public String getFileName() {
         switch (policy) {
             case ORIGINAL:
-                return fileName;
+                return fileName.trim();
             case ORIGINAL_RANDOM:
                 return nameOriginalRandom(fileName);
             case RANDOM:
@@ -71,6 +71,6 @@ public class NamePolicy {
     }
 
     public static String nameOriginalRandom(String fileName) {
-        return getBaseName(fileName) + "_" + RandomTools.uuidStr() + "." + getFileExtension(fileName);
+        return getBaseName(fileName).trim() + "_" + RandomTools.uuidStr() + "." + getFileExtension(fileName);
     }
 }

@@ -246,7 +246,7 @@ public class TextBox {
             width += w;
         }
 
-        if (line.length() > 0) // 添加最后一行内容（如果有）
+        if (!line.isEmpty()) // 添加最后一行内容（如果有）
             result.add(line.toString());
 
         if (result.isEmpty())  // 确保结果不为空

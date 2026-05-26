@@ -70,9 +70,12 @@ public class Query extends BaseAction {
             String traceId = MDC.get(Trace.TRACE_KEY);
             String bizAction = MDC.get(Trace.BIZ_ACTION);
 
-            CompletableFuture.runAsync(() -> PrintRealSql.printLog("Query", traceId, bizAction,
+            PrintRealSql.printLog("Query", traceId, bizAction,
                     action.getSql(), action.getParams(), PrintRealSql.printRealSql(action.getSql(), action.getParams()),
-                    this, _resultText, true));
+                    this, _resultText, true);
+//            CompletableFuture.runAsync(() -> PrintRealSql.printLog("Query", traceId, bizAction,
+//                    action.getSql(), action.getParams(), PrintRealSql.printRealSql(action.getSql(), action.getParams()),
+//                    this, _resultText, true));
         }
     }
 

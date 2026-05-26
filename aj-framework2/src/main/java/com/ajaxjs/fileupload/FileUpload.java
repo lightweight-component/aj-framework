@@ -71,9 +71,9 @@ public class FileUpload {
 
         try {
             file.transferTo(new File(dir, fileName));// 保存文件
-            log.info("File saved to: " + dest);
+            log.info("File saved to: {}", dest);
         } catch (IOException e) {
-            log.error("Error occurred when saving file to " + dest, e);
+            log.error("Error occurred when saving file to {}", dest, e);
             throw new UncheckedIOException("Error occurred when saving file to " + dest, e);
         }
 
@@ -123,7 +123,6 @@ public class FileUpload {
     BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase;
 
     private UploadedResult saveToFileService() {
-        UploadedResult result = new UploadedResult();
-        return result;
+        return new UploadedResult();
     }
 }
