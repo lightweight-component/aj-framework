@@ -63,6 +63,7 @@ public class ExtensionCheck {
             "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
             "doc", "odp", "xls", "odt", "ods", "md", "wps", "txt"
     );
+
     public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III
             "wav",    // Waveform Audio File Format
@@ -78,7 +79,8 @@ public class ExtensionCheck {
             "mid",    // MIDI (Musical Instrument Digital Interface)
             "midi",   // MIDI
             "weba",   // WebM Audio (WebM container, audio only)
-            "opus"    // Opus audio format (often in .ogg or .opus)
+            "opus",    // Opus audio format (often in .ogg or .opus)
+            "caf"
     );
     public static final Set<String> VIDEO_EXTENSIONS = ObjectHelper.setOf(
             "mp4",      // MPEG-4 Part 14 (最通用)

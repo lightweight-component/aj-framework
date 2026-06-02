@@ -158,7 +158,8 @@ public class ContentTypePolicy {
             "audio/3gpp",           // .3gp (audio only)
             "audio/3gpp2",          // .3g2 (audio only)
             "audio/amr",            // .amr
-            "audio/flac"            // .flac
+            "audio/flac",           // .flac
+            "audio/x-caf"           // apple audio
     );
 
     @SuppressWarnings("SpellCheckingInspection")

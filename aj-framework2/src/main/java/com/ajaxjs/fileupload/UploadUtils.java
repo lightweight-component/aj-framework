@@ -1,6 +1,7 @@
 package com.ajaxjs.fileupload;
 
 import com.ajaxjs.util.reflect.Methods;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Method;
@@ -61,15 +62,20 @@ public class UploadUtils {
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
                                           Consumer<FileUploadConfig> customConfig,
                                           BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
-        Method uploadAudio = Methods.getMethod(controllerClz, methodName, MultipartFile.class);
+        Method uploadMethod = Methods.getMethod(controllerClz, methodName, MultipartFile.class);
 
-        if (uploadAudio == null)
-            throw new UnsupportedOperationException("Failed to get controller method.");
+        if (uploadMethod == null) {
+            // try again
+            uploadMethod = Methods.getMethod(controllerClz, methodName, MultipartFile.class, HttpServletResponse.class);
 
-        if (!uploadAudio.isAnnotationPresent(FileUploadAction.class))
+            if (uploadMethod == null)
+                throw new UnsupportedOperationException("Failed to get controller method.");
+        }
+
+        if (!uploadMethod.isAnnotationPresent(FileUploadAction.class))
             throw new UnsupportedOperationException("It's not a file upload controller.");
 
-        FileUploadAction annotation = uploadAudio.getAnnotation(FileUploadAction.class);
+        FileUploadAction annotation = uploadMethod.getAnnotation(FileUploadAction.class);
         FileUploadConfig fileUploadConfig = fromAnnotation(annotation);
 
         if (customConfig != null)

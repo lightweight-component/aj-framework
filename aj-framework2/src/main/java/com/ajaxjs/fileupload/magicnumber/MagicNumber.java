@@ -32,7 +32,7 @@ public class MagicNumber {
                     throw new UnsupportedOperationException("[MG Detect]The uploaded file should be a image file.");
                 break;
             case OFFICE_FILE:
-                if ("txt".equals(ext)) // txt has no magic number
+                if ("txt".equals(ext) || "md".equals(ext)) // txt/md has no magic number
                     return;
 
                 if (!MagicNumber.isValidFile(ext, bytes, MagicNumberOfficeFile.OFFICE_MAGIC_MAP))
