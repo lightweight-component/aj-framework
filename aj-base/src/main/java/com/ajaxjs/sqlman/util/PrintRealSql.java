@@ -2,6 +2,7 @@ package com.ajaxjs.sqlman.util;
 
 import com.ajaxjs.sqlman.crud.BaseAction;
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.log.TextBox;
 import com.ajaxjs.util.log.Trace;
 import lombok.extern.slf4j.Slf4j;
@@ -157,6 +158,7 @@ public class PrintRealSql {
 
         TextBox textBox = new TextBox();
         textBox.boxStart(title)
+                .line("Time:     ", DateTools.now())
                 .line("TraceId:  ", traceId)
                 .line("BizAction:", bizAction)
                 .line("SQL:      ", sql.replaceAll(REGEXP, " "))

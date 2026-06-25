@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class ExtensionCheck {
     public static void checkExtName(FileUploadConfig config, String ext) {
+        ext = ext.toLowerCase();
         // 1. simple check by custom ext
         String[] allowExtFilenames = config.getAllowExtFilenames();
 
