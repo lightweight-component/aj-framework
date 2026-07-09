@@ -6,8 +6,10 @@ import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.log.TextBox;
 import com.ajaxjs.util.log.Trace;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -132,6 +134,33 @@ public class PrintRealSql {
         return count;
     }
 
+    private static final int MAX_REPEAT = 3;
+
+    private static String lastBizAction;
+
+    private static int repeatCount;
+
+    /**
+     * 日志限流（Log Throttling）
+     * <p>
+     * 对于同一个 bizAction，如果连续出现超过 N 次（例如 3 次），则后续相同 bizAction 的日志不再打印；直到出现其他 bizAction，计数重新开始。
+     *
+     * @param bizAction
+     * @return
+     */
+    public static synchronized boolean shouldPrint(String bizAction) {
+        if (Objects.equals(lastBizAction, bizAction)) {
+            repeatCount++;
+
+            return repeatCount <= MAX_REPEAT;
+        }
+
+        lastBizAction = bizAction;
+        repeatCount = 1;
+
+        return true;
+    }
+
     /**
      * 打印数据库操作日志
      *
@@ -146,6 +175,9 @@ public class PrintRealSql {
      * @param wrapLongLines 是否允许完整显示超长字符串，自动换行
      */
     public static void printLog(String type, String traceId, String bizAction, String sql, Object params, String realSql, BaseAction action, Object result, boolean wrapLongLines) {
+        if (MDC.get(Trace.ENABLE_LOG_THROTTLING) != null && ObjectHelper.hasText(bizAction) && !shouldPrint(bizAction))
+            return;
+
         String title = " Debugging " + type + " ";
         realSql = realSql.replaceAll(REGEXP, " ");
 

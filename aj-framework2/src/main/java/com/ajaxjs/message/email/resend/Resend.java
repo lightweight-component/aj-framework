@@ -17,8 +17,7 @@ public class Resend implements ISendEmail {
     public boolean sendEmail(Email email) {
         Objects.requireNonNull(apiKey, "请设置 Resend API Key");
 
-        Map<String, String> params = ObjectHelper.mapOf("from", email.getFrom(),
-                "to", email.getTo(), "subject", email.getSubject());
+        Map<String, String> params = ObjectHelper.mapOf("from", email.getFrom(), "to", email.getTo(), "subject", email.getSubject());
         params.put("html", email.getContent());
 
         Map<String, Object> map = Post.api(RESEND_API, params, (head) -> head.setRequestProperty("Authorization", "Bearer " + apiKey));
