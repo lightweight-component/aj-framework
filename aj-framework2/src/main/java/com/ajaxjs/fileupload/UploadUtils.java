@@ -62,11 +62,12 @@ public class UploadUtils {
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
                                           Consumer<FileUploadConfig> customConfig,
                                           BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
-        Method uploadMethod = Methods.getMethod(controllerClz, methodName, MultipartFile.class);
+        Methods methods = new Methods(controllerClz);
+        Method uploadMethod = methods.findDeclaredMethod(methodName, MultipartFile.class);
 
         if (uploadMethod == null) {
             // try again
-            uploadMethod = Methods.getMethod(controllerClz, methodName, MultipartFile.class, HttpServletResponse.class);
+            uploadMethod = methods.findDeclaredMethod(methodName, MultipartFile.class, HttpServletResponse.class);
 
             if (uploadMethod == null)
                 throw new UnsupportedOperationException("Failed to get controller method.");

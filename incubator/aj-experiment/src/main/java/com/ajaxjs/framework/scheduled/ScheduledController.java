@@ -83,8 +83,9 @@ public class ScheduledController {
         Class<?> aClass = Clazz.getClassByName(info.getClassName());
 //        Object bean = scheduleHandler.getBeanFactory().getBean(aClass);
         Object bean = DiContextUtil.getBean(aClass);
-        Method method = Methods.getDeclaredMethod(aClass, info.getMethod());
+        Method method = new Methods(aClass).findDeclaredMethod(info.getMethod());
         Assert.isTrue(method.getParameterCount() == 0, "Only no-arg methods may be annotated with @Scheduled");
+        assert bean != null;
         Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
 
         CronTask cronTask = new CronTask(new ScheduledMethodRunnable(bean, invocableMethod), new CronTrigger(info.getExpress(), TimeZone.getDefault()));

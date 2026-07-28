@@ -6,7 +6,7 @@
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-cms</artifactId>
         <version>1.0.5</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <artifactId>ajaxjs-framework2</artifactId>
@@ -58,8 +58,46 @@
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-base</artifactId>
-            <version>1.2.9</version>
+            <artifactId>sqlman</artifactId>
+            <version>2.0</version>
+
+            <exclusions>
+                <!-- 排除 Jackson 核心数据绑定库 -->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <!-- 排除 Jackson 核心解析库 -->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>jakarta.servlet</groupId>
+                    <artifactId>jakarta.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.ajaxjs</groupId>-->
+        <!--            <artifactId>ajaxjs-base</artifactId>-->
+        <!--            <version>1.2.9</version>-->
+        <!--        </dependency>-->
     </dependencies>
 </project>

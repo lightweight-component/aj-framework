@@ -1,5 +1,6 @@
-package com.ajaxjs.framework.mvc.grayrelease;
+package com.ajaxjs.framework.grayrelease;
 
+import com.ajaxjs.framework.mvc.grayrelease.ApiVersion;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;

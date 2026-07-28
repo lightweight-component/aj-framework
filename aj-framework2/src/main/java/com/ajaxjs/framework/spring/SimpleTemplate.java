@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.spring;
 
-import org.springframework.expression.spel.support.MapAccessor;
+//import org.springframework.expression.spel.support.MapAccessor;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -49,22 +49,22 @@ public class SimpleTemplate {
      * @param map     EL 表达式动态参数
      * @return 表达式结果
      */
-    public static boolean parse(String express, Map<String, Object> map) {
-        // 设置动态参数
-        StandardEvaluationContext cxt = new StandardEvaluationContext();
-        cxt.setVariables(map);
-        cxt.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
-
-        // 创建一个 EL 解析器
-        ExpressionParser parser = new SpelExpressionParser();
-        SpelExpression expr = (SpelExpression) parser.parseExpression(express, new TemplateParserContext("${", "}"));
-        expr.setEvaluationContext(cxt);
-
-        return Boolean.TRUE.equals(expr.getValue(map, Boolean.class));
-//		Map<String, Object> map = new HashMap<>(16);
-//		map.put("exp", 4);
+//    public static boolean parse(String express, Map<String, Object> map) {
+//        // 设置动态参数
+//        StandardEvaluationContext cxt = new StandardEvaluationContext();
+//        cxt.setVariables(map);
+//        cxt.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
 //
-//		String result = parse("jjjj${exp>2}jkj", map);
-//		System.out.println("result:" + result);
-    }
+//        // 创建一个 EL 解析器
+//        ExpressionParser parser = new SpelExpressionParser();
+//        SpelExpression expr = (SpelExpression) parser.parseExpression(express, new TemplateParserContext("${", "}"));
+//        expr.setEvaluationContext(cxt);
+//
+//        return Boolean.TRUE.equals(expr.getValue(map, Boolean.class));
+////		Map<String, Object> map = new HashMap<>(16);
+////		map.put("exp", 4);
+////
+////		String result = parse("jjjj${exp>2}jkj", map);
+////		System.out.println("result:" + result);
+//    }
 }

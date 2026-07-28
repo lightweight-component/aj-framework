@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.mvc.grayrelease;
+package com.ajaxjs.framework.grayrelease;
 
 import java.lang.annotation.*;
 
