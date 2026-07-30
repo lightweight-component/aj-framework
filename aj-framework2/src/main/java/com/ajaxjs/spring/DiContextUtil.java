@@ -239,7 +239,8 @@ public class DiContextUtil implements ApplicationContextAware {
     /**
      * 非 spring 管理的容器获取 application.yml 中的配置
      *
-     * @param configName YAML 中的配置名称
+     *
+     * @param configName YAML 中的配置名称 例如 oauth.token.client_expires
      * @return 配置
      */
     public static String getConfigFromYml(String configName) {
