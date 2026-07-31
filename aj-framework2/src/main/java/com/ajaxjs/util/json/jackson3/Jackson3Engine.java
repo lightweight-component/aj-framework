@@ -1,6 +1,7 @@
 package com.ajaxjs.util.json.jackson3;
 
 import com.ajaxjs.util.json.JsonEngine;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.core.StreamReadFeature;
 import tools.jackson.core.type.TypeReference;
@@ -35,6 +36,7 @@ public class Jackson3Engine implements JsonEngine {
      */
     @Override
     public String toJson(Object obj) {
+
         return OBJECT_MAPPER.writeValueAsString(obj);
     }
 

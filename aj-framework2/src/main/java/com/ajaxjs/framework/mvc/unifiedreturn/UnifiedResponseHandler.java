@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
@@ -139,6 +140,8 @@ public class UnifiedResponseHandler implements ResponseBodyAdvice<Object> {
 
         if (TRUE.equals(silentLog))
             return;
+
+//        log.info("responseResult::::::::::::::::::::::::::::::::{}", responseResult);
 
         TextBox textBox = new TextBox();
         textBox.boxStart(" Request Completion ")

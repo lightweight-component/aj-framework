@@ -1,16 +1,16 @@
 package com.ajaxjs.fileupload.filedownload;
 
-import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.io.DataWriter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -51,7 +51,7 @@ public class Download {
             if (contentType == null)
                 contentType = "application/octet-stream"; // fallback
 
-            String f = "attachment; filename=\"" + URLEncoder.encode(filename, CommonConstant.UTF8).replaceAll("\\+", "%20") + "\"";
+            String f = "attachment; filename=\"" + URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20") + "\"";
             log.info("下载文件：{}", f);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
@@ -68,7 +68,7 @@ public class Download {
              InputStream in = Files.newInputStream(downloadFile.toPath())) {
             new DataWriter(out).write(in);
         } catch (IOException e) {
-            log.warn("文件读取异常：{}", downloadFile.getName());
+            log.warn("下载的文件读取异常：{}", downloadFile.getName());
             throw new UncheckedIOException("文件读取异常", e);
         }
     }
