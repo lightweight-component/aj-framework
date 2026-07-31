@@ -22,7 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Map;
 
 /**
- * 阿里云 OSS Api 版本（不使用 SDK）工具类
+ * 阿里云 OSS HTTP API 适配器（不使用官方 SDK）。
+ * <p>当前实现使用旧签名和明文 HTTP，仅用于兼容旧系统；安全限制记录在模块
+ * {@code to-fix.md} 中。</p>
  * <p>
  * 阿里云官方文档地址：<a href="https://helpcdn.aliyun.com/document_detail/31947.html">...</a>
  */
@@ -40,11 +42,11 @@ public class OssUpload implements IFileUpload {
     private String endpoint;
 
     /**
-     * 上传文件到 OSS（Amazon S3 兼容的存储服务）。
+     * 上传字节内容到 OSS。
      *
-     * @param filename 要上传的文件名。
-     * @param content  要上传的文件内容，以字节数组形式提供。
-     * @return 返回一个布尔值，表示文件是否成功上传。成功返回 true，失败返回 false。
+     * @param filename 对象键
+     * @param content 对象内容
+     * @return HTTP 状态为 200 且响应包含 ETag 时返回 {@code true}
      */
     @Override
     public boolean upload(String filename, byte[] content) {
@@ -64,10 +66,10 @@ public class OssUpload implements IFileUpload {
     }
 
     /**
-     * 从 OSS（对象存储服务）获取指定对象的内容。
+     * 获取指定对象的响应内容。
      *
-     * @param key 对象在 OSS 中的键（KEY），用于标识对象。
-     * @return 返回从 OSS 获取的对象内容的字符串表示。
+     * @param key 以斜杠开头的对象路径
+     * @return HTTP 工具响应的字符串表示
      */
     public String getOssObj(String key) {
         String signResourcePath = "/" + ossBucket + key; // 构造资源路径，包括 bucket 名称和 key

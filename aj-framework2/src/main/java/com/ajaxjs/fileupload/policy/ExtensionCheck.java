@@ -5,7 +5,17 @@ import com.ajaxjs.util.ObjectHelper;
 
 import java.util.Set;
 
+/**
+ * 上传文件扩展名校验器。
+ */
 public class ExtensionCheck {
+    /**
+     * 按自定义白名单和检测类别校验扩展名。
+     *
+     * @param config 上传配置
+     * @param ext 不含前导点的扩展名
+     * @throws IllegalArgumentException 扩展名不在允许范围内时抛出
+     */
     public static void checkExtName(FileUploadConfig config, String ext) {
         ext = ext.toLowerCase();
         // 1. simple check by custom ext
@@ -35,7 +45,13 @@ public class ExtensionCheck {
         }
     }
 
-    // 扩展名判断
+    /**
+     * 按调用方提供的白名单校验扩展名。
+     *
+     * @param allowExtFilenames 允许的扩展名数组，元素不含前导点
+     * @param ext 待校验扩展名
+     * @throws IllegalArgumentException 未匹配任何允许值时抛出
+     */
     public static void checkExtName(String[] allowExtFilenames, String ext) {
         boolean isFound = false;
 
@@ -51,7 +67,7 @@ public class ExtensionCheck {
     }
 
     /**
-     * Common image file extensions
+     * 常见图片扩展名集合。
      */
     static final Set<String> IMAGE_EXTENSIONS = ObjectHelper.setOf(
             "jpg", "gif", "png", "jpeg", "webp"
@@ -60,11 +76,13 @@ public class ExtensionCheck {
     /**
      * Common office file extensions
      */
+    /** 支持按类别初筛的文档扩展名集合。 */
     public static final Set<String> OFFICE_EXTENSIONS = ObjectHelper.setOf(
             "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
             "doc", "odp", "xls", "odt", "ods", "md", "wps", "txt"
     );
 
+    /** 支持按类别初筛的音频扩展名集合。 */
     public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III
             "wav",    // Waveform Audio File Format
@@ -83,6 +101,7 @@ public class ExtensionCheck {
             "opus",    // Opus audio format (often in .ogg or .opus)
             "caf"
     );
+    /** 支持按类别初筛的视频扩展名集合。 */
     public static final Set<String> VIDEO_EXTENSIONS = ObjectHelper.setOf(
             "mp4",      // MPEG-4 Part 14 (最通用)
             "avi",      // Audio Video Interleave (Windows)

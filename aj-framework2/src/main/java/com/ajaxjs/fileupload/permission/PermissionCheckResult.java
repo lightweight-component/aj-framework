@@ -6,9 +6,15 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * POSIX 执行权限扫描结果。
+ * <p>结果当前由同包扫描器填充并输出日志，不作为公共 DTO 暴露。</p>
+ */
 @Slf4j
 public class PermissionCheckResult {
+    /** 发现的可执行普通文件。 */
     Set<Path> executableFiles = new HashSet<>();
+    /** 发现的具有执行权限的目录。 */
     Set<Path> executableDirs = new HashSet<>();
 
     void addExecutableFile(Path file) {

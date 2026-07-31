@@ -22,8 +22,8 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 /**
- * 网易云对象存储 HTTP 文件上传
- * 网易云已经不做这个了
+ * 已停服的网易云对象存储（NOS）HTTP 适配器。
+ * @deprecated 服务商已停止该对象存储服务，仅为旧系统兼容保留。
  */
 @Deprecated
 public class NsoHttpUpload implements IFileUpload {
@@ -46,9 +46,9 @@ public class NsoHttpUpload implements IFileUpload {
     private String bucket;
 
     /**
-     * 列出所有的桶
+     * 列出账号下的存储桶。
      *
-     * @return XML 结果
+     * @return XML 响应转换后的键值映射
      */
     public Map<String, String> listBuk() {
         String now = DateTools.nowGMTDate();
@@ -75,9 +75,9 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 创建空文件 TODO 报错
+     * 创建零字节对象。
      *
-     * @param filename 文件名
+     * @param filename 对象键
      */
     public void createEmptyFile(String filename) {
         String now = DateTools.nowGMTDate();
@@ -93,10 +93,10 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 删除指定的文件。
+     * 删除指定对象。
      *
      * @param filename 要删除的文件名称。
-     * @return 总是返回 false，可能用于未来扩展。
+     * @return 当前实现固定返回 {@code false}，不能据此判断服务端删除结果
      */
     public boolean delete(String filename) {
         String now = DateTools.nowGMTDate();// 获取当前时间，用于请求头
@@ -112,20 +112,21 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 上传文件
+     * 使用本地文件名上传文件。
      *
-     * @param filePath 文件路径
+     * @param filePath 本地文件路径
+     * @return 上传成功时返回 {@code true}
      */
     public boolean uploadFile(String filePath) {
         return uploadFile(null, filePath);
     }
 
     /**
-     * 上传文件。该方法用于将指定的文件上传，但不能指定上传到的具体目录。
+     * 上传本地文件，并可指定对象键。
      *
-     * @param filePath 文件的路径。
-     * @param filename 要上传的文件名，如果不指定，则使用文件原本的名称。
-     * @return 返回一个布尔值，表示文件是否上传成功。
+     * @param filePath 本地文件路径
+     * @param filename 对象键；为 {@code null} 时使用本地文件名
+     * @return 服务确认上传成功时返回 {@code true}
      */
     public boolean uploadFile(String filePath, String filename) {
         File file = new File(filePath); // 创建一个File对象，用于表示文件路径
@@ -142,11 +143,12 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 上传
+     * 使用预先计算的 MD5 上传字节内容。
      *
-     * @param bytes    文件字节数组
-     * @param filename 文件名，可在前面设置目录名，如 folder + "/" + saveFileName
-     * @param md5      MD5 值
+     * @param bytes 文件内容
+     * @param filename 对象键，可包含目录前缀
+     * @param md5 内容 MD5
+     * @return HTTP 状态和 ETag 均匹配时返回 {@code true}
      */
     public boolean upload(byte[] bytes, String filename, String md5) {
         String now = DateTools.nowGMTDate();
@@ -172,7 +174,7 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 上传
+     * 上传字节内容并自动计算 MD5。
      *
      * @param bytes    文件字节数组
      * @param filename 文件名，可在前面设置目录名，如 folder + "/" + saveFileName
@@ -184,11 +186,13 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 适合我自己写的文件上传
+     * 截取字节数组中的一段并上传。
      *
-     * @param bytes    文件字节数组
-     * @param filename 文件名，可在前面设置目录名，如 folder + "/" + saveFileName
-     * @return 是否成功
+     * @param bytes 原始字节数组
+     * @param offset 起始偏移
+     * @param length 截取长度
+     * @param filename 对象键
+     * @return 上传成功时返回 {@code true}
      */
     public boolean save(byte[] bytes, int offset, int length, String filename) {
         bytes = subBytes(bytes, offset, length); // 内存中的字节数组上传到空间中
@@ -197,12 +201,13 @@ public class NsoHttpUpload implements IFileUpload {
     }
 
     /**
-     * 在字节数组中截取指定长度数组
+     * 复制字节数组的指定区间。
      *
-     * @param data   输入的数据
-     * @param off    偏移
-     * @param length 长度
-     * @return 指定 范围的字节数组
+     * @param data 输入数组
+     * @param off 起始偏移
+     * @param length 复制长度
+     * @return 新字节数组
+     * @throws IndexOutOfBoundsException 区间越界时抛出
      */
     public static byte[] subBytes(byte[] data, int off, int length) {
         byte[] bs = new byte[length];

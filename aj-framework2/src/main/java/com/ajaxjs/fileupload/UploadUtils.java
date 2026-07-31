@@ -9,14 +9,14 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
- * File upload utilities.
+ * 基于 {@link FileUploadAction} 执行上传的工具类。
  */
 public class UploadUtils {
     /**
-     * Create a configuration from an annotation.
+     * 将上传注解转换为独立的配置对象。
      *
-     * @param annotation Annotation
-     * @return Configuration
+     * @param annotation 上传注解
+     * @return 包含注解全部属性的配置
      */
     public static FileUploadConfig fromAnnotation(FileUploadAction annotation) {
         FileUploadConfig config = new FileUploadConfig();
@@ -35,39 +35,56 @@ public class UploadUtils {
     }
 
     /**
-     * Upload a file.
+     * 根据控制器方法上的 {@link FileUploadAction} 上传文件。
      *
-     * @param controllerClz Controller class
-     * @param methodName    Method name
-     * @param file          File to upload
-     * @return Uploaded result
+     * @param controllerClz 控制器类型
+     * @param methodName    控制器方法名；方法签名必须是支持的上传签名
+     * @param file          待上传文件
+     * @return 上传结果
      */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file) {
         return doUpload(controllerClz, methodName, file, null);
     }
 
     /**
-     * Upload a file.
+     * 根据控制器方法上的注解上传文件，并允许调用方修改生成的配置。
      *
-     * @param controllerClz Controller class
-     * @param methodName    Method name
-     * @param file          File to upload
-     * @param customConfig  Custom configuration
-     * @return Uploaded result
+     * @param controllerClz 控制器类型
+     * @param methodName    控制器方法名
+     * @param file          待上传文件
+     * @param customConfig  配置修改回调；可为 {@code null}
+     * @return 上传结果
      */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file, Consumer<FileUploadConfig> customConfig) {
         return doUpload(controllerClz, methodName, file, customConfig, null);
     }
 
+    /**
+     * 根据控制器方法上的注解上传文件，并可提供配置修改回调和数据库保存回调。
+     * <p>支持的方法签名为 {@code (MultipartFile)} 或
+     * {@code (MultipartFile, HttpServletResponse)}。目标方法必须直接声明
+     * {@link FileUploadAction}。</p>
+     *
+     * @param controllerClz 控制器类型
+     * @param methodName 控制器方法名
+     * @param file 待上传文件
+     * @param customConfig 配置修改回调；可为 {@code null}
+     * @param saveToDatabase 数据库存储回调；使用
+     *                       {@link com.ajaxjs.fileupload.policy.StorageType#DATABASE}
+     *                       时必须提供并返回非 {@code null} 结果
+     * @return 上传结果
+     * @throws UnsupportedOperationException 未找到支持签名的方法或方法没有上传注解时抛出
+     */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
                                           Consumer<FileUploadConfig> customConfig,
-                                          BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
+        BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
         Methods methods = new Methods(controllerClz);
-        Method uploadMethod = methods.findDeclaredMethod(methodName, MultipartFile.class);
+        Method uploadMethod = methods.findDeclaredMethodByTypes(methodName, MultipartFile.class);
 
         if (uploadMethod == null) {
             // try again
-            uploadMethod = methods.findDeclaredMethod(methodName, MultipartFile.class, HttpServletResponse.class);
+            uploadMethod = methods.findDeclaredMethodByTypes(
+                    methodName, MultipartFile.class, HttpServletResponse.class);
 
             if (uploadMethod == null)
                 throw new UnsupportedOperationException("Failed to get controller method.");

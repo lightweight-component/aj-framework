@@ -12,6 +12,12 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * 音频上传控制器示例。
+ * <p>该类没有声明 {@code @RestController}，不会自动注册为 Spring MVC
+ * 控制器；它也没有使用完整的 {@link FileUpload} 校验流程，不应直接作为生产
+ * 上传端点。</p>
+ */
 //@RestController
 //@RequestMapping("/api/upload")
 public class FileUploadController {
@@ -23,7 +29,11 @@ public class FileUploadController {
     private String contextPath;
 
     /**
-     * 文件上传接口
+     * 将音频文件保存到示例目录并返回上传结果。
+     *
+     * @param file multipart 文件
+     * @return 上传结果
+     * @throws UncheckedIOException 保存文件失败时抛出
      */
     @PostMapping(value = "/", consumes = "multipart/form-data")
     public UploadedResult uploadAudio(@RequestParam("file") MultipartFile file) {

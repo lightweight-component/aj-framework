@@ -10,7 +10,7 @@
     <modules>
         <module>aj-next-parent</module>
         <module>aj-project-parent</module>
-        <module>aj-base</module>
+<!--        <module>aj-base</module>-->
         <module>aj-framework2</module>
     </modules>
 </project>

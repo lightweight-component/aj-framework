@@ -12,23 +12,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
+/**
+ * 根据声明的 Content-Type 和文件扩展名执行媒体类型校验。
+ * <p>multipart 请求中的 Content-Type 由客户端提供，只能作为辅助校验。</p>
+ */
 public class ContentTypePolicy {
+    /** Content-Type 校验方式。 */
     public enum Policy {
         /**
-         * No check content type.
+         * 不检查 Content-Type。
          */
         NO_CHECK(null),
 
         /**
-         * Check if it's in the pass-list.
+         * 检查 Content-Type 是否属于所选文件类别的允许集合。
          */
         WHITELIST(1),
 
         /**
-         * Check if it's with extension name.
+         * 检查 Content-Type 是否与扩展名映射一致。
+         * <p>当前映射比较尚未实现完整，参见模块 {@code to-fix.md}。</p>
          */
         MAPPING(2),
 
+        /** 同时执行白名单与扩展名映射检查。 */
         ALL(3);
 
         final Integer value;
@@ -37,6 +44,11 @@ public class ContentTypePolicy {
             this.value = value;
         }
 
+        /**
+         * 返回策略位标志。
+         *
+         * @return 位标志；{@link #NO_CHECK} 返回 {@code null}
+         */
         public Integer getValue() {
             return value;
         }
@@ -50,6 +62,12 @@ public class ContentTypePolicy {
 
     final DetectType detectType;
 
+    /**
+     * 从上传文件和配置创建校验器。
+     *
+     * @param file 上传文件
+     * @param config 上传配置
+     */
     public ContentTypePolicy(MultipartFile file, FileUploadConfig config) {
         this.fileName = file.getOriginalFilename();
         this.contentType = file.getContentType();
@@ -57,6 +75,12 @@ public class ContentTypePolicy {
         this.detectType = config.getDetectType();
     }
 
+    /**
+     * 执行当前策略包含的校验。
+     *
+     * @throws IllegalArgumentException Content-Type 不符合类别或映射规则时抛出
+     * @throws UncheckedIOException 探测扩展名映射失败时抛出
+     */
     public void check() {
         Integer value = policy.getValue();
 

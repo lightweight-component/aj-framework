@@ -9,13 +9,29 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Set;
 
+/**
+ * 遍历目录树并收集具有任一执行权限位的路径。
+ */
 public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     private final PermissionCheckResult result;
 
+    /**
+     * 创建文件访问器。
+     *
+     * @param result 扫描结果收集器
+     */
     public NoExecFileVisitor(PermissionCheckResult result) {
         this.result = result;
     }
 
+    /**
+     * 检查普通文件的 POSIX 执行权限。
+     *
+     * @param file 当前文件
+     * @param attrs 文件属性
+     * @return 始终返回 {@link FileVisitResult#CONTINUE}
+     * @throws IOException 读取权限失败时抛出
+     */
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         if (hasExecutePermission(file))
@@ -24,6 +40,14 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
+    /**
+     * 检查目录的 POSIX 执行权限。
+     *
+     * @param dir 当前目录
+     * @param attrs 目录属性
+     * @return 始终返回 {@link FileVisitResult#CONTINUE}
+     * @throws IOException 读取权限失败时抛出
+     */
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         if (hasExecutePermission(dir))

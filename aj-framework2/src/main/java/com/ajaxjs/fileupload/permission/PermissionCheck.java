@@ -9,6 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * POSIX 上传目录执行权限扫描器。
+ * <p>不支持 POSIX 属性视图的平台会跳过检查。当前实现仅执行一次全局扫描，
+ * 其限制记录在模块 {@code to-fix.md} 中。</p>
+ */
 @Slf4j
 public class PermissionCheck {
     /**
@@ -16,6 +21,12 @@ public class PermissionCheck {
      */
     static boolean isAlreadyChecked;
 
+    /**
+     * 扫描目录树并记录具有执行权限的目录和文件。
+     *
+     * @param dir 待扫描目录路径
+     * @throws UncheckedIOException 遍历目录失败时抛出
+     */
     public static void check(String dir) {
         if (isAlreadyChecked)
             return;
@@ -52,7 +63,9 @@ public class PermissionCheck {
     }
 
     /**
-     * 判断当前文件系统是否支持 POSIX 权限
+     * 判断默认文件系统是否支持 POSIX 权限属性。
+     *
+     * @return 支持时返回 {@code true}
      */
     public static boolean isPosixSupported() {
         return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
