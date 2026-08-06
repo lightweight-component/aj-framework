@@ -33,7 +33,7 @@ public class PermissionCheck {
 
         Path rootDir = Paths.get(dir); // 替换为你的存储目录
 
-        if (!isPosixSupported()) {
+        if (!FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
             log.warn("The current system doesn't support POSIX permission, skip this check.");
             return;
         }
@@ -48,26 +48,17 @@ public class PermissionCheck {
             return;
         }
 
-        log.info("Going to check executable permission: " + rootDir);
+        log.info("Going to check executable permission: {}", rootDir);
         PermissionCheckResult result = new PermissionCheckResult();
 
         try {
             Files.walkFileTree(rootDir, new NoExecFileVisitor(result));
             result.printSummary();
         } catch (IOException e) {
-            log.error("Error occurred when doing executable permission check on dir: " + dir, e);
+            log.error("Error occurred when doing executable permission check on dir: {}", dir, e);
             throw new UncheckedIOException("Error occurred when doing executable permission check on dir: " + dir, e);
         }
 
         isAlreadyChecked = true;
-    }
-
-    /**
-     * 判断默认文件系统是否支持 POSIX 权限属性。
-     *
-     * @return 支持时返回 {@code true}
-     */
-    public static boolean isPosixSupported() {
-        return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
     }
 }

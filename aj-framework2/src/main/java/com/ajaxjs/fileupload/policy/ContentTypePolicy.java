@@ -17,7 +17,9 @@ import java.util.Set;
  * <p>multipart 请求中的 Content-Type 由客户端提供，只能作为辅助校验。</p>
  */
 public class ContentTypePolicy {
-    /** Content-Type 校验方式。 */
+    /**
+     * Content-Type 校验方式。
+     */
     public enum Policy {
         /**
          * 不检查 Content-Type。
@@ -35,7 +37,9 @@ public class ContentTypePolicy {
          */
         MAPPING(2),
 
-        /** 同时执行白名单与扩展名映射检查。 */
+        /**
+         * 同时执行白名单与扩展名映射检查。
+         */
         ALL(3);
 
         final Integer value;
@@ -65,7 +69,7 @@ public class ContentTypePolicy {
     /**
      * 从上传文件和配置创建校验器。
      *
-     * @param file 上传文件
+     * @param file   上传文件
      * @param config 上传配置
      */
     public ContentTypePolicy(MultipartFile file, FileUploadConfig config) {
@@ -79,7 +83,7 @@ public class ContentTypePolicy {
      * 执行当前策略包含的校验。
      *
      * @throws IllegalArgumentException Content-Type 不符合类别或映射规则时抛出
-     * @throws UncheckedIOException 探测扩展名映射失败时抛出
+     * @throws UncheckedIOException     探测扩展名映射失败时抛出
      */
     public void check() {
         Integer value = policy.getValue();
@@ -119,8 +123,8 @@ public class ContentTypePolicy {
 
     /**
      * Check content-type by extension name.
-     * Beware that it's nothing related to the `DetectType detectType`.
-     * Though the content-type is not within `DetectType detectType`, it'll pass.
+     * Beware that it's nothing related to the `DetectType`.
+     * Though the content-type is not within `DetectType`, it'll pass.
      */
     private void checkMapping() {
         Path fakePath = Paths.get(fileName);

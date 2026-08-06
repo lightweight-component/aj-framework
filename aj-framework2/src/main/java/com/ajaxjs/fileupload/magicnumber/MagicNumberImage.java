@@ -8,7 +8,9 @@ import java.util.function.Function;
  * 图片文件头检测规则集合。
  */
 public class MagicNumberImage {
-    /** 扩展名到图片文件头检测函数的映射。 */
+    /**
+     * 扩展名到图片文件头检测函数的映射。
+     */
     public static final Map<String, Function<byte[], Boolean>> IMAGE_MAGIC_MAP = new HashMap<>();
 
     static {

@@ -28,10 +28,14 @@ import java.util.function.BiFunction;
 public class FileUpload {
     private static final long BYTES_PER_MB = 1024L * 1024L;
 
-    /** 当前待处理的 multipart 文件。 */
+    /**
+     * 当前待处理的 multipart 文件。
+     */
     final MultipartFile file;
 
-    /** 当前上传使用的配置。 */
+    /**
+     * 当前上传使用的配置。
+     */
     final FileUploadConfig config;
 
     /**
@@ -77,7 +81,7 @@ public class FileUpload {
      * 仅执行配置、大小、扩展名、Content-Type 和魔数校验，不保存文件。
      *
      * @throws IllegalArgumentException 文件或配置不符合规则时抛出
-     * @throws UncheckedIOException      读取文件内容进行检测失败时抛出
+     * @throws UncheckedIOException     读取文件内容进行检测失败时抛出
      */
     public void check() {
         validateConfiguration();

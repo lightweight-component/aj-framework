@@ -9,7 +9,9 @@ import java.util.function.Function;
  * 视频容器文件头检测规则集合。
  */
 public class MagicNumberVideo {
-    /** 扩展名到视频文件头或容器检测函数的映射。 */
+    /**
+     * 扩展名到视频文件头或容器检测函数的映射。
+     */
     public static final Map<String, Function<byte[], Boolean>> VIDEO_MAGIC_MAP = new HashMap<>();
 
     static {

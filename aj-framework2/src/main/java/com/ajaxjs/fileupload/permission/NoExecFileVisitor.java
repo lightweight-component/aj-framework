@@ -27,7 +27,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     /**
      * 检查普通文件的 POSIX 执行权限。
      *
-     * @param file 当前文件
+     * @param file  当前文件
      * @param attrs 文件属性
      * @return 始终返回 {@link FileVisitResult#CONTINUE}
      * @throws IOException 读取权限失败时抛出
@@ -43,7 +43,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     /**
      * 检查目录的 POSIX 执行权限。
      *
-     * @param dir 当前目录
+     * @param dir   当前目录
      * @param attrs 目录属性
      * @return 始终返回 {@link FileVisitResult#CONTINUE}
      * @throws IOException 读取权限失败时抛出

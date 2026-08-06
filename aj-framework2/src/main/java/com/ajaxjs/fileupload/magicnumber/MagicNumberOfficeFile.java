@@ -26,7 +26,9 @@ public class MagicNumberOfficeFile {
             "docx", "xlsx", "pptx", "dotx", "xltx", "potx", "odt", "ods", "odp"
     ));
 
-    /** 非 ZIP 文档扩展名到文件头检测函数的映射。 */
+    /**
+     * 非 ZIP 文档扩展名到文件头检测函数的映射。
+     */
     public static final Map<String, Function<byte[], Boolean>> OFFICE_MAGIC_MAP = new HashMap<>();
 
     static {
@@ -61,7 +63,7 @@ public class MagicNumberOfficeFile {
      * {@code false}。</p>
      *
      * @param input ZIP 文件输入流；方法会关闭该流
-     * @param ext 不含点的文档扩展名
+     * @param ext   不含点的文档扩展名
      * @return 容器包含对应格式的必要标志时返回 {@code true}
      * @throws IOException ZIP 内容损坏或读取失败时抛出
      */
@@ -106,7 +108,7 @@ public class MagicNumberOfficeFile {
                 }
 
                 if (mimetypeContent != null)
-                    mimetype = new String(mimetypeContent.toByteArray(), StandardCharsets.US_ASCII);
+                    mimetype = mimetypeContent.toString(StandardCharsets.US_ASCII);
             }
         }
 

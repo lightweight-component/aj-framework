@@ -8,7 +8,9 @@ import java.util.function.Function;
  * 音频文件头检测规则集合。
  */
 public class MagicNumberAudio {
-    /** 扩展名到音频文件头检测函数的映射。 */
+    /**
+     * 扩展名到音频文件头检测函数的映射。
+     */
     public static final Map<String, Function<byte[], Boolean>> AUDIO_MAGIC_MAP = new HashMap<>();
 
     static {

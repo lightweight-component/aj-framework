@@ -32,10 +32,10 @@ public class PermissionCheckResult {
             log.warn("❌ 发现可执行项：");
 
             for (Path dir : executableDirs)
-                log.warn("📁 可执行目录: " + dir);
+                log.warn("\uD83D\uDCC1 可执行目录: {}", dir);
 
             for (Path file : executableFiles)
-                log.warn("📄 可执行文件: " + file);
+                log.warn("\uD83D\uDCC4 可执行文件: {}", file);
         }
 
         log.warn("共发现 {} 个可执行目录，{} 个可执行文件。", executableDirs.size(), executableFiles.size());

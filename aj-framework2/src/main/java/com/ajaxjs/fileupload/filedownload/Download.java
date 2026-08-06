@@ -47,7 +47,7 @@ public class Download {
      * Downloads a trusted server-side path.
      * Use {@link #download(Path, String, String)} when any path component comes from a client.
      *
-     * @param file 服务端可信文件路径
+     * @param file     服务端可信文件路径
      * @param filename 响应中展示的下载文件名；为空时使用实际文件名
      * @return 成功时为 200 和文件资源；文件不可读时为 404；参数或读取异常时为 400
      */
@@ -83,7 +83,7 @@ public class Download {
     /**
      * Resolves a client-supplied relative path under a trusted download root.
      *
-     * @param root 服务端可信下载根目录
+     * @param root         服务端可信下载根目录
      * @param relativePath 根目录下的客户端相对路径
      * @param downloadName 响应中展示的文件名；为空时使用实际文件名
      * @return 安全校验后的下载响应；越界路径为 400，不存在的文件为 404
@@ -123,10 +123,10 @@ public class Download {
     /**
      * 将可信文件写入 Servlet 响应，并使用文件自身名称作为下载名。
      *
-     * @param response Servlet 响应
+     * @param response     Servlet 响应
      * @param downloadFile 服务端可信文件
      * @throws IllegalArgumentException {@code response} 为 {@code null} 时抛出
-     * @throws UncheckedIOException 设置错误响应或读取文件失败时抛出
+     * @throws UncheckedIOException     设置错误响应或读取文件失败时抛出
      */
     public static void downloadServlet(HttpServletResponse response, File downloadFile) {
         downloadServlet(response, downloadFile, downloadFile == null ? null : downloadFile.getName());
@@ -135,11 +135,11 @@ public class Download {
     /**
      * 将可信文件写入 Servlet 响应。
      *
-     * @param response Servlet 响应
+     * @param response     Servlet 响应
      * @param downloadFile 服务端可信文件
-     * @param filename 响应中展示的下载文件名；为空时使用实际文件名
+     * @param filename     响应中展示的下载文件名；为空时使用实际文件名
      * @throws IllegalArgumentException 响应或下载名不合法时抛出
-     * @throws UncheckedIOException 设置响应或读取文件失败时抛出
+     * @throws UncheckedIOException     设置响应或读取文件失败时抛出
      */
     public static void downloadServlet(HttpServletResponse response, File downloadFile, String filename) {
         if (response == null)
