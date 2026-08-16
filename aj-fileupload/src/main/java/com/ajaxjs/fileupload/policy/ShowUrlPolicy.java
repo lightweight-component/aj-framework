@@ -4,7 +4,9 @@ package com.ajaxjs.fileupload.policy;
  * URL display policy and URL concatenation utility for upload results.
  */
 public class ShowUrlPolicy {
-    /** How the upload result URL is provided. */
+    /**
+     * How the upload result URL is provided.
+     */
     public enum Policy {
         /**
          * File access URL is provided by the current service.

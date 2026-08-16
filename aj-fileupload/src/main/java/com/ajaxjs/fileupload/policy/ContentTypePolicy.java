@@ -102,8 +102,8 @@ public class ContentTypePolicy {
     /**
      * Executes the validations included in the current policy.
      *
-     * @throws IllegalArgumentException      thrown when Content-Type does not match the category or mapping rules
-     * @throws UncheckedIOException thrown when probing the extension mapping fails
+     * @throws IllegalArgumentException thrown when Content-Type does not match the category or mapping rules
+     * @throws UncheckedIOException     thrown when probing the extension mapping fails
      */
     public void check() {
         Integer value = policy.getValue();
@@ -118,7 +118,7 @@ public class ContentTypePolicy {
     /**
      * Pass-list check of content-type.
      */
-    private void simpleCheck() {
+    void simpleCheck() {
         switch (detectType) {
             case NONE:
                 break;
@@ -146,7 +146,7 @@ public class ContentTypePolicy {
      * Beware that it's nothing related to the `DetectType detectType`.
      * Though the content-type is not within `DetectType detectType`, it'll pass.
      */
-    private void checkMapping() {
+    void checkMapping() {
         Path fakePath = Paths.get(fileName);
 
         try {

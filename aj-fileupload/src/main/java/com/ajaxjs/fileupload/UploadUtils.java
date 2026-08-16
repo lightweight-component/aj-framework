@@ -76,7 +76,7 @@ public class UploadUtils {
      */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
                                           Consumer<FileUploadConfig> customConfig,
-        BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
+                                          BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
         Methods methods = new Methods(controllerClz);
         Method uploadMethod = methods.findDeclaredMethodByTypes(methodName, MultipartFile.class);
 

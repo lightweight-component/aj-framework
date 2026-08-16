@@ -84,7 +84,7 @@ public class FileUpload {
      * Only performs configuration, size, extension, Content-Type, and magic number validation without saving the file.
      *
      * @throws IllegalArgumentException If the file or configuration does not conform to rules
-     * @throws UncheckedIOException      If reading file content for detection fails
+     * @throws UncheckedIOException     If reading file content for detection fails
      */
     public void check() {
         validateConfiguration();
@@ -96,7 +96,7 @@ public class FileUpload {
      *
      * @throws IllegalArgumentException If the file is empty, the size is invalid, or exceeds the limit
      * @throws IllegalArgumentException If the file extension is not allowed
-     * @throws UncheckedIOException      If reading file content for detection fails
+     * @throws UncheckedIOException     If reading file content for detection fails
      */
     void checkFile() {
         if (file.isEmpty())
@@ -196,7 +196,7 @@ public class FileUpload {
      *
      * @return Upload result containing the file URL, saved file name, original file name, and file size
      * @throws IllegalArgumentException If the target file escapes the upload directory or is a symbolic link
-     * @throws UncheckedIOException      If file writing fails
+     * @throws UncheckedIOException     If file writing fails
      */
     UploadedResult saveToDisk() {
         Path dir = initDir();
@@ -232,7 +232,7 @@ public class FileUpload {
      * Initializes and validates the upload directory, creating it if necessary.
      *
      * @return The resolved real path of the upload directory
-     * @throws IllegalArgumentException If the subdirectory is absolute, escapes the base directory, or contains symbolic links
+     * @throws IllegalArgumentException      If the subdirectory is absolute, escapes the base directory, or contains symbolic links
      * @throws UnsupportedOperationException If the base upload directory is not configured
      * @throws UncheckedIOException          If directory creation or path resolution fails
      */

@@ -62,7 +62,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     /**
      * Checks whether the path has execute permission (true if any of owner/group/others has execute permission).
      */
-    private static boolean hasExecutePermission(Path path) throws IOException {
+    static boolean hasExecutePermission(Path path) throws IOException {
         try {
             Set<PosixFilePermission> perms = Files.getPosixFilePermissions(path);
 

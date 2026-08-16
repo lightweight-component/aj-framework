@@ -112,7 +112,7 @@ public class MagicNumberVideo {
      * @param removeMarker Whether to strip the length marker bit from the value
      * @return A {@link Vint} containing the length and value, or {@code null} if the data is invalid
      */
-    private static Vint readVint(byte[] bytes, int offset, boolean removeMarker) {
+    static Vint readVint(byte[] bytes, int offset, boolean removeMarker) {
         if (offset >= bytes.length)
             return null;
 
@@ -139,7 +139,7 @@ public class MagicNumberVideo {
     /**
      * Represents a parsed EBML variable-length integer (VINT).
      */
-    private static class Vint {
+    static class Vint {
         /**
          * The number of bytes consumed by the VINT encoding.
          */
