@@ -1,32 +1,32 @@
 package com.ajaxjs.fileupload;
 
 /**
- * 上传文件的内容检测类别。
- * <p>该类别用于选择扩展名、Content-Type 和魔数校验规则，并不表示文件已经过完整解析。</p>
+ * Content detection type for uploaded files.
+ * <p>This type is used to select extension, Content-Type, and magic number validation rules; it does not indicate that the file has been fully parsed.</p>
  */
 public enum DetectType {
     /**
-     * 不限定文件类别。
+     * No file type restriction.
      */
     NONE,
 
     /**
-     * 图片文件。
+     * Image files.
      */
     IMAGE,
 
     /**
-     * Office、PDF、文本等文档文件。
+     * Documents such as Office files, PDFs, and text files.
      */
     OFFICE_FILE,
 
     /**
-     * 音频文件。
+     * Audio files.
      */
     AUDIO,
 
     /**
-     * 视频文件。
+     * Video files.
      */
     VIDEO
 }

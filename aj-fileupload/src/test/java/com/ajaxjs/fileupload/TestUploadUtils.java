@@ -11,8 +11,24 @@ import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for {@link UploadUtils}, covering annotation-to-configuration conversion,
+ * {@code doUpload} with database callback, and error handling for missing or
+ * unannotated methods.
+ */
 class TestUploadUtils {
+
+    /**
+     * A controller class with an annotated and an unannotated upload method,
+     * used to verify annotation-based configuration extraction.
+     */
     public static class Controller {
+
+        /**
+         * Annotated upload method with all configuration properties set.
+         *
+         * @param file the multipart file to upload
+         */
         @FileUploadAction(
                 storageType = StorageType.DATABASE,
                 maxFileSize = 7,
@@ -28,10 +44,21 @@ class TestUploadUtils {
         public void upload(MultipartFile file) {
         }
 
+        /**
+         * Unannotated upload method, used to verify that unannotated methods are rejected.
+         *
+         * @param file the multipart file to upload
+         */
         public void noAnnotation(MultipartFile file) {
         }
     }
 
+    /**
+     * Verifies that every property in the {@link FileUploadAction} annotation
+     * is correctly converted to a {@link FileUploadConfig} object.
+     *
+     * @throws Exception if reflection fails
+     */
     @Test
     void convertsEveryAnnotationPropertyToConfiguration() throws Exception {
         Method method = Controller.class.getDeclaredMethod("upload", MultipartFile.class);
@@ -50,6 +77,10 @@ class TestUploadUtils {
         assertEquals("/files", config.getUrlPrefix());
     }
 
+    /**
+     * Verifies that {@link UploadUtils#doUpload} passes the correct file and
+     * configuration to the database callback and returns the callback's result.
+     */
     @Test
     void annotationUploadUsesDatabaseCallbackAndCustomConfiguration() {
         MockMultipartFile file =
@@ -72,6 +103,11 @@ class TestUploadUtils {
         assertEquals(expected, actual);
     }
 
+    /**
+     * Verifies that {@link UploadUtils#doUpload} throws
+     * {@link UnsupportedOperationException} when the target method is missing
+     * or does not have the {@link FileUploadAction} annotation.
+     */
     @Test
     void rejectsMissingMethodAndMethodWithoutAnnotation() {
         MockMultipartFile file =

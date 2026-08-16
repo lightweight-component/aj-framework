@@ -16,16 +16,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * Spring MVC 和 Servlet 环境下的文件下载工具。
- * <p>路径包含客户端输入时，应优先使用
- * {@link #download(Path, String, String)} 的安全根目录入口。</p>
+ * File download utility for Spring MVC and Servlet environments.
+ * <p>When a path contains client input, prefer the secure root entry point
+ * {@link #download(Path, String, String)}.</p>
  */
 @Slf4j
 public class Download {
     /**
-     * StreamingResponseBody是Spring框架从4.2版本增加的一个个用于处理异步响应的接口,特别适用于需要流式传输大文件或大量数据的场景。
-     * 它允许开发者直接将数据写入HTTP响应的输出流,而无需将整个响应内容加载到内存中,
-     * 尤其是在处理大文件下载或导出时,从而避免了内存溢出,并提高了程序性能
+     * StreamingResponseBody is an interface added in Spring Framework 4.2 for handling asynchronous responses,
+     * particularly suitable for streaming large files or large amounts of data.
+     * It allows developers to write data directly to the HTTP response output stream without loading the entire
+     * response content into memory, especially when handling large file downloads or exports, thereby avoiding
+     * memory overflow and improving performance.
      * <a href="https://mp.weixin.qq.com/s/Q88V8wYRaEduRSZHE0XKFQ">...</a>
      * <a href="https://mp.weixin.qq.com/s/jvPQH7Wzue1eRl2R51ZXIQ">...</a>
      * <a href="https://github.com/Linyuzai/concept/wiki/Concept-Download-2">...</a>
@@ -37,9 +39,9 @@ public class Download {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDisposition(ContentDisposition.builder("attachment").filename("orders_" + System.currentTimeMillis() + ".xlsx").build());
-
         StreamingResponseBody body = outputStream -> {
         };
+
         return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
 
@@ -47,9 +49,9 @@ public class Download {
      * Downloads a trusted server-side path.
      * Use {@link #download(Path, String, String)} when any path component comes from a client.
      *
-     * @param file     服务端可信文件路径
-     * @param filename 响应中展示的下载文件名；为空时使用实际文件名
-     * @return 成功时为 200 和文件资源；文件不可读时为 404；参数或读取异常时为 400
+     * @param file     Trusted server-side file path
+     * @param filename Download filename shown in the response; uses the actual filename if empty
+     * @return 200 with file resource on success; 404 if the file is not readable; 400 on parameter or read error
      */
     public static ResponseEntity<Resource> download(Path file, String filename) {
         if (file == null)
@@ -59,7 +61,7 @@ public class Download {
             Path normalizedFile = file.toAbsolutePath().normalize();
 
             if (!isReadableRegularFile(normalizedFile)) {
-                log.warn("文件不存在：{}", filename);
+                log.warn("File not found: {}", filename);
                 return ResponseEntity.notFound().build();
             }
 
@@ -67,7 +69,7 @@ public class Download {
             String contentType = probeContentType(normalizedFile);
             ContentDisposition disposition = contentDisposition(filename, normalizedFile);
             long contentLength = Files.size(normalizedFile);
-            log.info("下载文件：{}", disposition);
+            log.info("Downloading file: {}", disposition);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, contentType)
@@ -75,7 +77,7 @@ public class Download {
                     .contentLength(contentLength)
                     .body(resource);
         } catch (IOException | IllegalArgumentException e) {
-            log.warn("文件读取异常：{}", filename, e);
+            log.warn("File read error: {}", filename, e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -83,10 +85,10 @@ public class Download {
     /**
      * Resolves a client-supplied relative path under a trusted download root.
      *
-     * @param root         服务端可信下载根目录
-     * @param relativePath 根目录下的客户端相对路径
-     * @param downloadName 响应中展示的文件名；为空时使用实际文件名
-     * @return 安全校验后的下载响应；越界路径为 400，不存在的文件为 404
+     * @param root         Trusted server-side download root directory
+     * @param relativePath Client-relative path under the root directory
+     * @param downloadName Filename shown in the response; uses the actual filename if empty
+     * @return Download response after security validation; 400 for path traversal, 404 for non-existent file
      */
     public static ResponseEntity<Resource> download(Path root, String relativePath, String downloadName) {
         if (root == null || relativePath == null || relativePath.trim().isEmpty())
@@ -115,31 +117,31 @@ public class Download {
 
             return download(realFile, downloadName);
         } catch (IOException | IllegalArgumentException e) {
-            log.warn("下载路径解析异常：{}", relativePath, e);
+            log.warn("Download path resolution error: {}", relativePath, e);
             return ResponseEntity.badRequest().build();
         }
     }
 
     /**
-     * 将可信文件写入 Servlet 响应，并使用文件自身名称作为下载名。
+     * Writes a trusted file to the Servlet response using the file's own name as the download filename.
      *
-     * @param response     Servlet 响应
-     * @param downloadFile 服务端可信文件
-     * @throws IllegalArgumentException {@code response} 为 {@code null} 时抛出
-     * @throws UncheckedIOException     设置错误响应或读取文件失败时抛出
+     * @param response     Servlet response
+     * @param downloadFile Trusted server-side file
+     * @throws IllegalArgumentException If {@code response} is {@code null}
+     * @throws UncheckedIOException     If sending an error response or reading the file fails
      */
     public static void downloadServlet(HttpServletResponse response, File downloadFile) {
         downloadServlet(response, downloadFile, downloadFile == null ? null : downloadFile.getName());
     }
 
     /**
-     * 将可信文件写入 Servlet 响应。
+     * Writes a trusted file to the Servlet response.
      *
-     * @param response     Servlet 响应
-     * @param downloadFile 服务端可信文件
-     * @param filename     响应中展示的下载文件名；为空时使用实际文件名
-     * @throws IllegalArgumentException 响应或下载名不合法时抛出
-     * @throws UncheckedIOException     设置响应或读取文件失败时抛出
+     * @param response     Servlet response
+     * @param downloadFile Trusted server-side file
+     * @param filename     Download filename shown in the response; uses the actual filename if empty
+     * @throws IllegalArgumentException If the response or download filename is invalid
+     * @throws UncheckedIOException     If setting the response or reading the file fails
      */
     public static void downloadServlet(HttpServletResponse response, File downloadFile, String filename) {
         if (response == null)
@@ -169,21 +171,41 @@ public class Download {
             new DataWriter(out).write(in);
             out.flush();
         } catch (IOException e) {
-            log.warn("下载的文件读取异常：{}", downloadFile.getName());
-            throw new UncheckedIOException("文件读取异常", e);
+            log.warn("Download file read error: {}", downloadFile.getName());
+            throw new UncheckedIOException("File read error", e);
         }
     }
 
+    /**
+     * Checks whether the given path is a regular file and is readable.
+     *
+     * @param file the path to check
+     * @return {@code true} if the path is a regular file and is readable
+     */
     static boolean isReadableRegularFile(Path file) {
         return Files.isRegularFile(file) && Files.isReadable(file);
     }
 
+    /**
+     * Probes the MIME content type of the given file.
+     *
+     * @param file the file to probe
+     * @return the detected content type, or {@link MediaType#APPLICATION_OCTET_STREAM_VALUE} if unknown
+     * @throws IOException if an I/O error occurs during probing
+     */
     static String probeContentType(Path file) throws IOException {
         String contentType = Files.probeContentType(file);
 
         return contentType == null ? MediaType.APPLICATION_OCTET_STREAM_VALUE : contentType;
     }
 
+    /**
+     * Builds a {@link ContentDisposition} header for the download response.
+     *
+     * @param filename the desired download filename
+     * @param file     the fallback file used when {@code filename} is empty
+     * @return the attachment content disposition
+     */
     static ContentDisposition contentDisposition(String filename, Path file) {
         String safeFilename = sanitizeDownloadName(filename, file);
 
@@ -192,6 +214,15 @@ public class Download {
                 .build();
     }
 
+    /**
+     * Sanitizes the download filename by removing path separators, control characters,
+     * and invalid names such as {@code .} and {@code ..}.
+     *
+     * @param filename the desired download filename
+     * @param file     the fallback file used when {@code filename} is empty
+     * @return a sanitized, safe filename
+     * @throws IllegalArgumentException if the filename contains control characters or is invalid
+     */
     static String sanitizeDownloadName(String filename, Path file) {
         String name = filename;
 

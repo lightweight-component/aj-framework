@@ -7,7 +7,16 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for upload policies, including name extraction, extension validation,
+ * detect-type-based extension sets, content type whitelisting, and URL concatenation.
+ */
 class TestUploadPolicies {
+
+    /**
+     * Verifies that {@link NamePolicy#getBaseName} and {@link NamePolicy#getFileExtension}
+     * correctly extract the base name and last extension from file names.
+     */
     @Test
     void extractsBaseNameAndLastExtension() {
         assertEquals("archive.tar", NamePolicy.getBaseName("archive.tar.gz"));
@@ -15,12 +24,21 @@ class TestUploadPolicies {
         assertEquals("README", NamePolicy.getBaseName("README"));
     }
 
+    /**
+     * Verifies that {@link NamePolicy#getFileExtension} throws
+     * {@link IllegalArgumentException} for {@code null} input or file names
+     * without an extension.
+     */
     @Test
     void extensionRequiresDotAndFilename() {
         assertThrows(IllegalArgumentException.class, () -> NamePolicy.getFileExtension((String) null));
         assertThrows(IllegalArgumentException.class, () -> NamePolicy.getFileExtension("README"));
     }
 
+    /**
+     * Verifies that all naming policies (ORIGINAL, ORIGINAL_RANDOM, RANDOM)
+     * produce safe file names without path separators.
+     */
     @Test
     void namingPoliciesPreserveOnlySafeParts() {
         assertEquals(
@@ -39,6 +57,9 @@ class TestUploadPolicies {
         assertFalse(random.contains("report"));
     }
 
+    /**
+     * Verifies that custom extension lists are matched case-insensitively.
+     */
     @Test
     void customExtensionListIsCaseInsensitive() {
         assertDoesNotThrow(() -> ExtensionCheck.checkExtName(new String[]{"jpg", "PNG"}, "png"));
@@ -48,6 +69,10 @@ class TestUploadPolicies {
         );
     }
 
+    /**
+     * Verifies that the {@link DetectType} setting applies its built-in extension
+     * set, and that {@code DetectType.NONE} allows any extension.
+     */
     @Test
     void detectTypeAppliesItsExtensionSet() {
         FileUploadConfig config = new FileUploadConfig();
@@ -60,6 +85,10 @@ class TestUploadPolicies {
         assertDoesNotThrow(() -> ExtensionCheck.checkExtName(config, "unknown"));
     }
 
+    /**
+     * Verifies that the content type whitelist policy accepts matching MIME types
+     * when the upload is an image.
+     */
     @Test
     void contentTypeWhitelistAcceptsMatchingCategory() {
         FileUploadConfig config = new FileUploadConfig();
@@ -71,6 +100,10 @@ class TestUploadPolicies {
         assertDoesNotThrow(() -> new ContentTypePolicy(png, config).check());
     }
 
+    /**
+     * Verifies that the content type whitelist policy rejects non-matching
+     * MIME types and missing (null) content types.
+     */
     @Test
     void contentTypeWhitelistRejectsWrongOrMissingType() {
         FileUploadConfig config = new FileUploadConfig();
@@ -86,6 +119,10 @@ class TestUploadPolicies {
         assertThrows(IllegalArgumentException.class, () -> new ContentTypePolicy(missing, config).check());
     }
 
+    /**
+     * Verifies that {@link ShowUrlPolicy#concatTwoUrl} correctly normalizes
+     * exactly one slash at the boundary between two URL parts.
+     */
     @Test
     void urlConcatenationNormalizesOneBoundarySlash() {
         assertEquals(

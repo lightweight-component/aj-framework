@@ -1,4 +1,4 @@
 /**
- * 上传目录和文件的 POSIX 执行权限扫描。
+ * POSIX execute permission scan for uploaded directories and files.
  */
 package com.ajaxjs.fileupload.permission;

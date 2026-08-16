@@ -10,27 +10,30 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.util.Set;
 
 /**
- * 遍历目录树并收集具有任一执行权限位的路径。
+ * Traverses the directory tree and collects paths that have any execute permission bit set.
  */
 public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
+    /**
+     * Collector for scan results.
+     */
     private final PermissionCheckResult result;
 
     /**
-     * 创建文件访问器。
+     * Creates a file visitor.
      *
-     * @param result 扫描结果收集器
+     * @param result scan result collector
      */
     public NoExecFileVisitor(PermissionCheckResult result) {
         this.result = result;
     }
 
     /**
-     * 检查普通文件的 POSIX 执行权限。
+     * Checks POSIX execute permissions for regular files.
      *
-     * @param file 当前文件
-     * @param attrs 文件属性
-     * @return 始终返回 {@link FileVisitResult#CONTINUE}
-     * @throws IOException 读取权限失败时抛出
+     * @param file  current file
+     * @param attrs file attributes
+     * @return always returns {@link FileVisitResult#CONTINUE}
+     * @throws IOException thrown when reading permissions fails
      */
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -41,12 +44,12 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     /**
-     * 检查目录的 POSIX 执行权限。
+     * Checks POSIX execute permissions for directories.
      *
-     * @param dir 当前目录
-     * @param attrs 目录属性
-     * @return 始终返回 {@link FileVisitResult#CONTINUE}
-     * @throws IOException 读取权限失败时抛出
+     * @param dir   current directory
+     * @param attrs directory attributes
+     * @return always returns {@link FileVisitResult#CONTINUE}
+     * @throws IOException thrown when reading permissions fails
      */
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
@@ -57,7 +60,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     /**
-     * 检查路径是否有执行权限（owner/group/others 任一有执行权限即为 true）
+     * Checks whether the path has execute permission (true if any of owner/group/others has execute permission).
      */
     private static boolean hasExecutePermission(Path path) throws IOException {
         try {
@@ -67,7 +70,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
                     perms.contains(PosixFilePermission.GROUP_EXECUTE) ||
                     perms.contains(PosixFilePermission.OTHERS_EXECUTE);
         } catch (UnsupportedOperationException e) {
-            System.err.println("不支持 POSIX 权限: " + path); // 理论上不会发生，因为我们已检查 POSIX 支持
+            System.err.println("不支持 POSIX 权限: " + path); // Theoretically should not happen because we already checked POSIX support
             return false;
         }
     }

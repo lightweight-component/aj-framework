@@ -7,82 +7,82 @@ import com.ajaxjs.fileupload.policy.StorageType;
 import java.lang.annotation.*;
 
 /**
- * 声明控制器方法的文件上传策略。
- * <p>{@link UploadUtils} 会读取该注解并构造 {@link FileUploadConfig}。</p>
+ * Declares the file upload policy for a controller method.
+ * <p>{@link UploadUtils} reads this annotation and constructs {@link FileUploadConfig}.</p>
  */
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface FileUploadAction {
     /**
-     * 文件存储类型。
+     * File storage type.
      *
-     * @return 存储类型
+     * @return storage type
      */
     StorageType storageType() default StorageType.LOCAL_DISK;
 
     /**
-     * 允许的最大文件大小，单位 MB；必须大于 0。
+     * The Maximum allowed file size, in MB, must be greater than 0.
      *
-     * @return 最大文件大小（MB）
+     * @return maximum file size (MB)
      */
     long maxFileSize() default 10;
 
     /**
-     * 本地文件存储的基础目录。
+     * Base directory for local file storage.
      *
-     * @return 基础目录路径
+     * @return base directory path
      */
     String baseUploadDir() default "c:/temp/uploads";
 
     /**
-     * 基础目录下的可选相对子目录，不得逃逸基础目录。
+     * Optional relative subdirectory under the base directory; must not escape the base directory.
      *
-     * @return 相对子目录，空字符串表示不使用子目录
+     * @return relative subdirectory, empty string means no subdirectory is used
      */
     String uploadDir() default "";
 
     /**
-     * 允许的文件扩展名，例如 {@code {"jpg", "png"}}；空数组表示不限制。
-     * 扩展名不包含前导点。
+     * Allowed file extensions, e.g., {@code {"jpg", "png"}}; an empty array means no restriction.
+     * Extensions do not include the leading dot.
      *
-     * @return 允许的扩展名数组
+     * @return array of allowed extensions
      */
     String[] allowExtFilenames() default {};
 
     /**
-     * 文件内容检测类别。
+     * File content detection category.
      *
-     * @return 检测类别
+     * @return detection category
      */
     DetectType detectType() default DetectType.NONE;
 
     /**
-     * 是否根据文件头或容器结构执行魔数检查。
-     * <p>当前实现不会回退到 Apache Tika。</p>
+     * Whether to perform magic number checking based on file headers or container structure.
+     * <p>The current implementation does not fall back to Apache Tika.</p>
      *
-     * @return 启用返回 {@code true}
+     * @return {@code true} if enabled
      */
     boolean checkMagicNumber() default true;
 
     /**
-     * Content-Type 校验策略。
+     * Content-Type validation policy.
      *
-     * @return Content-Type 校验策略
+     * @return Content-Type validation policy
      */
     ContentTypePolicy.Policy contentTypePolicy() default ContentTypePolicy.Policy.ALL;
 
     /**
-     * 保存文件的命名策略。
+     * Naming policy for saved files.
      *
-     * @return 命名策略
+     * @return naming policy
      */
     NamePolicy.Policy namePolicy() default NamePolicy.Policy.ORIGINAL_RANDOM;
 
     /**
-     * 上传完成后返回的文件访问 URL 前缀。
+     * URL prefix for file access returned after upload completes.
      *
-     * @return URL 前缀
+     * @return URL prefix
      */
     String urlPrefix() default "";
 }

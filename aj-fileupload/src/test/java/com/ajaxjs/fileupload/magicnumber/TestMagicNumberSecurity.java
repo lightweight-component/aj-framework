@@ -14,7 +14,17 @@ import java.util.zip.ZipOutputStream;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Security-focused tests for {@link MagicNumber}, verifying that magic number
+ * checks cannot be bypassed by crafted files (e.g., ordinary ZIPs posing as
+ * Office documents, or mismatched EBML container types).
+ */
 class TestMagicNumberSecurity {
+
+    /**
+     * Verifies that the magic number check for multipart files does not call
+     * {@code getBytes()}, which would risk loading the entire file into memory.
+     */
     @Test
     void multipartCheckDoesNotCallGetBytes() {
         byte[] png = {(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
@@ -29,6 +39,12 @@ class TestMagicNumberSecurity {
         assertDoesNotThrow(() -> MagicNumber.checkMagicNumber(file, config, "png"));
     }
 
+    /**
+     * Verifies that an ordinary ZIP file cannot pass the magic number check
+     * when claiming to be a DOCX file (which requires specific OOXML entries).
+     *
+     * @throws Exception if an I/O error occurs
+     */
     @Test
     void ordinaryZipCannotPretendToBeDocx() throws Exception {
         MockMultipartFile file = officeFile("document.docx", zip("notes.txt"));
@@ -37,6 +53,12 @@ class TestMagicNumberSecurity {
                 () -> MagicNumber.checkMagicNumber(file, config(DetectType.OFFICE_FILE), "docx"));
     }
 
+    /**
+     * Verifies that a valid DOCX file (containing {@code [Content_Types].xml}
+     * and {@code word/document.xml} entries) passes the magic number check.
+     *
+     * @throws Exception if an I/O error occurs
+     */
     @Test
     void docxRequiresContainerMarkers() throws Exception {
         MockMultipartFile file = officeFile(
@@ -48,6 +70,10 @@ class TestMagicNumberSecurity {
                 () -> MagicNumber.checkMagicNumber(file, config(DetectType.OFFICE_FILE), "docx"));
     }
 
+    /**
+     * Verifies that MKV and WebM files require matching EBML doc types;
+     * a WebM file cannot pass as MKV and vice versa.
+     */
     @Test
     void mkvAndWebmRequireMatchingEbmlDocType() {
         byte[] webm = ebml("webm");
@@ -61,6 +87,13 @@ class TestMagicNumberSecurity {
                 () -> MagicNumber.checkMagicNumber(DetectType.VIDEO, matroska, "webm"));
     }
 
+    /**
+     * Creates a {@link FileUploadConfig} with the given detect type and magic
+     * number checking enabled.
+     *
+     * @param detectType the detect type to set
+     * @return a configured {@link FileUploadConfig} instance
+     */
     private static FileUploadConfig config(DetectType detectType) {
         FileUploadConfig config = new FileUploadConfig();
         config.setDetectType(detectType);
@@ -68,10 +101,25 @@ class TestMagicNumberSecurity {
         return config;
     }
 
+    /**
+     * Creates a {@link MockMultipartFile} representing an Office file with
+     * the given name and ZIP content.
+     *
+     * @param name    the file name
+     * @param content the ZIP content bytes
+     * @return a configured {@link MockMultipartFile} instance
+     */
     private static MockMultipartFile officeFile(String name, byte[] content) {
         return new MockMultipartFile("file", name, "application/zip", content);
     }
 
+    /**
+     * Creates a ZIP file in memory containing the given entry names.
+     *
+     * @param entries the entry names to include in the ZIP
+     * @return the ZIP file content as a byte array
+     * @throws IOException if an I/O error occurs
+     */
     private static byte[] zip(String... entries) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -86,6 +134,12 @@ class TestMagicNumberSecurity {
         return output.toByteArray();
     }
 
+    /**
+     * Creates a minimal EBML byte sequence with the given doc type.
+     *
+     * @param docType the EBML document type (e.g., "webm" or "matroska")
+     * @return the EBML byte sequence
+     */
     private static byte[] ebml(String docType) {
         byte[] value = docType.getBytes(StandardCharsets.US_ASCII);
         byte[] bytes = new byte[8 + value.length];

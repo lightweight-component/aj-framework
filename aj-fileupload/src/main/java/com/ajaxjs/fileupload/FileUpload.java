@@ -20,29 +20,32 @@ import java.nio.file.Paths;
 import java.util.function.BiFunction;
 
 /**
- * 单个 {@link MultipartFile} 的校验与保存处理器。
- * <p>实例绑定一个上传文件和一份配置，不应在多个上传请求之间复用。</p>
+ * Validation and save handler for a single {@link MultipartFile}.
+ * <p>An instance binds one upload file and one configuration and should not be reused across multiple upload requests.</p>
  */
 @Slf4j
 @Data
 public class FileUpload {
+    /**
+     * Number of bytes in one megabyte.
+     */
     private static final long BYTES_PER_MB = 1024L * 1024L;
 
     /**
-     * 当前待处理的 multipart 文件。
+     * The multipart file currently being processed.
      */
     final MultipartFile file;
 
     /**
-     * 当前上传使用的配置。
+     * The configuration used for the current upload.
      */
     final FileUploadConfig config;
 
     /**
-     * 创建上传处理器。
+     * Creates an upload handler.
      *
-     * @param file   待上传文件；在调用 {@link #save()} 或 {@link #check()} 时不得为 {@code null}
-     * @param config 上传配置；在调用 {@link #save()} 或 {@link #check()} 时不得为 {@code null}
+     * @param file   File to upload; must not be {@code null} when calling {@link #save()} or {@link #check()}
+     * @param config Upload configuration; must not be {@code null} when calling {@link #save()} or {@link #check()}
      */
     public FileUpload(MultipartFile file, FileUploadConfig config) {
         this.file = file;
@@ -50,13 +53,13 @@ public class FileUpload {
     }
 
     /**
-     * 校验文件并按照配置的存储类型保存。
+     * Validates the file and saves it according to the configured storage type.
      *
-     * @return 存储实现返回的上传结果，不会返回 {@code null}
-     * @throws IllegalArgumentException      文件或配置不合法时抛出
-     * @throws IllegalStateException         数据库存储未配置回调或回调返回 {@code null} 时抛出
-     * @throws UnsupportedOperationException 选择尚未实现的存储类型时抛出
-     * @throws UncheckedIOException          本地目录初始化或写入失败时抛出
+     * @return Upload result from the storage implementation; never returns {@code null}
+     * @throws IllegalArgumentException      If the file or configuration is invalid
+     * @throws IllegalStateException         If database storage is selected but no callback is configured or the callback returns {@code null}
+     * @throws UnsupportedOperationException If a storage type that is not yet implemented is selected
+     * @throws UncheckedIOException          If local directory initialization or file writing fails
      */
     public UploadedResult save() {
         validateConfiguration();
@@ -78,19 +81,26 @@ public class FileUpload {
     }
 
     /**
-     * 仅执行配置、大小、扩展名、Content-Type 和魔数校验，不保存文件。
+     * Only performs configuration, size, extension, Content-Type, and magic number validation without saving the file.
      *
-     * @throws IllegalArgumentException 文件或配置不符合规则时抛出
-     * @throws UncheckedIOException     读取文件内容进行检测失败时抛出
+     * @throws IllegalArgumentException If the file or configuration does not conform to rules
+     * @throws UncheckedIOException      If reading file content for detection fails
      */
     public void check() {
         validateConfiguration();
         checkFile();
     }
 
+    /**
+     * Validates the uploaded file: checks emptiness, size, extension, Content-Type, and magic number.
+     *
+     * @throws IllegalArgumentException If the file is empty, the size is invalid, or exceeds the limit
+     * @throws IllegalArgumentException If the file extension is not allowed
+     * @throws UncheckedIOException      If reading file content for detection fails
+     */
     void checkFile() {
         if (file.isEmpty())
-            throw new IllegalArgumentException("没有上传任何文件");
+            throw new IllegalArgumentException("No file was uploaded");
 
         long fileSize = file.getSize();
 
@@ -98,7 +108,7 @@ public class FileUpload {
             throw new IllegalArgumentException("The uploaded file size is invalid.");
 
         if (fileSize > maxFileSizeInBytes())
-            throw new IllegalArgumentException("文件大小超过系统限制！");
+            throw new IllegalArgumentException("File size exceeds the system limit!");
 
         String ext = NamePolicy.getFileExtension(file);
 
@@ -110,6 +120,11 @@ public class FileUpload {
         MagicNumber.checkMagicNumber(file, config, ext);
     }
 
+    /**
+     * Validates that the file, configuration, and all required configuration properties are present and valid.
+     *
+     * @throws IllegalArgumentException If the file, configuration, or any required property is null or invalid
+     */
     void validateConfiguration() {
         if (file == null)
             throw new IllegalArgumentException("The uploaded file is required.");
@@ -132,6 +147,12 @@ public class FileUpload {
         maxFileSizeInBytes();
     }
 
+    /**
+     * Converts the configured maximum file size from megabytes to bytes and validates the value.
+     *
+     * @return Maximum file size in bytes
+     * @throws IllegalArgumentException If the configured max file size is zero or negative, or causes overflow
+     */
     long maxFileSizeInBytes() {
         long maxFileSize = config.getMaxFileSize();
 
@@ -146,6 +167,12 @@ public class FileUpload {
         }
     }
 
+    /**
+     * Validates that the selected storage type is supported and, if required, that the necessary callback is configured.
+     *
+     * @throws IllegalStateException         If database storage is selected but no callback is configured
+     * @throws UnsupportedOperationException If the storage type is not implemented or not supported
+     */
     void validateStorage() {
         switch (config.getStorageType()) {
             case LOCAL_DISK:
@@ -164,27 +191,34 @@ public class FileUpload {
         }
     }
 
+    /**
+     * Saves the uploaded file to local disk and returns the upload result.
+     *
+     * @return Upload result containing the file URL, saved file name, original file name, and file size
+     * @throws IllegalArgumentException If the target file escapes the upload directory or is a symbolic link
+     * @throws UncheckedIOException      If file writing fails
+     */
     UploadedResult saveToDisk() {
         Path dir = initDir();
         String fileName = new NamePolicy(file, config.getNamePolicy()).getFileName();
-        Path dest = dir.resolve(fileName).normalize();
+        Path destination = dir.resolve(fileName).normalize();
 
-        if (!dest.startsWith(dir))
+        if (!destination.startsWith(dir))
             throw new IllegalArgumentException("The target file escapes the upload directory.");
 
         try {
-            if (Files.isSymbolicLink(dest))
+            if (Files.isSymbolicLink(destination))
                 throw new IllegalArgumentException("The target file must not be a symbolic link.");
 
-            file.transferTo(dest.toFile());// 保存文件
-            log.info("File saved to: {}", dest);
+            file.transferTo(destination.toFile());// Save file
+            log.info("File saved to: {}", destination);
         } catch (IOException e) {
-            log.error("Error occurred when saving file to {}", dest, e);
-            throw new UncheckedIOException("Error occurred when saving file to " + dest, e);
+            log.error("Error occurred when saving file to {}", destination, e);
+            throw new UncheckedIOException("Error occurred when saving file to " + destination, e);
         }
 
         String fileUrl = ShowUrlPolicy.concatTwoUrl(config.getUrlPrefix(), fileName);
-        // 返回数据
+        // Return data
         UploadedResult result = new UploadedResult();
         result.setUrl(fileUrl);
         result.setFileName(fileName);
@@ -194,6 +228,14 @@ public class FileUpload {
         return result;
     }
 
+    /**
+     * Initializes and validates the upload directory, creating it if necessary.
+     *
+     * @return The resolved real path of the upload directory
+     * @throws IllegalArgumentException If the subdirectory is absolute, escapes the base directory, or contains symbolic links
+     * @throws UnsupportedOperationException If the base upload directory is not configured
+     * @throws UncheckedIOException          If directory creation or path resolution fails
+     */
     Path initDir() {
         String configuredBaseDir = config.getBaseUploadDir();
 
@@ -236,6 +278,13 @@ public class FileUpload {
         }
     }
 
+    /**
+     * Checks that no component of the relative path between {@code baseDir} and {@code dir} is a symbolic link.
+     *
+     * @param baseDir The base directory
+     * @param dir     The target directory to check
+     * @throws IllegalArgumentException If any path component is a symbolic link
+     */
     static void rejectSymbolicLinks(Path baseDir, Path dir) {
         Path current = baseDir;
 
@@ -248,11 +297,11 @@ public class FileUpload {
     }
 
     /**
-     * 根据域名、应用上下文路径和上传路径设置文件访问 URL 前缀。
+     * Sets the file access URL prefix based on domain, application context path, and upload a path.
      *
-     * @param baseUrl     域名，例如 {@code https://example.com}
-     * @param contextPath 应用上下文路径，例如 {@code /app}
-     * @param uploadPath  上传资源路径，例如 {@code /uploads}
+     * @param baseUrl     Domain, e.g. {@code https://example.com}
+     * @param contextPath Application context path, e.g. {@code /app}
+     * @param uploadPath  Upload resource path, e.g. {@code /uploads}
      */
     public void setUrlPrefix(String baseUrl, String contextPath, String uploadPath) {
         String urlPrefix = UrlHelper.concatUrl(baseUrl, contextPath);
@@ -262,11 +311,17 @@ public class FileUpload {
     }
 
     /**
-     * 数据库存储回调；仅当 {@link com.ajaxjs.fileupload.policy.StorageType#DATABASE} 时使用。
-     * 回调必须返回非 {@code null} 的 {@link UploadedResult}。
+     * Database storage callback; used only when {@link com.ajaxjs.fileupload.policy.StorageType#DATABASE}.
+     * The callback must return a non-{@code null} {@link UploadedResult}.
      */
     BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase;
 
+    /**
+     * Delegates saving to the configured database callback and validating the result.
+     *
+     * @return Upload result from the database callback
+     * @throws IllegalStateException If the callback returns {@code null}
+     */
     UploadedResult saveToDatabase() {
         UploadedResult result = saveToDatabase.apply(file, config);
 

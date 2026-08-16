@@ -10,19 +10,31 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * 文档文件头及 ZIP Office 容器检测规则。
+ * Document file header and ZIP Office container detection rules.
  */
 public class MagicNumberOfficeFile {
+    /**
+     * Maximum number of ZIP entries to process before aborting validation.
+     */
     private static final int MAX_ZIP_ENTRIES = 10_000;
+    /**
+     * Maximum cumulative uncompressed bytes to read before aborting validation (100 MiB).
+     */
     private static final long MAX_UNCOMPRESSED_BYTES = 100L * 1024 * 1024;
+    /**
+     * Maximum bytes to read from the mimetype entry.
+     */
     private static final int MAX_MIMETYPE_BYTES = 256;
 
+    /**
+     * Set of file extensions that correspond to ZIP-based Office or OpenDocument formats.
+     */
     private static final Set<String> ZIP_OFFICE_EXTENSIONS = new HashSet<>(Arrays.asList(
             "docx", "xlsx", "pptx", "dotx", "xltx", "potx", "odt", "ods", "odp"
     ));
 
     /**
-     * 非 ZIP 文档扩展名到文件头检测函数的映射。
+     * Map from a non-ZIP document extension to file header detection function.
      */
     public static final Map<String, Function<byte[], Boolean>> OFFICE_MAGIC_MAP = new HashMap<>();
 
@@ -43,24 +55,24 @@ public class MagicNumberOfficeFile {
     }
 
     /**
-     * 判断扩展名是否属于需要检查 ZIP 内部结构的文档格式。
+     * Check whether the extension belongs to a document format that requires ZIP internal structure inspection.
      *
-     * @param ext 不含点的扩展名；可为 {@code null}
-     * @return 属于 ZIP Office 或 OpenDocument 格式时返回 {@code true}
+     * @param ext Extension without the dot; may be {@code null}
+     * @return {@code true} if it is a ZIP Office or OpenDocument format
      */
     public static boolean isZipOfficeExtension(String ext) {
         return ext != null && ZIP_OFFICE_EXTENSIONS.contains(ext.toLowerCase(Locale.ROOT));
     }
 
     /**
-     * 以流式方式校验 ZIP Office 容器，不保留解压后的文件内容。
-     * <p>最多处理 10,000 个条目和 100 MiB 累计解压数据；超过限制返回
-     * {@code false}。</p>
+     * Validate ZIP Office container in a streaming manner, without retaining decompressed file content.
+     * <p>Processes at most 10,000 entries and 100 MiB of cumulative decompressed data; returns
+     * {@code false} if limits are exceeded.</p>
      *
-     * @param input ZIP 文件输入流；方法会关闭该流
-     * @param ext   不含点的文档扩展名
-     * @return 容器包含对应格式的必要标志时返回 {@code true}
-     * @throws IOException ZIP 内容损坏或读取失败时抛出
+     * @param input ZIP file input stream; this method will close the stream
+     * @param ext   Document extension without the dot
+     * @return {@code true} if the container contains the required markers for the corresponding format
+     * @throws IOException Thrown when ZIP content is corrupted or reading fails
      */
     public static boolean isValidZipOffice(InputStream input, String ext) throws IOException {
         String normalizedExt = ext.toLowerCase(Locale.ROOT);
@@ -104,14 +116,21 @@ public class MagicNumberOfficeFile {
                 }
 
                 if (mimetypeContent != null)
-                    mimetype = new String(mimetypeContent.toByteArray(), StandardCharsets.US_ASCII);
+                    mimetype = mimetypeContent.toString(StandardCharsets.US_ASCII);
             }
         }
 
         return hasRequiredEntries(normalizedExt, entries, mimetype);
     }
 
-    private static String normalizeEntryName(String name) {
+    /**
+     * Normalize a ZIP entry name by converting backslashes to forward slashes and rejecting
+     * paths that start with "/" or contain ".." traversal segments.
+     *
+     * @param name The raw entry name from the ZIP file
+     * @return The normalized entry name, or {@code null} if the path is suspicious
+     */
+    static String normalizeEntryName(String name) {
         if (name == null)
             return null;
 
@@ -127,7 +146,16 @@ public class MagicNumberOfficeFile {
         return normalized;
     }
 
-    private static boolean hasRequiredEntries(String ext, Set<String> entries, String mimetype) {
+    /**
+     * Check whether the set of ZIP entries and optional mimetype content confirm the expected
+     * Office or OpenDocument format.
+     *
+     * @param ext      Normalized document extension (lowercase, no dot)
+     * @param entries  Set of entry names found in the ZIP container
+     * @param mimetype Content of the mimetype entry, or {@code null} if not present
+     * @return {@code true} if the entries match the expected structure for the given extension
+     */
+    static boolean hasRequiredEntries(String ext, Set<String> entries, String mimetype) {
         if ("docx".equals(ext) || "dotx".equals(ext))
             return entries.contains("[Content_Types].xml") && entries.contains("word/document.xml");
 

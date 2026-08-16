@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * POSIX 上传目录执行权限扫描器。
- * <p>不支持 POSIX 属性视图的平台会跳过检查。当前实现仅执行一次全局扫描，
- * 其限制记录在模块 {@code to-fix.md} 中。</p>
+ * POSIX upload directory executes permission scanner.
+ * <p>Platforms that do not support POSIX attribute views will skip the check. The current implementation
+ * performs only a single global scan, and its limitations are documented in the {@code to-fix.md} module.</p>
  */
 @Slf4j
 public class PermissionCheck {
@@ -22,16 +22,16 @@ public class PermissionCheck {
     static boolean isAlreadyChecked;
 
     /**
-     * 扫描目录树并记录具有执行权限的目录和文件。
+     * Scan the directory tree and record directories and files with execute permission.
      *
-     * @param dir 待扫描目录路径
-     * @throws UncheckedIOException 遍历目录失败时抛出
+     * @param dir path of the directory to scan
+     * @throws UncheckedIOException if directory traversal fails
      */
     public static void check(String dir) {
         if (isAlreadyChecked)
             return;
 
-        Path rootDir = Paths.get(dir); // 替换为你的存储目录
+        Path rootDir = Paths.get(dir); // Replace with your storage directory
 
         if (!isPosixSupported()) {
             log.warn("The current system doesn't support POSIX permission, skip this check.");
@@ -63,9 +63,9 @@ public class PermissionCheck {
     }
 
     /**
-     * 判断默认文件系统是否支持 POSIX 权限属性。
+     * Determine whether the default file system supports POSIX permission attributes.
      *
-     * @return 支持时返回 {@code true}
+     * @return {@code true} if supported
      */
     public static boolean isPosixSupported() {
         return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");

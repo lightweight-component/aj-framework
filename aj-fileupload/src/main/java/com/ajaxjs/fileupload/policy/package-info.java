@@ -1,4 +1,4 @@
 /**
- * 文件扩展名、Content-Type、命名和 URL 展示策略。
+ * File extension, Content-Type, naming and URL display policies.
  */
 package com.ajaxjs.fileupload.policy;

@@ -13,64 +13,84 @@ import java.nio.file.Paths;
 import java.util.Set;
 
 /**
- * 根据声明的 Content-Type 和文件扩展名执行媒体类型校验。
- * <p>multipart 请求中的 Content-Type 由客户端提供，只能作为辅助校验。</p>
+ * Performs media type validation based on the declared Content-Type and file extension.
+ * <p>The Content-Type in a multipart request is provided by the client and should only serve as a secondary check.</p>
  */
 public class ContentTypePolicy {
     /**
-     * Content-Type 校验方式。
+     * Content-Type validation modes.
      */
     public enum Policy {
         /**
-         * 不检查 Content-Type。
+         * Do not check Content-Type.
          */
         NO_CHECK(null),
 
         /**
-         * 检查 Content-Type 是否属于所选文件类别的允许集合。
+         * Checks whether the Content-Type belongs to the allowed set for the selected file category.
          */
         WHITELIST(1),
 
         /**
-         * 检查 Content-Type 是否与扩展名映射一致。
-         * <p>当前映射比较尚未实现完整，参见模块 {@code to-fix.md}。</p>
+         * Checks whether the Content-Type matches the extension mapping.
+         * <p>The current mapping comparison is not yet fully implemented; see module {@code to-fix.md}.</p>
          */
         MAPPING(2),
 
         /**
-         * 同时执行白名单与扩展名映射检查。
+         * Performs both pass-list and extension mapping checks.
          */
         ALL(3);
 
+        /**
+         * The bit flag value of this policy.
+         */
         final Integer value;
 
+        /**
+         * Constructs a policy with the given bit flag value.
+         *
+         * @param value the bit flag value
+         */
         Policy(Integer value) {
             this.value = value;
         }
 
         /**
-         * 返回策略位标志。
+         * Returns the policy bit flag.
          *
-         * @return 位标志；{@link #NO_CHECK} 返回 {@code null}
+         * @return bit flag; {@link #NO_CHECK} returns {@code null}
          */
         public Integer getValue() {
             return value;
         }
     }
 
+    /**
+     * The original client-provided filename.
+     */
     final String fileName;
 
+    /**
+     * The Content-Type declared by the client.
+     */
     final String contentType;
 
+    /**
+     * The Content-Type validation policy.
+     */
     final Policy policy;
 
+    /**
+     * The file detection category used for pass-list checks.
+     */
     final DetectType detectType;
 
     /**
-     * 从上传文件和配置创建校验器。
+     * Creates a validator from an upload file and configuration.
      *
-     * @param file   上传文件
-     * @param config 上传配置
+     * @param file   upload file
+     * @param config upload configuration
      */
     public ContentTypePolicy(MultipartFile file, FileUploadConfig config) {
         this.fileName = file.getOriginalFilename();
@@ -80,10 +100,10 @@ public class ContentTypePolicy {
     }
 
     /**
-     * 执行当前策略包含的校验。
+     * Executes the validations included in the current policy.
      *
-     * @throws IllegalArgumentException Content-Type 不符合类别或映射规则时抛出
-     * @throws UncheckedIOException     探测扩展名映射失败时抛出
+     * @throws IllegalArgumentException      thrown when Content-Type does not match the category or mapping rules
+     * @throws UncheckedIOException thrown when probing the extension mapping fails
      */
     public void check() {
         Integer value = policy.getValue();
@@ -139,6 +159,9 @@ public class ContentTypePolicy {
         }
     }
 
+    /**
+     * Allowed image Content-Type values.
+     */
     static final Set<String> IMAGE_CONTENT_TYPES = ObjectHelper.setOf(
             "image/jpeg",
             "image/jpg",
@@ -151,6 +174,9 @@ public class ContentTypePolicy {
             "image/x-icon"
     );
 
+    /**
+     * Allowed office file Content-Type values.
+     */
     @SuppressWarnings("SpellCheckingInspection")
     static final Set<String> OFFICE_CONTENT_TYPES = ObjectHelper.setOf(
             "application/msword", // .doc
@@ -171,6 +197,9 @@ public class ContentTypePolicy {
             "application/wps-office.dps"
     );
 
+    /**
+     * Allowed audio Content-Type values.
+     */
     static final Set<String> AUDIO_CONTENT_TYPES = ObjectHelper.setOf(
             "audio/mpeg",           // .mp3
             "audio/x-wav",          // .wav
@@ -190,6 +219,9 @@ public class ContentTypePolicy {
             "audio/x-caf"           // apple audio
     );
 
+    /**
+     * Allowed video Content-Type values.
+     */
     @SuppressWarnings("SpellCheckingInspection")
     static final Set<String> VIDEO_CONTENT_TYPES = ObjectHelper.setOf(
             "video/mp4",              // .mp4

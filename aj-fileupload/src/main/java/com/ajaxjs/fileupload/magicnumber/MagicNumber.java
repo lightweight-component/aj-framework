@@ -10,20 +10,23 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 根据文件头或容器结构校验上传文件类型。
- * <p>普通格式最多读取文件前 64 KiB；ZIP Office 文件采用有限制的流式校验。</p>
+ * Validate an uploaded file type based on file header or container structure.
+ * <p>For regular formats, reads at most the first 64 KiB of the file; ZIP Office files use bounded streaming validation.</p>
  */
 public class MagicNumber {
+    /**
+     * Maximum number of bytes to read from the file prefix for signature detection (64 KiB).
+     */
     static final int MAX_PREFIX_BYTES = 64 * 1024;
 
     /**
-     * 根据上传配置校验 multipart 文件。
+     * Validate a multipart file based on upload configuration.
      *
-     * @param file   上传文件
-     * @param config 上传配置
-     * @param ext    不含点的文件扩展名
-     * @throws UnsupportedOperationException 内容与声明类别不匹配时抛出
-     * @throws UncheckedIOException          读取文件失败时抛出
+     * @param file   Uploaded file
+     * @param config Upload configuration
+     * @param ext    File extension without the dot
+     * @throws UnsupportedOperationException Thrown when content does not match the declared type
+     * @throws UncheckedIOException          Thrown when reading the file fails
      */
     public static void checkMagicNumber(MultipartFile file, FileUploadConfig config, String ext) {
         if (!config.isCheckMagicNumber())
@@ -43,12 +46,12 @@ public class MagicNumber {
     }
 
     /**
-     * 使用已读取的字节校验文件类型。
+     * Validate file type using pre-read bytes.
      *
-     * @param detectType 检测类别
-     * @param bytes      固定签名格式的文件前缀；ZIP Office 格式必须传入完整文件内容
-     * @param ext        不含点的扩展名
-     * @throws UnsupportedOperationException 未匹配对应格式时抛出
+     * @param detectType Detection category
+     * @param bytes      File prefix for fixed signature formats; ZIP Office formats must pass the full file content
+     * @param ext        Extension without the dot
+     * @throws UnsupportedOperationException Thrown when no matching format is found
      */
     public static void checkMagicNumber(DetectType detectType, byte[] bytes, String ext) {
         switch (detectType) {
@@ -81,6 +84,14 @@ public class MagicNumber {
         }
     }
 
+    /**
+     * Read up to the specified number of bytes from the beginning of an input stream.
+     *
+     * @param input The input stream to read from
+     * @param limit Maximum number of bytes to read
+     * @return The bytes read from the stream prefix
+     * @throws IOException Thrown when reading from the stream fails
+     */
     static byte[] readPrefix(InputStream input, int limit) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream(Math.min(limit, 8192));
         byte[] buffer = new byte[4096];
@@ -100,11 +111,11 @@ public class MagicNumber {
     }
 
     /**
-     * 判断字节数组是否以指定前缀开始。
+     * Check whether a byte array starts with a given prefix.
      *
-     * @param data   待检查数据
-     * @param prefix 期望前缀
-     * @return 匹配返回 {@code true}
+     * @param data   Data to check
+     * @param prefix Expected prefix
+     * @return {@code true} if matched
      */
     public static boolean startsWith(byte[] data, byte[] prefix) {
         if (data.length < prefix.length)
@@ -118,12 +129,12 @@ public class MagicNumber {
     }
 
     /**
-     * 使用扩展名对应的检测函数校验内容。
+     * Validate content using the detection function mapped to the extension.
      *
-     * @param ext      不含点的扩展名
-     * @param bytes    待检测字节
-     * @param magicMap 扩展名到检测函数的映射
-     * @return 找到检测器且内容匹配时返回 {@code true}
+     * @param ext      Extension without the dot
+     * @param bytes    Bytes to inspect
+     * @param magicMap Map from extension-to-detection function
+     * @return {@code true} if a validator is found and the content matches
      */
     public static boolean isValidFile(String ext, byte[] bytes, Map<String, Function<byte[], Boolean>> magicMap) {
         Function<byte[], Boolean> validator = magicMap.get(ext.toLowerCase(Locale.ROOT));

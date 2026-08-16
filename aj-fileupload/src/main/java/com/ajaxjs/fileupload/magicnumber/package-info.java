@@ -1,4 +1,4 @@
 /**
- * 图片、音频、视频和文档的文件头及容器结构检测。
+ * File header and container structure detection for images, audio, video, and documents.
  */
 package com.ajaxjs.fileupload.magicnumber;

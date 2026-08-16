@@ -6,15 +6,15 @@ import com.ajaxjs.util.ObjectHelper;
 import java.util.Set;
 
 /**
- * 上传文件扩展名校验器。
+ * Upload file extension validator.
  */
 public class ExtensionCheck {
     /**
-     * 按自定义白名单和检测类别校验扩展名。
+     * Validates the extension against the custom whitelist and detection category.
      *
-     * @param config 上传配置
-     * @param ext    不含前导点的扩展名
-     * @throws IllegalArgumentException 扩展名不在允许范围内时抛出
+     * @param config upload configuration
+     * @param ext    extension without leading dot
+     * @throws IllegalArgumentException thrown when the extension is not within the allowed range
      */
     public static void checkExtName(FileUploadConfig config, String ext) {
         ext = ext.toLowerCase();
@@ -46,11 +46,11 @@ public class ExtensionCheck {
     }
 
     /**
-     * 按调用方提供的白名单校验扩展名。
+     * Validates the extension against a caller-provided whitelist.
      *
-     * @param allowExtFilenames 允许的扩展名数组，元素不含前导点
-     * @param ext               待校验扩展名
-     * @throws IllegalArgumentException 未匹配任何允许值时抛出
+     * @param allowExtFilenames array of allowed extensions, elements without leading dot
+     * @param ext               extension to validate
+     * @throws IllegalArgumentException thrown when no allowed value matches
      */
     public static void checkExtName(String[] allowExtFilenames, String ext) {
         boolean isFound = false;
@@ -67,7 +67,7 @@ public class ExtensionCheck {
     }
 
     /**
-     * 常见图片扩展名集合
+     * Common image extension set
      */
     static final Set<String> IMAGE_EXTENSIONS = ObjectHelper.setOf(
             "jpg", "gif", "png", "jpeg", "webp"
@@ -76,7 +76,7 @@ public class ExtensionCheck {
     /* Common office file extensions */
 
     /**
-     * 支持按类别初筛的文档扩展名集合
+     * Document extension set supporting category-based initial screening
      */
     public static final Set<String> OFFICE_EXTENSIONS = ObjectHelper.setOf(
             "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
@@ -84,7 +84,7 @@ public class ExtensionCheck {
     );
 
     /**
-     * 支持按类别初筛的音频扩展名集合
+     * Audio extension set supporting category-based initial screening
      */
     public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III
@@ -106,26 +106,26 @@ public class ExtensionCheck {
     );
 
     /**
-     * 支持按类别初筛的视频扩展名集合。
+     * Video extension set supporting category-based initial screening.
      */
     public static final Set<String> VIDEO_EXTENSIONS = ObjectHelper.setOf(
-            "mp4",      // MPEG-4 Part 14 (最通用)
+            "mp4",      // MPEG-4 Part 14 (most common)
             "avi",      // Audio Video Interleave (Windows)
             "mov",      // Apple QuickTime Movie
             "wmv",      // Windows Media Video
-            "flv",      // Flash Video (旧版流媒体)
-            "mkv",      // Matroska Video (支持多音轨/字幕)
-            "webm",     // WebM (HTML5 视频，VP8/VP9)
-            "mpeg",     // MPEG-1 或 MPEG-2 视频
-            "mpg",      // 同 .mpeg
-            "m4v",      // MPEG-4 Video (Apple, 类似 MP4)
-            "3gp",      // 3GPP (手机视频，低带宽)
-            "3g2",      // 3GPP2 (类似 3gp)
-            "vob",      // DVD Video Object (DVD 光盘)
+            "flv",      // Flash Video (legacy streaming)
+            "mkv",      // Matroska Video (supports multi-track audio/subtitles)
+            "webm",     // WebM (HTML5 video, VP8/VP9)
+            "mpeg",     // MPEG-1 or MPEG-2 video
+            "mpg",      // same as .mpeg
+            "m4v",      // MPEG-4 Video (Apple, similar to MP4)
+            "3gp",      // 3GPP (mobile video, low bandwidth)
+            "3g2",      // 3GPP2 (similar to 3gp)
+            "vob",      // DVD Video Object (DVD disc)
             "ogv",      // Ogg Theora Video
-            "ts",       // MPEG Transport Stream (直播流)
+            "ts",       // MPEG Transport Stream (live streaming)
             "f4v",      // Flash MP4 variant
-            "rmvb",     // RealMedia Variable Bitrate (国内老视频)
-            "asf"       // Advanced Systems Format (微软容器)
+            "rmvb",     // RealMedia Variable Bitrate (legacy Chinese video)
+            "asf"       // Advanced Systems Format (Microsoft container)
     );
 }

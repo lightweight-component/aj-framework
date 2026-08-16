@@ -1,33 +1,33 @@
 package com.ajaxjs.fileupload.policy;
 
 /**
- * 上传结果 URL 的展示策略及 URL 拼接工具。
+ * URL display policy and URL concatenation utility for upload results.
  */
 public class ShowUrlPolicy {
-    /** 上传结果 URL 的提供方式。 */
+    /** How the upload result URL is provided. */
     public enum Policy {
         /**
-         * 由当前服务提供文件访问 URL。
+         * File access URL is provided by the current service.
          */
         SERVICE_SELF,
 
         /**
-         * 由 Nginx、对象存储等其他服务提供 URL。
+         * URL is provided by other services such as Nginx, object storage, etc.
          */
         OTHER_WEB_SERVER,
 
         /**
-         * 不返回文件 URL。
+         * Do not return the file URL.
          */
         NOT_SHOW
     }
 
     /**
-     * 使用单个斜杠连接 URL 前缀和相对路径。
+     * Concatenate URL prefix and relative path with a single slash.
      *
-     * @param baseUrl URL 前缀，不得为 {@code null}
-     * @param subPath 相对路径，不得为 {@code null}
-     * @return 拼接后的 URL
+     * @param baseUrl URL prefix, must not be {@code null}
+     * @param subPath Relative path, must not be {@code null}
+     * @return The concatenated URL
      */
     public static String concatTwoUrl(String baseUrl, String subPath) {
         if (!baseUrl.endsWith("/"))// Ensure base ends with `/`

@@ -7,29 +7,42 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * POSIX 执行权限扫描结果。
- * <p>结果当前由同包扫描器填充并输出日志，不作为公共 DTO 暴露。</p>
+ * POSIX execute permission scan result.
+ * <p>The result is currently populated by the same-package scanner and logged, not exposed as a public DTO.</p>
  */
 @Slf4j
 public class PermissionCheckResult {
     /**
-     * 发现的可执行普通文件。
+     * Executable regular files found.
      */
     Set<Path> executableFiles = new HashSet<>();
 
     /**
-     * 发现的具有执行权限的目录。
+     * Directories with execute permission found.
      */
     Set<Path> executableDirs = new HashSet<>();
 
+    /**
+     * Adds a regular file that has execute permission to the result set.
+     *
+     * @param file the file path to record
+     */
     void addExecutableFile(Path file) {
         executableFiles.add(file);
     }
 
+    /**
+     * Adds a directory that has execute permission to the result set.
+     *
+     * @param dir the directory path to record
+     */
     void addExecutableDir(Path dir) {
         executableDirs.add(dir);
     }
 
+    /**
+     * Logs a summary of all executable files and directories found during the scan.
+     */
     void printSummary() {
         if (executableFiles.isEmpty() && executableDirs.isEmpty())
             log.info("✅ 所有文件和目录均无执行权限。");

@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 视频容器文件头检测规则集合。
+ * Video container file header detection rule set.
  */
 public class MagicNumberVideo {
     /**
-     * 扩展名到视频文件头或容器检测函数的映射。
+     * Map from extension to video file header or container detection function.
      */
     public static final Map<String, Function<byte[], Boolean>> VIDEO_MAGIC_MAP = new HashMap<>();
 
@@ -34,6 +34,13 @@ public class MagicNumberVideo {
         VIDEO_MAGIC_MAP.put("flv", bytes -> bytes.length >= 3 && bytes[0] == 'F' && bytes[1] == 'L' && bytes[2] == 'V');
     }
 
+    /**
+     * Check whether the byte array starts with an ISOBMFF ftyp box containing the expected brand.
+     *
+     * @param bytes The file bytes to inspect
+     * @param brand The expected 4-character brand code
+     * @return {@code true} if the ftyp box with the matching brand is found
+     */
     static boolean isFtyp(byte[] bytes, String brand) {
         if (bytes.length < 12)
             return false;
@@ -45,6 +52,12 @@ public class MagicNumberVideo {
                 bytes[11] == brand.charAt(3);
     }
 
+    /**
+     * Parse an EBML header from the byte array and extract the DocType string value.
+     *
+     * @param bytes The file bytes to parse
+     * @return The DocType string, or {@code null} if the header is not valid EBML
+     */
     static String readEbmlDocType(byte[] bytes) {
         byte[] ebmlHeader = {(byte) 0x1A, (byte) 0x45, (byte) 0xDF, (byte) 0xA3};
 
@@ -91,6 +104,14 @@ public class MagicNumberVideo {
         return null;
     }
 
+    /**
+     * Read a variable-length integer (VINT) as defined by the EBML specification.
+     *
+     * @param bytes        The byte array to read from
+     * @param offset       Starting offset in the byte array
+     * @param removeMarker Whether to strip the length marker bit from the value
+     * @return A {@link Vint} containing the length and value, or {@code null} if the data is invalid
+     */
     private static Vint readVint(byte[] bytes, int offset, boolean removeMarker) {
         if (offset >= bytes.length)
             return null;
@@ -115,10 +136,25 @@ public class MagicNumberVideo {
         return new Vint(length, value);
     }
 
+    /**
+     * Represents a parsed EBML variable-length integer (VINT).
+     */
     private static class Vint {
+        /**
+         * The number of bytes consumed by the VINT encoding.
+         */
         final int length;
+        /**
+         * The decoded integer value.
+         */
         final long value;
 
+        /**
+         * Construct a VINT with the given length and value.
+         *
+         * @param length Number of bytes consumed
+         * @param value  Decoded integer value
+         */
         Vint(int length, long value) {
             this.length = length;
             this.value = value;

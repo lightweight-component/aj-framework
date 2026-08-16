@@ -4,39 +4,45 @@ import com.ajaxjs.util.RandomTools;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 上传文件的安全命名策略。
- * <p>所有策略都会先移除客户端文件名中的路径部分并拒绝控制字符。</p>
+ * Secure naming policy for uploaded files.
+ * <p>All policies first strip path components from the client filename and reject control characters.</p>
  */
 public class NamePolicy {
     /**
-     * 可用的上传文件命名方式。
+     * Available upload file naming modes.
      */
     public enum Policy {
         /**
-         * 使用清理后的原始文件名；可能发生同名冲突。
+         * Uses the sanitized original filename; may cause name collisions.
          */
         ORIGINAL,
 
         /**
-         * 在原始基本名称后追加 UUID，并保留扩展名。
+         * Appends a UUID after the original base name while preserving the extension.
          */
         ORIGINAL_RANDOM,
 
         /**
-         * 仅使用 UUID 和原始扩展名。
+         * Uses only a UUID with the original extension.
          */
         RANDOM
     }
 
+    /**
+     * The original client-provided filename.
+     */
     final String fileName;
 
+    /**
+     * The naming policy to apply.
+     */
     final Policy policy;
 
     /**
-     * 创建文件名策略。
+     * Creates a filename policy.
      *
-     * @param fileName 客户端文件名；可以包含浏览器传入的路径部分
-     * @param policy   命名策略
+     * @param fileName client filename; may contain path components from the browser
+     * @param policy   naming policy
      */
     public NamePolicy(String fileName, Policy policy) {
         this.fileName = fileName;
@@ -44,20 +50,20 @@ public class NamePolicy {
     }
 
     /**
-     * 从 multipart 文件创建命名策略。
+     * Creates a naming policy from a multipart file.
      *
-     * @param file   multipart 文件
-     * @param policy 命名策略
+     * @param file   multipart file
+     * @param policy naming policy
      */
     public NamePolicy(MultipartFile file, Policy policy) {
         this(file.getOriginalFilename(), policy);
     }
 
     /**
-     * 根据策略生成安全文件名。
+     * Generates a safe filename according to the policy.
      *
-     * @return 不包含目录部分的文件名
-     * @throws IllegalArgumentException 原始文件名或策略不合法时抛出
+     * @return filename without directory components
+     * @throws IllegalArgumentException thrown when the original filename or policy is invalid
      */
     public String getFileName() {
         String safeFileName = sanitizeFileName(fileName);
@@ -75,11 +81,11 @@ public class NamePolicy {
     }
 
     /**
-     * 移除客户端提供的 Unix/Windows 路径并校验剩余文件名。
+     * Strips Unix/Windows paths from the client-provided filename and validates the remainder.
      *
-     * @param originalFilename 客户端提供的原始文件名
-     * @return 不含路径部分的文件名
-     * @throws IllegalArgumentException 名称为 {@code null}、空、点目录或含控制字符时抛出
+     * @param originalFilename original filename provided by the client
+     * @return filename without path components
+     * @throws IllegalArgumentException thrown when the name is {@code null}, empty, a dot directory, or contains control characters
      */
     public static String sanitizeFileName(String originalFilename) {
         if (originalFilename == null)
@@ -102,10 +108,10 @@ public class NamePolicy {
     }
 
     /**
-     * 返回最后一个点之前的基本名称。
+     * Returns the base name before the last dot.
      *
-     * @param fileName 文件名
-     * @return 基本名称；没有点时返回原值
+     * @param fileName filename
+     * @return base name; returns the original value if no dot is present
      */
     public static String getBaseName(String fileName) {
         int lastDot = fileName.lastIndexOf('.');
@@ -114,21 +120,21 @@ public class NamePolicy {
     }
 
     /**
-     * 从 multipart 文件的原始名称取得扩展名。
+     * Gets the extension from the multipart file's original name.
      *
-     * @param file multipart 文件
-     * @return 不含点的扩展名
+     * @param file multipart file
+     * @return extension without the dot
      */
     public static String getFileExtension(MultipartFile file) {
         return getFileExtension(file.getOriginalFilename());
     }
 
     /**
-     * 取得最后一个点之后的扩展名。
+     * Gets the extension after the last dot.
      *
-     * @param fileName 文件名
-     * @return 不含点的扩展名
-     * @throws IllegalArgumentException 名称为 {@code null} 或不含点时抛出
+     * @param fileName filename
+     * @return extension without the dot
+     * @throws IllegalArgumentException thrown when the name is {@code null} or has no dot
      */
     public static String getFileExtension(String fileName) {
         if (fileName == null || !fileName.contains("."))
@@ -140,10 +146,10 @@ public class NamePolicy {
     }
 
     /**
-     * 在原始基本名称后追加 UUID。
+     * Appends a UUID after the original base name.
      *
-     * @param fileName 已清理的文件名
-     * @return {@code 基本名称_UUID.扩展名}
+     * @param fileName sanitized filename
+     * @return {@code baseName_UUID.extension}
      */
     public static String nameOriginalRandom(String fileName) {
         return getBaseName(fileName).trim() + "_" + RandomTools.uuidStr() + "." + getFileExtension(fileName);

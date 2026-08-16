@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 音频文件头检测规则集合。
+ * Audio file header detection rule set.
  */
 public class MagicNumberAudio {
     /**
-     * 扩展名到音频文件头检测函数的映射。
+     * Map from extension to audio file header detection function.
      */
     public static final Map<String, Function<byte[], Boolean>> AUDIO_MAGIC_MAP = new HashMap<>();
 

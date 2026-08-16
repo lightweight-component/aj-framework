@@ -6,7 +6,17 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for boundary conditions in {@link FileUpload}, including null inputs,
+ * empty files, exact and over-limit sizes, negative reported sizes, null policies,
+ * and URL prefix building.
+ */
 class TestFileUploadBoundaries {
+
+    /**
+     * Verifies that creating a {@link FileUpload} with a {@code null} file or
+     * {@code null} configuration throws {@link IllegalArgumentException}.
+     */
     @Test
     void rejectsNullFileAndConfiguration() {
         assertThrows(
@@ -19,6 +29,9 @@ class TestFileUploadBoundaries {
         );
     }
 
+    /**
+     * Verifies that an empty file (zero bytes) is rejected.
+     */
     @Test
     void rejectsEmptyFile() {
         assertThrows(
@@ -27,6 +40,10 @@ class TestFileUploadBoundaries {
         );
     }
 
+    /**
+     * Verifies that a file exactly at the maximum size limit is accepted,
+     * while a file one byte over is rejected.
+     */
     @Test
     void acceptsExactMaximumAndRejectsOneByteOver() {
         FileUploadConfig config = configuration();
@@ -41,6 +58,10 @@ class TestFileUploadBoundaries {
         );
     }
 
+    /**
+     * Verifies that a file reporting a negative size via {@code getSize()}
+     * is rejected.
+     */
     @Test
     void rejectsNegativeReportedFileSize() {
         MockMultipartFile file = new MockMultipartFile(
@@ -57,6 +78,10 @@ class TestFileUploadBoundaries {
         );
     }
 
+    /**
+     * Verifies that setting a {@code null} detect type, content type policy,
+     * or name policy on the configuration is rejected.
+     */
     @Test
     void rejectsNullPoliciesSetByCaller() {
         FileUploadConfig nullDetectType = configuration();
@@ -81,6 +106,10 @@ class TestFileUploadBoundaries {
         );
     }
 
+    /**
+     * Verifies that the URL prefix is correctly built from three parts,
+     * producing a single concatenated string.
+     */
     @Test
     void buildsUrlPrefixFromThreeParts() {
         FileUploadConfig config = configuration();
@@ -91,6 +120,12 @@ class TestFileUploadBoundaries {
         assertEquals("https://example.com/app/files", config.getUrlPrefix());
     }
 
+    /**
+     * Creates a default {@link FileUploadConfig} with a no-check content type
+     * policy and magic number check disabled.
+     *
+     * @return a configured {@link FileUploadConfig} instance
+     */
     private static FileUploadConfig configuration() {
         FileUploadConfig config = new FileUploadConfig();
         config.setContentTypePolicy(ContentTypePolicy.Policy.NO_CHECK);
@@ -98,6 +133,12 @@ class TestFileUploadBoundaries {
         return config;
     }
 
+    /**
+     * Creates a {@link MockMultipartFile} with the given byte content.
+     *
+     * @param content the file content bytes
+     * @return a configured {@link MockMultipartFile} instance
+     */
     private static MockMultipartFile file(byte[] content) {
         return new MockMultipartFile(
                 "file",

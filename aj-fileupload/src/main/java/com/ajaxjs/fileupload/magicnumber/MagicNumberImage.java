@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 图片文件头检测规则集合。
+ * Image file header detection rule set.
  */
 public class MagicNumberImage {
     /**
-     * 扩展名到图片文件头检测函数的映射。
+     * Map from extension to image file header detection function.
      */
     public static final Map<String, Function<byte[], Boolean>> IMAGE_MAGIC_MAP = new HashMap<>();
 

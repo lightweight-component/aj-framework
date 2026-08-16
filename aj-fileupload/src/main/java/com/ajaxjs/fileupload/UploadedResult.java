@@ -3,27 +3,27 @@ package com.ajaxjs.fileupload;
 import lombok.Data;
 
 /**
- * 文件上传结果，可作为控制器返回值序列化给客户端。
+ * File upload result, which can be serialized to the client as a controller return value.
  */
 @Data
 public class UploadedResult {
     /**
-     * 文件访问 URL。
+     * File access URL.
      */
     String url;
 
     /**
-     * 实际保存的文件名；根据命名策略可能不同于原始文件名。
+     * The actual saved file name; may differ from the original file name depending on the naming policy.
      */
     String fileName;
 
     /**
-     * 客户端提供的原始文件名。
+     * The original file name provided by the client.
      */
     String originalFileName;
 
     /**
-     * 文件大小，单位字节。
+     * File size, in bytes.
      */
     long fileSize;
 }
