@@ -123,8 +123,8 @@ public class ContentTypePolicy {
 
     /**
      * Check content-type by extension name.
-     * Beware that it's nothing related to the `DetectType detectType`.
-     * Though the content-type is not within `DetectType detectType`, it'll pass.
+     * Beware that it's nothing related to the `DetectType`.
+     * Though the content-type is not within `DetectType`, it'll pass.
      */
     private void checkMapping() {
         Path fakePath = Paths.get(fileName);

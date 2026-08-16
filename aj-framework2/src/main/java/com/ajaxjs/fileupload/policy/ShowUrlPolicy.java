@@ -4,7 +4,9 @@ package com.ajaxjs.fileupload.policy;
  * 上传结果 URL 的展示策略及 URL 拼接工具。
  */
 public class ShowUrlPolicy {
-    /** 上传结果 URL 的提供方式。 */
+    /**
+     * 上传结果 URL 的提供方式。
+     */
     public enum Policy {
         /**
          * 由当前服务提供文件访问 URL。

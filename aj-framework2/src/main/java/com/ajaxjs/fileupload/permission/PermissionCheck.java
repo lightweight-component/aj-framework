@@ -33,7 +33,7 @@ public class PermissionCheck {
 
         Path rootDir = Paths.get(dir); // 替换为你的存储目录
 
-        if (!isPosixSupported()) {
+        if (!FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
             log.warn("The current system doesn't support POSIX permission, skip this check.");
             return;
         }
@@ -60,14 +60,5 @@ public class PermissionCheck {
         }
 
         isAlreadyChecked = true;
-    }
-
-    /**
-     * 判断默认文件系统是否支持 POSIX 权限属性。
-     *
-     * @return 支持时返回 {@code true}
-     */
-    public static boolean isPosixSupported() {
-        return FileSystems.getDefault().supportedFileAttributeViews().contains("posix");
     }
 }

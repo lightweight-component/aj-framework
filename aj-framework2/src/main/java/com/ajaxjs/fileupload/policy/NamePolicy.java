@@ -8,7 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
  * <p>所有策略都会先移除客户端文件名中的路径部分并拒绝控制字符。</p>
  */
 public class NamePolicy {
-    /** 可用的上传文件命名方式。 */
+    /**
+     * 可用的上传文件命名方式。
+     */
     public enum Policy {
         /**
          * 使用清理后的原始文件名；可能发生同名冲突。
@@ -34,7 +36,7 @@ public class NamePolicy {
      * 创建文件名策略。
      *
      * @param fileName 客户端文件名；可以包含浏览器传入的路径部分
-     * @param policy 命名策略
+     * @param policy   命名策略
      */
     public NamePolicy(String fileName, Policy policy) {
         this.fileName = fileName;
@@ -44,7 +46,7 @@ public class NamePolicy {
     /**
      * 从 multipart 文件创建命名策略。
      *
-     * @param file multipart 文件
+     * @param file   multipart 文件
      * @param policy 命名策略
      */
     public NamePolicy(MultipartFile file, Policy policy) {

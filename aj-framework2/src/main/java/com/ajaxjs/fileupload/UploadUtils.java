@@ -65,10 +65,10 @@ public class UploadUtils {
      * {@code (MultipartFile, HttpServletResponse)}。目标方法必须直接声明
      * {@link FileUploadAction}。</p>
      *
-     * @param controllerClz 控制器类型
-     * @param methodName 控制器方法名
-     * @param file 待上传文件
-     * @param customConfig 配置修改回调；可为 {@code null}
+     * @param controllerClz  控制器类型
+     * @param methodName     控制器方法名
+     * @param file           待上传文件
+     * @param customConfig   配置修改回调；可为 {@code null}
      * @param saveToDatabase 数据库存储回调；使用
      *                       {@link com.ajaxjs.fileupload.policy.StorageType#DATABASE}
      *                       时必须提供并返回非 {@code null} 结果
@@ -77,7 +77,7 @@ public class UploadUtils {
      */
     public static UploadedResult doUpload(Class<?> controllerClz, String methodName, MultipartFile file,
                                           Consumer<FileUploadConfig> customConfig,
-        BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
+                                          BiFunction<MultipartFile, FileUploadConfig, UploadedResult> saveToDatabase) {
         Methods methods = new Methods(controllerClz);
         Method uploadMethod = methods.findDeclaredMethodByTypes(methodName, MultipartFile.class);
 
