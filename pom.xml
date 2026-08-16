@@ -10,7 +10,11 @@
     <modules>
         <module>aj-next-parent</module>
         <module>aj-project-parent</module>
-<!--        <module>aj-base</module>-->
+        <module>aj-security</module>
+        <module>aj-spring-base</module>
+        <module>aj-fileupload</module>
+        <module>aj-dataservice</module>
+        <module>aj-wechat</module>
         <module>aj-framework2</module>
     </modules>
 </project>

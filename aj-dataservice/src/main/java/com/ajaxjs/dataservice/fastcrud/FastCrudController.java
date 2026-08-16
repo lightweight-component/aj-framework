@@ -1,0 +1,131 @@
+package com.ajaxjs.dataservice.fastcrud;
+
+import com.ajaxjs.spring.annotation.BizAction;
+import com.ajaxjs.sqlman.crud.page.PageResult;
+import com.ajaxjs.sqlman.model.CreateResult;
+import com.ajaxjs.sqlman.model.UpdateResult;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * FastCRUD 控制器
+ */
+@RestController
+@RequestMapping("/common_api")
+public interface FastCrudController {
+    /**
+     * 获取单笔详情
+     *
+     * @param namespace 实体的命名空间
+     * @param id        实体 id
+     * @return 实体 Map
+     */
+    @GetMapping("/{namespace}/{id}")
+    @BizAction("获取单笔详情")
+    Map<String, Object> info(@PathVariable String namespace, @PathVariable Long id);
+
+    /**
+     * 获取实体列表
+     *
+     * @param namespace 实体的命名空间
+     * @return 实体列表
+     */
+    @GetMapping("/{namespace}/list")
+    @BizAction("获取实体列表")
+    List<Map<String, Object>> list(@PathVariable String namespace);
+
+    /**
+     * 分页获取实体列表
+     *
+     * @param namespace 实体的命名空间
+     * @return 实体列表
+     */
+    @GetMapping("/{namespace}/page")
+    @BizAction("分页获取实体列表")
+    PageResult<Map<String, Object>> page(@PathVariable String namespace);
+
+    /**
+     * 分页获取实体列表
+     * 按照页码的
+     *
+     * @param namespace 实体的命名空间
+     * @return 实体列表
+     */
+    @GetMapping("/{namespace}/page_no")
+    @BizAction("分页获取实体列表")
+    PageResult<Map<String, Object>> pageByNo(@PathVariable String namespace);
+
+    /**
+     * 创建实体
+     * 这是 Raw Body POST for Form-Data 的版本
+     *
+     * @param namespace 实体的命名空间
+     * @param params    实体
+     * @return 实体 id
+     */
+    @PostMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @BizAction("创建实体")
+    CreateResult<Serializable> create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+
+    /**
+     * 创建实体
+     * 这是 Raw Body POST for JSON 的版本
+     *
+     * @param namespace 实体的命名空间
+     * @param params    实体
+     * @return 实体 id
+     */
+    @PostMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @BizAction("创建实体")
+    CreateResult<Serializable> create(@RequestBody Map<String, Object> params, @PathVariable String namespace);
+
+    /**
+     * 修改实体
+     * 这是 Raw Body POST for Form-Data 的版本
+     *
+     * @param namespace 实体的命名空间
+     * @param params    实体
+     * @return 是否成功
+     */
+    @PutMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @BizAction("修改实体")
+    UpdateResult update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+
+    /**
+     * 修改实体
+     * 这是 Raw Body POST for JSON 的版本
+     *
+     * @param namespace 实体的命名空间
+     * @param params    实体
+     * @return 是否成功
+     */
+    @PutMapping(value = "/{namespace}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @BizAction("修改实体")
+    UpdateResult update(@RequestBody Map<String, Object> params, @PathVariable String namespace);
+
+    /**
+     * 物理删除实体
+     *
+     * @param namespace 实体的命名空间
+     * @param id        实体 id
+     * @return 是否成功
+     */
+    @DeleteMapping("/{namespace}/logical/{id}")
+    @BizAction("物理删除实体")
+    boolean deletePhysical(@PathVariable String namespace, @PathVariable Long id);
+
+    /**
+     * 物理删除实体
+     *
+     * @param namespace 实体的命名空间
+     * @param id        实体 id
+     * @return 是否成功
+     */
+    @DeleteMapping("/{namespace}/{id}")
+    @BizAction("逻辑删除实体")
+    boolean deleteLogical(@PathVariable String namespace, @PathVariable Long id);
+}
