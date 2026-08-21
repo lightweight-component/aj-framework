@@ -162,10 +162,7 @@ public class Download {
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType(probeContentType(file));
             response.setContentLengthLong(Files.size(file));
-            response.setHeader(
-                    HttpHeaders.CONTENT_DISPOSITION,
-                    contentDisposition(filename, file).toString()
-            );
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition(filename, file).toString());
 
             OutputStream out = response.getOutputStream();
             new DataWriter(out).write(in);

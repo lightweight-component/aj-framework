@@ -81,7 +81,6 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
     int expireSeconds;
 
     public void captchaImage(HttpServletRequest req, HttpServletResponse resp) {
-
         String uuid = req.getParameter("uuid");
 
         if (ObjectHelper.isEmptyText(uuid) || "undefined".equals(uuid))
