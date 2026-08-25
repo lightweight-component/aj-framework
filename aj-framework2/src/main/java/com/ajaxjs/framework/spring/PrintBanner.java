@@ -35,16 +35,6 @@ public class PrintBanner implements ApplicationRunner {
 
     private String version = "1.0";
 
-    //    private static final String[] BANNER = {
-//            "",
-//            "\033[91m       ___       _       ___  __    __      _   _____        _          __  _____   _____  ",
-//            "\033[92m     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ ",
-//            "\033[93m    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  ",
-//            "\033[94m   / / | |  _  | |   / / | |   }  {    _  | | \\___  \\      | | /  | / /   |  __|  |  _  {  ",
-//            "\033[95m  / /  | | | |_| |  / /  | |  / /\\ \\  | |_| |  ___| |      | |/   |/ /    | |___  | |_| |  ",
-//            "\033[96m /_/   |_| \\_____/ /_/   |_| /_/  \\_\\ \\_____/ /_____/      |___/|___/     |_____| |_____/ ",
-//            "\033[0m"
-//    };
     /* Thx to https://manytools.org/hacker-tools/ascii-banner/ */
     private static final String[] BANNER = {
             "\nBrought to you by:",
