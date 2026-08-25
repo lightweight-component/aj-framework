@@ -1,6 +1,5 @@
-package com.ajaxjs.framework.service;
+package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.validator.ValidatorHelper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
