@@ -18,6 +18,5 @@
         <module>aj-wechat</module>
         <module>aj-framework2</module>
         <module>aj-beanvalidator</module>
-        <module>aj-shop</module>
     </modules>
 </project>
