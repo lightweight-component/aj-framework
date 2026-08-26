@@ -1,6 +1,5 @@
 package com.ajaxjs.wechat;
 
-import com.ajaxjs.framework.BaseTest;
 import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.httpremote.Get;

@@ -1,4 +1,1 @@
-com.ajaxjs.security.SecurityConfiguration
-com.ajaxjs.dataservice.AutoConfiguration
-com.ajaxjs.wechat.WechatConfiguration
 com.ajaxjs.framework.AutoConfiguration

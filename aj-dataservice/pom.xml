@@ -7,7 +7,7 @@
         <relativePath/>
     </parent>
 
-    <artifactId>dataservice</artifactId>
+    <artifactId>aj-data-service</artifactId>
     <name>aj-dataservice</name>
     <version>1.3</version>
     <packaging>jar</packaging>
