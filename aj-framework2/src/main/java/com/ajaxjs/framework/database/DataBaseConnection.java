@@ -37,6 +37,10 @@ import java.util.Objects;
 public class DataBaseConnection implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
+        // 防御性清理：Tomcat 线程会复用，避免继承上一个请求的残留异常
+        if (req.getDispatcherType() == DispatcherType.REQUEST)
+            GlobalExceptionHandler.EXCEPTION_HOLDER.remove();
+
         if (DispatcherType.ERROR.equals(req.getDispatcherType()) && "/error".equals(req.getRequestURI()))
             return true; // Error page
 
@@ -82,28 +86,34 @@ public class DataBaseConnection implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
+        if (!(handler instanceof HandlerMethod))
+            return;
 
-            if (method.getAnnotation(IgnoreDataBaseConnect.class) == null) {// 有注解
-                try {
-                    if (method.getAnnotation(EnableTransaction.class) != null) {
-                        if (ex == null) { // Global Exception just done.
-                            Throwable ex2 = GlobalExceptionHandler.EXCEPTION_HOLDER.get();
-                            doTransaction(ex2);
-                            GlobalExceptionHandler.EXCEPTION_HOLDER.remove();
-                        } else
-                            doTransaction(ex);
-                    }
-                } catch (Throwable e) {
-                    log.error("Error when finishing the transaction.", e);
-                } finally {
-                    JdbcConnection.closeDb();
+        Method method = ((HandlerMethod) handler).getMethod();
+
+        if (method.getAnnotation(IgnoreDataBaseConnect.class) != null)
+            return;
+
+        if (method.getAnnotation(IgnoreDataBaseConnect.class) == null) {// 有注解
+            try {
+                if (method.getAnnotation(EnableTransaction.class) != null) {
+                    // 全局异常处理器处理过后，Spring 传进来的 ex 往往为 null；
+                    // 此时才从 ThreadLocal 取。
+                    Throwable actualEx = ex != null ? ex : GlobalExceptionHandler.EXCEPTION_HOLDER.get();
+                    log.warn("Global Exception-------------------" + actualEx, actualEx);
+
+                    doTransaction(actualEx);
                 }
+            } catch (Throwable e) {
+                log.error("Error when finishing the transaction.", e);
+            } finally {
+                // 无论是否有事务、是否抛错、是否 rollback 成功，都必须清理
+                GlobalExceptionHandler.EXCEPTION_HOLDER.remove();
+                JdbcConnection.closeDb();
             }
-
         }
+
+
     }
 
     private static void doTransaction(Throwable ex) throws SQLException {
@@ -116,11 +126,14 @@ public class DataBaseConnection implements HandlerInterceptor {
         if (conn.getAutoCommit())
             throw new SQLException("数据库连接没有关闭自动提交事务");
 
-        if (ex != null)
+        if (ex != null) {
+            log.warn("数据库事务异常，回滚回滚事务……", ex);
             conn.rollback();
-        else
+            log.warn("数据库事务回滚成功！");
+        } else {
             conn.commit();
-
+            log.info("数据库事务提交成功！");
+        }
         conn.setAutoCommit(true);
     }
 
