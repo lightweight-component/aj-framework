@@ -28,6 +28,13 @@ public class HttpReferer extends InterceptorAction<HttpRefererCheck> {
      */
     private List<String> allowedReferrers;
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(HttpRefererCheck annotation, HttpServletRequest req) {
         if (!ObjectHelper.isEmpty(allowedReferrers)) {

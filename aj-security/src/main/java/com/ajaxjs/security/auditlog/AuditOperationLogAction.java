@@ -15,6 +15,9 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
+/**
+ * Represents the audit operation log action component.
+ */
 @Data
 @Slf4j
 @Component
@@ -32,7 +35,13 @@ public class AuditOperationLogAction extends InterceptorAction<AuditOperationLog
      */
     public static final ExpressionParser EXPRESSION_PARSER = new SpelExpressionParser();
 
-
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(AuditOperationLog annotation, HttpServletRequest req) {
         String expression = annotation.expression();

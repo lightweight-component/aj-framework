@@ -6,10 +6,10 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
 
-
 # AJ Security：实用的 Java Web 安全库
 
-基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于 Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
+基于 Spring/HandlerInterceptor 拦截器机制，抽象一套过滤/校验的机制，形成统一的一套调用链，可灵活配置并扩展。本安全框架架构简单，代码精炼，没有其他额外的依赖，适用于任何基于
+Spring 的项目。Spring Boot 程序引入 jar 包即可开箱即用。
 
 本框架的功能有：
 
@@ -37,7 +37,6 @@
     - 实体字段脱敏
     - API 接口加解密
 
-
 AJ Security 的代码量不多，而且都是很简单易懂的代码。另外没啥第三方依赖，适合 Java8+。
 
 请参阅[用户手册](https://security.ajaxjs.com)以了解更多。
@@ -47,6 +46,7 @@ AJ Security 的代码量不多，而且都是很简单易懂的代码。另外�
 需要 Java 8+. Maven:
 
 ```xml
+
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
@@ -55,10 +55,13 @@ AJ Security 的代码量不多，而且都是很简单易懂的代码。另外�
 ```
 
 ## 源代码
+
 本项目采用 Apache License 协议开源。
 
-- GitHub 地址：[https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
-- GitCode 地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security)
+- GitHub
+  地址：[https://github.com/lightweight-component/aj-security](https://github.com/lightweight-component/aj-security)
+- GitCode
+  地址（适合中国用户快速访问）：[https://gitcode.com/lightweight-component/aj-security](https://gitcode.com/lightweight-component/aj-security)
 
 ## 相关链接
 

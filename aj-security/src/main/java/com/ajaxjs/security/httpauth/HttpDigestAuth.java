@@ -35,6 +35,13 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
 
     String REALM = "my-digest-realm";
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(HttpDigestAuthCheck annotation, HttpServletRequest req) {
         String authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);  // 获取 Referer 头
@@ -75,7 +82,10 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
         }
     }
 
-    private void sendDigestChallenge() {
+    /**
+     * Executes the send digest challenge operation.
+     */
+    void sendDigestChallenge() {
         HttpServletResponse response = DiContextUtil.getResponse();
         String nonce = new Base64Utils(UUID.randomUUID().toString()).encodeAsString();
         String header = String.format("Digest realm=\"%s\", qop=\"auth\", nonce=\"%s\", opaque=\"%s\"", REALM, nonce, HashHelper.md5(REALM));
@@ -89,7 +99,13 @@ public class HttpDigestAuth extends InterceptorAction<HttpDigestAuthCheck> {
         }
     }
 
-    private static Map<String, String> parseDigestHeader(String header) {
+    /**
+     * Executes the parse digest header operation.
+     *
+     * @param header the header parameter.
+     * @return the operation result.
+     */
+    static Map<String, String> parseDigestHeader(String header) {
         Map<String, String> map = new HashMap<>();
         String[] parts = header.split(", ");
 

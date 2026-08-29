@@ -7,6 +7,9 @@ import com.ajaxjs.security.desensitize.annotation.DesensitizeNullProperty;
 import com.ajaxjs.security.desensitize.annotation.DesensitizeProperty;
 import lombok.Data;
 
+/**
+ * Represents the people component.
+ */
 @DesensitizeModel
 @Data
 public class People {

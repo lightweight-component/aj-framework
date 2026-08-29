@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+          display: flex;
+          justify-content: center; /* horizontal center */
+          align-items: center;      /* vertical center */
+          height: 100vh;            /* full viewport height (or any fixed height) */
+          width: 100%;
+        }
+
+
+    </style>
+</head>
+<body>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<div class="container">
+    <form action="http://localhost:8083/foo/captcha_cloudflare" method="POST">
+        <input type="text" name="name"/>
+        <br/>
+        <input type="text" name="age"/>
+        <br/>
+        <!-- Other form fields -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAA2NqTaXauncxkr"></div>
+
+        <button type="submit">Submit</button>
+    </form>
+    <br/>
+    <br/>
+    Google:
+
+    <script src="https://www.recaptcha.net/recaptcha/api.js?render=6LclfLMZAAAAAKC3YUTP4E3Ylc0PSvfXpneRePAH"></script>
+
+    <form id="myForm" action="http://localhost:8083/foo/captcha_google" method="POST">
+        <input type="text" name="name"/>
+        <br/>
+        <input type="text" name="age"/>
+        <br/>
+        <input type="hidden" name="grecaptchaToken" id="recaptchaToken"/>
+        <button type="submit">Submit</button>
+        <p id="status"></p>
+    </form>
+
+    <script>
+            document.getElementById('myForm').addEventListener('submit', function (e) {
+            debugger
+              e.preventDefault(); // Prevent default form submission
+
+              const form = e.target;
+              const tokenInput = document.getElementById('recaptchaToken');
+
+              grecaptcha.ready(function () {
+                grecaptcha.execute('6LclfLMZAAAAAKC3YUTP4E3Ylc0PSvfnp8eRePAH', { action: 'submit' }).then(function (token) {
+                debugger
+                  tokenInput.value = token; // Set token value in hidden input
+                  form.submit(); // Now submit the form
+                });
+              });
+            });
+           /* document.getElementById('myForm').addEventListener('submit', function (e) {
+              e.preventDefault();
+
+              const form = e.target;
+              const status = document.getElementById('status');
+
+              // Execute reCAPTCHA
+              grecaptcha.ready(function () {
+                grecaptcha.execute('6LclfLMZAAAAAKC3YUTP4Ylc0PSvfnpneRePAH', { action: 'submit' }).then(function (token) {
+                  // Add token to form data
+                  const formData = new FormData(form);
+                  formData.append('token', token);
+
+                  // Submit form via fetch
+                  fetch('/api/submit-form', {
+                    method: 'POST',
+                    body: JSON.stringify(Object.fromEntries(formData)),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }).then(response => response.json()).then(data => {
+                    status.textContent = data.message || 'Success!';
+                    status.style.color = 'green';
+                    form.reset();
+                  }).catch(error => {
+                    status.textContent = 'An error occurred.';
+                    status.style.color = 'red';
+                    console.error('Error:', error);
+                  });
+                });
+              });
+            });*/
+
+
+    </script>
+</div>
+</body>
+</html>

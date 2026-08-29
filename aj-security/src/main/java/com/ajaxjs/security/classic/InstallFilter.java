@@ -35,10 +35,24 @@ public class InstallFilter implements Filter {
      */
     int maxCookieSize;
 
+    /**
+     * Executes the init operation.
+     *
+     * @param filterConfig the filter config parameter.
+     */
     @Override
     public void init(FilterConfig filterConfig) {
     }
 
+    /**
+     * Executes the do filter operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param chain    the chain parameter.
+     * @throws IOException      if the operation cannot be completed.
+     * @throws ServletException if the operation cannot be completed.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         SecurityRequest securityRequest = new SecurityRequest((HttpServletRequest) request);
@@ -52,6 +66,9 @@ public class InstallFilter implements Filter {
         chain.doFilter(securityRequest, securityResponse);// 继续处理请求
     }
 
+    /**
+     * Executes the destroy operation.
+     */
     @Override
     public void destroy() {
     }
@@ -67,7 +84,7 @@ public class InstallFilter implements Filter {
      * @param replFn 替换函数，用于处理匹配到的模式。如果为 null，则简单地移除所有匹配的模式
      * @return 清理后的字符串。
      */
-    private static String clean(String str, Pattern p, Function<Matcher, String> replFn) {
+    static String clean(String str, Pattern p, Function<Matcher, String> replFn) {
         if (ObjectHelper.isEmptyText(str))
             return str;
 
@@ -79,6 +96,9 @@ public class InstallFilter implements Filter {
             return str;
     }
 
+    /**
+     * Stores the crlf pattern value.
+     */
     private static final Pattern CRLF_Pattern = Pattern.compile("\\r|\\n");
 
     /**
@@ -91,6 +111,9 @@ public class InstallFilter implements Filter {
         return clean(str, CRLF_Pattern, null);
     }
 
+    /**
+     * Stores the xss pattern value.
+     */
     private static final Pattern XSS_Pattern = Pattern.compile("<script[^>]*?>.*?</script>");
 
     /**
@@ -141,7 +164,7 @@ public class InstallFilter implements Filter {
      * @param list
      * @return true 表示为包含；false 表示为不包含
      */
-    private static boolean isInList(String str, List<String> list) {
+    static boolean isInList(String str, List<String> list) {
         if (ObjectHelper.isEmpty(list))
             return false;
 

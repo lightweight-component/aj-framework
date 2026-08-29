@@ -18,6 +18,9 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+/**
+ * Represents the params sign component.
+ */
 @Data
 @Slf4j
 public class ParamsSign {
@@ -38,8 +41,18 @@ public class ParamsSign {
     @Value("${security.ParamsSign.expire: 600}")
     long expireSeconds = 60 * 10;
 
+    /**
+     * Stores the sign params value.
+     */
     public static final String SIGN_PARAMS = "sign";
 
+    /**
+     * Executes the sign operation.
+     *
+     * @param params       the params parameter.
+     * @param accessSecret the access secret parameter.
+     * @return the operation result.
+     */
     @SuppressWarnings("unchecked")
     public String sign(Object params, String accessSecret) {
         Map<String, String> paramMap = new HashMap<>();
@@ -67,10 +80,22 @@ public class ParamsSign {
         return sign;
     }
 
+    /**
+     * Executes the sign operation.
+     *
+     * @param params the params parameter.
+     * @return the operation result.
+     */
     public String sign(Object params) {
         return sign(params, secretKey);
     }
 
+    /**
+     * Executes the verify operation.
+     *
+     * @param params the params parameter.
+     * @return the operation result.
+     */
     public boolean verify(Map<String, String> params) {
         String clientSign = params.get(SIGN_PARAMS);
         String nonce = params.get("nonce");
@@ -108,10 +133,15 @@ public class ParamsSign {
         }
     }
 
+    /**
+     * Stores the datetime formatter value.
+     */
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneOffset.UTC);
 
     /**
      * 请求的时间戳。按照 ISO8601 标准表示，并需要使用 UTC 时间，格式为 yyyy-MM-ddTHH:mm:ssZ。
+     *
+     * @return the operation result.
      */
     static String getTimestamp() {
         return DATETIME_FORMATTER.format(Instant.now());
@@ -119,8 +149,11 @@ public class ParamsSign {
 
     /**
      * 根据参数 Key 排序（顺序）
+     *
+     * @param paras the para parameter.
+     * @return the operation result.
      */
-    private static String sort(Map<String, String> paras) {
+    static String sort(Map<String, String> paras) {
         TreeMap<String, String> sortParas = new TreeMap<>(paras);
         Iterator<String> it = sortParas.keySet().iterator();
         StringBuilder sb = new StringBuilder();
@@ -136,7 +169,12 @@ public class ParamsSign {
         return sb.substring(1);// 去除第一个多余的&符号
     }
 
-    // 解析 ISO8601 字符串为 long 类型的毫秒时间戳
+    /**
+     * 解析 ISO8601 字符串为 long 类型的毫秒时间戳
+     *
+     * @param timestampStr the timestamp str parameter.
+     * @return the operation result.
+     */
     static long parseIso8601ToMillis(String timestampStr) {
         return Instant.from(DATETIME_FORMATTER.parse(timestampStr)).toEpochMilli();
     }

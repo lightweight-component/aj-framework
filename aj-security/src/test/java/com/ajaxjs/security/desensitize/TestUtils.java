@@ -8,7 +8,10 @@ import java.util.List;
 import static com.ajaxjs.security.desensitize.FieldTools.*;
 
 
-public class TestUtils {
+/**
+ * Represents the test utils component.
+ */
+class TestUtils {
     @Test
     void testRemove() {
         Integer[] numbers = {1, 2, 3, 4, 5};
@@ -17,11 +20,16 @@ public class TestUtils {
         System.out.println(java.util.Arrays.toString(updatedNumbers)); // Output: [1, 2, 4, 5]
     }
 
-    // 示例类
+    /**
+     * 示例类
+     */
     class Parent {
         private String parentField;
     }
 
+    /**
+     * Represents the child component.
+     */
     class Child extends Parent {
         private int childField;
     }

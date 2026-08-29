@@ -8,6 +8,9 @@ import com.ajaxjs.security.desensitize.annotation.DesensitizeProperty;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents the pub response component.
+ */
 @DesensitizeModel
 public class PubResponse {
     @DesensitizeProperty(DesensitizeType.USERNAME)
@@ -29,6 +32,9 @@ public class PubResponse {
     public List<Job> jobList;
     public Job[] jobs;
 
+    /**
+     * Represents the job component.
+     */
     @DesensitizeModel
     public static class Job {
         @DesensitizeProperty(DesensitizeType.DEFAULT)

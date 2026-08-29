@@ -12,7 +12,7 @@ import java.util.HashMap;
 /**
  * 实体类对象脱敏单元测试
  */
-public class TestDeSensitizeNewEntity {
+class TestDeSensitizeNewEntity {
     @Test
     public void simpleFieldTest() {
         People people = new People();
@@ -55,7 +55,7 @@ public class TestDeSensitizeNewEntity {
     }
 
     @Test
-    public void testFieldMap() {
+    void testFieldMap() {
         PeopleMap peopleMap = new PeopleMap();
         peopleMap.getParams().put("password", "12345");
         peopleMap.getParams().put("username", "田晓霞");
@@ -65,7 +65,7 @@ public class TestDeSensitizeNewEntity {
     }
 
     @Test
-    public void test11() {
+    void test11() {
         PubResponse response = new PubResponse();
         response.password = "32433";
         response.username = "条消息";

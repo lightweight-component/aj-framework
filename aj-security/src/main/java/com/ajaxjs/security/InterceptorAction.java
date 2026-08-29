@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 /**
  * 拦截器动作
  *
- * @param <T>
+ * @param <T> the annotation type handled by this interceptor action
  */
 @Data
 public abstract class InterceptorAction<T extends Annotation> {
@@ -33,6 +33,11 @@ public abstract class InterceptorAction<T extends Annotation> {
      */
     abstract public boolean action(T annotation, HttpServletRequest req);
 
+    /**
+     * Executes the get after completion action operation.
+     *
+     * @return the operation result.
+     */
     public BiConsumer<HttpServletRequest, HttpServletResponse> getAfterCompletionAction() {
         return null;
     }

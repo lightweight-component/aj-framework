@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestSecurity {
+/**
+ * Represents the test security component.
+ */
+class TestSecurity {
     private ListCheck c;
 
     //	@Test
@@ -16,7 +19,7 @@ public class TestSecurity {
 //	}
 
     @Test
-    public void testXss() {
+    void testXss() {
         String script = "Foo <script>alert(3)</script>";
         assertEquals("Foo ", InstallFilter.cleanXSS(script));
         assertEquals("&lt;script&gt;alert(3)&lt;/script&gt;", InstallFilter.cleanXSS(script, InstallFilter.Handle.TYPE_ESCAPE));
@@ -32,7 +35,7 @@ public class TestSecurity {
 //	}
 
     @Test
-    public void testFilter() {
+    void testFilter() {
         String str = "abc \rlk\n";
         assertEquals("abc lk", InstallFilter.cleanCRLF(str));
 

@@ -13,10 +13,28 @@ import java.io.IOException;
  * Servlet implementation class CaptchaServlet
  */
 public abstract class BaseCaptchaServlet extends HttpServlet {
+    /**
+     * Stores the serial version uid value.
+     */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Stores the session key value value.
+     */
     protected String sessionKeyValue = "CAPTCHA";
+
+    /**
+     * Stores the provider value.
+     */
     protected ICaptchaImageProvider provider;
 
+    /**
+     * Executes the do get operation.
+     *
+     * @param req  the req parameter.
+     * @param resp the resp parameter.
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // Set to expire far in the past.

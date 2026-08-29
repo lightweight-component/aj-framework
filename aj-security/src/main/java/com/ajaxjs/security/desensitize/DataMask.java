@@ -8,6 +8,9 @@ import java.util.Arrays;
  * 数据脱敏
  */
 public class DataMask {
+    /**
+     * Stores the place holder value.
+     */
     public static String PLACE_HOLDER = "--隐藏--";
 
     /**
@@ -193,6 +196,13 @@ public class DataMask {
         return cardNo.substring(0, 6) + repeat("*", cardNo.length() - 10) + cardNo.substring(cardNo.length() - 4);
     }
 
+    /**
+     * Executes the repeat operation.
+     *
+     * @param str   the str parameter.
+     * @param count the count parameter.
+     * @return the operation result.
+     */
     public static String repeat(String str, int count) {
         if (str == null || count <= 0)
             return "";

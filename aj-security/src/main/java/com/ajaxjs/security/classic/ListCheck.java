@@ -54,7 +54,7 @@ public class ListCheck {
      * @param list
      * @return true 表示为包含；false 表示为不包含
      */
-    private static boolean isInList(String str, List<String> list) {
+    static boolean isInList(String str, List<String> list) {
         if (ObjectHelper.isEmpty(list))
             return false;
 

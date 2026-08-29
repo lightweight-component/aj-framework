@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 /**
- * Simply check the HttpBasicAuth
+ * Check the HttpBasicAuth
  */
 @Data
 @Component
@@ -29,6 +29,13 @@ public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
 
     String password;
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(HttpBasicAuthCheck annotation, HttpServletRequest req) {
         if (ObjectHelper.isEmptyText(username) || ObjectHelper.isEmptyText(password))
@@ -55,11 +62,21 @@ public class HttpBasicAuth extends InterceptorAction<HttpBasicAuthCheck> {
         }
     }
 
+    /**
+     * Executes the create operation.
+     *
+     * @param username the username parameter.
+     * @param password the password parameter.
+     * @return the operation result.
+     */
     public static String create(String username, String password) {
         return "Basic " + new Base64Utils(username + ":" + password).encodeAsString();
     }
 
-    private static void responseLogin() {
+    /**
+     * Executes the response login operation.
+     */
+    static void responseLogin() {
         HttpServletResponse response = DiContextUtil.getResponse();
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
         response.setHeader("WWW-Authenticate", "Basic realm=\"User Login\"");

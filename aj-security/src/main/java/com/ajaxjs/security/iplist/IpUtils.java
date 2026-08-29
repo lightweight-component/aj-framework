@@ -13,16 +13,29 @@ import java.util.Set;
  */
 public class IpUtils {
 
-    // 未知 IP 标识
+    /**
+     * 未知 IP 标识
+     */
     private static final String UNKNOWN = "unknown";
-    // 本地回环 IP（IPv4）
+
+    /**
+     * 本地回环 IP（IPv4）
+     */
     private static final String LOCALHOST_IP = "127.0.0.1";
-    // 本地回环 IP（IPv6）
+
+    /**
+     * 本地回环 IP（IPv6）
+     */
     private static final String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";
-    // IP 分隔符（X-Forwarded-For 中多 IP 的分隔符）
+
+    /**
+     * IP 分隔符（X-Forwarded-For 中多 IP 的分隔符）
+     */
     private static final String SEPARATOR = ",";
 
-    // 内网 IP 段（需过滤的非公网 IP）
+    /**
+     * 内网 IP 段（需过滤的非公网 IP）
+     */
     private static final Set<String> INTERNAL_IP_SEGMENTS = new HashSet<>(Arrays.asList(
             "10.", "192.168.",
             "172.16.", "172.17.", "172.18.", "172.19.",
@@ -59,7 +72,7 @@ public class IpUtils {
      * @param xffHeader X-Forwarded-For 头值
      * @return 解析后的 IP（null 表示无有效 IP）
      */
-    private static String parseXForwardedFor(String xffHeader) {
+    static String parseXForwardedFor(String xffHeader) {
         if (xffHeader == null || xffHeader.trim().isEmpty())  // 空值直接返回 null
             return null;
 
@@ -87,7 +100,7 @@ public class IpUtils {
      * @param request HttpServletRequest 请求对象
      * @return 提取到的 IP（null 表示无有效 IP）
      */
-    private static String getIpFromHeaders(HttpServletRequest request) {
+    static String getIpFromHeaders(HttpServletRequest request) {
         // 常见的代理 IP 头字段列表
         String[] headers = {"X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
 
@@ -106,7 +119,7 @@ public class IpUtils {
      * @param ip 待校验 IP
      * @return true=有效，false=无效
      */
-    private static boolean isValidIp(String ip) {
+    static boolean isValidIp(String ip) {
         return ip != null && !ip.isEmpty() && !UNKNOWN.equalsIgnoreCase(ip) && isValidIpAddress(ip);
     }
 
@@ -116,7 +129,7 @@ public class IpUtils {
      * @param ip 待校验 IP
      * @return true=有效公网 IP，false=内网/本地/无效 IP
      */
-    private static boolean isValidPublicIp(String ip) {
+    static boolean isValidPublicIp(String ip) {
         return isValidIp(ip) && !isInternalIp(ip) && !isLocalhost(ip);
     }
 
@@ -126,7 +139,7 @@ public class IpUtils {
      * @param ip 待判断 IP
      * @return true=内网 IP，false=公网 IP
      */
-    private static boolean isInternalIp(String ip) {
+    static boolean isInternalIp(String ip) {
         if (ip == null)
             return false;
 
@@ -139,10 +152,13 @@ public class IpUtils {
      * @param ip 待判断 IP
      * @return true=本地 IP，false=非本地 IP
      */
-    private static boolean isLocalhost(String ip) {
+    static boolean isLocalhost(String ip) {
         return LOCALHOST_IP.equals(ip) || LOCALHOST_IPV6.equals(ip);
     }
 
+    /**
+     * Stores the ipv4 pattern value.
+     */
     public static final String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
     /**

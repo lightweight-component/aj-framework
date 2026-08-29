@@ -16,10 +16,14 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Slf4j
 public class IpSecurityFilter implements Filter {
-    // IP 黑名单（线程安全）
+    /**
+     * IP 黑名单（线程安全）
+     */
     private final Set<String> blacklistedIps = ConcurrentHashMap.newKeySet();
 
-    // 访问频率限制缓存（key=IP，value=频率限制信息）
+    /**
+     * 访问频率限制缓存（key=IP，value=频率限制信息）
+     */
     private final ConcurrentMap<String, RateLimitInfo> rateLimitMap = new ConcurrentHashMap<>();
 
     /**
@@ -28,13 +32,14 @@ public class IpSecurityFilter implements Filter {
      * @param request  请求对象
      * @param response 响应对象
      * @param chain    过滤器链
+     * @throws IOException      if the operation cannot be completed.
+     * @throws ServletException if the operation cannot be completed.
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String clientIp = IpUtils.getClientRealIp(httpRequest); // 获取客户端真实 IP
-
 
 
         // 1. 黑名单校验：命中则拦截
@@ -70,7 +75,7 @@ public class IpSecurityFilter implements Filter {
      * @param ip 客户端 IP
      * @return true=触发限制，false=未触发
      */
-    private boolean isRateLimited(String ip) {
+    boolean isRateLimited(String ip) {
         // 不存在则初始化频率信息
         RateLimitInfo info = rateLimitMap.computeIfAbsent(ip, k -> new RateLimitInfo());
         long currentTime = System.currentTimeMillis();
@@ -89,7 +94,7 @@ public class IpSecurityFilter implements Filter {
      * @param request 请求对象
      * @return true=可疑，false=正常
      */
-    private boolean isSuspiciousRequest(String ip, HttpServletRequest request) {
+    boolean isSuspiciousRequest(String ip, HttpServletRequest request) {
         // 1. 无 User-Agent 视为可疑
         String userAgent = request.getHeader("User-Agent");
         if (userAgent == null || userAgent.trim().isEmpty())
@@ -106,8 +111,9 @@ public class IpSecurityFilter implements Filter {
      * @param response 响应对象
      * @param status   状态码
      * @param message  错误信息
+     * @throws IOException if the operation cannot be completed.
      */
-    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+    void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
         response.setStatus(status);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write("{\"code\": " + status + ", \"message\": \"" + message + "\"}");
@@ -120,7 +126,7 @@ public class IpSecurityFilter implements Filter {
      * @param ip      客户端 IP
      * @param request 请求对象
      */
-    private void logSecurityEvent(String event, String ip, HttpServletRequest request) {
+    void logSecurityEvent(String event, String ip, HttpServletRequest request) {
         log.warn("安全事件触发 - 类型: {}, IP: {}, URI: {}, User-Agent: {}", event, ip, request.getRequestURI(), request.getHeader("User-Agent"));
     }
 
@@ -129,11 +135,19 @@ public class IpSecurityFilter implements Filter {
      * 内部类：记录令牌数、时间窗口起始时间
      */
     private static class RateLimitInfo {
-        // 剩余令牌数（每请求消耗1个）
+        /**
+         * 剩余令牌数（每请求消耗1个）
+         */
         private int tokens;
-        // 时间窗口起始时间
+
+        /**
+         * 时间窗口起始时间
+         */
         private long windowStart;
-        // 最大令牌数（1分钟60个）
+
+        /**
+         * 最大令牌数（1分钟60个）
+         */
         private final int maxTokens = 60;
 
         /**

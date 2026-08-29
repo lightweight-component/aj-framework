@@ -7,7 +7,10 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
-public class TestSimpleCaptchaImage {
+/**
+ * Represents the test simple captcha image component.
+ */
+class TestSimpleCaptchaImage {
     @Test
     void test() throws IOException {
         boolean result = ImageIO.write(new SimpleCaptchaImage().getRenderedImage(200, 50, "343d"), "jpg",

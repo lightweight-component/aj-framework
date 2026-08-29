@@ -23,6 +23,9 @@ import java.util.Map;
 @ConditionalOnProperty(name = "security.captcha.google.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.captcha.google")
 public class GoogleCaptcha extends InterceptorAction<GoogleCaptchaCheck> {
+    /**
+     * Stores the access secret value.
+     */
     private String accessSecret;
 
     /**
@@ -35,6 +38,13 @@ public class GoogleCaptcha extends InterceptorAction<GoogleCaptchaCheck> {
      */
     private final static String SITE_VERIFY = "https://www.recaptcha.net/recaptcha/api/siteverify";
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param request    the request parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(GoogleCaptchaCheck annotation, HttpServletRequest request) {
         String token = request.getParameter(PARAM_NAME);

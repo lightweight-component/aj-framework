@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 字符串脱敏
  */
-public class TestDataMask {
+class TestDataMask {
     @Test
     void testEnum() {
         DataMask.doGetProperty("lklllllllllllllll", DesensitizeType.PHONE);

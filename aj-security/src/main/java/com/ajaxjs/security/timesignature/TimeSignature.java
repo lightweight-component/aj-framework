@@ -97,7 +97,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
      * @param increment the non-negative increment
      * @return the sum, or {@link Long#MAX_VALUE} when it would overflow
      */
-    private static long saturatedAdd(long value, long increment) {
+    static long saturatedAdd(long value, long increment) {
         if (value > Long.MAX_VALUE - increment)
             return Long.MAX_VALUE;
 
@@ -111,7 +111,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
      * @param decrement the non-negative decrement
      * @return the difference, or {@link Long#MIN_VALUE} when it would overflow
      */
-    private static long saturatedSubtract(long value, long decrement) {
+    static long saturatedSubtract(long value, long decrement) {
         if (value < Long.MIN_VALUE + decrement)
             return Long.MIN_VALUE;
 
@@ -142,6 +142,13 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
         return generateSignature(clock.millis());
     }
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(TimeSignatureVerify annotation, HttpServletRequest req) {
         String signature = req.getParameter("tsign");// 获取签名参数

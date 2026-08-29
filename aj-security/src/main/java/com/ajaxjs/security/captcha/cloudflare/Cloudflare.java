@@ -19,6 +19,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+/**
+ * Represents the cloudflare component.
+ */
 @Data
 @Slf4j
 @Component
@@ -28,6 +31,13 @@ import java.util.Map;
 public class Cloudflare extends InterceptorAction<CloudflareCheck> {
     String secretKey;
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(CloudflareCheck annotation, HttpServletRequest req) {
         String token = req.getParameter("cf-turnstile-response");
@@ -66,8 +76,16 @@ public class Cloudflare extends InterceptorAction<CloudflareCheck> {
         }
     }
 
+    /**
+     * Stores the rest template value.
+     */
     private static RestTemplate restTemplate;
 
+    /**
+     * Executes the get rest template operation.
+     *
+     * @return the operation result.
+     */
     static synchronized RestTemplate getRestTemplate() {
         RestTemplate http = DiContextUtil.getBean(RestTemplate.class);
 
@@ -81,5 +99,8 @@ public class Cloudflare extends InterceptorAction<CloudflareCheck> {
         return http;
     }
 
+    /**
+     * Stores the cf url value.
+     */
     private final static String CF_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 }

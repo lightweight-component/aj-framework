@@ -13,9 +13,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-public class TestImage {
+/**
+ * Represents the test image component.
+ */
+class TestImage {
     @Test
-    public void testImageRenderer() throws IOException {
+    void testImageRenderer() throws IOException {
         saveImg(new SimpleCaptchaImage().getRenderedImage(200, 50, "343d"));
     }
 
@@ -30,7 +33,7 @@ public class TestImage {
     }
 
     @Test
-    public void testK() throws IOException {
+    void testK() throws IOException {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         Properties properties = new Properties();
         properties.setProperty("kaptcha.border", "no");
@@ -56,7 +59,7 @@ public class TestImage {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         int d = 9;
         System.out.println(d);
         String str = "foo";

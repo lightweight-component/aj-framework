@@ -43,8 +43,9 @@ public class DeSensitizeNewEntity {
     /**
      * 对实体类entity的属性及父类的属性遍历并对符合条件的属性进行多语言翻译
      *
-     * @param entity 实体类对象
-     * @param <T>    实体类类型
+     * @param entity    实体类对象
+     * @param packClass the pack class parameter.
+     * @param <T>       实体类类型
      */
     protected static <T> void doSetField(T entity, Class<?>... packClass) {
         List<Field> fields = FieldTools.getAllFields(entity.getClass());

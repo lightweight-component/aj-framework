@@ -25,8 +25,14 @@ import java.io.IOException;
  *
  */
 public class SecurityResponse extends HttpServletResponseWrapper {
+    /**
+     * Stores the is xss check value.
+     */
     public boolean isXssCheck;
 
+    /**
+     * Stores the is crlfcheck value.
+     */
     public boolean isCRLFCheck;
 
     /**
@@ -49,6 +55,11 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         super(response);
     }
 
+    /**
+     * Executes the add cookie operation.
+     *
+     * @param cookie the cookie parameter.
+     */
     @Override
     public void addCookie(Cookie cookie) {
         if (isCRLFCheck) {
@@ -79,6 +90,12 @@ public class SecurityResponse extends HttpServletResponseWrapper {
             super.addCookie(cookie);
     }
 
+    /**
+     * Executes the set date header operation.
+     *
+     * @param name the name parameter.
+     * @param date the date parameter.
+     */
     @Override
     public void setDateHeader(String name, long date) {
         if (isCRLFCheck)
@@ -87,6 +104,12 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         super.setDateHeader(name, date);
     }
 
+    /**
+     * Executes the set int header operation.
+     *
+     * @param name  the name parameter.
+     * @param value the value parameter.
+     */
     @Override
     public void setIntHeader(String name, int value) {
         if (isCRLFCheck)
@@ -95,6 +118,12 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         super.setIntHeader(name, value);
     }
 
+    /**
+     * Executes the add header operation.
+     *
+     * @param name  the name parameter.
+     * @param value the value parameter.
+     */
     @Override
     public void addHeader(String name, String value) {
         if (isXssCheck)
@@ -108,6 +137,12 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         super.addHeader(name, value);
     }
 
+    /**
+     * Executes the set header operation.
+     *
+     * @param name  the name parameter.
+     * @param value the value parameter.
+     */
     @Override
     public void setHeader(String name, String value) {
         if (isXssCheck)
@@ -121,6 +156,13 @@ public class SecurityResponse extends HttpServletResponseWrapper {
         super.setHeader(name, value);
     }
 
+    /**
+     * Executes the send error operation.
+     *
+     * @param sc    the sc parameter.
+     * @param value the value parameter.
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void sendError(int sc, String value) throws IOException {
         if (isXssCheck)

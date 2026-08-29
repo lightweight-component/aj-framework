@@ -9,19 +9,37 @@ import java.util.function.Function;
  */
 @AllArgsConstructor
 public enum DesensitizeType {
+    /**
+     * Replaces the value with the default placeholder.
+     */
     DEFAULT(v -> DataMask.PLACE_HOLDER),
-    // 手机号
+    /**
+     * Masks a phone number.
+     */
     PHONE(DataMask::maskPhoneNumber),
-    // 银行卡号
+    /**
+     * Masks a bank-card number.
+     */
     BANK_CARD(DataMask::maskBankCard),
-    // 身份证号
+    /**
+     * Masks an identity-card number.
+     */
     ID_CARD(DataMask::maskIdCard),
-    // 姓名
+    /**
+     * Masks a Chinese name.
+     */
     USERNAME(DataMask::maskChineseName),
-    // email
+    /**
+     * Masks an email address.
+     */
     EMAIL(DataMask::maskEmail),
-    //地址
+    /**
+     * Masks an address.
+     */
     ADDRESS(v -> DataMask.maskAddress(v, 0));
 
+    /**
+     * Stores the handler value.
+     */
     public final Function<String, String> handler;
 }

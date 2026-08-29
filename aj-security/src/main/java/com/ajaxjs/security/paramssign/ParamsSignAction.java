@@ -25,6 +25,13 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
     String secretKey;
     Long expireSeconds;
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(ParamsSignCheck annotation, HttpServletRequest req) {
         if (!(req instanceof ContentCachingRequestWrapper))
@@ -73,6 +80,13 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
         return true;
     }
 
+    /**
+     * Executes the to byte array operation.
+     *
+     * @param input the input parameter.
+     * @return the operation result.
+     * @throws IOException if the operation cannot be completed.
+     */
     public static byte[] toByteArray(InputStream input) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;

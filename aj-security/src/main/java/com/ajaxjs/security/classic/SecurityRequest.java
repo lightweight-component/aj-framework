@@ -31,6 +31,9 @@ import java.util.Vector;
  * @author sp42 frank@ajaxjs.com
  */
 public class SecurityRequest extends HttpServletRequestWrapper {
+    /**
+     * Stores the is xss check value.
+     */
     public boolean isXssCheck = true;
 
     /**
@@ -42,6 +45,12 @@ public class SecurityRequest extends HttpServletRequestWrapper {
         super(request);
     }
 
+    /**
+     * Executes the get parameter operation.
+     *
+     * @param key the key parameter.
+     * @return the operation result.
+     */
     @Override
     public String getParameter(String key) {
         String v = super.getParameter(key);
@@ -52,6 +61,11 @@ public class SecurityRequest extends HttpServletRequestWrapper {
             return v;
     }
 
+    /**
+     * Executes the get parameter map operation.
+     *
+     * @return the operation result.
+     */
     @Override
     public Map<String, String[]> getParameterMap() {
         Map<String, String[]> _map = super.getParameterMap();
@@ -68,6 +82,11 @@ public class SecurityRequest extends HttpServletRequestWrapper {
             return _map;
     }
 
+    /**
+     * Executes the get parameter names operation.
+     *
+     * @return the operation result.
+     */
     @Override
     public Enumeration<String> getParameterNames() {
         Enumeration<String> enums = super.getParameterNames();
@@ -85,6 +104,12 @@ public class SecurityRequest extends HttpServletRequestWrapper {
             return enums;
     }
 
+    /**
+     * Executes the get parameter values operation.
+     *
+     * @param key the key parameter.
+     * @return the operation result.
+     */
     @Override
     public String[] getParameterValues(String key) {
         String[] values = super.getParameterValues(key);

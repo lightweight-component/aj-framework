@@ -11,6 +11,13 @@ import java.util.function.Predicate;
  * bean相互转换工具类
  */
 class FieldTools {
+    /**
+     * Executes the get value operation.
+     *
+     * @param field the field parameter.
+     * @param obj   the obj parameter.
+     * @return the operation result.
+     */
     public static Object getValue(Field field, Object obj) {
         try {
             return field.get(obj);
@@ -19,6 +26,13 @@ class FieldTools {
         }
     }
 
+    /**
+     * Executes the set field operation.
+     *
+     * @param field the field parameter.
+     * @param obj   the obj parameter.
+     * @param value the value parameter.
+     */
     public static void setField(Field field, Object obj, Object value) {
         try {
             field.set(obj, value);
@@ -57,14 +71,29 @@ class FieldTools {
             currentClass = currentClass.getSuperclass(); // 移动到父类
         }
 
-        // 如果到达 Object 类还没有找到字段，则抛出异常
+        /**
+         * 如果到达 Object 类还没有找到字段，则抛出异常
+         */
         throw new IllegalArgumentException("Cannot find field named '" + name + "' in class hierarchy of " + clazz.getName());
     }
 
+    /**
+     * Executes the get fields with annotation operation.
+     *
+     * @param clazz      the clazz parameter.
+     * @param annotation the annotation parameter.
+     * @return the operation result.
+     */
     public static List<Field> getFieldsWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotation) {
         return getAllFields(clazz, field -> field.isAnnotationPresent(annotation));
     }
 
+    /**
+     * Executes the get all fields operation.
+     *
+     * @param clazz the clazz parameter.
+     * @return the operation result.
+     */
     public static List<Field> getAllFields(Class<?> clazz) {
         return getAllFields(clazz, null);
     }
@@ -73,6 +102,7 @@ class FieldTools {
      * 获取指定类及其所有父类和接口中声明的所有字段。
      *
      * @param clazz 要获取字段的类
+     * @param fn    the fn parameter.
      * @return 包含所有字段的列表
      */
     public static List<Field> getAllFields(Class<?> clazz, Predicate<Field> fn) {
@@ -146,10 +176,22 @@ class FieldTools {
         return checkModifierFinalStaticTransVol(modifiers) || checkModifierNativeSyncStrict(modifiers);
     }
 
+    /**
+     * Executes the check modifier native sync strict operation.
+     *
+     * @param modifiers the modifiers parameter.
+     * @return the operation result.
+     */
     protected static boolean checkModifierNativeSyncStrict(int modifiers) {
         return Modifier.isNative(modifiers) || Modifier.isSynchronized(modifiers) || Modifier.isStrict(modifiers);
     }
 
+    /**
+     * Executes the check modifier final static trans vol operation.
+     *
+     * @param modifiers the modifiers parameter.
+     * @return the operation result.
+     */
     protected static boolean checkModifierFinalStaticTransVol(int modifiers) {
         return Modifier.isStatic(modifiers) || Modifier.isTransient(modifiers) || Modifier.isVolatile(modifiers);
     }

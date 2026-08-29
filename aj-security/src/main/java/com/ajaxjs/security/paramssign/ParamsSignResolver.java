@@ -13,15 +13,37 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents the params sign resolver component.
+ */
 @AllArgsConstructor
 public class ParamsSignResolver implements HandlerMethodArgumentResolver {
+    /**
+     * Stores the params sign value.
+     */
     final ParamsSign paramsSign;
 
+    /**
+     * Executes the supports parameter operation.
+     *
+     * @param parameter the parameter parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasMethodAnnotation(ParamsSignCheck.class) || parameter.hasParameterAnnotation(ParamsSignCheck.class);
     }
 
+    /**
+     * Executes the resolve argument operation.
+     *
+     * @param parameter     the parameter parameter.
+     * @param mavContainer  the mav container parameter.
+     * @param webRequest    the web request parameter.
+     * @param binderFactory the binder factory parameter.
+     * @return the operation result.
+     * @throws Exception if the operation cannot be completed.
+     */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);

@@ -9,6 +9,9 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 public @interface NonRepeatSubmit {
+    /**
+     * Represents the type component.
+     */
     enum Type {
         /**
          * 通过 Token 验证，时候没有 userId 的场景（例如注册）

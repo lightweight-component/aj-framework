@@ -34,11 +34,23 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 
+/**
+ * Represents the security interceptor component.
+ */
 @Slf4j
 public class SecurityInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
     NonRepeatSubmitMgr nonRepeatSubmitMgr;
 
+    /**
+     * Executes the pre-handle operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param handler  the handler parameter.
+     * @return the operation result.
+     * @throws Exception if the operation cannot be completed.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod))
@@ -86,6 +98,9 @@ public class SecurityInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * Stores the after completion action value.
+     */
     final static String AFTER_COMPLETION_ACTION = "afterCompletionAction";
 
     int count = 0;
@@ -149,6 +164,14 @@ public class SecurityInterceptor implements HandlerInterceptor {
         return true;  // 如果注解不存在，直接放行
     }
 
+    /**
+     * Executes the after completion operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param handler  the handler parameter.
+     * @param ex       the ex parameter.
+     */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 //        System.out.println("DO afterCompletion::" + (++count));

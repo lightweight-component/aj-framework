@@ -22,15 +22,24 @@ import java.util.Map;
 //@RestController
 //@RequestMapping("/api")
 public class TestController {
-
+    /**
+     * Stores the bandwidth limit interceptor value.
+     */
     @Autowired(required = false)
     private BandwidthLimitInterceptor bandwidthLimitInterceptor;
 
+    /**
+     * Stores the bandwidth limit manager value.
+     */
     @Autowired
     private BandwidthLimitManager bandwidthLimitManager;
 
     /**
      * 全局限速测试 - 200 KB/s
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @throws IOException if the operation cannot be completed.
      */
     @BandwidthLimit(value = 200, unit = BandwidthUnit.KB, type = LimitType.GLOBAL)
     @GetMapping("/download/global")
@@ -44,6 +53,10 @@ public class TestController {
 
     /**
      * API维度限速测试 - 500 KB/s
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @throws IOException if the operation cannot be completed.
      */
     @BandwidthLimit(value = 500, unit = BandwidthUnit.KB, type = LimitType.API)
     @GetMapping("/download/api")
@@ -57,6 +70,12 @@ public class TestController {
 
     /**
      * 用户维度限速测试 - 普通 200 KB/s，VIP 1 MB/s
+     *
+     * @param request  the request parameter.
+     * @param userType the user type from the request header.
+     * @param userId   the user identifier from the request header.
+     * @param response the HTTP response used for the download.
+     * @throws IOException if the response cannot be written.
      */
     @BandwidthLimit(value = 200, unit = BandwidthUnit.KB, type = LimitType.USER, free = 200, vip = 1024)
     @GetMapping("/download/user")
@@ -75,6 +94,10 @@ public class TestController {
 
     /**
      * IP维度限速测试 - 300 KB/s
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @throws IOException if the operation cannot be completed.
      */
     @BandwidthLimit(value = 300, unit = BandwidthUnit.KB, type = LimitType.IP)
     @GetMapping("/download/ip")
@@ -88,6 +111,12 @@ public class TestController {
 
     /**
      * 自定义限速测试
+     *
+     * @param bandwidth the bandwidth parameter.
+     * @param unit      the unit used for the bandwidth value.
+     * @param type      the dimension used to apply the limit.
+     * @param response  the HTTP response that receives the result.
+     * @throws IOException if the response cannot be written.
      */
     @GetMapping("/download/custom")
     public void downloadCustom(@RequestParam long bandwidth,
@@ -114,6 +143,8 @@ public class TestController {
 
     /**
      * 获取限速统计信息
+     *
+     * @return the operation result.
      */
     @GetMapping("/stats")
     public Map<String, Object> getStats() {
@@ -138,6 +169,8 @@ public class TestController {
 
     /**
      * 重置全局限速
+     *
+     * @return the operation result.
      */
     @PostMapping("/reset/global")
     public Map<String, Object> resetGlobal() {
@@ -151,6 +184,8 @@ public class TestController {
 
     /**
      * 清除所有限速桶
+     *
+     * @return the operation result.
      */
     @PostMapping("/reset/all")
     public Map<String, Object> resetAll() {
@@ -165,8 +200,12 @@ public class TestController {
 
     /**
      * 生成测试数据
+     *
+     * @param response the response parameter.
+     * @param size     the size parameter.
+     * @throws IOException if the operation cannot be completed.
      */
-    private void generateTestData(HttpServletResponse response, int size) throws IOException {
+    void generateTestData(HttpServletResponse response, int size) throws IOException {
         response.setContentLengthLong(size);
 
         byte[] buffer = new byte[8192];
@@ -190,7 +229,13 @@ public class TestController {
         response.getOutputStream().flush();
     }
 
-    private String toJson(Map<String, Object> map) {
+    /**
+     * Executes the to json operation.
+     *
+     * @param map the map parameter.
+     * @return the operation result.
+     */
+    String toJson(Map<String, Object> map) {
         StringBuilder sb = new StringBuilder("{");
         boolean first = true;
 
@@ -214,10 +259,17 @@ public class TestController {
         return sb.toString();
     }
 
+    /**
+     * Stores the wrapped response attr value.
+     */
     private static final String WRAPPED_RESPONSE_ATTR = "BandwidthLimitWrappedResponse";
 
     /**
      * 获取限速响应包装器（如果存在）
+     *
+     * @param request         the request parameter.
+     * @param defaultResponse the default response parameter.
+     * @return the operation result.
      */
     public static HttpServletResponse getLimitedResponse(HttpServletRequest request, HttpServletResponse defaultResponse) {
         BandwidthLimitResponseWrapper wrappedResponse =
@@ -231,6 +283,9 @@ public class TestController {
 
     /**
      * 检查是否应用了限速
+     *
+     * @param request the request parameter.
+     * @return the operation result.
      */
     public static boolean isLimited(HttpServletRequest request) {
         return request.getAttribute(WRAPPED_RESPONSE_ATTR) != null;

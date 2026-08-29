@@ -20,19 +20,29 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class BandwidthLimitManager {
-    // 全局限速桶
+    /**
+     * 全局限速桶
+     */
     private TokenBucket globalBucket;
 
-    // API维度限速桶 (path -> TokenBucket)
+    /**
+     * API维度限速桶 (path -> TokenBucket)
+     */
     private final ConcurrentHashMap<String, TokenBucket> apiBuckets = new ConcurrentHashMap<>();
 
-    // 用户维度限速桶 (userId -> TokenBucket)
+    /**
+     * 用户维度限速桶 (userId -> TokenBucket)
+     */
     private final ConcurrentHashMap<String, TokenBucket> userBuckets = new ConcurrentHashMap<>();
 
-    // IP维度限速桶 (ip -> TokenBucket)
+    /**
+     * IP维度限速桶 (ip -> TokenBucket)
+     */
     private final ConcurrentHashMap<String, TokenBucket> ipBuckets = new ConcurrentHashMap<>();
 
-    // 定时清理服务
+    /**
+     * 定时清理服务
+     */
     private final ScheduledExecutorService cleanupExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread thread = new Thread(r, "bandwidth-limit-cleanup");
         thread.setDaemon(true);
@@ -40,12 +50,19 @@ public class BandwidthLimitManager {
         return thread;
     });
 
-    // 最后使用时间记录
+    /**
+     * 最后使用时间记录
+     */
     private final ConcurrentHashMap<String, Long> lastAccessTime = new ConcurrentHashMap<>();
 
-    // 空闲超时时间（毫秒）
+    /**
+     * 空闲超时时间（毫秒）
+     */
     private static final long IDLE_TIMEOUT_MS = 5 * 60 * 1000; // 5分钟
 
+    /**
+     * Executes the bandwidth limit manager operation.
+     */
     public BandwidthLimitManager() {
         cleanupExecutor.scheduleAtFixedRate(() -> { // 启动定时清理任务
             try {
@@ -58,6 +75,12 @@ public class BandwidthLimitManager {
 
     /**
      * 获取或创建令牌桶
+     *
+     * @param type       the type parameter.
+     * @param key        the key parameter.
+     * @param capacity   the capacity parameter.
+     * @param refillRate the refill rate parameter.
+     * @return the operation result.
      */
     public TokenBucket getBucket(LimitType type, String key, long capacity, long refillRate) {
         return switch (type) {
@@ -70,8 +93,12 @@ public class BandwidthLimitManager {
 
     /**
      * 获取全局限速桶
+     *
+     * @param capacity   the capacity parameter.
+     * @param refillRate the refill rate parameter.
+     * @return the operation result.
      */
-    private synchronized TokenBucket getGlobalBucket(long capacity, long refillRate) {
+    synchronized TokenBucket getGlobalBucket(long capacity, long refillRate) {
         if (globalBucket == null) {
             globalBucket = new TokenBucket(capacity, refillRate);
             log.info("Created global bandwidth limit bucket: capacity={}, rate={}/s", capacity, BandwidthUnit.formatBytes(refillRate));
@@ -85,8 +112,14 @@ public class BandwidthLimitManager {
 
     /**
      * 获取或创建指定维度的令牌桶
+     *
+     * @param buckets    the buckets parameter.
+     * @param key        the key parameter.
+     * @param capacity   the capacity parameter.
+     * @param refillRate the refill rate parameter.
+     * @return the operation result.
      */
-    private TokenBucket getOrCreateBucket(ConcurrentHashMap<String, TokenBucket> buckets, String key, long capacity, long refillRate) {
+    TokenBucket getOrCreateBucket(ConcurrentHashMap<String, TokenBucket> buckets, String key, long capacity, long refillRate) {
         return buckets.compute(key, (k, existing) -> {
             if (existing == null) {
                 log.debug("Created new bandwidth limit bucket for {}: capacity={}, rate={}/s", k, capacity, BandwidthUnit.formatBytes(refillRate));
@@ -108,7 +141,7 @@ public class BandwidthLimitManager {
     /**
      * 清理空闲的令牌桶
      */
-    private void cleanupIdleBuckets() {
+    void cleanupIdleBuckets() {
         long now = System.currentTimeMillis();
 
         cleanupMap(apiBuckets, now, "API"); // 清理 API 维度
@@ -117,7 +150,14 @@ public class BandwidthLimitManager {
         lastAccessTime.entrySet().removeIf(entry -> now - entry.getValue() > IDLE_TIMEOUT_MS);  // 清理访问时间记录
     }
 
-    private void cleanupMap(ConcurrentHashMap<String, TokenBucket> buckets, long now, String type) {
+    /**
+     * Executes the cleanup map operation.
+     *
+     * @param buckets the buckets parameter.
+     * @param now     the now parameter.
+     * @param type    the type parameter.
+     */
+    void cleanupMap(ConcurrentHashMap<String, TokenBucket> buckets, long now, String type) {
         buckets.keySet().removeIf(key -> {
             Long lastAccess = lastAccessTime.get(key);
 
@@ -133,6 +173,8 @@ public class BandwidthLimitManager {
 
     /**
      * 获取统计信息
+     *
+     * @return the operation result.
      */
     public BandwidthLimitStats getStats() {
         if (globalBucket != null) {

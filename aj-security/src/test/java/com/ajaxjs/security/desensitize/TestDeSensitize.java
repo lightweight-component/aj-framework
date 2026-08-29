@@ -12,7 +12,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestDeSensitize {
+/**
+ * Represents the test de sensitize component.
+ */
+class TestDeSensitize {
     @Test
     public void jsonNullFieldTest() {
         People people = new People();
@@ -47,7 +50,7 @@ public class TestDeSensitize {
     }
 
     @Test
-    public void testFieldMap() {
+    void testFieldMap() {
         PeopleMap peopleMap = new PeopleMap();
         peopleMap.getParams().put("password", "12345");
         peopleMap.getParams().put("username", "田晓霞");
@@ -57,7 +60,7 @@ public class TestDeSensitize {
     }
 
     @Test
-    public void testFieldMap1() {
+    void testFieldMap1() {
         PeopleMap peopleMap = new PeopleMap();
         peopleMap.getAges().put(12, "12345");
         peopleMap.getAges().put(13, "田晓霞");
@@ -67,7 +70,7 @@ public class TestDeSensitize {
     }
 
     @Test
-    public void test11() {
+    void test11() {
         PubResponse response = new PubResponse();
         response.password = "32433";
         response.username = "条消息";

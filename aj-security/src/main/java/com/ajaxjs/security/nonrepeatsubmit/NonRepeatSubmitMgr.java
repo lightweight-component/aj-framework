@@ -12,8 +12,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Represents the non repeat submit mgr component.
+ */
 @Data
 public class NonRepeatSubmitMgr {
+    /**
+     * Stores the token name value.
+     */
     static final String TOKEN_NAME = "NS_TOKEN";
 
     Consumer<String> createToken;
@@ -22,6 +28,11 @@ public class NonRepeatSubmitMgr {
 
     Consumer<String> makeTokenUsed;
 
+    /**
+     * Executes the init token operation.
+     *
+     * @return the operation result.
+     */
     public String initToken() {
         String token = UUID.randomUUID().toString();
         createToken.accept(token);
@@ -29,6 +40,12 @@ public class NonRepeatSubmitMgr {
         return token;
     }
 
+    /**
+     * Executes the extract token operation.
+     *
+     * @param req the req parameter.
+     * @return the operation result.
+     */
     static String extractToken(HttpServletRequest req) {
         String token = req.getHeader(TOKEN_NAME);
 
@@ -50,6 +67,13 @@ public class NonRepeatSubmitMgr {
 
     BiConsumer<String, Integer> makeExpiresToken;
 
+    /**
+     * Executes the handle operation.
+     *
+     * @param request the request parameter.
+     * @param method  the method parameter.
+     * @throws IllegalAccessException if the operation cannot be completed.
+     */
     public void handle(HttpServletRequest request, Method method) throws IllegalAccessException {
         NonRepeatSubmit annotation = method.getAnnotation(NonRepeatSubmit.class);
 

@@ -14,9 +14,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * Represents the security configuration component.
+ */
 @Configuration
 @ComponentScan(basePackages = "com.ajaxjs.security")
 public class SecurityConfiguration implements WebMvcConfigurer {
+    /**
+     * Executes the add interceptors operation.
+     *
+     * @param registry the registry parameter.
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(initSecurityInterceptor());
@@ -27,9 +35,17 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         return new SecurityInterceptor();
     }
 
+    /**
+     * Stores the params sign enabled value.
+     */
     @Value("${security.ParamsSign.enabled:false}")
     private boolean paramsSignEnabled;
 
+    /**
+     * Executes the add argument resolvers operation.
+     *
+     * @param resolvers the resolvers parameter.
+     */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         if (paramsSignEnabled)

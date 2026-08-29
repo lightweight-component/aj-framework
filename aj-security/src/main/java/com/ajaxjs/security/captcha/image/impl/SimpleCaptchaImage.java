@@ -11,6 +11,14 @@ import java.util.Random;
  * Default image provider, just using Java AWT to renderer image
  */
 public class SimpleCaptchaImage implements ICaptchaImageProvider {
+    /**
+     * Executes the get rendered image operation.
+     *
+     * @param width     the width parameter.
+     * @param height    the height parameter.
+     * @param randomStr the random str parameter.
+     * @return the operation result.
+     */
     @Override
     public RenderedImage getRenderedImage(int width, int height, String randomStr) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);// 在内存中创建图像
@@ -45,7 +53,7 @@ public class SimpleCaptchaImage implements ICaptchaImageProvider {
      * @param bc
      * @return 随机颜色
      */
-    private static Color getRandColor(int fc, int bc) {
+    static Color getRandColor(int fc, int bc) {
         if (fc > 255)
             fc = 255;
         if (bc > 255)

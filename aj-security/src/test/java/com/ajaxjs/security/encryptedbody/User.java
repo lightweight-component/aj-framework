@@ -1,5 +1,8 @@
 package com.ajaxjs.security.encryptedbody;
 
+/**
+ * Represents the user component.
+ */
 @EncryptedData
 public class User {
     private String name;

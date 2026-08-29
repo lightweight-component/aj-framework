@@ -7,6 +7,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents the company component.
+ */
 @Data
 public class Company {
     private Long id;
@@ -16,6 +19,9 @@ public class Company {
     private List<Worker> list;
     private Map<String, Worker> dataMap;
 
+    /**
+     * Represents the worker component.
+     */
     @DesensitizeModel
     @Data
     public static class Worker {

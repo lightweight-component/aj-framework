@@ -8,8 +8,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Represents the test leak bucket component.
+ */
 @Slf4j
-public class TestLeakBucket {
+class TestLeakBucket {
     /**
      * 线程池，用于多线程模拟测试
      */

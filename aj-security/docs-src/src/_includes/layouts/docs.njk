@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>AJ Security/{{ title }}</title>
+        <meta name="description" content="A Practical Java Web Security Library. {{description}}"/>
+        <meta name="keywords" content="security, xss, csrf, captcha, {{tags}}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="https://framework.ajaxjs.com/static/new-ui/css/common.css" />
+        <link rel="stylesheet" href="https://iam.ajaxjs.com/asset/main.css"/>
+        <link rel="icon" type="image/x-icon" href="https://framework.ajaxjs.com/aj-logo/logo.ico"/>
+        <script src="https://framework.ajaxjs.com/static/aj-docs/common.js"></script>
+        <script>
+            // 获取用户的默认语言
+            var userLang = navigator.language || navigator.userLanguage;
+
+            // 检查是否为中文环境（包括简体和繁体）
+            if (userLang.startsWith('zh') && location.pathname.indexOf('cn') == -1) {
+                 confirm('欢迎！您可以改为访问中文内容。是否继续？') && location.assign('/cn');  // 如果是中文，则弹出提示
+            }
+
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?950ba5ba1f1fe4906c3b4cf836080f03";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <div class="links">
+                    <a href="/">🏠 Home</a>
+                    | ⚙️ Source:
+                    <a target="_blank" href="https://github.com/lightweight-component/aj-security">Github</a>/<a target="_blank" href="https://gitcode.com/lightweight-component/aj-security">Gitcode</a>
+                    |
+                    <a href="/cn">Chinese Version</a>
+                </div>
+                <h1><img src="https://framework.ajaxjs.com/aj-logo/logo.png" style="vertical-align: middle;height: 45px;margin-bottom: 6px;" /> AJ Security</h1>
+                <h3>User Manual</h3>
+            </div>
+        </nav>
+        <div>
+            <menu>
+                <ul>
+                    <li class="selected">
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        <a href="/install">Installation & Configuration</a>
+                    </li>
+                </ul>
+                <h3>HTTP Web Security</h3>
+                <ul>
+                    <li>
+                        <a href="/http/http-referer">HTTP Referer Validation</a>
+                    </li>
+                    <li>
+                        <a href="/http/timestamp">Timestamp Encrypted Token Validation</a>
+                    </li>
+         <li>
+                       <a href="/http/paramssign">Parameter Signature</a>
+                    </li>
+                    <li>
+                        <a href="/http/ip-list">IP Whitelist/Blacklist</a>
+                    </li>
+                    <li>
+                        <a href="/http/nonrepeatsubmit">Prevent Duplicate Submission</a>
+                    </li>
+                </ul>
+                <h3>General Web Validation</h3>
+                <ul>
+                    <li>
+                        <a href="/classic/xss">Prevent XSS Attacks</a>
+                    </li>
+                    <li>
+                        <a href="/classic/crlf">Prevent CRLF Attacks</a>
+                    </li>
+                </ul>
+
+                <h3>Captcha Mechanism</h3>
+                <ul>
+                    <li><a href="/captcha/img-captcha">Image Captcha</a></li>
+                    <li><a href="/captcha/google">Google-based Captcha</a></li>
+                    <li><a href="/captcha/cf">CloudFlare-based Captcha</a></li>
+                </ul>
+                <h3>HTTP Standard Authentication</h3>
+                <ul>
+                    <li><a href="/auth/http-basic-auth">HTTP Basic Auth</a></li>
+                    <li><a href="/auth/http-digest-auth">HTTP Digest Auth</a></li>
+                </ul>
+                <h3>API Features</h3>
+                <ul>
+                    <li><a href="/api/limit">Rate Limiting</a></li>
+                </ul>
+                <h3>Other Practical Features</h3>
+                <ul>
+                    <li><a href="/misc/desensitize">Field Desensitization</a></li>
+                    <li><a href="/misc/encryption-api">API Encryption</a></li>
+                    <li><a href="/misc/trace-id">Trace Tracking</a></li>
+                </ul>
+            </menu>
+            <article class="aj-text">
+                {{ content | safe }}
+            </article>
+        </div>
+        <footer>
+            AJ Security, a part of
+            <a href="https://framework.ajaxjs.com" target="_blank">AJ-Framework</a>
+            open source. Mail:frank@ajaxjs.com, visit
+            <a href="https://blog.csdn.net/zhangxin09" target="_blank">my blog(In Chinese)</a>. <br/> <br/> Copyright © 2025 Frank Cheung. All rights reserved.
+        </footer>
+    </body>
+</html>

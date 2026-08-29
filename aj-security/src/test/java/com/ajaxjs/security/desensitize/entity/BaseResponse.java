@@ -47,6 +47,9 @@ public class BaseResponse<T> implements Serializable {
         this.spentTime = spentTime;
     }
 
+    /**
+     * Represents the builder component.
+     */
     public static class Builder<T> {
         private int status;
         private String message;

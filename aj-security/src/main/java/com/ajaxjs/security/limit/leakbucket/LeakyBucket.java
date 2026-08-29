@@ -27,15 +27,31 @@ public final class LeakyBucket {
      */
     private long leakTimeStamp;
 
+    /**
+     * Executes the leaky bucket operation.
+     *
+     * @param capacity the capacity parameter.
+     * @param leakRate the leak rate parameter.
+     */
     public LeakyBucket(int capacity, int leakRate) {
         this.capacity = capacity;
         this.leakRate = leakRate;
     }
 
+    /**
+     * Executes the leaky bucket operation.
+     *
+     * @param leakRate the leak rate parameter.
+     */
     public LeakyBucket(int leakRate) {
         this.leakRate = leakRate;
     }
 
+    /**
+     * Executes the acquire operation.
+     *
+     * @return the operation result.
+     */
     public boolean acquire() {
         // 如果是空桶，就当前时间作为桶开是漏出的时间
         if (water.get() == 0) {

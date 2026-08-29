@@ -28,26 +28,36 @@ import java.lang.annotation.Target;
 public @interface BandwidthLimit {
     /**
      * 限速值
+     *
+     * @return the configured bandwidth value
      */
     long value() default 200;
 
     /**
      * 限速单位
+     *
+     * @return the unit used to interpret {@link #value()}
      */
     BandwidthUnit unit() default BandwidthUnit.KB;
 
     /**
      * 限速类型
+     *
+     * @return the dimension used to apply the bandwidth limit
      */
     LimitType type() default LimitType.GLOBAL;
 
     /**
      * 免费用户限速值（-1表示不区分）
+     *
+     * @return the free-user bandwidth value, or {@code -1} when not applicable
      */
     long free() default -1;
 
     /**
      * VIP用户限速值（-1表示不区分）
+     *
+     * @return the VIP-user bandwidth value, or {@code -1} when not applicable
      */
     long vip() default -1;
 
@@ -56,16 +66,22 @@ public @interface BandwidthLimit {
      * 1.0 表示桶容量 = 1秒流量
      * 0.5 表示桶容量 = 0.5秒流量（更平滑）
      * 2.0 表示桶容量 = 2秒流量（允许更大突发）
+     *
+     * @return the bucket-capacity multiplier
      */
     double capacityMultiplier() default 1.0;
 
     /**
      * 分块大小（字节），-1 表示自动计算
+     *
+     * @return the chunk size in bytes, or {@code -1} for automatic selection
      */
     int chunkSize() default -1;
 
     /**
      * 用户标识请求头名称（用于 USER 类型限速）
+     *
+     * @return the HTTP header used to obtain the user identifier
      */
     String userHeader() default "X-User-Id";
 }

@@ -19,11 +19,29 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 public class BandwidthLimitInterceptor implements HandlerInterceptor {
 
+    /**
+     * Stores the limit manager value.
+     */
     private final BandwidthLimitManager limitManager = new BandwidthLimitManager();
 
+    /**
+     * Stores the wrapped response attr value.
+     */
     private static final String WRAPPED_RESPONSE_ATTR = "BandwidthLimitWrappedResponse";
+
+    /**
+     * Stores the original response attr value.
+     */
     private static final String ORIGINAL_RESPONSE_ATTR = "BandwidthLimitOriginalResponse";
 
+    /**
+     * Executes the pre handle operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param handler  the handler parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
@@ -89,6 +107,14 @@ public class BandwidthLimitInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * Executes the after completion operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param handler  the handler parameter.
+     * @param ex       the ex parameter.
+     */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         // 清理资源
@@ -102,7 +128,14 @@ public class BandwidthLimitInterceptor implements HandlerInterceptor {
         }
     }
 
-    private static long calculateBandwidth(HttpServletRequest request, BandwidthLimit annotation) {
+    /**
+     * Executes the calculate bandwidth operation.
+     *
+     * @param request    the request parameter.
+     * @param annotation the annotation parameter.
+     * @return the operation result.
+     */
+    static long calculateBandwidth(HttpServletRequest request, BandwidthLimit annotation) {
         if (annotation.free() > 0 || annotation.vip() > 0) {
             String userType = request.getHeader("X-User-Type");
 

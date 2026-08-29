@@ -16,17 +16,52 @@ import java.io.OutputStream;
 @Slf4j
 public class RateLimitedOutputStream extends ServletOutputStream {
 
+    /**
+     * Stores the output stream value.
+     */
     private final OutputStream outputStream;
+
+    /**
+     * Stores the token bucket value.
+     */
     private final TokenBucket tokenBucket;
+
+    /**
+     * Stores the chunk size value.
+     */
     private final int chunkSize;
+
+    /**
+     * Stores the bandwidth bytes per second value.
+     */
     private final long bandwidthBytesPerSecond;
 
-    // 统计信息
+    /**
+     * 统计信息
+     */
     private long totalBytesWritten = 0;
+
+    /**
+     * Stores the start time value.
+     */
     private final long startTime = System.nanoTime();
+
+    /**
+     * Stores the closed value.
+     */
     private volatile boolean closed = false;
+
+    /**
+     * Stores the logged value.
+     */
     private boolean logged = false;
 
+    /**
+     * Executes the rate limited output stream operation.
+     *
+     * @param outputStream            the output stream parameter.
+     * @param bandwidthBytesPerSecond the bandwidth bytes per second parameter.
+     */
     public RateLimitedOutputStream(OutputStream outputStream, long bandwidthBytesPerSecond) {
         this(outputStream, bandwidthBytesPerSecond, calculateOptimalChunkSize(bandwidthBytesPerSecond));
     }
@@ -80,8 +115,11 @@ public class RateLimitedOutputStream extends ServletOutputStream {
     /**
      * 计算最佳分块大小
      * 经验公式：chunkSize = bandwidthBytesPerSecond / 50
+     *
+     * @param bandwidthBytesPerSecond the bandwidth bytes per second parameter.
+     * @return the operation result.
      */
-    private static int calculateOptimalChunkSize(long bandwidthBytesPerSecond) {
+    static int calculateOptimalChunkSize(long bandwidthBytesPerSecond) {
         if (bandwidthBytesPerSecond < 200 * 1024)
             // 低于 200KB/s，使用 1-4KB
             return 1024;
@@ -96,6 +134,12 @@ public class RateLimitedOutputStream extends ServletOutputStream {
             return 16384;
     }
 
+    /**
+     * Executes the write operation.
+     *
+     * @param b the b parameter.
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void write(int b) throws IOException {
         checkClosed();
@@ -104,11 +148,25 @@ public class RateLimitedOutputStream extends ServletOutputStream {
         totalBytesWritten++;
     }
 
+    /**
+     * Executes the write operation.
+     *
+     * @param b the b parameter.
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void write(byte[] b) throws IOException {
         write(b, 0, b.length);
     }
 
+    /**
+     * Executes the write operation.
+     *
+     * @param b   the b parameter.
+     * @param off the off parameter.
+     * @param len the len parameter.
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         checkClosed();
@@ -139,12 +197,22 @@ public class RateLimitedOutputStream extends ServletOutputStream {
         }
     }
 
+    /**
+     * Executes the flush operation.
+     *
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void flush() throws IOException {
         checkClosed();
         outputStream.flush();
     }
 
+    /**
+     * Executes the close operation.
+     *
+     * @throws IOException if the operation cannot be completed.
+     */
     @Override
     public void close() throws IOException {
         if (!closed) {
@@ -158,17 +226,32 @@ public class RateLimitedOutputStream extends ServletOutputStream {
         }
     }
 
-    private void checkClosed() throws IOException {
+    /**
+     * Executes the check closed operation.
+     *
+     * @throws IOException if the operation cannot be completed.
+     */
+    void checkClosed() throws IOException {
         if (closed) {
             throw new IOException("Stream is closed");
         }
     }
 
+    /**
+     * Executes the is ready operation.
+     *
+     * @return the operation result.
+     */
     @Override
     public boolean isReady() {
         return !closed;
     }
 
+    /**
+     * Executes the set write listener operation.
+     *
+     * @param writeListener the write listener parameter.
+     */
     @Override
     public void setWriteListener(WriteListener writeListener) {
         throw new UnsupportedOperationException("Async write not supported");
@@ -176,6 +259,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 动态调整带宽
+     *
+     * @param newBandwidth the new bandwidth parameter.
      */
     public void setBandwidth(long newBandwidth) {
         tokenBucket.setRefillRate(newBandwidth);
@@ -183,6 +268,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取当前可用令牌
+     *
+     * @return the operation result.
      */
     public long getAvailableTokens() {
         return tokenBucket.getAvailableTokens();
@@ -190,6 +277,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取实际传输速率
+     *
+     * @return the operation result.
      */
     public double getActualRate() {
         long elapsedNanos = System.nanoTime() - startTime;
@@ -202,6 +291,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取总写入字节数
+     *
+     * @return the operation result.
      */
     public long getTotalBytesWritten() {
         return totalBytesWritten;
@@ -209,6 +300,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取配置的带宽
+     *
+     * @return the operation result.
      */
     public long getBandwidthBytesPerSecond() {
         return bandwidthBytesPerSecond;
@@ -216,6 +309,8 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取分块大小
+     *
+     * @return the operation result.
      */
     public int getChunkSize() {
         return chunkSize;
@@ -223,11 +318,18 @@ public class RateLimitedOutputStream extends ServletOutputStream {
 
     /**
      * 获取令牌桶利用率
+     *
+     * @return the operation result.
      */
     public double getBucketUtilization() {
         return tokenBucket.getUtilization();
     }
 
+    /**
+     * Executes the get token bucket operation.
+     *
+     * @return the operation result.
+     */
     public TokenBucket getTokenBucket() {
         return tokenBucket;
     }

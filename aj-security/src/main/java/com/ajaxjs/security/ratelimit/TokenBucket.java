@@ -11,17 +11,48 @@ import java.util.concurrent.locks.LockSupport;
  * 3. 获取令牌：消耗对应数量的令牌，不足则等待
  */
 public class TokenBucket {
+    /**
+     * Stores the capacity value.
+     */
     private final long capacity;              // 桶容量（字节）
+    /**
+     * Stores the initial refill rate value.
+     */
     private final long initialRefillRate;     // 初始填充速率（字节/秒）
+    /**
+     * Stores the refill rate value.
+     */
     private volatile long refillRate;         // 当前填充速率（字节/秒）
+    /**
+     * Stores the tokens value.
+     */
     private volatile long tokens;             // 当前令牌数（字节）
+    /**
+     * Stores the last refill time value.
+     */
     private volatile long lastRefillTime;     // 上次填充时间（纳秒）
 
-    // 统计信息
+    /**
+     * 统计信息
+     */
     private volatile long totalBytesConsumed;
+
+    /**
+     * Stores the total wait time nanos value.
+     */
     private volatile long totalWaitTimeNanos;
+
+    /**
+     * Stores the creation time value.
+     */
     private final long creationTime;
 
+    /**
+     * Executes the token bucket operation.
+     *
+     * @param capacity   the capacity parameter.
+     * @param refillRate the refill rate parameter.
+     */
     public TokenBucket(long capacity, long refillRate) {
         this.capacity = capacity;
         this.initialRefillRate = refillRate;
@@ -79,8 +110,11 @@ public class TokenBucket {
 
     /**
      * 填充令牌并计算需要等待的时间
+     *
+     * @param permits the permits parameter.
+     * @return the operation result.
      */
-    private long refillAndCalculateWait(long permits) {
+    long refillAndCalculateWait(long permits) {
         refill();
 
         if (tokens >= permits)
@@ -95,7 +129,7 @@ public class TokenBucket {
     /**
      * 填充令牌（核心逻辑）
      */
-    private void refill() {
+    void refill() {
         long now = System.nanoTime();
         long elapsedNanos = now - lastRefillTime;
 
@@ -113,8 +147,10 @@ public class TokenBucket {
 
     /**
      * 精确纳秒级等待
+     *
+     * @param nanos the nanos parameter.
      */
-    private void sleepNanos(long nanos) {
+    void sleepNanos(long nanos) {
         if (nanos <= 0)
             return;
 
@@ -125,6 +161,8 @@ public class TokenBucket {
 
     /**
      * 获取当前可用令牌数
+     *
+     * @return the operation result.
      */
     public long getAvailableTokens() {
         refill();
@@ -133,6 +171,8 @@ public class TokenBucket {
 
     /**
      * 动态调整填充速率
+     *
+     * @param newRate the new rate parameter.
      */
     public synchronized void setRefillRate(long newRate) {
         this.refillRate = newRate;
@@ -150,6 +190,8 @@ public class TokenBucket {
 
     /**
      * 获取实际传输速率
+     *
+     * @return the operation result.
      */
     public double getActualRate() {
         long elapsedNanos = System.nanoTime() - creationTime;
@@ -161,22 +203,47 @@ public class TokenBucket {
         return elapsedSeconds > 0 ? (double) totalBytesConsumed / elapsedSeconds : 0;
     }
 
+    /**
+     * Executes the get capacity operation.
+     *
+     * @return the operation result.
+     */
     public long getCapacity() {
         return capacity;
     }
 
+    /**
+     * Executes the get refill rate operation.
+     *
+     * @return the operation result.
+     */
     public long getRefillRate() {
         return refillRate;
     }
 
+    /**
+     * Executes the get total bytes consumed operation.
+     *
+     * @return the operation result.
+     */
     public long getTotalBytesConsumed() {
         return totalBytesConsumed;
     }
 
+    /**
+     * Executes the get total wait time nanos operation.
+     *
+     * @return the operation result.
+     */
     public long getTotalWaitTimeNanos() {
         return totalWaitTimeNanos;
     }
 
+    /**
+     * Executes the get utilization operation.
+     *
+     * @return the operation result.
+     */
     public double getUtilization() {
         return capacity > 0 ? (double) tokens / capacity : 0;
     }

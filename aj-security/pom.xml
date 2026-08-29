@@ -13,7 +13,8 @@
     <artifactId>aj-security</artifactId>
     <name>aj-security</name>
     <version>1.4</version>
-    <description>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation mechanisms,
+    <description>Based on the Spring/HandlerInterceptor mechanism, this library abstracts a set of filtering/validation
+        mechanisms,
         forming a unified invocation chain that is flexibly configurable and extensible.
     </description>
     <packaging>jar</packaging>

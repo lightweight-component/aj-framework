@@ -7,7 +7,18 @@ import com.google.code.kaptcha.util.Config;
 import java.awt.image.RenderedImage;
 import java.util.Properties;
 
+/**
+ * Represents the kaptcha image component.
+ */
 public class KaptchaImage implements ICaptchaImageProvider {
+    /**
+     * Executes the get rendered image operation.
+     *
+     * @param width     the width parameter.
+     * @param height    the height parameter.
+     * @param randomStr the random str parameter.
+     * @return the operation result.
+     */
     @Override
     public RenderedImage getRenderedImage(int width, int height, String randomStr) {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
@@ -25,6 +36,7 @@ public class KaptchaImage implements ICaptchaImageProvider {
         properties.setProperty("kaptcha.background.clear.to", "white");
 
         Config config = new Config(properties);
+
         defaultKaptcha.setConfig(config);
 //        String captcha = defaultKaptcha.createText();// 生成验证码
 

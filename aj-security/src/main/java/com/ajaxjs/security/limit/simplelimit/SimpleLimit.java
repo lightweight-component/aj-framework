@@ -27,19 +27,32 @@ public class SimpleLimit extends InterceptorAction<SimpleLimitCheck> {
      */
     int maxSemaphore = 3;
 
+    /**
+     * Stores the semaphore value.
+     */
     private static Semaphore semaphore;
 
+    /**
+     * Executes the simple limit operation.
+     */
     public SimpleLimit() {
         if (semaphore == null)
             semaphore = new Semaphore(maxSemaphore);
     }
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(SimpleLimitCheck annotation, HttpServletRequest req) {
         boolean acquired = false;
 
         try {
-            acquired = semaphore.tryAcquire(1,  TimeUnit.MILLISECONDS );
+            acquired = semaphore.tryAcquire(1, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -54,6 +67,11 @@ public class SimpleLimit extends InterceptorAction<SimpleLimitCheck> {
 
     int count = 0;
 
+    /**
+     * Executes the get after completion action operation.
+     *
+     * @return the operation result.
+     */
     @Override
     public BiConsumer<HttpServletRequest, HttpServletResponse> getAfterCompletionAction() {
         return (req, resp) -> {

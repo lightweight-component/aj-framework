@@ -3,9 +3,12 @@ package com.ajaxjs.security.iplist;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class IpUtilsTest {
+/**
+ * Represents the ip utils test component.
+ */
+class TestIpUtils {
     @Test
     void testGetClientRealIp() {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -26,5 +29,20 @@ public class IpUtilsTest {
         // 场景4：IPv6地址
         request.addHeader("X-Forwarded-For", "2001:db8::1");
         assertEquals("2001:db8::1", IpUtils.getClientRealIp(request));
+    }
+
+    @Test
+    void testPackageVisibleIpHelpers() {
+        assertEquals("203.0.113.10", IpUtils.parseXForwardedFor("unknown, 10.0.0.1, 203.0.113.10"));
+        assertNull(IpUtils.parseXForwardedFor("unknown, 10.0.0.1"));
+        assertTrue(IpUtils.isValidIp("2001:db8::1"));
+        assertFalse(IpUtils.isValidIp("not-an-ip"));
+        assertTrue(IpUtils.isInternalIp("192.168.1.1"));
+        assertFalse(IpUtils.isValidPublicIp("127.0.0.1"));
+        assertTrue(IpUtils.isLocalhost("0:0:0:0:0:0:0:1"));
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("X-Real-IP", "203.0.113.11");
+        assertEquals("203.0.113.11", IpUtils.getIpFromHeaders(request));
     }
 }

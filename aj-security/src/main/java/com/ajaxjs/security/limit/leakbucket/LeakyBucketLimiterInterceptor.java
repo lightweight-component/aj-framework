@@ -12,8 +12,20 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Map;
 
+/**
+ * Represents the leaky bucket limiter interceptor component.
+ */
 @Component
 public class LeakyBucketLimiterInterceptor implements HandlerInterceptor {
+    /**
+     * Executes the pre handle operation.
+     *
+     * @param request  the request parameter.
+     * @param response the response parameter.
+     * @param handler  the handler parameter.
+     * @return the operation result.
+     * @throws Exception if the operation cannot be completed.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {

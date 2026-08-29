@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Represents the image captcha config component.
+ */
 @Data
 public class ImageCaptchaConfig {
     ICaptchaImageProvider captchaImageProvider;

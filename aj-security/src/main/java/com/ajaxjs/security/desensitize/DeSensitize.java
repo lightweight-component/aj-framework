@@ -62,7 +62,8 @@ public class DeSensitize {
     /**
      * 获取实体类对象脱敏后的对象
      *
-     * @param entity 需要脱敏的实体类对象
+     * @param entity    需要脱敏的实体类对象
+     * @param packClass the pack class parameter.
      * @return 实体类属性脱敏后的集合对象
      */
     protected static Map<String, Object> doSetField(Object entity, Class<?>... packClass) {

@@ -18,6 +18,9 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+/**
+ * Represents the image captcha component.
+ */
 @Data
 @Slf4j
 @Component
@@ -25,8 +28,18 @@ import java.io.UncheckedIOException;
 @ConditionalOnProperty(name = "security.ImageCaptcha.enabled", havingValue = "true")
 @ConfigurationProperties(prefix = "security.image-captcha")
 public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
+    /**
+     * Stores the message key prefix value.
+     */
     static String MESSAGE_KEY_PREFIX = "security.ImageCaptcha.message";
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(ImageCaptchaCheck annotation, HttpServletRequest req) {
         String uuid = req.getParameter("uuid");
@@ -71,8 +84,14 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
     @Autowired
     ImageCaptchaConfig config;
 
+    /**
+     * Stores the key prefix value.
+     */
     public final static String KEY_PREFIX = "captcha_";
 
+    /**
+     * Stores the code key value.
+     */
     private final static String CODE_KEY = "captcha_code";
 
     /**
@@ -80,6 +99,12 @@ public class ImageCaptcha extends InterceptorAction<ImageCaptchaCheck> {
      */
     int expireSeconds;
 
+    /**
+     * Executes the captcha image operation.
+     *
+     * @param req  the req parameter.
+     * @param resp the resp parameter.
+     */
     public void captchaImage(HttpServletRequest req, HttpServletResponse resp) {
 
         String uuid = req.getParameter("uuid");

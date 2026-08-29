@@ -32,6 +32,13 @@ public class IpList extends InterceptorAction<IpListCheck> {
      */
     private List<String> blackList;
 
+    /**
+     * Executes the action operation.
+     *
+     * @param annotation the annotation parameter.
+     * @param req        the req parameter.
+     * @return the operation result.
+     */
     @Override
     public boolean action(IpListCheck annotation, HttpServletRequest req) {
         String ip = IpList.getClientIp(req);
@@ -45,6 +52,9 @@ public class IpList extends InterceptorAction<IpListCheck> {
         return true;
     }
 
+    /**
+     * Stores the unknown value.
+     */
     final static String UNKNOWN = "unknown";
 
     /**

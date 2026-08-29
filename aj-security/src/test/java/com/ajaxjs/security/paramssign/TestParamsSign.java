@@ -3,9 +3,15 @@ package com.ajaxjs.security.paramssign;
 import com.ajaxjs.util.ObjectHelper;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class TestParamsSign {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * Represents the test params sign component.
+ */
+class TestParamsSign {
     @Test
     void test() {
         Map<String, Object> params = ObjectHelper.mapOf("foo", 2, "bar", "bar2", "ccc", true);
@@ -18,6 +24,7 @@ public class TestParamsSign {
 
         System.out.println(sign);
     }
+
     @Test
     void test2() {
         Map<String, Object> params = ObjectHelper.mapOf("name", "jack");
@@ -29,6 +36,15 @@ public class TestParamsSign {
         String sign = paramsSign.sign(params);
 
         System.out.println(sign);
+    }
+
+    @Test
+    void testSortUsesEncodedKeyOrder() {
+        Map<String, String> values = new LinkedHashMap<>();
+        values.put("z key", "last value");
+        values.put("a", "first");
+
+        assertEquals("a=first&z+key=last+value", ParamsSign.sort(values));
     }
 
 }
