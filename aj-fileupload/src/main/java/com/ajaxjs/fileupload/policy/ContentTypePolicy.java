@@ -4,6 +4,7 @@ import com.ajaxjs.fileupload.DetectType;
 import com.ajaxjs.fileupload.FileUploadConfig;
 import com.ajaxjs.util.ObjectHelper;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -33,7 +34,7 @@ public class ContentTypePolicy {
 
         /**
          * Checks whether the Content-Type matches the extension mapping.
-         * <p>The current mapping comparison is not yet fully implemented; see module {@code to-fix.md}.</p>
+         * <p>The expected type is determined by the current operating system's file-extension mapping.</p>
          */
         MAPPING(2),
 
@@ -106,6 +107,9 @@ public class ContentTypePolicy {
      * @throws UncheckedIOException     thrown when probing the extension mapping fails
      */
     public void check() {
+        if (policy == Policy.NO_CHECK)
+            return;
+
         Integer value = policy.getValue();
 
         if ((value & Policy.WHITELIST.value) == Policy.WHITELIST.value)
@@ -152,8 +156,18 @@ public class ContentTypePolicy {
         try {
             String expectedByExt = Files.probeContentType(fakePath);
 
-//            if (!contentType.equalsIgnoreCase(expectedByExt))
-//                throw new IllegalArgumentException("The ext type: " + expectedByExt + " doesn't match with: " + contentType);
+            if (expectedByExt == null)
+                throw new IllegalArgumentException("Cannot determine Content-Type from file extension: " + fileName);
+
+            if (contentType == null)
+                throw new IllegalArgumentException("The uploaded file has no Content-Type.");
+
+            MediaType expected = MediaType.parseMediaType(expectedByExt);
+            MediaType actual = MediaType.parseMediaType(contentType);
+
+            if (!expected.getType().equalsIgnoreCase(actual.getType())
+                    || !expected.getSubtype().equalsIgnoreCase(actual.getSubtype()))
+                throw new IllegalArgumentException("The uploaded Content-Type does not match the file extension.");
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);
         }

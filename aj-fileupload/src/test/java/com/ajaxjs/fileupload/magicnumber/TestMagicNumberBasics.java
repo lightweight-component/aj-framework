@@ -56,6 +56,18 @@ class TestMagicNumberBasics {
         assertFalse(MagicNumber.isValidFile("flac", wave, MagicNumberAudio.AUDIO_MAGIC_MAP));
     }
 
+    @Test
+    void magicNumberRulesAreImmutable() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> MagicNumberImage.IMAGE_MAGIC_MAP.clear());
+        assertThrows(UnsupportedOperationException.class,
+                () -> MagicNumberAudio.AUDIO_MAGIC_MAP.clear());
+        assertThrows(UnsupportedOperationException.class,
+                () -> MagicNumberVideo.VIDEO_MAGIC_MAP.clear());
+        assertThrows(UnsupportedOperationException.class,
+                () -> MagicNumberOfficeFile.OFFICE_MAGIC_MAP.clear());
+    }
+
     /**
      * Verifies that an unknown extension has no validator and returns {@code false}.
      */

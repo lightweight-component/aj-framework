@@ -1,6 +1,7 @@
 package com.ajaxjs.fileupload.magicnumber;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -12,26 +13,28 @@ public class MagicNumberVideo {
     /**
      * Map from extension to video file header or container detection function.
      */
-    public static final Map<String, Function<byte[], Boolean>> VIDEO_MAGIC_MAP = new HashMap<>();
+    public static final Map<String, Function<byte[], Boolean>> VIDEO_MAGIC_MAP;
 
     static {
+        Map<String, Function<byte[], Boolean>> magicMap = new HashMap<>();
         // MP4 / M4V / M4A / MOV: ftyp....
-        VIDEO_MAGIC_MAP.put("mp4", bytes -> isFtyp(bytes, "mp4"));
-        VIDEO_MAGIC_MAP.put("m4v", bytes -> isFtyp(bytes, "M4V"));
-        VIDEO_MAGIC_MAP.put("mov", bytes -> isFtyp(bytes, "qt  "));
+        magicMap.put("mp4", bytes -> isFtyp(bytes, "mp42"));
+        magicMap.put("m4v", bytes -> isFtyp(bytes, "M4V "));
+        magicMap.put("mov", bytes -> isFtyp(bytes, "qt  "));
 
         // MKV / WebM: EBML header with a matching DocType element
-        VIDEO_MAGIC_MAP.put("mkv", bytes -> "matroska".equals(readEbmlDocType(bytes)));
-        VIDEO_MAGIC_MAP.put("webm", bytes -> "webm".equals(readEbmlDocType(bytes)));
+        magicMap.put("mkv", bytes -> "matroska".equals(readEbmlDocType(bytes)));
+        magicMap.put("webm", bytes -> "webm".equals(readEbmlDocType(bytes)));
 
         // AVI: RIFF....AVI
-        VIDEO_MAGIC_MAP.put("avi", bytes -> bytes.length >= 12 &&
+        magicMap.put("avi", bytes -> bytes.length >= 12 &&
                 bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
                 bytes[8] == 'A' && bytes[9] == 'V' && bytes[10] == 'I' && bytes[11] == ' '
         );
 
         // FLV: FLV header
-        VIDEO_MAGIC_MAP.put("flv", bytes -> bytes.length >= 3 && bytes[0] == 'F' && bytes[1] == 'L' && bytes[2] == 'V');
+        magicMap.put("flv", bytes -> bytes.length >= 3 && bytes[0] == 'F' && bytes[1] == 'L' && bytes[2] == 'V');
+        VIDEO_MAGIC_MAP = Collections.unmodifiableMap(magicMap);
     }
 
     /**
@@ -42,7 +45,7 @@ public class MagicNumberVideo {
      * @return {@code true} if the ftyp box with the matching brand is found
      */
     static boolean isFtyp(byte[] bytes, String brand) {
-        if (bytes.length < 12)
+        if (bytes.length < 12 || brand == null || brand.length() != 4)
             return false;
 
         return bytes[4] == 'f' && bytes[5] == 't' && bytes[6] == 'y' && bytes[7] == 'p' &&

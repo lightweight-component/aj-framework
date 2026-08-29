@@ -4,20 +4,22 @@ import com.ajaxjs.fileupload.FileUploadConfig;
 import com.ajaxjs.util.ObjectHelper;
 
 import java.util.Set;
+import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Upload file extension validator.
  */
 public class ExtensionCheck {
     /**
-     * Validates the extension against the custom whitelist and detection category.
+     * Validates the extension against the custom pass-list and detection category.
      *
      * @param config upload configuration
      * @param ext    extension without leading dot
      * @throws IllegalArgumentException thrown when the extension is not within the allowed range
      */
     public static void checkExtName(FileUploadConfig config, String ext) {
-        ext = ext.toLowerCase();
+        ext = ext.toLowerCase(Locale.ROOT);
         // 1. simple check by custom ext
         String[] allowExtFilenames = config.getAllowExtFilenames();
 
@@ -46,7 +48,7 @@ public class ExtensionCheck {
     }
 
     /**
-     * Validates the extension against a caller-provided whitelist.
+     * Validates the extension against a caller-provided pass-list.
      *
      * @param allowExtFilenames array of allowed extensions, elements without leading dot
      * @param ext               extension to validate
@@ -69,24 +71,24 @@ public class ExtensionCheck {
     /**
      * Common image extension set
      */
-    static final Set<String> IMAGE_EXTENSIONS = ObjectHelper.setOf(
+    static final Set<String> IMAGE_EXTENSIONS = Collections.unmodifiableSet(ObjectHelper.setOf(
             "jpg", "gif", "png", "jpeg", "webp"
-    );
+    ));
 
     /* Common office file extensions */
 
     /**
      * Document extension set supporting category-based initial screening
      */
-    public static final Set<String> OFFICE_EXTENSIONS = ObjectHelper.setOf(
+    public static final Set<String> OFFICE_EXTENSIONS = Collections.unmodifiableSet(ObjectHelper.setOf(
             "dotx", "xltx", "xlsx", "rtf", "docx", "pptx", "pdf", "ppt", "potx",
             "doc", "odp", "xls", "odt", "ods", "md", "wps", "txt"
-    );
+    ));
 
     /**
      * Audio extension set supporting category-based initial screening
      */
-    public static final Set<String> AUDIO_EXTENSIONS = ObjectHelper.setOf(
+    public static final Set<String> AUDIO_EXTENSIONS = Collections.unmodifiableSet(ObjectHelper.setOf(
             "mp3",    // MPEG Audio Layer III
             "wav",    // Waveform Audio File Format
             "aac",    // Advanced Audio Coding
@@ -103,12 +105,12 @@ public class ExtensionCheck {
             "weba",   // WebM Audio (WebM container, audio only)
             "opus",    // Opus audio format (often in .ogg or .opus)
             "caf"
-    );
+    ));
 
     /**
      * Video extension set supporting category-based initial screening.
      */
-    public static final Set<String> VIDEO_EXTENSIONS = ObjectHelper.setOf(
+    public static final Set<String> VIDEO_EXTENSIONS = Collections.unmodifiableSet(ObjectHelper.setOf(
             "mp4",      // MPEG-4 Part 14 (most common)
             "avi",      // Audio Video Interleave (Windows)
             "mov",      // Apple QuickTime Movie
@@ -123,9 +125,9 @@ public class ExtensionCheck {
             "3g2",      // 3GPP2 (similar to 3gp)
             "vob",      // DVD Video Object (DVD disc)
             "ogv",      // Ogg Theora Video
-            "ts",       // MPEG Transport Stream (live streaming)
+            "ts",       // MPEG Transport Stream (live-streaming)
             "f4v",      // Flash MP4 variant
             "rmvb",     // RealMedia Variable Bitrate (legacy Chinese video)
             "asf"       // Advanced Systems Format (Microsoft container)
-    );
+    ));
 }

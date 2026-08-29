@@ -66,12 +66,12 @@ class TestMagicNumberVideo {
 
     @Test
     void isFtypDetectsMp4Brand() {
-        assertTrue(MagicNumberVideo.isFtyp(buildFtyp("mp4"), "mp4"));
+        assertTrue(MagicNumberVideo.isFtyp(buildFtyp("mp42"), "mp42"));
     }
 
     @Test
     void isFtypDetectsM4vBrand() {
-        assertTrue(MagicNumberVideo.isFtyp(buildFtyp("M4V"), "M4V"));
+        assertTrue(MagicNumberVideo.isFtyp(buildFtyp("M4V "), "M4V "));
     }
 
     @Test
@@ -86,7 +86,7 @@ class TestMagicNumberVideo {
 
     @Test
     void isFtypWrongBrandReturnsFalse() {
-        assertFalse(MagicNumberVideo.isFtyp(buildFtyp("mp4"), "M4V"));
+        assertFalse(MagicNumberVideo.isFtyp(buildFtyp("mp42"), "M4V "));
     }
 
     // ── readEbmlDocType ───────────────────────────────────────────────────

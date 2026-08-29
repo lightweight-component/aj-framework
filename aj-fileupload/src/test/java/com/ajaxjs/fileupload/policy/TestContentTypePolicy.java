@@ -95,11 +95,18 @@ class TestContentTypePolicy {
     }
 
     @Test
-    void checkMappingDoesNotThrowForMismatchedExtension() {
-        // The comparison logic in checkMapping() is currently commented out,
-        // so mismatched extensions do not throw an exception.
+    void checkMappingRejectsMismatchedExtension() {
         FileUploadConfig config = new FileUploadConfig();
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "image/png", new byte[]{1});
-        assertDoesNotThrow(() -> new ContentTypePolicy(file, config).checkMapping());
+        assertThrows(IllegalArgumentException.class, () -> new ContentTypePolicy(file, config).checkMapping());
+    }
+
+    @Test
+    void noCheckPolicyReturnsWithoutValidation() {
+        FileUploadConfig config = new FileUploadConfig();
+        config.setContentTypePolicy(ContentTypePolicy.Policy.NO_CHECK);
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", null, new byte[]{1});
+
+        assertDoesNotThrow(() -> new ContentTypePolicy(file, config).check());
     }
 }

@@ -1,6 +1,7 @@
 package com.ajaxjs.fileupload.magicnumber;
 
 import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -11,16 +12,17 @@ public class MagicNumberImage {
     /**
      * Map from extension to image file header detection function.
      */
-    public static final Map<String, Function<byte[], Boolean>> IMAGE_MAGIC_MAP = new HashMap<>();
+    public static final Map<String, Function<byte[], Boolean>> IMAGE_MAGIC_MAP;
 
     static {
+        Map<String, Function<byte[], Boolean>> magicMap = new HashMap<>();
         // JPEG: FF D8
-        IMAGE_MAGIC_MAP.put("jpg", bytes -> bytes.length >= 2 && (bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xFF) == 0xD8);
+        magicMap.put("jpg", bytes -> bytes.length >= 2 && (bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xFF) == 0xD8);
 
-        IMAGE_MAGIC_MAP.put("jpeg", IMAGE_MAGIC_MAP.get("jpg"));
+        magicMap.put("jpeg", magicMap.get("jpg"));
 
         // PNG: 89 50 4E 47 0D 0A 1A 0A
-        IMAGE_MAGIC_MAP.put("png", bytes -> bytes.length >= 8 && (bytes[0] & 0xFF) == 0x89 &&
+        magicMap.put("png", bytes -> bytes.length >= 8 && (bytes[0] & 0xFF) == 0x89 &&
                 bytes[1] == 0x50 &&
                 bytes[2] == 0x4E &&
                 bytes[3] == 0x47 &&
@@ -31,17 +33,18 @@ public class MagicNumberImage {
         );
 
         // GIF: GIF87a or GIF89a
-        IMAGE_MAGIC_MAP.put("gif", bytes ->
+        magicMap.put("gif", bytes ->
                 bytes.length >= 6 &&
                         (bytes[0] == 'G' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == '8' &&
                                 (bytes[4] == '7' || bytes[4] == '9') && bytes[5] == 'a')
         );
 
         // WEBP: RIFF....WEBP
-        IMAGE_MAGIC_MAP.put("webp", bytes ->
+        magicMap.put("webp", bytes ->
                 bytes.length >= 12 &&
                         bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
                         bytes[8] == 'W' && bytes[9] == 'E' && bytes[10] == 'B' && bytes[11] == 'P'
         );
+        IMAGE_MAGIC_MAP = Collections.unmodifiableMap(magicMap);
     }
 }

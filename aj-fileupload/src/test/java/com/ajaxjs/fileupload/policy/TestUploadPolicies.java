@@ -69,6 +69,16 @@ class TestUploadPolicies {
         );
     }
 
+    @Test
+    void builtInExtensionRulesAreImmutable() {
+        assertThrows(UnsupportedOperationException.class,
+                () -> ExtensionCheck.OFFICE_EXTENSIONS.clear());
+        assertThrows(UnsupportedOperationException.class,
+                () -> ExtensionCheck.AUDIO_EXTENSIONS.clear());
+        assertThrows(UnsupportedOperationException.class,
+                () -> ExtensionCheck.VIDEO_EXTENSIONS.clear());
+    }
+
     /**
      * Verifies that the {@link DetectType} setting applies its built-in extension
      * set, and that {@code DetectType.NONE} allows any extension.
