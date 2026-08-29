@@ -3,7 +3,7 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-cms</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
         <relativePath/>
     </parent>
 
@@ -13,6 +13,12 @@
     <packaging>jar</packaging>
     <description>A Small Bean Validator</description>
     <url>https://aj-docs.ajaxjs.com/</url>
+
+    <properties>
+        <maven.compiler.release>8</maven.compiler.release>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <scm>
         <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-spring</url>
@@ -36,12 +42,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>base</artifactId>
-            <version>1.4</version>
         </dependency>
     </dependencies>
 </project>

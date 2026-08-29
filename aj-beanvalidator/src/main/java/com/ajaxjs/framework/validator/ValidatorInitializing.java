@@ -1,12 +1,7 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.spring.DiContextUtil;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.MethodParameter;
-import org.springframework.stereotype.Component;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.support.ConfigurableWebBindingInitializer;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -16,42 +11,36 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 在 Spring 应用程序上下文初始化完成后设置验证器和参数解析器
- * 这个类的作用是在 Spring MVC 启动时，拦截并修改 RequestMappingHandlerAdapter 的行为。通过设置自定义的验证器和参数解析器，可以对路径变量进行验证
+ * 由 Starter 自动配置在 MVC 初始化时安装验证器与路径变量解析器。
  */
-@Component
 public class ValidatorInitializing {
     /**
-     * ContextRefreshedEvent 会在 Spring 应用上下文（ApplicationContext）完全初始化并刷新后触发。这通常意味着所有的 Bean 都已经被创建和配置好了
+     * 在 MVC 适配器中安装对象校验器及路径变量校验解析器。
      *
-     * @param event 事件
+     * @param adapter    Spring MVC 请求映射适配器
+     * @param properties 校验组件配置属性
+     * @param rules      应用注册的扩展校验规则
+     * @throws NullPointerException MVC 适配器尚未初始化参数解析器时抛出
      */
-    @EventListener
-    public void handleContextRefresh(ContextRefreshedEvent event) {
-        RequestMappingHandlerAdapter adapter = DiContextUtil.getBeanNonNull(RequestMappingHandlerAdapter.class);
+    public void initialize(RequestMappingHandlerAdapter adapter, ValidatorProperties properties, List<ValidatorRule> rules) {
         ConfigurableWebBindingInitializer init = (ConfigurableWebBindingInitializer) adapter.getWebBindingInitializer();
-        assert init != null;
-        init.setValidator(new ValidatorImpl());
+        // 若 Spring 已配置 Jakarta Validation Provider，优先交由它执行标准约束；
+        // 否则 ValidatorImpl 使用内置的轻量实现处理受支持的标准注解。
+        Validator defaultValidator = init.getValidator();
+        if (!(defaultValidator instanceof ValidatorImpl))
+            init.setValidator(new ValidatorImpl(defaultValidator, properties, rules));
 
         List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>();
         List<HandlerMethodArgumentResolver> originalResolvers = Objects.requireNonNull(adapter.getArgumentResolvers());
 
         for (HandlerMethodArgumentResolver r : originalResolvers) {
-            if (!r.getClass().equals(PathVariableMethodArgumentResolver.class))
+            if (!r.getClass().equals(PathVariableMethodArgumentResolver.class)
+                    && !(r instanceof ValidatorPathVariableMethodArgumentResolver))
                 resolvers.add(r);
         }
 
         // 路径变量时进行参数验证
-        resolvers.add(0, new PathVariableMethodArgumentResolver() {
-            @Override
-            protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
-                Object value = super.resolveName(name, parameter, request);
-                // validateIfApplicable
-                new ValidatorImpl().resolveAnnotations(parameter.getParameterAnnotations(), value, name);
-
-                return value;
-            }
-        });
+        resolvers.add(0, new ValidatorPathVariableMethodArgumentResolver(properties, rules));
 
         adapter.setArgumentResolvers(resolvers);
     }

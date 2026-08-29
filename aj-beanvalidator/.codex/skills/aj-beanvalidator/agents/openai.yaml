@@ -1,0 +1,4 @@
+interface:
+  display_name: "AJ Bean Validator"
+  short_description: "Use the lightweight Spring MVC validation starter"
+  default_prompt: "Help me use AJ Bean Validator correctly in a Spring Boot application."
