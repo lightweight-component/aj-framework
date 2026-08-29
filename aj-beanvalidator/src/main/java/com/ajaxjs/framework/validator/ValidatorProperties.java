@@ -10,9 +10,14 @@ import java.util.Map;
  */
 @ConfigurationProperties("ajaxjs.beanvalidator")
 public class ValidatorProperties {
-    /** 是否启用自动配置。 */
+    /**
+     * 是否启用自动配置。
+     */
     private boolean enabled = true;
-    /** 注解消息占位符与实际提示语的映射。 */
+
+    /**
+     * 注解消息占位符与实际提示语的映射。
+     */
     private Map<String, String> messages = new HashMap<>();
 
     /**

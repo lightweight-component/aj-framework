@@ -1,6 +1,7 @@
 # AJ Bean Validator
 
-一個不依賴 Hibernate Validator 的輕量 Spring MVC 驗證擴充套件，提供中國身分證、中國大陸手機號碼、使用者名稱、密碼、中文文字、IPv4 與 HTTP URL 等常用業務規則。
+一個不依賴 Hibernate Validator 的輕量 Spring MVC 驗證擴充套件，提供中國身分證、中國大陸手機號碼、使用者名稱、密碼、中文文字、IPv4
+與 HTTP URL 等常用業務規則。
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -9,13 +10,15 @@
 - Java 8+
 - Spring Boot 2.7+
 
-本套件 JAR 以 Java 8 位元碼編譯，支援 Spring Boot 2.7、3 與 4。Spring Boot 2.7 應用程式可執行於 Java 8+；Spring Boot 3 與 4 應用程式本身需要 Java 17+。
+本套件 JAR 以 Java 8 位元碼編譯，支援 Spring Boot 2.7、3 與 4。Spring Boot 2.7 應用程式可執行於 Java 8+；Spring Boot 3 與 4
+應用程式本身需要 Java 17+。
 
 ## 安裝
 
 在使用此套件的應用程式中加入本套件：
 
 ```xml
+
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>beanvalidator</artifactId>
@@ -56,18 +59,20 @@ private String idCard;
 
 ## 驗證範圍
 
-本套件不依賴 `javax.validation`、`jakarta.validation` 或 Hibernate Validator。下列全部是本套件自己的註解，請從 `com.ajaxjs.framework.validator.custom` 匯入。
+本套件不依賴 `javax.validation`、`jakarta.validation` 或 Hibernate
+Validator。下列全部是本套件自己的註解，請從 `com.ajaxjs.framework.validator.custom` 匯入。
 
-| 註解 | 支援的值 | `null` 處理 |
-| --- | --- | --- |
-| `@NotNull` | 任何值 | 驗證失敗 |
-| `@NotBlank` | `CharSequence` | 驗證失敗 |
-| `@Size` | `CharSequence`、`Collection`、`Map`、陣列 | 驗證通過 |
-| `@Min`、`@Max` | `Number` | 驗證通過 |
-| `@Pattern` | `CharSequence` | 驗證通過 |
-| `@Email` | `CharSequence` | 驗證通過 |
+| 註解            | 支援的值                                 | `null` 處理 |
+|---------------|--------------------------------------|-----------|
+| `@NotNull`    | 任何值                                  | 驗證失敗      |
+| `@NotBlank`   | `CharSequence`                       | 驗證失敗      |
+| `@Size`       | `CharSequence`、`Collection`、`Map`、陣列 | 驗證通過      |
+| `@Min`、`@Max` | `Number`                             | 驗證通過      |
+| `@Pattern`    | `CharSequence`                       | 驗證通過      |
+| `@Email`      | `CharSequence`                       | 驗證通過      |
 
-`@Pattern` 與 `@Email` 支援它們的 `regexp` 與 `flags` 屬性，`flags` 使用本套件的 `Pattern.Flag` 列舉。這是一組輕量註解，不是 Bean Validation 實作。
+`@Pattern` 與 `@Email` 支援它們的 `regexp` 與 `flags` 屬性，`flags` 使用本套件的 `Pattern.Flag` 列舉。這是一組輕量註解，不是
+Bean Validation 實作。
 
 ```java
 import com.ajaxjs.framework.validator.custom.Email;
@@ -92,15 +97,15 @@ class ContactRequest {
 
 自訂註解支援用於請求物件欄位與 Controller 方法參數。
 
-| 註解 | 合法值 |
-| --- | --- |
-| `@IdCard` | 15 或 18 位中國身分證號；須有合法出生日期，18 位另須有正確校驗碼。 |
-| `@MobileNo` | 格式為 `1[3-9]xxxxxxxxx` 的中國大陸手機號碼。 |
-| `@Username` | 以英文字母開始，總長度為 6–21 個單字字元。 |
-| `@Password` | 8–16 個非空白字元，英文字母、數字、符號至少包含其中兩類。 |
-| `@Chinese` | 一個或多個中文字元。 |
-| `@Ipv4` | 完整 IPv4 位址。 |
-| `@HttpUrl` | 有主機名稱、使用 `http` 或 `https`，且不含未跳脫空白的 URL。 |
+| 註解          | 合法值                                      |
+|-------------|------------------------------------------|
+| `@IdCard`   | 15 或 18 位中國身分證號；須有合法出生日期，18 位另須有正確校驗碼。   |
+| `@MobileNo` | 格式為 `1[3-9]xxxxxxxxx` 的中國大陸手機號碼。         |
+| `@Username` | 以英文字母開始，總長度為 6–21 個單字字元。                 |
+| `@Password` | 8–16 個非空白字元，英文字母、數字、符號至少包含其中兩類。          |
+| `@Chinese`  | 一個或多個中文字元。                               |
+| `@Ipv4`     | 完整 IPv4 位址。                              |
+| `@HttpUrl`  | 有主機名稱、使用 `http` 或 `https`，且不含未跳脫空白的 URL。 |
 
 ## 應用程式自訂約束
 
@@ -212,9 +217,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @GetMapping("/people/{idCard}")
-String find(@PathVariable("idCard") @IdCard String idCard) {
-    return idCard;
-}
+String find(@PathVariable("idCard") @IdCard String idCard){
+        return idCard;
+        }
 ```
 
 ## 錯誤回應範例
@@ -244,4 +249,5 @@ class ValidationErrorHandler {
 }
 ```
 
-不合法的路徑變數會拋出 `ValidatorException`，應在應用程式的例外處理器中對應為 HTTP 400。`ValidatorConfigurationException` 表示開發設定錯誤，例如使用未支援的自訂註解或設定空白的訊息；通常應作為伺服器端錯誤處理。
+不合法的路徑變數會拋出 `ValidatorException`，應在應用程式的例外處理器中對應為 HTTP 400。`ValidatorConfigurationException`
+表示開發設定錯誤，例如使用未支援的自訂註解或設定空白的訊息；通常應作為伺服器端錯誤處理。

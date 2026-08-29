@@ -1,10 +1,6 @@
 package com.ajaxjs.framework.validator.custom;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 约束字符串为邮箱地址，并可附加正则表达式限制。

@@ -12,7 +12,8 @@
 
 ## MVC 深度定制兼容
 
-初始化逻辑依赖默认的 `RequestMappingHandlerAdapter` 并替换路径变量解析器。普通 Spring MVC 应用没有问题；若应用深度定制了 Adapter 或参数解析器顺序，需要额外验证兼容性。
+初始化逻辑依赖默认的 `RequestMappingHandlerAdapter` 并替换路径变量解析器。普通 Spring MVC 应用没有问题；若应用深度定制了
+Adapter 或参数解析器顺序，需要额外验证兼容性。
 
 ## 路径变量错误响应
 

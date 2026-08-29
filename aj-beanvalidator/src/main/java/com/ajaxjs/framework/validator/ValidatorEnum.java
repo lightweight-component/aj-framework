@@ -6,7 +6,9 @@ import org.springframework.util.StringUtils;
  * 内置业务校验注解与其校验实现的映射。
  */
 public enum ValidatorEnum {
-    /** 身份证号码校验。 */
+    /**
+     * 身份证号码校验。
+     */
     IdCard {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -14,7 +16,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 邮箱地址校验。 */
+    /**
+     * 邮箱地址校验。
+     */
     UserMail {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -22,7 +26,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 非空白文本校验。 */
+    /**
+     * 非空白文本校验。
+     */
     NotBlank {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -30,7 +36,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 非空值校验。 */
+    /**
+     * 非空值校验。
+     */
     NotNull {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -38,7 +46,10 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 中国大陆手机号码校验。 */
+
+    /**
+     * 中国大陆手机号码校验。
+     */
     MobileNo {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -46,7 +57,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 用户名格式校验。 */
+    /**
+     * 用户名格式校验。
+     */
     Username {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -54,7 +67,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 密码强度校验。 */
+    /**
+     * 密码强度校验。
+     */
     Password {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -62,7 +77,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** 中文文本校验。 */
+    /**
+     * 中文文本校验。
+     */
     Chinese {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -70,7 +87,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** IPv4 地址校验。 */
+    /**
+     * IPv4 地址校验。
+     */
     Ipv4 {
         @Override
         public void validated(Object value, String errorMsg) {
@@ -78,7 +97,9 @@ public enum ValidatorEnum {
                 throw new ValidatorException(errorMsg);
         }
     },
-    /** HTTP 或 HTTPS 地址校验。 */
+    /**
+     * HTTP 或 HTTPS 地址校验。
+     */
     HttpUrl {
         @Override
         public void validated(Object value, String errorMsg) {

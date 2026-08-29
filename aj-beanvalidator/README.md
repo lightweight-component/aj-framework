@@ -17,7 +17,9 @@
 
 <hr />
 
-A lightweight Spring MVC validation extension for common application-specific values, without a Hibernate Validator dependency. It provides validators for Chinese identity cards, mainland mobile numbers, usernames, passwords, Chinese text, IPv4 addresses, and HTTP URLs.
+A lightweight Spring MVC validation extension for common application-specific values, without a Hibernate Validator
+dependency. It provides validators for Chinese identity cards, mainland mobile numbers, usernames, passwords, Chinese
+text, IPv4 addresses, and HTTP URLs.
 
 [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md)
 
@@ -26,13 +28,15 @@ A lightweight Spring MVC validation extension for common application-specific va
 - Java 8+
 - Spring Boot 2.7+
 
-The library JAR is compiled for Java 8 and supports Spring Boot 2.7, 3, and 4. Spring Boot 2.7 applications may run on Java 8+; Spring Boot 3 and 4 applications themselves require Java 17+.
+The library JAR is compiled for Java 8 and supports Spring Boot 2.7, 3, and 4. Spring Boot 2.7 applications may run on
+Java 8+; Spring Boot 3 and 4 applications themselves require Java 17+.
 
 ## Installation
 
 Add the library to the application that consumes it:
 
 ```xml
+
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>beanvalidator</artifactId>
@@ -42,7 +46,8 @@ Add the library to the application that consumes it:
 
 ## Spring Boot integration
 
-This starter supports Spring Boot 2.7+. In a servlet-based Spring MVC application, it is enabled automatically after adding the dependency; no manual configuration is required.
+This starter supports Spring Boot 2.7+. In a servlet-based Spring MVC application, it is enabled automatically after
+adding the dependency; no manual configuration is required.
 
 Disable it when necessary:
 
@@ -54,7 +59,8 @@ ajaxjs:
 
 ## Custom messages
 
-Custom constraints use built-in Chinese messages by default. Override them through normal Spring Boot configuration; profiles, environment variables, and command-line properties follow Spring Boot's usual precedence rules.
+Custom constraints use built-in Chinese messages by default. Override them through normal Spring Boot configuration;
+profiles, environment variables, and command-line properties follow Spring Boot's usual precedence rules.
 
 ```yaml
 ajaxjs:
@@ -73,18 +79,20 @@ private String idCard;
 
 ## Validation scope
 
-The library does not depend on `javax.validation`, `jakarta.validation`, or Hibernate Validator. The following are this library's own annotations; import them from `com.ajaxjs.framework.validator.custom`.
+The library does not depend on `javax.validation`, `jakarta.validation`, or Hibernate Validator. The following are this
+library's own annotations; import them from `com.ajaxjs.framework.validator.custom`.
 
-| Annotation | Supported values | `null` handling |
-| --- | --- | --- |
-| `@NotNull` | Any value | Fails |
-| `@NotBlank` | `CharSequence` | Fails |
-| `@Size` | `CharSequence`, `Collection`, `Map`, arrays | Valid |
-| `@Min`, `@Max` | `Number` | Valid |
-| `@Pattern` | `CharSequence` | Valid |
-| `@Email` | `CharSequence` | Valid |
+| Annotation     | Supported values                            | `null` handling |
+|----------------|---------------------------------------------|-----------------|
+| `@NotNull`     | Any value                                   | Fails           |
+| `@NotBlank`    | `CharSequence`                              | Fails           |
+| `@Size`        | `CharSequence`, `Collection`, `Map`, arrays | Valid           |
+| `@Min`, `@Max` | `Number`                                    | Valid           |
+| `@Pattern`     | `CharSequence`                              | Valid           |
+| `@Email`       | `CharSequence`                              | Valid           |
 
-`@Pattern` and `@Email` support their `regexp` and `flags` attributes. `flags` uses this library's `Pattern.Flag` enum. This is a lightweight annotation set, not a Bean Validation implementation.
+`@Pattern` and `@Email` support their `regexp` and `flags` attributes. `flags` uses this library's `Pattern.Flag` enum.
+This is a lightweight annotation set, not a Bean Validation implementation.
 
 ```java
 import com.ajaxjs.framework.validator.custom.Email;
@@ -109,19 +117,20 @@ class ContactRequest {
 
 Custom constraints are supported on request-object fields and controller method parameters.
 
-| Annotation | Valid value |
-| --- | --- |
-| `@IdCard` | A 15- or 18-digit Chinese ID card number with a valid birth date; 18-digit values also require a valid check digit. |
-| `@MobileNo` | Mainland mobile number in the `1[3-9]xxxxxxxxx` format. |
-| `@Username` | Starts with a letter and is 6–21 word characters long. |
-| `@Password` | 8–16 non-whitespace characters containing at least two of letters, digits, and symbols. |
-| `@Chinese` | One or more Chinese characters. |
-| `@Ipv4` | A complete IPv4 address. |
-| `@HttpUrl` | An `http` or `https` URL with a hostname and no unescaped spaces. |
+| Annotation  | Valid value                                                                                                         |
+|-------------|---------------------------------------------------------------------------------------------------------------------|
+| `@IdCard`   | A 15- or 18-digit Chinese ID card number with a valid birth date; 18-digit values also require a valid check digit. |
+| `@MobileNo` | Mainland mobile number in the `1[3-9]xxxxxxxxx` format.                                                             |
+| `@Username` | Starts with a letter and is 6–21 word characters long.                                                              |
+| `@Password` | 8–16 non-whitespace characters containing at least two of letters, digits, and symbols.                             |
+| `@Chinese`  | One or more Chinese characters.                                                                                     |
+| `@Ipv4`     | A complete IPv4 address.                                                                                            |
+| `@HttpUrl`  | An `http` or `https` URL with a hostname and no unescaped spaces.                                                   |
 
 ## Application-defined constraints
 
-Applications can define annotations in their own packages. Add a Spring bean implementing `ValidatorRule`; the starter automatically applies registered rules to request-object fields and path variables.
+Applications can define annotations in their own packages. Add a Spring bean implementing `ValidatorRule`; the starter
+automatically applies registered rules to request-object fields and path variables.
 
 ```java
 package com.example.validation;
@@ -201,7 +210,8 @@ Each custom annotation has `required`, which defaults to `true`.
 - `required = false`: `null`, an empty string, or whitespace-only text skips this custom format validation.
 - A non-empty value is always validated, regardless of `required`.
 
-`required` applies only to the business constraints in the table above. Use this library's `@NotNull` or `@NotBlank` for general required-field semantics.
+`required` applies only to the business constraints in the table above. Use this library's `@NotNull` or `@NotBlank` for
+general required-field semantics.
 
 ## Controller usage
 
@@ -229,14 +239,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @GetMapping("/people/{idCard}")
-String find(@PathVariable("idCard") @IdCard String idCard) {
-    return idCard;
-}
+String find(@PathVariable("idCard") @IdCard String idCard){
+        return idCard;
+        }
 ```
 
 ## Error handling example
 
-For request-body validation, custom constraint failures are collected in Spring's `BindingResult` / `Errors`. A controller advice can return a 400 response such as:
+For request-body validation, custom constraint failures are collected in Spring's `BindingResult` / `Errors`. A
+controller advice can return a 400 response such as:
 
 ```java
 import org.springframework.http.HttpStatus;
@@ -261,4 +272,6 @@ class ValidationErrorHandler {
 }
 ```
 
-Invalid path variables throw `ValidatorException`; map it to a 400 response in the application's exception handler. `ValidatorConfigurationException` indicates a developer configuration error, such as an unsupported custom annotation or a blank message, and should normally be reported as a server-side error.
+Invalid path variables throw `ValidatorException`; map it to a 400 response in the application's exception
+handler. `ValidatorConfigurationException` indicates a developer configuration error, such as an unsupported custom
+annotation or a blank message, and should normally be reported as a server-side error.

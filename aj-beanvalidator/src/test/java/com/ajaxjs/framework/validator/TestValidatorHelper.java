@@ -1,13 +1,6 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.validator.custom.Email;
-import com.ajaxjs.framework.validator.custom.IdCard;
-import com.ajaxjs.framework.validator.custom.Max;
-import com.ajaxjs.framework.validator.custom.Min;
-import com.ajaxjs.framework.validator.custom.NotBlank;
-import com.ajaxjs.framework.validator.custom.NotNull;
-import com.ajaxjs.framework.validator.custom.Pattern;
-import com.ajaxjs.framework.validator.custom.Size;
+import com.ajaxjs.framework.validator.custom.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.DirectFieldBindingResult;
 

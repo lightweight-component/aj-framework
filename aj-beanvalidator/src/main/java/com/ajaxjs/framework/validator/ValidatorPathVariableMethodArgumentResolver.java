@@ -10,9 +10,14 @@ import java.util.List;
  * 为路径变量增加本组件自定义注解校验的解析器。
  */
 class ValidatorPathVariableMethodArgumentResolver extends PathVariableMethodArgumentResolver {
-    /** 注解消息配置。 */
+    /**
+     * 注解消息配置。
+     */
     private final ValidatorProperties properties;
-    /** 应用注册的扩展校验规则。 */
+
+    /**
+     * 应用注册的扩展校验规则。
+     */
     private final List<ValidatorRule> rules;
 
     /**

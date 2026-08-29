@@ -55,7 +55,9 @@ public class ValidatorHelper {
      */
     public static final String REGEX_IP_ADDR = "^((25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)$";
 
-    /** 18 位身份证号码校验码计算使用的权重。 */
+    /**
+     * 18 位身份证号码校验码计算使用的权重。
+     */
     private static final int[] IdWeights = {7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1};
 
     /**

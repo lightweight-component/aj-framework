@@ -1,30 +1,16 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.validator.custom.IdCard;
-import com.ajaxjs.framework.validator.custom.Chinese;
-import com.ajaxjs.framework.validator.custom.HttpUrl;
-import com.ajaxjs.framework.validator.custom.Ipv4;
-import com.ajaxjs.framework.validator.custom.MobileNo;
-import com.ajaxjs.framework.validator.custom.Password;
-import com.ajaxjs.framework.validator.custom.Username;
+import com.ajaxjs.framework.validator.custom.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.DirectFieldBindingResult;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
+import java.lang.annotation.*;
 import java.lang.reflect.Field;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestValidatorImpl {
     @Test

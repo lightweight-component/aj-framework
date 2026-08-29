@@ -5,25 +5,26 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import java.lang.reflect.Array;
+
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Spring {@link Validator} 实现，负责执行本组件内置及扩展的校验规则。
  */
 @Slf4j
 public class ValidatorImpl implements Validator {
-    /** Spring 已注册的校验器，存在时先执行。 */
+    /**
+     * Spring 已注册的校验器，存在时先执行。
+     */
     private final Validator delegate;
-    /** 应用注册的扩展校验规则。 */
+    /**
+     * 应用注册的扩展校验规则。
+     */
     private final List<ValidatorRule> rules;
 
     /**
@@ -126,9 +127,13 @@ public class ValidatorImpl implements Validator {
         }
     }
 
-    /** 本组件内置注解所在的包名前缀。 */
+    /**
+     * 本组件内置注解所在的包名前缀。
+     */
     private static final String AJ_PACKAGE = "com.ajaxjs.framework.validator.custom";
-    /** 注解消息配置。 */
+    /**
+     * 注解消息配置。
+     */
     private final ValidatorProperties properties;
 
     /**

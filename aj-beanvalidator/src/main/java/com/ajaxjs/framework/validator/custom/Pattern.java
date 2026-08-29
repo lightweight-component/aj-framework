@@ -1,10 +1,6 @@
 package com.ajaxjs.framework.validator.custom;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 约束字符序列匹配指定正则表达式。
@@ -38,24 +34,42 @@ public @interface Pattern {
      * 可用于 {@link java.util.regex.Pattern} 的正则匹配标志。
      */
     enum Flag {
-        /** 启用 UNIX 行模式。 */
+        /**
+         * 启用 UNIX 行模式。
+         */
         UNIX_LINES(java.util.regex.Pattern.UNIX_LINES),
-        /** 启用不区分大小写匹配。 */
+        /**
+         * 启用不区分大小写匹配。
+         */
         CASE_INSENSITIVE(java.util.regex.Pattern.CASE_INSENSITIVE),
-        /** 允许正则表达式中的空白和注释。 */
+        /**
+         * 允许正则表达式中的空白和注释。
+         */
         COMMENTS(java.util.regex.Pattern.COMMENTS),
-        /** 启用多行模式。 */
+        /**
+         * 启用多行模式。
+         */
         MULTILINE(java.util.regex.Pattern.MULTILINE),
-        /** 使点号匹配行终止符。 */
+        /**
+         * 使点号匹配行终止符。
+         */
         DOTALL(java.util.regex.Pattern.DOTALL),
-        /** 启用 Unicode 大小写匹配。 */
+        /**
+         * 启用 Unicode 大小写匹配。
+         */
         UNICODE_CASE(java.util.regex.Pattern.UNICODE_CASE),
-        /** 启用规范等价匹配。 */
+        /**
+         * 启用规范等价匹配。
+         */
         CANON_EQ(java.util.regex.Pattern.CANON_EQ),
-        /** 启用 Unicode 字符类。 */
+        /**
+         * 启用 Unicode 字符类。
+         */
         UNICODE_CHARACTER_CLASS(java.util.regex.Pattern.UNICODE_CHARACTER_CLASS);
 
-        /** 对应的 JDK 正则匹配标志位。 */
+        /**
+         * 对应的 JDK 正则匹配标志位。
+         */
         private final int value;
 
         /**

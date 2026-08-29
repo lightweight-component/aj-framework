@@ -1,21 +1,24 @@
 # AJ Bean Validator
 
-一个不依赖 Hibernate Validator 的轻量 Spring MVC 校验扩展库，提供中国身份证、中国大陆手机号、用户名、密码、中文文本、IPv4 和 HTTP URL 等常用业务校验。
+一个不依赖 Hibernate Validator 的轻量 Spring MVC 校验扩展库，提供中国身份证、中国大陆手机号、用户名、密码、中文文本、IPv4 和
+HTTP URL 等常用业务校验。
 
-[English](README.md) | [繁體中文](README.zh-TW.md)
+[English](README.md) | [繁體中文](README.zh-TW.md) | [中文入门教程](TUTORIAL.zh-CN.md)
 
 ## 环境要求
 
 - Java 8+
 - Spring Boot 2.7+
 
-本库 JAR 以 Java 8 字节码编译，支持 Spring Boot 2.7、3 和 4。Spring Boot 2.7 应用可运行在 Java 8+；Spring Boot 3 和 4 应用自身需要 Java 17+。
+本库 JAR 以 Java 8 字节码编译，支持 Spring Boot 2.7、3 和 4。Spring Boot 2.7 应用可运行在 Java 8+；Spring Boot 3 和 4 应用自身需要
+Java 17+。
 
 ## 安装
 
 在应用中加入依赖：
 
 ```xml
+
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>beanvalidator</artifactId>
@@ -37,7 +40,8 @@ ajaxjs:
 
 ## 自定义错误消息
 
-自定义约束默认使用内置中文消息。可以通过标准 Spring Boot 配置覆盖；Profile、环境变量和命令行参数的优先级遵循 Spring Boot 规则。
+自定义约束默认使用内置中文消息。可以通过标准 Spring Boot 配置覆盖；Profile、环境变量和命令行参数的优先级遵循 Spring Boot
+规则。
 
 ```yaml
 ajaxjs:
@@ -56,18 +60,20 @@ private String idCard;
 
 ## 校验范围
 
-本库不依赖 `javax.validation`、`jakarta.validation` 或 Hibernate Validator。下列全部是本库自己的注解，请从 `com.ajaxjs.framework.validator.custom` 导入。
+本库不依赖 `javax.validation`、`jakarta.validation` 或 Hibernate
+Validator。下列全部是本库自己的注解，请从 `com.ajaxjs.framework.validator.custom` 导入。
 
-| 注解 | 支持的值 | `null` 处理 |
-| --- | --- | --- |
-| `@NotNull` | 任意值 | 校验失败 |
-| `@NotBlank` | `CharSequence` | 校验失败 |
-| `@Size` | `CharSequence`、`Collection`、`Map`、数组 | 校验通过 |
-| `@Min`、`@Max` | `Number` | 校验通过 |
-| `@Pattern` | `CharSequence` | 校验通过 |
-| `@Email` | `CharSequence` | 校验通过 |
+| 注解            | 支持的值                                 | `null` 处理 |
+|---------------|--------------------------------------|-----------|
+| `@NotNull`    | 任意值                                  | 校验失败      |
+| `@NotBlank`   | `CharSequence`                       | 校验失败      |
+| `@Size`       | `CharSequence`、`Collection`、`Map`、数组 | 校验通过      |
+| `@Min`、`@Max` | `Number`                             | 校验通过      |
+| `@Pattern`    | `CharSequence`                       | 校验通过      |
+| `@Email`      | `CharSequence`                       | 校验通过      |
 
-`@Pattern` 和 `@Email` 支持自身的 `regexp` 和 `flags` 属性，`flags` 使用本库的 `Pattern.Flag` 枚举。这是一组轻量注解，不是 Bean Validation 实现。
+`@Pattern` 和 `@Email` 支持自身的 `regexp` 和 `flags` 属性，`flags` 使用本库的 `Pattern.Flag` 枚举。这是一组轻量注解，不是
+Bean Validation 实现。
 
 ```java
 import com.ajaxjs.framework.validator.custom.Email;
@@ -92,15 +98,15 @@ class ContactRequest {
 
 自定义注解可用于请求对象字段和 Controller 方法参数。
 
-| 注解 | 合法值 |
-| --- | --- |
-| `@IdCard` | 15 或 18 位中国身份证号；出生日期须合法，18 位还需通过校验码验证。 |
-| `@MobileNo` | `1[3-9]xxxxxxxxx` 格式的中国大陆手机号。 |
-| `@Username` | 以英文字母开头，总长度为 6–21 个单词字符。 |
-| `@Password` | 8–16 个非空白字符，英文字母、数字、符号中至少包含两类。 |
-| `@Chinese` | 一个或多个中文字符。 |
-| `@Ipv4` | 完整的 IPv4 地址。 |
-| `@HttpUrl` | 含主机名的 `http` 或 `https` URL，且不允许未转义的空格。 |
+| 注解          | 合法值                                    |
+|-------------|----------------------------------------|
+| `@IdCard`   | 15 或 18 位中国身份证号；出生日期须合法，18 位还需通过校验码验证。 |
+| `@MobileNo` | `1[3-9]xxxxxxxxx` 格式的中国大陆手机号。          |
+| `@Username` | 以英文字母开头，总长度为 6–21 个单词字符。               |
+| `@Password` | 8–16 个非空白字符，英文字母、数字、符号中至少包含两类。         |
+| `@Chinese`  | 一个或多个中文字符。                             |
+| `@Ipv4`     | 完整的 IPv4 地址。                           |
+| `@HttpUrl`  | 含主机名的 `http` 或 `https` URL，且不允许未转义的空格。 |
 
 ## 应用自定义约束
 
@@ -212,9 +218,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @GetMapping("/people/{idCard}")
-String find(@PathVariable("idCard") @IdCard String idCard) {
-    return idCard;
-}
+String find(@PathVariable("idCard") @IdCard String idCard){
+        return idCard;
+        }
 ```
 
 ## 错误响应示例
@@ -244,4 +250,5 @@ class ValidationErrorHandler {
 }
 ```
 
-不合法的路径变量会抛出 `ValidatorException`，应在应用的异常处理器中映射为 HTTP 400。`ValidatorConfigurationException` 表示开发配置错误，例如使用了不支持的自定义注解或配置了空白消息，通常应作为服务端错误处理。
+不合法的路径变量会抛出 `ValidatorException`，应在应用的异常处理器中映射为 HTTP 400。`ValidatorConfigurationException`
+表示开发配置错误，例如使用了不支持的自定义注解或配置了空白消息，通常应作为服务端错误处理。
