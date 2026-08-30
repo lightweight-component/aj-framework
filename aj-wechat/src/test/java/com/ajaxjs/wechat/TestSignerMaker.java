@@ -1,10 +1,10 @@
 package com.ajaxjs.wechat;
 
 
-import com.ajaxjs.wechat.merchant.MerchantConfig;
-import com.ajaxjs.wechat.merchant.SignerMaker;
 import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
+import com.ajaxjs.wechat.merchant.MerchantConfig;
+import com.ajaxjs.wechat.merchant.SignerMaker;
 import org.junit.jupiter.api.Test;
 
 public class TestSignerMaker {

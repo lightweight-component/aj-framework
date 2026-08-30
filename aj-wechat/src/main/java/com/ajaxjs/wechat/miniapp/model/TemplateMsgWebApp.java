@@ -7,7 +7,7 @@ import lombok.Data;
  * 小程序模板消息相关的信息，可以参考小程序模板消息接口
  */
 @Data
-public class TemplateMsgWebApp  {
+public class TemplateMsgWebApp {
     /**
      * 小程序模板 ID
      */

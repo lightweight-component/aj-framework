@@ -13,11 +13,11 @@ package com.ajaxjs.wechat;
 import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.httpremote.Get;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.function.Consumer;
 

@@ -1,10 +1,10 @@
 package com.ajaxjs.wechat;
 
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.wechat.miniapp.Message;
 import com.ajaxjs.wechat.miniapp.WeChatAppletConfig;
 import com.ajaxjs.wechat.miniapp.model.TemplateMsgMp;
 import com.ajaxjs.wechat.miniapp.model.TemplateMsgWebApp;
-import com.ajaxjs.util.ObjectHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

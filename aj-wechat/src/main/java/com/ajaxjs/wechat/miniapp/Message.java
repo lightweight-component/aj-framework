@@ -1,9 +1,9 @@
 package com.ajaxjs.wechat.miniapp;
 
-import com.ajaxjs.wechat.miniapp.model.TemplateMsgMp;
-import com.ajaxjs.wechat.miniapp.model.TemplateMsgWebApp;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.httpremote.Get;
+import com.ajaxjs.wechat.miniapp.model.TemplateMsgMp;
+import com.ajaxjs.wechat.miniapp.model.TemplateMsgWebApp;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

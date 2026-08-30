@@ -9,9 +9,9 @@ import lombok.Data;
  */
 @Data
 public class PayResult {
-    private String  mchid;
+    private String mchid;
 
-    private String  appid;
+    private String appid;
 
     private PayResultPayer payer;
 

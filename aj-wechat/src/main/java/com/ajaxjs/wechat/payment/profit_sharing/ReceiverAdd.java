@@ -6,7 +6,7 @@ import lombok.Data;
  * 添加分账接收方
  */
 @Data
-public class ReceiverAdd  {
+public class ReceiverAdd {
     public final static String PERSONAL_OPENID = "PERSONAL_OPENID";
 
     public final static String MERCHANT_ID = "MERCHANT_ID";

@@ -8,7 +8,7 @@ import java.util.Map;
  * 公众号模板消息相关的信息，可以参考公众号模板消息接口
  */
 @Data
-public class TemplateMsgMp  {
+public class TemplateMsgMp {
     /**
      * 公众号 appid，要求与小程序有绑定且同主体
      */

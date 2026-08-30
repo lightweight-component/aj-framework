@@ -6,7 +6,7 @@ import lombok.Data;
  * 分账接收方
  */
 @Data
-public class RequestOrderReceivers  {
+public class RequestOrderReceivers {
     /**
      * 分账金额，单位为分，只能为整数，不能超过原订单支付金额及最大分账比例金额
      * 示例值：100

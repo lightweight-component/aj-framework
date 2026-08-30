@@ -1,9 +1,9 @@
 package com.ajaxjs.wechat.payment;
 
-import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
-import com.ajaxjs.wechat.merchant.MerchantConfig;
 import com.ajaxjs.util.httpremote.Get;
 import com.ajaxjs.util.httpremote.HttpConstant;
+import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
+import com.ajaxjs.wechat.merchant.MerchantConfig;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  */
 //@Service("WxBillService")
 public class BillService {
-//    @Autowired
+    //    @Autowired
     private MerchantConfig mchCfg;
 
     /**
@@ -39,7 +39,7 @@ public class BillService {
 
         if ((Boolean) map.get("isOk"))
             return map.get("download_url").toString();
-         else
+        else
             throw new RuntimeException(map.get("message").toString());
     }
 
@@ -67,7 +67,7 @@ public class BillService {
 
         if ((Boolean) map.get("isOk"))
             return map.get("download_url").toString();
-         else
+        else
             throw new RuntimeException(map.get("message").toString());
     }
 
