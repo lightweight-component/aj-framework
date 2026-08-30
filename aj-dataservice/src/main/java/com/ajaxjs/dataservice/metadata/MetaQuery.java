@@ -17,6 +17,11 @@ import java.util.Map;
  */
 @Slf4j
 public class MetaQuery extends BaseMetaQuery {
+    /**
+     * 使用指定 JDBC 连接创建 MySQL 运行信息查询器。
+     *
+     * @param conn 用于执行查询的 JDBC 连接
+     */
     public MetaQuery(Connection conn) {
         super(conn);
     }
@@ -26,6 +31,7 @@ public class MetaQuery extends BaseMetaQuery {
      *
      * @param name 变量名名
      * @param sql  要执行的 SQL 语句
+     * @return 查询到的变量值；未找到或查询失败时返回 {@code null}
      */
     public String getVariable(String name, String sql) {
         try (Statement st = conn.createStatement(); ResultSet result = st.executeQuery(sql)) {

@@ -17,6 +17,11 @@ import java.util.Map;
  */
 @Slf4j
 public class TableQuery extends BaseMetaQuery {
+    /**
+     * 使用指定 JDBC 连接创建表元数据查询器。
+     *
+     * @param conn 用于执行查询的 JDBC 连接
+     */
     public TableQuery(Connection conn) {
         super(conn);
     }

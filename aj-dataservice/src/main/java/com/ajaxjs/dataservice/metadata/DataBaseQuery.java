@@ -27,6 +27,11 @@ import java.util.List;
  * @author frank
  */
 public class DataBaseQuery extends BaseMetaQuery {
+    /**
+     * 使用指定 JDBC 连接创建数据库结构查询器。
+     *
+     * @param conn 用于执行查询的 JDBC 连接
+     */
     public DataBaseQuery(Connection conn) {
         super(conn);
     }
@@ -58,8 +63,17 @@ public class DataBaseQuery extends BaseMetaQuery {
         return getDataBaseWithTable(getDatabase());
     }
 
+    /**
+     * 查询数据库列表时需要忽略的 MySQL 系统数据库名称。
+     */
     static final String[] IGNORE_SYSTEM_TABLE = {"information_schema", "performance_schema", "mysql", "sys"};
 
+    /**
+     * 获取指定数据库及其表名的两级结构。
+     *
+     * @param databases 要读取的数据库名称数组
+     * @return 数据库及表名信息
+     */
     public Database[] getDataBaseWithTable(String[] databases) {
         List<Database> list = new ArrayList<>();
         TableQuery tableQuery = new TableQuery(conn);
@@ -83,6 +97,7 @@ public class DataBaseQuery extends BaseMetaQuery {
     /**
      * 完整的信息，包括 CreateDDL
      *
+     * @param dbName 要读取的数据库名称；为空时读取所有非系统数据库
      * @return 完整的信息，包括 CreateDDL
      */
     public Database[] getDataBaseWithTableFull(String dbName) {
@@ -114,6 +129,11 @@ public class DataBaseQuery extends BaseMetaQuery {
         }
     }
 
+    /**
+     * 获取所有非系统数据库及其表、列定义。
+     *
+     * @return 所有数据库的完整结构信息
+     */
     public Database[] getDataBaseWithTableFull() {
         return getDataBaseWithTableFull(null);
     }
@@ -194,6 +214,13 @@ public class DataBaseQuery extends BaseMetaQuery {
         return list;
     }
 
+    /**
+     * 将数据库结构导出为 JSON 文档。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @param dbName 要导出的数据库名称；为空时导出全部非系统数据库
+     * @return 数据库结构 JSON
+     */
     public static String getDoc(Connection conn, String dbName) {
         DataBaseQuery d = new DataBaseQuery(conn);
         Database[] dataBaseWithTable = d.getDataBaseWithTableFull(dbName);
@@ -201,6 +228,13 @@ public class DataBaseQuery extends BaseMetaQuery {
         return JsonUtil.toJson(dataBaseWithTable);
     }
 
+    /**
+     * 将数据库结构以 JavaScript 变量形式保存到磁盘。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @param path 目标文件路径
+     * @param dbName 要导出的数据库名称；为空时导出全部非系统数据库
+     */
     public static void saveToDiskJson(Connection conn, String path, String dbName) {
         new FileHelper(path).writeFileContent("DOC_DATA = " + getDoc(conn, dbName));
     }

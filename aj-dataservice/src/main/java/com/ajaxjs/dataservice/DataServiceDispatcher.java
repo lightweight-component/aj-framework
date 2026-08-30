@@ -24,6 +24,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping(DataServiceDispatcher.URL_PREFIX)
 public abstract class DataServiceDispatcher {
+    /**
+     * 动态数据服务接口的统一 URL 前缀。
+     */
     static final String URL_PREFIX = "/ds_api";
 
     /**
@@ -31,6 +34,9 @@ public abstract class DataServiceDispatcher {
      */
     private final static AntPathMatcher ROUTER_MATCHER = new AntPathMatcher();
 
+    /**
+     * 已注册动态端点的路由表。
+     */
     @Autowired
     EndpointMgr endPointMgr;
 
@@ -185,8 +191,14 @@ public abstract class DataServiceDispatcher {
         return arr;
     }
 
+    /**
+     * 没有查询结果或操作结果时使用的空响应对象。
+     */
     @Data
     static class Empty {
+        /**
+         * 空响应的提示文本。
+         */
         String msg = "No data";
     }
 

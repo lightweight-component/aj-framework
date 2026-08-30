@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * 持久化在 {@code ds_namespace} 表中的 FastCRUD 命名空间配置。
+ */
 @Data
 public class NamespaceDataEntity {
 

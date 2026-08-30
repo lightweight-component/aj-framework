@@ -10,18 +10,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * FastCRUD 请求参数和查询条件处理工具。
+ */
 public class Tools {
+    /**
+     * 根据当前 HTTP 请求构造 SQL 条件片段。
+     *
+     * @return SQL 的 WHERE 条件片段
+     * @throws NullPointerException 当当前线程没有绑定 HTTP 请求时抛出
+     */
     public static String getWhereClause() {
         return getWhereClause(Objects.requireNonNull(DiContextUtil.getRequest()));
     }
 
+    /**
+     * 请求属性中附加 SQL 查询条件参数的键名。
+     */
     public static final String SQL_WHERE_CLAUSE = "SQL_WHERE_CLAUSE";
 
     /**
      * 基于 URL 的 QueryString，设计一个条件查询的参数规范，可以转化为 SQL 的 Where 里面的查询
      * usage:
      * <pre>
-     *  ?q_name=张三&q_age=18&q_sex=1&ql_address=上海&lo=and // 默认是 OR 关系
+     *  ?q_name=张三&amp;q_age=18&amp;q_sex=1&amp;ql_address=上海&amp;lo=and // 默认是 OR 关系
      * </pre>
      *
      * @param request 请求对象

@@ -18,8 +18,16 @@ import java.util.function.Function;
  */
 @Slf4j
 public abstract class BaseMetaQuery {
+    /**
+     * 执行元数据查询所使用的 JDBC 连接。
+     */
     Connection conn;
 
+    /**
+     * 使用指定 JDBC 连接创建元数据查询器。
+     *
+     * @param conn 用于执行查询的 JDBC 连接
+     */
     public BaseMetaQuery(Connection conn) {
         this.conn = conn;
     }
@@ -52,11 +60,11 @@ public abstract class BaseMetaQuery {
      * 获取查询结果，返回 Map 类型的数据集合
      *
      * @param sql    要执行的 SQL 语句
-     * @param cb     对于每个查询结果行，执行回调函数，将 ResultSet 转成 Map<String, String>
+     * @param cb     对于每个查询结果行执行的回调，将 ResultSet 转成 {@code Map<String, String>}
      *               <p>
      *               注意：Map 的 key 是列名（column name），value 是列值（column value）
      * @param isLoop 是否需要循环处理 ResultSet 中的每一行
-     * @return 返回转换后的 Map<String, String> 所组成的 Map 对象，可能包含多行数据
+     * @return 由转换结果组成的映射对象，可能包含多行数据
      */
     public Map<String, String> getMapResult(String sql, BiConsumer<ResultSet, Map<String, String>> cb, boolean isLoop) {
         Map<String, String> map = new HashMap<>();
@@ -80,10 +88,10 @@ public abstract class BaseMetaQuery {
      * 默认为需要循环处理 ResultSet 中的每一行
      *
      * @param sql 要执行的 SQL 语句
-     * @param cb  对于每个查询结果行，执行回调函数，将 ResultSet 转成 Map<String, String>
+     * @param cb  对于每个查询结果行执行的回调，将 ResultSet 转成 {@code Map<String, String>}
      *            <p>
      *            注意：Map 的 key 是列名（column name），value 是列值（column value）
-     * @return 返回转换后的 Map<String, String> 所组成的 Map 对象，可能包含多行数据
+     * @return 由转换结果组成的映射对象，可能包含多行数据
      */
     public Map<String, String> getMapResult(String sql, BiConsumer<ResultSet, Map<String, String>> cb) {
         return getMapResult(sql, cb, true);

@@ -17,12 +17,24 @@ import java.util.Map;
  */
 @Slf4j
 public class Sync {
+    /**
+     * 源数据库连接。
+     */
     private Connection conn;
 
+    /**
+     * 目标数据库连接。
+     */
     private Connection connR;
 
+    /**
+     * 默认目标数据库类型。
+     */
     public static final String typeR = "oracle";
 
+    /**
+     * 遍历源数据库中的表并尝试同步其表结构。
+     */
     public void run() {
 //        List<Map<String, Object>> list = new ArrayList<>();
 //        StringBuffer sql = new StringBuffer();
@@ -39,6 +51,13 @@ public class Sync {
 
     }
 
+    /**
+     * 生成并在目标数据库创建指定表的结构。
+     *
+     * @param tableName 要同步的表名
+     * @return 同步过程中的结果数据
+     * @throws Exception 当读取元数据或创建表失败时抛出
+     */
     @SuppressWarnings("unchecked")
     public Map<String, Object> sync(String tableName) throws Exception {
         Map<String, Object> map = new HashMap<>();
@@ -56,7 +75,10 @@ public class Sync {
     }
 
     /**
-     * 获取建表 SQL
+     * 获取指定源表的建表 SQL 与列类型映射。
+     *
+     * @param tableName 源表名称
+     * @return 包含建表 SQL 和列类型映射的结果；读取失败时返回 {@code null}
      */
     public Map<String, Object> sql(String tableName) {
         Map<String, Object> map = new HashMap<>(), sqlMap = new HashMap<>();
@@ -113,7 +135,12 @@ public class Sync {
     }
 
     /**
-     * 拼接建表 sql
+     * 根据读取到的列定义拼接目标数据库的建表 SQL。
+     *
+     * @param map 包含表名、主键和列定义的元数据
+     * @param tableName 表名
+     * @param typeR 目标数据库类型
+     * @return 建表 SQL
      */
     @SuppressWarnings("unchecked")
     public String getSql(Map<String, Object> map, String tableName, String typeR) {
@@ -188,7 +215,11 @@ public class Sync {
     }
 
     /**
-     * 两方不同数据库，需要对类型进行转换
+     * 将源数据库字段类型转换为目标数据库支持的类型。
+     *
+     * @param typeName 源字段类型名称
+     * @param type 目标数据库类型
+     * @return 转换后的目标字段类型
      */
     public String caseVale(Object typeName, String type) {
         String typeCloud;
@@ -269,7 +300,12 @@ public class Sync {
     }
 
     /**
-     * 连接对方系统进行建表
+     * 在目标数据库创建表并验证创建结果。
+     *
+     * @param sql 建表 SQL
+     * @param tableName 预期创建的表名
+     * @return 表已存在或创建成功时返回 {@code true}
+     * @throws Exception 当执行建表操作失败时抛出
      */
     public boolean createTable(String sql, String tableName) throws Exception {
         if (typeR.equals("oracle")) {
@@ -282,7 +318,11 @@ public class Sync {
     }
 
     /**
-     * 判断对方表是否存在
+     * 判断目标连接中是否存在指定表。
+     *
+     * @param conn 目标数据库连接
+     * @param tableName 表名
+     * @return 表存在时返回 {@code true}
      */
     public static boolean exitsTable(Connection conn, String tableName) {
         try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName.toUpperCase(), null)) {
@@ -295,7 +335,11 @@ public class Sync {
     }
 
     /**
-     * 获取 insert 模板
+     * 根据一行样例数据生成参数化插入 SQL 模板。
+     *
+     * @param list 至少包含一行数据的记录集合
+     * @param tableName 目标表名
+     * @return 包含字段列表和 SQL 模板的映射
      */
     public Map<String, Object> sqlTemplate(List<Map<String, Object>> list, String tableName) {
         List<String> fieldList = new ArrayList<>();
@@ -321,18 +365,38 @@ public class Sync {
         return map;
     }
 
+    /**
+     * 获取源数据库连接。
+     *
+     * @return 源数据库连接
+     */
     public Connection getConn() {
         return conn;
     }
 
+    /**
+     * 设置源数据库连接。
+     *
+     * @param conn 源数据库连接
+     */
     public void setConn(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * 获取目标数据库连接。
+     *
+     * @return 目标数据库连接
+     */
     public Connection getConnR() {
         return connR;
     }
 
+    /**
+     * 设置目标数据库连接。
+     *
+     * @param connR 目标数据库连接
+     */
     public void setConnR(Connection connR) {
         this.connR = connR;
     }

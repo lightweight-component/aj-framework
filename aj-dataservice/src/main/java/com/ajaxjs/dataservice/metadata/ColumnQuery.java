@@ -22,6 +22,11 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ColumnQuery extends BaseMetaQuery {
 
+    /**
+     * 使用指定 JDBC 连接创建列元数据查询器。
+     *
+     * @param conn 用于执行查询的 JDBC 连接
+     */
     public ColumnQuery(Connection conn) {
         super(conn);
     }
@@ -72,8 +77,17 @@ public class ColumnQuery extends BaseMetaQuery {
         return map;
     }
 
+    /**
+     * 提取字段类型长度的正则表达式缓存。
+     */
     private static Pattern getLength;
 
+    /**
+     * 将当前结果集的列元数据行转换为列对象并加入结果列表。
+     *
+     * @param rs 包含列元数据的结果集
+     * @param list 用于接收列对象的列表
+     */
     private static void rs2list(ResultSet rs, List<Column> list) {
         if (getLength == null)
             getLength = Pattern.compile("\\((\\d+)\\)");

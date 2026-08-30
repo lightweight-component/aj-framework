@@ -45,6 +45,11 @@ public class DbDocController {
      */
     public static String DB_DOC_JSON;
 
+    /**
+     * 获取缓存的数据库结构文档；首次调用会从默认数据源加载。
+     *
+     * @return 包含 {@code DOC_DATA} 变量的数据库文档文本
+     */
     @GetMapping
     public String getJson() {
         if (DB_DOC_JSON == null) // 第一次启动，不管是不是多数据源，先加载当前数据源的
@@ -53,6 +58,9 @@ public class DbDocController {
         return DB_DOC_JSON;
     }
 
+    /**
+     * 从 Spring 默认数据源加载数据库结构文档到内存缓存。
+     */
     void getSingleDataSource() {
         DataSource ds = DiContextUtil.getBean(DataSource.class);
 
@@ -67,10 +75,20 @@ public class DbDocController {
         }
     }
 
+    /**
+     * 获取保留的数据库文档输出目录。
+     *
+     * @return 数据库文档输出目录
+     */
     public String getJsonPath() {
         return jsonPath;
     }
 
+    /**
+     * 设置数据库文档输出目录。
+     *
+     * @param jsonPath 数据库文档输出目录
+     */
     public void setJsonPath(String jsonPath) {
         this.jsonPath = jsonPath;
     }

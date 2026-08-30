@@ -63,8 +63,14 @@ public class MysqlExport {
         this.saveFolder = saveFolder;
     }
 
+    /**
+     * SQL 片段开始标识。
+     */
     private static final String SQL_START_PATTERN = "-- start";
 
+    /**
+     * SQL 片段结束标识。
+     */
     private static final String SQL_END_PATTERN = "-- end";
 
     /**
@@ -237,10 +243,22 @@ public class MysqlExport {
 
     }
 
+    /**
+     * 使用 MySQL 反引号转义数据库标识符。
+     *
+     * @param identifier 表名或数据库名
+     * @return 可嵌入 SQL 的转义标识符
+     */
     private String escapeIdentifier(String identifier) {
         return "`" + identifier.replace("`", "``") + "`";
     }
 
+    /**
+     * 转义字符串字面量中的 MySQL 特殊字符。
+     *
+     * @param str 原始字符串
+     * @return 已转义的字符串字面量；空值返回 {@code NULL}
+     */
     private String escapeString(String str) {
         if (str == null)
             return "NULL";

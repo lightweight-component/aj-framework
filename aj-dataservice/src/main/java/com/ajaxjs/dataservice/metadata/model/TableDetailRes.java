@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 一个数据库表的建表语句、列定义和索引定义。
+ */
 @Data
 public class TableDetailRes {
     /**

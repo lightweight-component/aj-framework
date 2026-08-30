@@ -14,8 +14,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 基于命名空间配置执行通用 CRUD 操作的服务。
+ */
 @Service
 public class FastCrudService implements FastCrudController {
+    /**
+     * 可访问命名空间及其自动查询规则。
+     */
     @Autowired(required = false)
     protected Namespaces namespaces;
 

@@ -15,15 +15,28 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 用于读取 MySQL 数据库、表和运行环境元数据的工具。
+ */
 @Slf4j
 public class MySqlProbe {
     /**
-     * 获取数据库详情
+     * 获取当前连接数据库的详情。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @return 当前数据库的详情
      */
     public static DataBaseDetail detail(Connection conn) {
         return detail(conn, getDatabaseNameByConnection(conn));
     }
 
+    /**
+     * 从 JDBC 连接中读取当前数据库名称。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @return 当前连接的 catalog，即数据库名称
+     * @throws RuntimeException 当读取 JDBC 元数据失败时抛出
+     */
     static String getDatabaseNameByConnection(Connection conn) {
         String catalog; // catalog 是数据库名
 
@@ -39,6 +52,14 @@ public class MySqlProbe {
         return catalog;
     }
 
+    /**
+     * 获取指定 MySQL 数据库的运行状态和配置信息。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @param database 要统计的数据库名称
+     * @return 数据库详情
+     * @throws RuntimeException 当读取数据库元数据失败时抛出
+     */
     public static DataBaseDetail detail(Connection conn, String database) {
         MetaQuery q = new MetaQuery(conn);
 
@@ -99,14 +120,21 @@ public class MySqlProbe {
     }
 
     /**
-     * 获取某个库下的所有表信息
+     * 获取当前连接数据库下的所有表信息。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @return 表信息列表
      */
     public static List<TableDesc> list(Connection conn) {
         return list(conn, getDatabaseNameByConnection(conn));
     }
 
     /**
-     * 获取某个库下的所有表信息
+     * 获取指定数据库下的所有表信息。
+     *
+     * @param conn 已连接的 JDBC 连接
+     * @param database 数据库名称
+     * @return 表信息列表
      */
     public static List<TableDesc> list(Connection conn, String database) {
         MetaQuery q = new MetaQuery(conn);
@@ -121,7 +149,12 @@ public class MySqlProbe {
     }
 
     /**
-     * 获取某个表的详情信息
+     * 获取指定表的建表语句、列和索引信息。
+     *
+     * @param connect 已连接的 JDBC 连接
+     * @param database 数据库名称
+     * @param tableName 表名称
+     * @return 表详情
      */
     public static TableDetailRes detail(Connection connect, String database, String tableName) {
         MetaQuery q = new MetaQuery(connect);
@@ -150,12 +183,23 @@ public class MySqlProbe {
         }
     }
 
+    /**
+     * 从当前进程环境变量中读取指定属性。
+     *
+     * @param key 环境变量名称
+     * @return 对应的变量值；不存在时返回 {@code null}
+     */
     public static String getCustomProperties(String key) {
         Map<String, String> map = getEnv();
 
         return map.get(key);
     }
 
+    /**
+     * 读取当前操作系统进程可见的环境变量。
+     *
+     * @return 环境变量名称与值的映射
+     */
     public static Map<String, String> getEnv() {
         Map<String, String> map = new HashMap<>();
         Process p;
@@ -184,9 +228,14 @@ public class MySqlProbe {
     }
 
     /**
-     * 只能在 Linux 下执行
+     * 通过 {@code mysqladmin} 检查 MySQL 服务是否响应。
+     * 只能在 Linux 下执行。
      *
      * @author <a href="https://github.com/535404515/MYSQL-TOMCAT-MONITOR/blob/master/nlpms-task-monitor/src/main/java/com/nuoli/mysqlprotect/timer/MysqlServiceJob.java">...</a>
+     *
+     * @param username MySQL 用户名
+     * @param password MySQL 密码
+     * @return 命令输出或错误提示
      */
     public static String ping(String username, String password) {
         Process p;

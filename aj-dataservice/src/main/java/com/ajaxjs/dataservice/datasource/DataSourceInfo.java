@@ -26,10 +26,14 @@ public class DataSourceInfo {
      */
     private Integer stat;
 
-//	private Status stat;
-
+    /**
+     * 数据源的显示名称。
+     */
     private String name;
 
+    /**
+     * 数据源的扩展配置内容。
+     */
     private String content;
 
     /**

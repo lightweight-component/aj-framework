@@ -25,7 +25,6 @@ public class MySqlProbeController {
 
     @GetMapping("/test")
     DataBaseDetail test() {
-//        JdbcConnection.getConnection();
         try (Connection connection = ds.getConnection()) {
             return MySqlProbe.detail(connection);
         } catch (SQLException e) {

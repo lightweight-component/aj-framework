@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 数据源配置和数据库元数据查询的服务实现。
+ */
 @Slf4j
 @Service
 public class DatasourceService implements DatasourceController {
@@ -44,9 +47,11 @@ public class DatasourceService implements DatasourceController {
     }
 
     /**
-     * 是否重复数据源编码
+     * 检查数据源编码是否与其他有效数据源重复。
      *
-     * @param dsId 数据源 id，非 null 时候表示更新排除自己
+     * @param entity 待检查的数据源配置
+     * @param dsId 数据源 id；非 {@code null} 时更新操作会排除自身
+     * @throws IllegalArgumentException 当存在相同编码的数据源时抛出
      */
     private void checkIfIsRepeat(DataSourceInfo entity, Long dsId) {
         String sql;
@@ -94,6 +99,12 @@ public class DatasourceService implements DatasourceController {
         }
     }
 
+    /**
+     * 根据数据源配置标识创建 JDBC 连接。
+     *
+     * @param id 数据源配置主键
+     * @return 已建立的 JDBC 连接
+     */
     Connection getConnectionByDataSourceId(Long id) {
         DataSourceInfo info = new Action("SELECT * FROM ds_datasource WHERE stat!= 1 AND id =?").query(id).one(DataSourceInfo.class);
 
@@ -118,24 +129,29 @@ public class DatasourceService implements DatasourceController {
     }
 
     /**
-     * 返回数据源下的表名和表注释，支持分页和表名搜索
+     * 返回数据源下的表名和表注释，支持分页和表名搜索。
      *
-     * @param tablename 搜索的关键字
-     * @throws SQLException
+     * @param connection 已建立的数据库连接
+     * @param start 起始偏移量
+     * @param limit 最多返回的记录数
+     * @param tableName 表名搜索关键字
+     * @param dbName 数据库名称
+     * @return 表名及其注释的分页结果
+     * @throws SQLException 当读取数据库元数据失败时抛出
      */
-    private static PageResult<Map<String, Object>> getTableAndComment(Connection _conn, Integer start, Integer limit, String tablename, String dbName) throws SQLException {
+    private static PageResult<Map<String, Object>> getTableAndComment(Connection connection, Integer start, Integer limit, String tableName, String dbName) throws SQLException {
         int total;
         List<Map<String, Object>> list = null;
 
         try {
-            TableQuery tableQuery = new TableQuery(_conn);
+            TableQuery tableQuery = new TableQuery(connection);
             List<String> allTableName = tableQuery.getAllTableName(dbName);
 
             // 有可能出现配置表本身，删除
             allTableName.remove("adp_data_service");
 
-            if (StringUtils.hasText(tablename)) // 搜索关键字
-                allTableName = allTableName.stream().filter(item -> item.contains(tablename)).collect(Collectors.toList());
+            if (StringUtils.hasText(tableName)) // 搜索关键字
+                allTableName = allTableName.stream().filter(item -> item.contains(tableName)).collect(Collectors.toList());
 
             total = allTableName.size();
 
@@ -151,7 +167,7 @@ public class DatasourceService implements DatasourceController {
                 list = tableQuery.getTableCommentWithAnnotateAsList(subList, dbName);
             }
         } finally {
-            JdbcConnection.closeDb(_conn);
+            JdbcConnection.closeDb(connection);
         }
 
         PageResult<Map<String, Object>> result = new PageResult<>();

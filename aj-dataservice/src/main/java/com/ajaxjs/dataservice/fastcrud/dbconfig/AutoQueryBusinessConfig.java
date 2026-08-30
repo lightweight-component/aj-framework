@@ -10,13 +10,25 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * 基于数据库命名空间配置实现的 FastCRUD 业务规则。
+ */
 @RequiredArgsConstructor
 @Data
 public class AutoQueryBusinessConfig implements AutoQueryBusiness {
+    /**
+     * 命名空间的持久化配置。
+     */
     final NamespaceDataEntity entity;
 
+    /**
+     * 当前用户标识供应器。
+     */
     Supplier<Serializable> getCurrentUserId;
 
+    /**
+     * 当前租户标识供应器。
+     */
     Supplier<Serializable> getTenantId;
 
     @Override

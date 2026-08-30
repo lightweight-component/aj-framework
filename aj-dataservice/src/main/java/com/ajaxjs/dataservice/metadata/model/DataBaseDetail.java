@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * MySQL 数据库的运行状态、配置和容量信息。
+ */
 @Data
 public class DataBaseDetail  {
     /**

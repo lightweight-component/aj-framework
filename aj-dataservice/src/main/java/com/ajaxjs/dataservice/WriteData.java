@@ -37,6 +37,12 @@ public class WriteData {
      */
     Map<String, String> patchParams;
 
+    /**
+     * 设置从 URL 模板中提取的路径参数。
+     *
+     * @param patchParams 路径参数名与参数值的映射
+     * @return 当前写入处理器，便于链式调用
+     */
     public WriteData setPatchParams(Map<String, String> patchParams) {
         this.patchParams = patchParams;
 
@@ -160,6 +166,12 @@ public class WriteData {
         }
     }
 
+    /**
+     * 读取并校验请求体中的原始数据。
+     *
+     * @return 非空的原始请求体
+     * @throws IllegalArgumentException 当请求体为空或仅包含空白字符时抛出
+     */
     private String getInputData() {
         String raw = TraceXFilter.getStreamBodyAsStr(req);
 
@@ -170,14 +182,23 @@ public class WriteData {
     }
 
     /**
-     * To deal with the query string and patch params, make them as one array.
+     * 将当前路径参数与表单参数组合为更新操作的参数。
+     *
+     * @param action 要执行的 SQL 操作
+     * @param mapParams 请求中的表单参数
+     * @return 已绑定参数的更新操作
      */
     private Update combineParamsUpdate(Action action, Map<String, String> mapParams) {
         return combineParamsUpdate(action, patchParams, mapParams);
     }
 
     /**
-     * To deal with the query string and patch params, make them as one array.
+     * 将路径参数与表单参数组合为更新操作的参数。
+     *
+     * @param action 要执行的 SQL 操作
+     * @param patchParams URL 模板参数
+     * @param mapParams 请求参数
+     * @return 已绑定参数的更新操作
      */
     static Update combineParamsUpdate(Action action, Map<String, String> patchParams, Map<String, String> mapParams) {
         if (patchParams == null)
@@ -193,7 +214,11 @@ public class WriteData {
     }
 
     /**
-     * To deal with the query string and patch params, make them as one array.
+     * 将路径参数与表单参数组合为创建操作的参数。
+     *
+     * @param action 要执行的 SQL 操作
+     * @param mapParams 请求参数
+     * @return 已绑定参数的创建操作
      */
     Create combineParamsCreate(Action action, Map<String, String> mapParams) {
         if (patchParams == null)

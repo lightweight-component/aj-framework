@@ -9,15 +9,52 @@ import java.util.StringTokenizer;
  * 格式化 SQL
  */
 public class SqlFormatter {
+    /**
+     * 会开始一个复合 SQL 子句的关键字。
+     */
     private static final Set<String> BEGIN_CLAUSES = new HashSet<>();
+
+    /**
+     * 会结束当前 SQL 子句的关键字。
+     */
     private static final Set<String> END_CLAUSES = new HashSet<>();
+
+    /**
+     * SQL 逻辑关键字集合。
+     */
     private static final Set<String> LOGICAL = new HashSet<>();
+
+    /**
+     * SQL 量词关键字集合。
+     */
     private static final Set<String> QUANTIFIERS = new HashSet<>();
+
+    /**
+     * 数据操纵语句关键字集合。
+     */
     private static final Set<String> DML = new HashSet<>();
+
+    /**
+     * 其他需要特别处理的 SQL 关键字集合。
+     */
     private static final Set<String> MISC = new HashSet<>();
+
+    /**
+     * 单级缩进使用的字符串。
+     */
     static final String indentString = "    ";
+
+    /**
+     * 格式化结果的初始换行和缩进。
+     */
     static final String initial = "\n    ";
 
+    /**
+     * 按关键字和括号层级格式化 SQL 文本。
+     *
+     * @param source 原始 SQL 文本
+     * @return 格式化后的 SQL 文本
+     */
     public String format(String source) {
         return new FormatProcess(source).perform().trim();
     }
@@ -60,32 +97,76 @@ public class SqlFormatter {
         MISC.add("on");
     }
 
+    /**
+     * 保存一次 SQL 格式化过程中的词法状态和输出内容。
+     */
     private static class FormatProcess {
+        /** Indicates whether the next token begins a line. */
         boolean beginLine = true;
+
+        /** Indicates that a begin clause has not yet reached its end clause. */
         boolean afterBeginBeforeEnd = false;
+
+        /** Indicates that comma-separated items are being processed. */
         boolean afterByOrSetOrFromOrSelect = false;
+
         @SuppressWarnings("unused")
+        /** Indicates that the current token follows a VALUES clause. */
         boolean afterValues = false;
+
+        /** Indicates that the formatter is processing an ON clause. */
         boolean afterOn = false;
+
+        /** Indicates that the formatter is processing a BETWEEN expression. */
         boolean afterBetween = false;
+
+        /** Indicates that the formatter is processing an INSERT statement. */
         boolean afterInsert = false;
+
+        /** Current nesting depth inside SQL function calls. */
         int inFunction = 0;
+
+        /** Parenthesis depth since the latest SELECT clause. */
         int parensSinceSelect = 0;
+
+        /** Stack of parenthesis depths for nested SELECT clauses. */
         private final LinkedList<Integer> parenCounts = new LinkedList<>();
+
+        /** Stack of comma-formatting states for nested SELECT clauses. */
         private final LinkedList<Boolean> afterByOrFromOrSelects = new LinkedList<>();
 
+        /** Current output indentation level. */
         int indent = 1;
 
+        /** Accumulates the formatted SQL text. */
         StringBuffer result = new StringBuffer();
+
+        /** Token stream of the source SQL. */
         StringTokenizer tokens;
+
+        /** Previously processed non-whitespace token. */
         String lastToken;
+
+        /** Current source token. */
         String token;
+
+        /** Lowercase representation of the current token. */
         String lcToken;
 
+        /**
+         * Creates a formatter state for the supplied SQL.
+         *
+         * @param sql SQL text to tokenize
+         */
         public FormatProcess(String sql) {
             tokens = new StringTokenizer(sql, "()+*/-=<>'`\"[], \n\r\f\t", true);
         }
 
+        /**
+         * Processes the token stream and returns formatted SQL text.
+         *
+         * @return formatted SQL text
+         */
         public String perform() {
             result.append("\n    ");
 
@@ -145,6 +226,7 @@ public class SqlFormatter {
             return result.toString();
         }
 
+        /** Handles a comma following an ON clause. */
         private void commaAfterOn() {
             out();
             indent -= 1;
@@ -153,11 +235,13 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = true;
         }
 
+        /** Handles a comma in BY, FROM or SELECT item lists. */
         private void commaAfterByOrFromOrSelect() {
             out();
             newline();
         }
 
+        /** Formats a logical keyword. */
         private void logical() {
             if ("end".equals(lcToken)) indent -= 1;
 
@@ -166,6 +250,7 @@ public class SqlFormatter {
             beginLine = false;
         }
 
+        /** Starts formatting an ON clause. */
         private void on() {
             indent += 1;
             afterOn = true;
@@ -174,6 +259,7 @@ public class SqlFormatter {
             beginLine = false;
         }
 
+        /** Formats a regular non-whitespace token. */
         private void misc() {
             out();
             if ("between".equals(lcToken)) afterBetween = true;
@@ -188,10 +274,12 @@ public class SqlFormatter {
             }
         }
 
+        /** Emits whitespace when the current output line already has content. */
         private void white() {
             if (!beginLine) result.append(" ");
         }
 
+        /** Formats an UPDATE, INSERT or DELETE statement keyword. */
         private void updateOrInsertOrDelete() {
             out();
             indent += 1;
@@ -202,6 +290,7 @@ public class SqlFormatter {
             if ("insert".equals(lcToken)) afterInsert = true;
         }
 
+        /** Starts a SELECT clause and saves nested formatting state. */
         private void select() {
             out();
             indent += 1;
@@ -212,10 +301,12 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = true;
         }
 
+        /** Appends the current token to the formatted output. */
         private void out() {
             result.append(token);
         }
 
+        /** Formats a keyword that starts a new terminating clause. */
         private void endNewClause() {
             if (!afterBeginBeforeEnd) {
                 indent -= 1;
@@ -236,6 +327,7 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = (("by".equals(lcToken)) || ("set".equals(lcToken)) || ("from".equals(lcToken)));
         }
 
+        /** Formats a keyword that starts a composite clause. */
         private void beginNewClause() {
             if (!afterBeginBeforeEnd) {
                 if (afterOn) {
@@ -252,6 +344,7 @@ public class SqlFormatter {
             afterBeginBeforeEnd = true;
         }
 
+        /** Formats a VALUES clause. */
         private void values() {
             indent -= 1;
             newline();
@@ -261,6 +354,7 @@ public class SqlFormatter {
             afterValues = true;
         }
 
+        /** Formats a closing parenthesis and restores nesting state. */
         private void closeParen() {
             parensSinceSelect -= 1;
             if (parensSinceSelect < 0) {
@@ -284,6 +378,7 @@ public class SqlFormatter {
             beginLine = false;
         }
 
+        /** Formats an opening parenthesis and updates nesting state. */
         private void openParen() {
             if ((isFunctionName(lastToken)) || (inFunction > 0)) inFunction += 1;
 
@@ -303,18 +398,31 @@ public class SqlFormatter {
             parensSinceSelect += 1;
         }
 
-        private static boolean isFunctionName(String tok) {
-            char begin = tok.charAt(0);
+        /**
+         * Determines whether a token can be treated as a SQL function name.
+         *
+         * @param token token preceding an opening parenthesis
+         * @return {@code true} when the token represents a function name
+         */
+        private static boolean isFunctionName(String token) {
+            char begin = token.charAt(0);
             boolean isIdentifier = (Character.isJavaIdentifierStart(begin)) || ('"' == begin);
 
-            return (isIdentifier) && (!SqlFormatter.LOGICAL.contains(tok)) && (!SqlFormatter.END_CLAUSES.contains(tok))
-                    && (!SqlFormatter.QUANTIFIERS.contains(tok)) && (!SqlFormatter.DML.contains(tok)) && (!SqlFormatter.MISC.contains(tok));
+            return (isIdentifier) && (!SqlFormatter.LOGICAL.contains(token)) && (!SqlFormatter.END_CLAUSES.contains(token))
+                    && (!SqlFormatter.QUANTIFIERS.contains(token)) && (!SqlFormatter.DML.contains(token)) && (!SqlFormatter.MISC.contains(token));
         }
 
+        /**
+         * Determines whether a token contains SQL whitespace.
+         *
+         * @param token token to inspect
+         * @return {@code true} when the token is whitespace
+         */
         private static boolean isWhitespace(String token) {
             return " \n\r\f\t".contains(token);
         }
 
+        /** Appends a line break followed by the current indentation. */
         private void newline() {
             result.append("\n");
 
