@@ -1,12 +1,14 @@
 # aj-fileupload 待修复问题
 
-本文记录当前仍未解决的安全、稳定性和设计问题，按优先级排序。已完成的 MIME 映射比较、`NO_CHECK` 空指针修复、`Locale.ROOT` 处理、规则集合不可变及视频 `ftyp` 测试修复不再列入。
+本文记录当前仍未解决的安全、稳定性和设计问题，按优先级排序。已完成的 MIME 映射比较、`NO_CHECK` 空指针修复、`Locale.ROOT`
+处理、规则集合不可变及视频 `ftyp` 测试修复不再列入。
 
 ## P0：公开上传场景必须先处理
 
 ### 1. 默认配置允许任意文件落盘
 
-`FileUploadConfig` 默认 `DetectType.NONE`，扩展名白名单为空。也就是说，调用方若没有显式配置，任意非空文件都可以保存。若该目录被 Nginx、Tomcat 或对象存储公开访问，可能造成脚本、HTML、恶意文档等不受控文件暴露。
+`FileUploadConfig` 默认 `DetectType.NONE`，扩展名白名单为空。也就是说，调用方若没有显式配置，任意非空文件都可以保存。若该目录被
+Nginx、Tomcat 或对象存储公开访问，可能造成脚本、HTML、恶意文档等不受控文件暴露。
 
 建议：
 
@@ -16,7 +18,8 @@
 
 ### 2. 本地落盘存在符号链接竞态和覆盖风险
 
-`FileUpload.saveToDisk()` 在检查目标不是符号链接后才调用 `MultipartFile.transferTo()`。检查和写入之间，具有本地目录写权限的攻击者可以替换目标；`ORIGINAL` 命名策略也会直接覆盖同名文件。
+`FileUpload.saveToDisk()` 在检查目标不是符号链接后才调用 `MultipartFile.transferTo()`
+。检查和写入之间，具有本地目录写权限的攻击者可以替换目标；`ORIGINAL` 命名策略也会直接覆盖同名文件。
 
 建议：
 
@@ -27,7 +30,8 @@
 
 ### 3. `PermissionCheck` 只告警，不产生安全效果
 
-当前权限扫描只写日志，既不会删除文件执行权限，也不会限制新上传文件的权限。更重要的是，POSIX 目录的 execute 位表示“可进入/可检索目录”，通常是正常且必要的权限，不应当当作“可执行目录”风险。
+当前权限扫描只写日志，既不会删除文件执行权限，也不会限制新上传文件的权限。更重要的是，POSIX 目录的 execute
+位表示“可进入/可检索目录”，通常是正常且必要的权限，不应当当作“可执行目录”风险。
 
 建议：
 
@@ -40,7 +44,8 @@
 
 ### 4. 请求体和压缩包资源限制不足
 
-库在拿到 `MultipartFile` 后才比较 `getSize()`，无法阻止 Spring 在解析请求、写临时文件时已经消耗磁盘或内存。ZIP Office 校验虽然限制了条目数和总解压量，但固定允许解压 100 MiB，仍可能被小压缩包放大 CPU 和 I/O 消耗。
+库在拿到 `MultipartFile` 后才比较 `getSize()`，无法阻止 Spring 在解析请求、写临时文件时已经消耗磁盘或内存。ZIP Office
+校验虽然限制了条目数和总解压量，但固定允许解压 100 MiB，仍可能被小压缩包放大 CPU 和 I/O 消耗。
 
 建议：
 
@@ -50,7 +55,8 @@
 
 ### 5. 文件类型校验仍只是初筛
 
-扩展名、客户端 Content-Type 和文件头都不能证明文件“安全”：短魔数可伪造，JPEG/PDF 等可构造 polyglot 文件，旧 Office 的 OLE 头也无法区分 doc/xls/ppt。当前音视频扩展名集合还大于已实现的魔数规则集合，导致部分合法文件会被拒绝。
+扩展名、客户端 Content-Type 和文件头都不能证明文件“安全”：短魔数可伪造，JPEG/PDF 等可构造 polyglot 文件，旧 Office 的 OLE
+头也无法区分 doc/xls/ppt。当前音视频扩展名集合还大于已实现的魔数规则集合，导致部分合法文件会被拒绝。
 
 建议：
 
@@ -62,7 +68,9 @@
 
 ### 6. 文件名和返回 URL 未完全净化
 
-文件名目前仍允许 Windows 特殊名称、冒号（可能触发 NTFS Alternate Data Stream）、尾随点/空格及双向控制字符。返回结果中的 `originalFileName` 使用客户端原值；返回 URL 直接拼接文件名，未对路径段进行 URL 编码。
+文件名目前仍允许 Windows 特殊名称、冒号（可能触发 NTFS Alternate Data
+Stream）、尾随点/空格及双向控制字符。返回结果中的 `originalFileName` 使用客户端原值；返回 URL 直接拼接文件名，未对路径段进行
+URL 编码。
 
 建议：
 
@@ -73,7 +81,8 @@
 
 ### 7. 下载 API 容易被误用，且仍有竞态窗口
 
-`Download.download(Path, String)` 和 `downloadServlet(HttpServletResponse, File, String)` 接受任意服务端路径，只依赖调用方遵守“可信路径”约定。根目录下载版本虽校验了穿越和真实路径，但校验完成到实际打开文件之间仍存在符号链接替换的竞态窗口。
+`Download.download(Path, String)` 和 `downloadServlet(HttpServletResponse, File, String)`
+接受任意服务端路径，只依赖调用方遵守“可信路径”约定。根目录下载版本虽校验了穿越和真实路径，但校验完成到实际打开文件之间仍存在符号链接替换的竞态窗口。
 
 建议：
 
@@ -86,7 +95,8 @@
 
 ### 8. 注解与反射式上传入口语义不一致
 
-`@FileUploadAction` 声明可用于类和方法，但 `UploadUtils` 只读取方法上的直接注解。它还根据“类 + 方法名 + 固定参数签名”反射查找配置；重构、重载、继承时容易失效，并且工具类不会真正调用 Controller 方法。
+`@FileUploadAction` 声明可用于类和方法，但 `UploadUtils` 只读取方法上的直接注解。它还根据“类 + 方法名 +
+固定参数签名”反射查找配置；重构、重载、继承时容易失效，并且工具类不会真正调用 Controller 方法。
 
 建议：
 
@@ -96,7 +106,8 @@
 
 ### 9. 默认本地目录不适合生产和跨平台
 
-默认值 `c:/temp/uploads` 是 Windows 风格路径，在 Linux 上含义不直观，也可能在应用工作目录创建意外层级。默认 `urlPrefix` 为空，调用方又可能把结果直接交给前端。
+默认值 `c:/temp/uploads` 是 Windows 风格路径，在 Linux 上含义不直观，也可能在应用工作目录创建意外层级。默认 `urlPrefix`
+为空，调用方又可能把结果直接交给前端。
 
 建议：
 
@@ -106,7 +117,8 @@
 
 ### 10. 兼容性边界尚未说明
 
-当前代码使用 `jakarta.servlet`，并按 Java 17 编译。因此它天然面向 Spring Boot 3+/Java 17+，不能直接用于使用 `javax.servlet` 的 Spring Boot 2.x 应用。
+当前代码使用 `jakarta.servlet`，并按 Java 17 编译。因此它天然面向 Spring Boot 3+/Java 17+，不能直接用于使用 `javax.servlet`
+的 Spring Boot 2.x 应用。
 
 建议：
 
@@ -115,7 +127,8 @@
 
 ### 11. 文档和未完成 API 需要收敛
 
-README 目前为空；`ShowUrlPolicy.Policy`、`SendDownload`、空的 `ServletResponse`、未实现的 `FILE_SERVICE` 与 `FILE_SERVICE_API` 会让调用方难以判断哪些能力可用。
+README 目前为空；`ShowUrlPolicy.Policy`、`SendDownload`、空的 `ServletResponse`、未实现的 `FILE_SERVICE`
+与 `FILE_SERVICE_API` 会让调用方难以判断哪些能力可用。
 
 建议：
 

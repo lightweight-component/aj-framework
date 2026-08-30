@@ -3,8 +3,8 @@ package com.ajaxjs.fileupload.policy;
 import com.ajaxjs.fileupload.DetectType;
 import com.ajaxjs.fileupload.FileUploadConfig;
 import com.ajaxjs.util.ObjectHelper;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

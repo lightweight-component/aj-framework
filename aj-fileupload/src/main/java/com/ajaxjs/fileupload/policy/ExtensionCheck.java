@@ -3,9 +3,9 @@ package com.ajaxjs.fileupload.policy;
 import com.ajaxjs.fileupload.FileUploadConfig;
 import com.ajaxjs.util.ObjectHelper;
 
-import java.util.Set;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Upload file extension validator.
