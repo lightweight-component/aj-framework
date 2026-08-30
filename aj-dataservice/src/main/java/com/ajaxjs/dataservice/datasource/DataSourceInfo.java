@@ -1,5 +1,6 @@
 package com.ajaxjs.dataservice.datasource;
 
+import com.ajaxjs.sqlman.annotation.Table;
 import com.ajaxjs.sqlman.model.DatabaseVendor;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * 数据库的数据源
  */
 @Data
+@Table("ds_datasource")
 public class DataSourceInfo {
     /**
      * 主键
@@ -30,11 +32,6 @@ public class DataSourceInfo {
      * 数据源的显示名称。
      */
     private String name;
-
-    /**
-     * 数据源的扩展配置内容。
-     */
-    private String content;
 
     /**
      * 创建日期
@@ -75,9 +72,4 @@ public class DataSourceInfo {
      * 是否跨库
      */
     private Boolean crossDb;
-
-    /**
-     * 数据源实例
-     */
-    private DataSource instance;
 }

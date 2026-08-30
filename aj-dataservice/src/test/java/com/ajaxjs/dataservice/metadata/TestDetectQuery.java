@@ -1,65 +1,74 @@
 package com.ajaxjs.dataservice.metadata;
 
-import com.ajaxjs.dataservice.metadata.model.Column;
-import com.ajaxjs.dataservice.metadata.model.Table;
-import com.ajaxjs.sqlman.JdbcConnection;
+import org.h2.jdbcx.JdbcDataSource;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-public class TestDetectQuery {
-    @Test
-    public void testGetDatabase() {
-        Connection connection = JdbcConnection.getConnection();
-        DataBaseQuery query = new DataBaseQuery(connection);
-        String[] database = query.getDatabase();
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-        System.out.println(Arrays.toString(database));
+class TestDetectQuery {
+    Connection connection;
 
-        TableQuery tableQuery = new TableQuery(connection);
-        List<String> tableNames = tableQuery.getAllTableName("aj_base");
+    @BeforeEach
+    void setUp() throws Exception {
+        JdbcDataSource dataSource = new JdbcDataSource();
+        dataSource.setURL("jdbc:h2:mem:metadata_parser;MODE=MySQL;DB_CLOSE_DELAY=-1");
+        connection = dataSource.getConnection();
 
-        List<Table> dataBaseWithTableFull = query.getDataBaseWithTableFull(tableNames, null);
-        System.out.println(dataBaseWithTableFull);
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("DROP TABLE IF EXISTS metadata_ddl");
+            statement.execute("CREATE TABLE metadata_ddl (ddl VARCHAR(2000) NOT NULL)");
+        }
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        connection.close();
     }
 
     @Test
-    public void testColumnQuery() {
-        Connection connection = JdbcConnection.getConnection();
-        ColumnQuery columnQuery = new ColumnQuery(connection);
-        List<Column> article = columnQuery.getColumnComment("article", null);
+    void parseReadsTableCommentInsteadOfColumnComment() throws Exception {
+        String ddl = "CREATE TABLE `orders` (`name` varchar(50) COMMENT='字段注释') ENGINE=InnoDB COMMENT = '订单表'";
 
-        System.out.println(article);
-
-        Map<String, List<Column>> list = columnQuery.getColumnComment(Collections.singletonList("article"));
-        System.out.println(list);
+        assertEquals("订单表", TableQuery.parse(readDdl(ddl)));
     }
 
     @Test
-    public void testMetaQuery() {
-        Connection connection = JdbcConnection.getConnection();
-        MetaQuery metaQuery = new MetaQuery(connection);
+    void parseHandlesEscapedQuoteAndMissingComment() throws Exception {
+        String escaped = "CREATE TABLE `orders` (id bigint) COMMENT='O\\'Reilly''s order'";
 
-        Map<String, String> allVariable = metaQuery.getAllVariable();
-        System.out.println(allVariable);
-
-        String value = metaQuery.getVariable("Value", "SHOW VARIABLES LIKE '%basedir%'");
-        System.out.println(value);
+        assertEquals("O'Reilly's order", TableQuery.parse(readDdl(escaped)));
+        assertEquals("", TableQuery.parse(readDdl("CREATE TABLE `orders` (id bigint)")));
+        assertNull(TableQuery.parse(null));
     }
 
     @Test
-    public void testTableQuery() {
-        Connection connection = JdbcConnection.getConnection();
-        TableQuery tableQuery = new TableQuery(connection);
-        List<String> tableName = tableQuery.getAllTableName(null);
-        System.out.println(tableName);
+    void metadataQueryRejectsH2Connection() {
+        assertThrows(IllegalArgumentException.class, () -> new TableQuery(connection));
+    }
 
-        String adpDataService = tableQuery.getTableComment("adp_data_service");
+    String readDdl(String ddl) throws Exception {
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM metadata_ddl");
+        }
 
-        System.out.println(adpDataService);
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO metadata_ddl (ddl) VALUES (?)")) {
+            statement.setString(1, ddl);
+            statement.executeUpdate();
+        }
+
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT ddl FROM metadata_ddl")) {
+            resultSet.next();
+
+            return resultSet.getString(1);
+        }
     }
 }

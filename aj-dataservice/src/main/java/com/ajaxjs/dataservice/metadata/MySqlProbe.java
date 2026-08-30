@@ -1,11 +1,15 @@
-package com.ajaxjs.dataservice.tools;
+package com.ajaxjs.dataservice.metadata;
 
-import com.ajaxjs.dataservice.metadata.MetaQuery;
 import com.ajaxjs.dataservice.metadata.model.*;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.io.DataReader;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -19,7 +23,39 @@ import java.util.regex.Pattern;
  * 用于读取 MySQL 数据库、表和运行环境元数据的工具。
  */
 @Slf4j
+@RestController
+@RequestMapping("/db_meta")
 public class MySqlProbe {
+    @Autowired
+    DataSource ds;
+
+    @GetMapping("/test")
+    DataBaseDetail test() {
+        try (Connection connection = ds.getConnection()) {
+            return detail(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/table_list")
+    List<TableDesc> tableList() {
+        try (Connection connection = ds.getConnection()) {
+            return list(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/table_info/{tableName}")
+    TableDetailRes tableInfo(@PathVariable String tableName) {
+        try (Connection connection = ds.getConnection()) {
+            return detail(connection, getDatabaseNameByConnection(connection), tableName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 获取当前连接数据库的详情。
      *
@@ -107,7 +143,7 @@ public class MySqlProbe {
         detail.setVersion(q.getVariable("version", "SELECT VERSION() AS version"));
         detail.setCharMap(q.getVariables("SHOW VARIABLES LIKE \"char%\""));
         detail.setLogError(q.getVariables("SHOW VARIABLES LIKE 'log_error'"));
-        detail.setLogBin(q.getVariables("SHOW VARIABLES LIKE 'log_error'"));
+        detail.setLogBin(q.getVariables("SHOW VARIABLES LIKE 'log_bin'"));
         detail.setGeneralLog(q.getVariables("SHOW VARIABLES LIKE '%general%';"));
         detail.setSlowQueryLog(q.getVariables(" SHOW VARIABLES LIKE 'slow_query%'"));
         detail.setMaxConnection(maxConnection);
@@ -201,30 +237,7 @@ public class MySqlProbe {
      * @return 环境变量名称与值的映射
      */
     public static Map<String, String> getEnv() {
-        Map<String, String> map = new HashMap<>();
-        Process p;
-        Runtime r = Runtime.getRuntime();
-        String OS = System.getProperty("os.name").toLowerCase();
-
-        try {
-            if (OS.contains("windows 9"))
-                p = r.exec("command.com /c set");
-            else if ((OS.contains("nt")) || (OS.contains("windows 20")) || (OS.contains("windows xp")))
-                p = r.exec("cmd.exe /c set");
-            else
-                p = r.exec("env"); // Unix
-
-            new DataReader(p.getInputStream()).readAsLineString(line -> {
-                String[] str = line.split("=");
-
-                if (2 <= str.length)
-                    map.put(str[0], str[1]);
-            });
-        } catch (IOException e) {
-            log.warn("", e);
-        }
-
-        return map;
+        return new HashMap<>(System.getenv());
     }
 
     /**

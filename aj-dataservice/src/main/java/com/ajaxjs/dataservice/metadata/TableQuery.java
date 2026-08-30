@@ -11,12 +11,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 表信息查询
  */
 @Slf4j
 public class TableQuery extends BaseMetaQuery {
+    /**
+     * MySQL 建表语句中表或字段注释选项的起始标记。
+     */
+    private static final Pattern COMMENT_START = Pattern.compile("(?i)\\bCOMMENT\\s*=\\s*'");
+
     /**
      * 使用指定 JDBC 连接创建表元数据查询器。
      *
@@ -33,7 +40,7 @@ public class TableQuery extends BaseMetaQuery {
      * @return 所有表名称
      */
     public List<String> getAllTableName(String dbName) {
-        String sql = StringUtils.hasText(dbName) ? "SHOW TABLES FROM " + dbName : "SHOW TABLES";
+        String sql = StringUtils.hasText(dbName) ? "SHOW TABLES FROM " + quoteIdentifier(dbName) : "SHOW TABLES";
 
         return getResult(sql, rs -> {
             try {
@@ -51,7 +58,7 @@ public class TableQuery extends BaseMetaQuery {
      * @return 表注释
      */
     public String getTableComment(String tableName) {
-        return getMapResult("SHOW CREATE TABLE " + tableName, (rs, map) -> {
+        return getMapResult("SHOW CREATE TABLE " + quoteIdentifier(tableName), (rs, map) -> {
             try {
                 String createDDL = rs.getString(2);
                 map.put("comment", parse(createDDL));
@@ -71,13 +78,35 @@ public class TableQuery extends BaseMetaQuery {
         if (all == null)
             return null;
 
-        int index = all.indexOf("COMMENT='");
-        if (index < 0)
-            return "";
+        Matcher matcher = COMMENT_START.matcher(all);
+        String comment = "";
 
-        String comment = all.substring(index + 9);
+        while (matcher.find()) {
+            StringBuilder value = new StringBuilder();
+            boolean closed = false;
 
-        return comment.substring(0, comment.length() - 1);
+            for (int i = matcher.end(); i < all.length(); i++) {
+                char current = all.charAt(i);
+
+                if (current == '\\' && i + 1 < all.length()) {
+                    value.append(all.charAt(++i));
+                } else if (current == '\'') {
+                    if (i + 1 < all.length() && all.charAt(i + 1) == '\'') {
+                        value.append(current);
+                        i++;
+                    } else {
+                        closed = true;
+                        break;
+                    }
+                } else
+                    value.append(current);
+            }
+
+            if (closed)
+                comment = value.toString();
+        }
+
+        return comment;
     }
 
     /**
@@ -93,16 +122,16 @@ public class TableQuery extends BaseMetaQuery {
 
         try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
-                String t = hasDbName ? dbName + "." + tableName : tableName;
+                String t = quoteTable(hasDbName ? dbName : null, tableName);
 
-                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE `" + t + "`")) {
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + t)) {
                     String createDDL = null;
 
                     try {
                         if (rs.next())
                             createDDL = rs.getString(2);
                     } catch (SQLException e) {
-                        log.warn("SQLException", e);
+                        throw new MetadataQueryException("读取表建表语句失败: " + tableName, e);
                     }
 
                     String comment = TableQuery.parse(createDDL);
@@ -110,7 +139,7 @@ public class TableQuery extends BaseMetaQuery {
                 }
             }
         } catch (SQLException e) {
-            log.warn("SQLException", e);
+            throw new MetadataQueryException("读取表注释失败", e);
         }
 
         return map;
@@ -128,7 +157,7 @@ public class TableQuery extends BaseMetaQuery {
         List<Map<String, Object>> list = new ArrayList<>();
         Map<String, String> tableComment = getTableComment(tableNames, dbName);
 
-        for (String tableName : tableComment.keySet()) {
+        for (String tableName : tableComment.keySet().stream().sorted().collect(java.util.stream.Collectors.toList())) {
             Map<String, Object> map = new HashMap<>();
             map.put("tableName", tableName);
             map.put("comment", tableComment.get(tableName));

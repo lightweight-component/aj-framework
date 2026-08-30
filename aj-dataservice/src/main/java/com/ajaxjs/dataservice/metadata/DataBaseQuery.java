@@ -46,8 +46,7 @@ public class DataBaseQuery extends BaseMetaQuery {
             try {
                 return rs.getString("Database");
             } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
+                throw new MetadataQueryException("读取数据库名称失败", e);
             }
         }, String.class);
 
@@ -75,6 +74,8 @@ public class DataBaseQuery extends BaseMetaQuery {
      * @return 数据库及表名信息
      */
     public Database[] getDataBaseWithTable(String[] databases) {
+        if (databases == null)
+            return new Database[0];
         List<Database> list = new ArrayList<>();
         TableQuery tableQuery = new TableQuery(conn);
 
@@ -112,7 +113,8 @@ public class DataBaseQuery extends BaseMetaQuery {
                 }
             }
 
-            if (_database == null) return null; // 找不到 dbName 的
+            if (_database == null)
+                return null; // 找不到 dbName 的
             else {
                 List<Table> full = getDataBaseWithTableFull(_database.getTables(), _database.getName());
                 _database.setTableInfo(full);
@@ -151,9 +153,9 @@ public class DataBaseQuery extends BaseMetaQuery {
 
         try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
-                String t = hasDbName ? dbName + "." + tableName : tableName;
+                String t = quoteTable(hasDbName ? dbName : null, tableName);
 
-                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName)) {
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + t)) {
                     String createDDL = null;
                     if (rs.next())
                         createDDL = rs.getString(2);
@@ -169,7 +171,7 @@ public class DataBaseQuery extends BaseMetaQuery {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new MetadataQueryException("读取数据表建表语句失败", e);
         }
 
         return tables;
@@ -181,7 +183,10 @@ public class DataBaseQuery extends BaseMetaQuery {
      * @param ddl DDL 语句
      * @return 列信息
      */
-    private List<Column> parseColumns(String ddl) {
+    List<Column> parseColumns(String ddl) {
+        if (!StringUtils.hasText(ddl))
+            throw new MetadataQueryException("建表 DDL 为空，无法解析列定义", null);
+
         List<Column> list = new ArrayList<>();
 
         try {
@@ -203,12 +208,14 @@ public class DataBaseQuery extends BaseMetaQuery {
                     colInfo.setLength(Integer.parseInt(regMatch));
 
                 String ddlItem = col.toString();
-                String comment = RegExpUtils.regMatch("COMMENT '(.*)'", ddlItem, 1);
+                String comment = RegExpUtils.regMatch("COMMENT\\s+'((?:''|[^'])*)'", ddlItem, 1);
+                if (comment != null)
+                    comment = comment.replace("''", "'");
                 colInfo.setComment(comment);
                 colInfo.setIsRequired(ddlItem.contains("NOT NULL"));
             }
-        } catch (JSQLParserException e) {
-            e.printStackTrace();
+        } catch (JSQLParserException | ClassCastException e) {
+            throw new MetadataQueryException("解析建表 DDL 失败", e);
         }
 
         return list;

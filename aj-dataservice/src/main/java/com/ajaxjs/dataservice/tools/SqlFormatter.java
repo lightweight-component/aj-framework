@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
- * 格式化 SQL
+ * 基于“分词 + 状态机 + 缩进”的格式化 SQL
  */
 public class SqlFormatter {
     /**

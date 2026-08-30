@@ -1,8 +1,7 @@
 package com.ajaxjs.dataservice.metadata;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,14 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
  * 抽象基类，用于数据库元数据查询
  */
-@Slf4j
 public abstract class BaseMetaQuery {
+    static final Pattern MYSQL_IDENTIFIER = Pattern.compile("[A-Za-z0-9_$]+");
     /**
      * 执行元数据查询所使用的 JDBC 连接。
      */
@@ -29,7 +29,42 @@ public abstract class BaseMetaQuery {
      * @param conn 用于执行查询的 JDBC 连接
      */
     public BaseMetaQuery(Connection conn) {
+        assertMySqlCompatible(conn);
         this.conn = conn;
+    }
+
+    /**
+     * 确认连接的数据库产品支持本包使用的 MySQL 元数据语法。
+     *
+     * @param conn 待检查的 JDBC 连接
+     * @throws IllegalArgumentException 当连接为空或数据库不是 MySQL/MariaDB 时抛出
+     * @throws IllegalStateException 当无法读取数据库产品信息时抛出
+     */
+    static void assertMySqlCompatible(Connection conn) {
+        if (conn == null)
+            throw new IllegalArgumentException("数据库连接不能为空");
+
+        try {
+            DatabaseMetaData metaData = conn.getMetaData();
+            String productName = metaData == null ? null : metaData.getDatabaseProductName();
+
+            if (productName == null || !("MySQL".equalsIgnoreCase(productName) || "MariaDB".equalsIgnoreCase(productName)))
+                throw new IllegalArgumentException("metadata 包仅支持 MySQL/MariaDB，当前数据库为: " + productName);
+        } catch (SQLException e) {
+            throw new IllegalStateException("无法读取数据库产品信息", e);
+        }
+    }
+
+    static String quoteIdentifier(String identifier) {
+        if (identifier == null || !MYSQL_IDENTIFIER.matcher(identifier).matches())
+            throw new IllegalArgumentException("非法 MySQL 标识符: " + identifier);
+
+        return "`" + identifier + "`";
+    }
+
+    static String quoteTable(String database, String table) {
+        String quotedTable = quoteIdentifier(table);
+        return database == null || database.isEmpty() ? quotedTable : quoteIdentifier(database) + "." + quotedTable;
     }
 
     /**
@@ -50,7 +85,7 @@ public abstract class BaseMetaQuery {
                 list.add(v);
             }
         } catch (SQLException e) {
-            log.warn("getResult", e);
+            throw new MetadataQueryException("执行元数据列表查询失败: " + sql, e);
         }
 
         return list;
@@ -76,7 +111,7 @@ public abstract class BaseMetaQuery {
             } else
                 cb.accept(rs, map);
         } catch (SQLException e) {
-            log.warn("getMapResult", e);
+            throw new MetadataQueryException("执行元数据映射查询失败: " + sql, e);
         }
 
         return map;

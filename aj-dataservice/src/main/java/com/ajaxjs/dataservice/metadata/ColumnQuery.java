@@ -42,12 +42,11 @@ public class ColumnQuery extends BaseMetaQuery {
         String target = CommonConstant.EMPTY_STRING;
 
         if (StringUtils.hasText(dbName))
-            target += dbName + ".";
+            target += quoteIdentifier(dbName) + ".";
 
-        target += tableName;
+        target += quoteIdentifier(tableName);
 
         List<Column> list = new ArrayList<>();
-//        JdbcReader.query(conn, "SHOW FULL COLUMNS FROM " + target, rs -> rs2list(rs, list));
         getMapResult("SHOW FULL COLUMNS FROM " + target, (rs, map) -> rs2list(rs, list), false);
 
         return list;
@@ -64,14 +63,14 @@ public class ColumnQuery extends BaseMetaQuery {
 
         try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
-                try (ResultSet rs = stmt.executeQuery("SHOW FULL COLUMNS FROM " + tableName)) {
+                try (ResultSet rs = stmt.executeQuery("SHOW FULL COLUMNS FROM " + quoteIdentifier(tableName))) {
                     List<Column> list = new ArrayList<>();
                     rs2list(rs, list);
                     map.put(tableName, list);
                 }
             }
         } catch (SQLException e) {
-            log.warn("getColumnComment", e);
+            throw new MetadataQueryException("读取多表字段注释失败", e);
         }
 
         return map;
@@ -88,7 +87,7 @@ public class ColumnQuery extends BaseMetaQuery {
      * @param rs   包含列元数据的结果集
      * @param list 用于接收列对象的列表
      */
-    private static void rs2list(ResultSet rs, List<Column> list) {
+    static void rs2list(ResultSet rs, List<Column> list) {
         if (getLength == null)
             getLength = Pattern.compile("\\((\\d+)\\)");
 
@@ -110,7 +109,7 @@ public class ColumnQuery extends BaseMetaQuery {
                 list.add(col);
             }
         } catch (SQLException e) {
-            log.warn("rs2list", e);
+            throw new MetadataQueryException("读取字段元数据失败", e);
         }
     }
 }
