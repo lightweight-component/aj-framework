@@ -50,7 +50,7 @@ public class DatasourceService implements DatasourceController {
      * 检查数据源编码是否与其他有效数据源重复。
      *
      * @param entity 待检查的数据源配置
-     * @param dsId 数据源 id；非 {@code null} 时更新操作会排除自身
+     * @param dsId   数据源 id；非 {@code null} 时更新操作会排除自身
      * @throws IllegalArgumentException 当存在相同编码的数据源时抛出
      */
     private void checkIfIsRepeat(DataSourceInfo entity, Long dsId) {
@@ -132,10 +132,10 @@ public class DatasourceService implements DatasourceController {
      * 返回数据源下的表名和表注释，支持分页和表名搜索。
      *
      * @param connection 已建立的数据库连接
-     * @param start 起始偏移量
-     * @param limit 最多返回的记录数
-     * @param tableName 表名搜索关键字
-     * @param dbName 数据库名称
+     * @param start      起始偏移量
+     * @param limit      最多返回的记录数
+     * @param tableName  表名搜索关键字
+     * @param dbName     数据库名称
      * @return 表名及其注释的分页结果
      * @throws SQLException 当读取数据库元数据失败时抛出
      */

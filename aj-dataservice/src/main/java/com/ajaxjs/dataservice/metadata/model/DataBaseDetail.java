@@ -8,7 +8,7 @@ import java.util.Map;
  * MySQL 数据库的运行状态、配置和容量信息。
  */
 @Data
-public class DataBaseDetail  {
+public class DataBaseDetail {
     /**
      * 数据库基本信息
      */

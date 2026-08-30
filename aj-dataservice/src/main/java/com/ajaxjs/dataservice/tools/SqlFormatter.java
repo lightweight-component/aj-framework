@@ -101,56 +101,88 @@ public class SqlFormatter {
      * 保存一次 SQL 格式化过程中的词法状态和输出内容。
      */
     private static class FormatProcess {
-        /** Indicates whether the next token begins a line. */
+        /**
+         * Indicates whether the next token begins a line.
+         */
         boolean beginLine = true;
 
-        /** Indicates that a begin clause has not yet reached its end clause. */
+        /**
+         * Indicates that a begin clause has not yet reached its end clause.
+         */
         boolean afterBeginBeforeEnd = false;
 
-        /** Indicates that comma-separated items are being processed. */
+        /**
+         * Indicates that comma-separated items are being processed.
+         */
         boolean afterByOrSetOrFromOrSelect = false;
 
         @SuppressWarnings("unused")
         /** Indicates that the current token follows a VALUES clause. */
-        boolean afterValues = false;
+                boolean afterValues = false;
 
-        /** Indicates that the formatter is processing an ON clause. */
+        /**
+         * Indicates that the formatter is processing an ON clause.
+         */
         boolean afterOn = false;
 
-        /** Indicates that the formatter is processing a BETWEEN expression. */
+        /**
+         * Indicates that the formatter is processing a BETWEEN expression.
+         */
         boolean afterBetween = false;
 
-        /** Indicates that the formatter is processing an INSERT statement. */
+        /**
+         * Indicates that the formatter is processing an INSERT statement.
+         */
         boolean afterInsert = false;
 
-        /** Current nesting depth inside SQL function calls. */
+        /**
+         * Current nesting depth inside SQL function calls.
+         */
         int inFunction = 0;
 
-        /** Parenthesis depth since the latest SELECT clause. */
+        /**
+         * Parenthesis depth since the latest SELECT clause.
+         */
         int parensSinceSelect = 0;
 
-        /** Stack of parenthesis depths for nested SELECT clauses. */
+        /**
+         * Stack of parenthesis depths for nested SELECT clauses.
+         */
         private final LinkedList<Integer> parenCounts = new LinkedList<>();
 
-        /** Stack of comma-formatting states for nested SELECT clauses. */
+        /**
+         * Stack of comma-formatting states for nested SELECT clauses.
+         */
         private final LinkedList<Boolean> afterByOrFromOrSelects = new LinkedList<>();
 
-        /** Current output indentation level. */
+        /**
+         * Current output indentation level.
+         */
         int indent = 1;
 
-        /** Accumulates the formatted SQL text. */
+        /**
+         * Accumulates the formatted SQL text.
+         */
         StringBuffer result = new StringBuffer();
 
-        /** Token stream of the source SQL. */
+        /**
+         * Token stream of the source SQL.
+         */
         StringTokenizer tokens;
 
-        /** Previously processed non-whitespace token. */
+        /**
+         * Previously processed non-whitespace token.
+         */
         String lastToken;
 
-        /** Current source token. */
+        /**
+         * Current source token.
+         */
         String token;
 
-        /** Lowercase representation of the current token. */
+        /**
+         * Lowercase representation of the current token.
+         */
         String lcToken;
 
         /**
@@ -226,7 +258,9 @@ public class SqlFormatter {
             return result.toString();
         }
 
-        /** Handles a comma following an ON clause. */
+        /**
+         * Handles a comma following an ON clause.
+         */
         private void commaAfterOn() {
             out();
             indent -= 1;
@@ -235,13 +269,17 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = true;
         }
 
-        /** Handles a comma in BY, FROM or SELECT item lists. */
+        /**
+         * Handles a comma in BY, FROM or SELECT item lists.
+         */
         private void commaAfterByOrFromOrSelect() {
             out();
             newline();
         }
 
-        /** Formats a logical keyword. */
+        /**
+         * Formats a logical keyword.
+         */
         private void logical() {
             if ("end".equals(lcToken)) indent -= 1;
 
@@ -250,7 +288,9 @@ public class SqlFormatter {
             beginLine = false;
         }
 
-        /** Starts formatting an ON clause. */
+        /**
+         * Starts formatting an ON clause.
+         */
         private void on() {
             indent += 1;
             afterOn = true;
@@ -259,7 +299,9 @@ public class SqlFormatter {
             beginLine = false;
         }
 
-        /** Formats a regular non-whitespace token. */
+        /**
+         * Formats a regular non-whitespace token.
+         */
         private void misc() {
             out();
             if ("between".equals(lcToken)) afterBetween = true;
@@ -274,12 +316,16 @@ public class SqlFormatter {
             }
         }
 
-        /** Emits whitespace when the current output line already has content. */
+        /**
+         * Emits whitespace when the current output line already has content.
+         */
         private void white() {
             if (!beginLine) result.append(" ");
         }
 
-        /** Formats an UPDATE, INSERT or DELETE statement keyword. */
+        /**
+         * Formats an UPDATE, INSERT or DELETE statement keyword.
+         */
         private void updateOrInsertOrDelete() {
             out();
             indent += 1;
@@ -290,7 +336,9 @@ public class SqlFormatter {
             if ("insert".equals(lcToken)) afterInsert = true;
         }
 
-        /** Starts a SELECT clause and saves nested formatting state. */
+        /**
+         * Starts a SELECT clause and saves nested formatting state.
+         */
         private void select() {
             out();
             indent += 1;
@@ -301,12 +349,16 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = true;
         }
 
-        /** Appends the current token to the formatted output. */
+        /**
+         * Appends the current token to the formatted output.
+         */
         private void out() {
             result.append(token);
         }
 
-        /** Formats a keyword that starts a new terminating clause. */
+        /**
+         * Formats a keyword that starts a new terminating clause.
+         */
         private void endNewClause() {
             if (!afterBeginBeforeEnd) {
                 indent -= 1;
@@ -327,7 +379,9 @@ public class SqlFormatter {
             afterByOrSetOrFromOrSelect = (("by".equals(lcToken)) || ("set".equals(lcToken)) || ("from".equals(lcToken)));
         }
 
-        /** Formats a keyword that starts a composite clause. */
+        /**
+         * Formats a keyword that starts a composite clause.
+         */
         private void beginNewClause() {
             if (!afterBeginBeforeEnd) {
                 if (afterOn) {
@@ -344,7 +398,9 @@ public class SqlFormatter {
             afterBeginBeforeEnd = true;
         }
 
-        /** Formats a VALUES clause. */
+        /**
+         * Formats a VALUES clause.
+         */
         private void values() {
             indent -= 1;
             newline();
@@ -354,7 +410,9 @@ public class SqlFormatter {
             afterValues = true;
         }
 
-        /** Formats a closing parenthesis and restores nesting state. */
+        /**
+         * Formats a closing parenthesis and restores nesting state.
+         */
         private void closeParen() {
             parensSinceSelect -= 1;
             if (parensSinceSelect < 0) {
@@ -378,7 +436,9 @@ public class SqlFormatter {
             beginLine = false;
         }
 
-        /** Formats an opening parenthesis and updates nesting state. */
+        /**
+         * Formats an opening parenthesis and updates nesting state.
+         */
         private void openParen() {
             if ((isFunctionName(lastToken)) || (inFunction > 0)) inFunction += 1;
 
@@ -422,7 +482,9 @@ public class SqlFormatter {
             return " \n\r\f\t".contains(token);
         }
 
-        /** Appends a line break followed by the current indentation. */
+        /**
+         * Appends a line break followed by the current indentation.
+         */
         private void newline() {
             result.append("\n");
 

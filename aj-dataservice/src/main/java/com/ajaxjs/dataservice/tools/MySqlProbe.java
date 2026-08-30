@@ -55,7 +55,7 @@ public class MySqlProbe {
     /**
      * 获取指定 MySQL 数据库的运行状态和配置信息。
      *
-     * @param conn 已连接的 JDBC 连接
+     * @param conn     已连接的 JDBC 连接
      * @param database 要统计的数据库名称
      * @return 数据库详情
      * @throws RuntimeException 当读取数据库元数据失败时抛出
@@ -132,7 +132,7 @@ public class MySqlProbe {
     /**
      * 获取指定数据库下的所有表信息。
      *
-     * @param conn 已连接的 JDBC 连接
+     * @param conn     已连接的 JDBC 连接
      * @param database 数据库名称
      * @return 表信息列表
      */
@@ -151,8 +151,8 @@ public class MySqlProbe {
     /**
      * 获取指定表的建表语句、列和索引信息。
      *
-     * @param connect 已连接的 JDBC 连接
-     * @param database 数据库名称
+     * @param connect   已连接的 JDBC 连接
+     * @param database  数据库名称
      * @param tableName 表名称
      * @return 表详情
      */
@@ -231,11 +231,10 @@ public class MySqlProbe {
      * 通过 {@code mysqladmin} 检查 MySQL 服务是否响应。
      * 只能在 Linux 下执行。
      *
-     * @author <a href="https://github.com/535404515/MYSQL-TOMCAT-MONITOR/blob/master/nlpms-task-monitor/src/main/java/com/nuoli/mysqlprotect/timer/MysqlServiceJob.java">...</a>
-     *
      * @param username MySQL 用户名
      * @param password MySQL 密码
      * @return 命令输出或错误提示
+     * @author <a href="https://github.com/535404515/MYSQL-TOMCAT-MONITOR/blob/master/nlpms-task-monitor/src/main/java/com/nuoli/mysqlprotect/timer/MysqlServiceJob.java">...</a>
      */
     public static String ping(String username, String password) {
         Process p;

@@ -14,18 +14,18 @@ import java.util.function.Consumer;
 
 /**
  * 免 mysqldump 命令备份 SQL
-<pre>{@code
-@Scheduled(cron = "0 0 23 * * ?")  // 每天晚上11点执行
- public void backup() {
-     String path = "/home/backup/mysql";
-     new File(path).mkdirs();
-     try (Connection connection = DataBaseConnection.initDb()) {
-         new MysqlExport(connection, path).export();
-     } catch (Exception e) {
-        log.error("Failed to backup database", e);
-     }
- }
-}</pre>
+ * <pre>{@code
+ * @Scheduled(cron = "0 0 23 * * ?")  // 每天晚上11点执行
+ * public void backup() {
+ * String path = "/home/backup/mysql";
+ * new File(path).mkdirs();
+ * try (Connection connection = DataBaseConnection.initDb()) {
+ * new MysqlExport(connection, path).export();
+ * } catch (Exception e) {
+ * log.error("Failed to backup database", e);
+ * }
+ * }
+ * }</pre>
  */
 @Slf4j
 public class MysqlExport {

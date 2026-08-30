@@ -10,7 +10,7 @@ import java.util.List;
  * @author Frank Cheung sp42@qq.com
  */
 @Data
-public class Database  {
+public class Database {
     private String uuid;
 
     /**

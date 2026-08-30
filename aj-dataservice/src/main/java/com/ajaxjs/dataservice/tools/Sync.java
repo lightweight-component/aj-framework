@@ -137,9 +137,9 @@ public class Sync {
     /**
      * 根据读取到的列定义拼接目标数据库的建表 SQL。
      *
-     * @param map 包含表名、主键和列定义的元数据
+     * @param map       包含表名、主键和列定义的元数据
      * @param tableName 表名
-     * @param typeR 目标数据库类型
+     * @param typeR     目标数据库类型
      * @return 建表 SQL
      */
     @SuppressWarnings("unchecked")
@@ -218,7 +218,7 @@ public class Sync {
      * 将源数据库字段类型转换为目标数据库支持的类型。
      *
      * @param typeName 源字段类型名称
-     * @param type 目标数据库类型
+     * @param type     目标数据库类型
      * @return 转换后的目标字段类型
      */
     public String caseVale(Object typeName, String type) {
@@ -302,7 +302,7 @@ public class Sync {
     /**
      * 在目标数据库创建表并验证创建结果。
      *
-     * @param sql 建表 SQL
+     * @param sql       建表 SQL
      * @param tableName 预期创建的表名
      * @return 表已存在或创建成功时返回 {@code true}
      * @throws Exception 当执行建表操作失败时抛出
@@ -320,7 +320,7 @@ public class Sync {
     /**
      * 判断目标连接中是否存在指定表。
      *
-     * @param conn 目标数据库连接
+     * @param conn      目标数据库连接
      * @param tableName 表名
      * @return 表存在时返回 {@code true}
      */
@@ -337,7 +337,7 @@ public class Sync {
     /**
      * 根据一行样例数据生成参数化插入 SQL 模板。
      *
-     * @param list 至少包含一行数据的记录集合
+     * @param list      至少包含一行数据的记录集合
      * @param tableName 目标表名
      * @return 包含字段列表和 SQL 模板的映射
      */

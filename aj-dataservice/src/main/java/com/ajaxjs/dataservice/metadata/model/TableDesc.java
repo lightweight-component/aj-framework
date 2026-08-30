@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class TableDesc  {
+public class TableDesc {
     /**
      * 表名
      */

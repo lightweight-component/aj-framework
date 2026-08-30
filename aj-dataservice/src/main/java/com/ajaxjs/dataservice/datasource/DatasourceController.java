@@ -83,10 +83,10 @@ public interface DatasourceController {
      * 指定数据源返回数据源下的表名和表注释
      *
      * @param dataSourceId 数据源 id
-     * @param start 起始偏移量
-     * @param limit 每页最大记录数
+     * @param start        起始偏移量
+     * @param limit        每页最大记录数
      * @param tableName    搜索的关键字
-     * @param dbName 数据库名称，可为空
+     * @param dbName       数据库名称，可为空
      * @return 表名和表注释的分页结果
      */
     @GetMapping("/{dataSourceId}/get_all_tables")

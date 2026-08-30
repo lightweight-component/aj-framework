@@ -184,7 +184,7 @@ public class WriteData {
     /**
      * 将当前路径参数与表单参数组合为更新操作的参数。
      *
-     * @param action 要执行的 SQL 操作
+     * @param action    要执行的 SQL 操作
      * @param mapParams 请求中的表单参数
      * @return 已绑定参数的更新操作
      */
@@ -195,9 +195,9 @@ public class WriteData {
     /**
      * 将路径参数与表单参数组合为更新操作的参数。
      *
-     * @param action 要执行的 SQL 操作
+     * @param action      要执行的 SQL 操作
      * @param patchParams URL 模板参数
-     * @param mapParams 请求参数
+     * @param mapParams   请求参数
      * @return 已绑定参数的更新操作
      */
     static Update combineParamsUpdate(Action action, Map<String, String> patchParams, Map<String, String> mapParams) {
@@ -216,7 +216,7 @@ public class WriteData {
     /**
      * 将路径参数与表单参数组合为创建操作的参数。
      *
-     * @param action 要执行的 SQL 操作
+     * @param action    要执行的 SQL 操作
      * @param mapParams 请求参数
      * @return 已绑定参数的创建操作
      */

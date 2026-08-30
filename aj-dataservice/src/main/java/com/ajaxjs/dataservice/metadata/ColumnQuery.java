@@ -85,7 +85,7 @@ public class ColumnQuery extends BaseMetaQuery {
     /**
      * 将当前结果集的列元数据行转换为列对象并加入结果列表。
      *
-     * @param rs 包含列元数据的结果集
+     * @param rs   包含列元数据的结果集
      * @param list 用于接收列对象的列表
      */
     private static void rs2list(ResultSet rs, List<Column> list) {

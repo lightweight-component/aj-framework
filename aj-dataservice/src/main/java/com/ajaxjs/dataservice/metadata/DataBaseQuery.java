@@ -217,7 +217,7 @@ public class DataBaseQuery extends BaseMetaQuery {
     /**
      * 将数据库结构导出为 JSON 文档。
      *
-     * @param conn 已连接的 JDBC 连接
+     * @param conn   已连接的 JDBC 连接
      * @param dbName 要导出的数据库名称；为空时导出全部非系统数据库
      * @return 数据库结构 JSON
      */
@@ -231,8 +231,8 @@ public class DataBaseQuery extends BaseMetaQuery {
     /**
      * 将数据库结构以 JavaScript 变量形式保存到磁盘。
      *
-     * @param conn 已连接的 JDBC 连接
-     * @param path 目标文件路径
+     * @param conn   已连接的 JDBC 连接
+     * @param path   目标文件路径
      * @param dbName 要导出的数据库名称；为空时导出全部非系统数据库
      */
     public static void saveToDiskJson(Connection conn, String path, String dbName) {

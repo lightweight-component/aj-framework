@@ -58,8 +58,8 @@ public class Namespaces extends HashMap<String, AutoQuery> {
      * 将记录映射列表转换为指定类型的对象列表。
      *
      * @param list 记录映射列表
-     * @param clz 目标对象类型
-     * @param <T> 目标对象类型
+     * @param clz  目标对象类型
+     * @param <T>  目标对象类型
      * @return 转换后的对象列表；输入为空时返回 {@code null}
      */
     public static <T> List<T> listMap2lisBean(List<Map<String, Object>> list, Class<T> clz) {
@@ -78,8 +78,8 @@ public class Namespaces extends HashMap<String, AutoQuery> {
      * 将分页记录中的映射转换为指定类型的对象，同时保留分页信息。
      *
      * @param page 原始分页结果
-     * @param clz 目标对象类型
-     * @param <T> 目标对象类型
+     * @param clz  目标对象类型
+     * @param <T>  目标对象类型
      * @return 元素已转换的分页结果
      */
     public static <T> PageResult<T> pageListMap2lisBean(PageResult<Map<String, Object>> page, Class<T> clz) {
