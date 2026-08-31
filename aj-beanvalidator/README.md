@@ -80,7 +80,7 @@ private String idCard;
 ## Validation scope
 
 The library does not depend on `javax.validation`, `jakarta.validation`, or Hibernate Validator. The following are this
-library's own annotations; import them from `com.ajaxjs.framework.validator.custom`.
+library's own annotations; import them from `com.ajaxjs.framework.validator.annotation`.
 
 | Annotation     | Supported values                            | `null` handling |
 |----------------|---------------------------------------------|-----------------|
@@ -95,10 +95,10 @@ library's own annotations; import them from `com.ajaxjs.framework.validator.cust
 This is a lightweight annotation set, not a Bean Validation implementation.
 
 ```java
-import com.ajaxjs.framework.validator.custom.Email;
-import com.ajaxjs.framework.validator.custom.NotBlank;
-import com.ajaxjs.framework.validator.custom.NotNull;
-import com.ajaxjs.framework.validator.custom.Size;
+import com.ajaxjs.framework.validator.annotation.Email;
+import com.ajaxjs.framework.validator.annotation.NotBlank;
+import com.ajaxjs.framework.validator.annotation.NotNull;
+import com.ajaxjs.framework.validator.annotation.Size;
 
 class ContactRequest {
     @NotNull(message = "ID is required")
@@ -168,13 +168,13 @@ class TenantCodeRule implements ValidatorRule {
 Example request object:
 
 ```java
-import com.ajaxjs.framework.validator.custom.Chinese;
-import com.ajaxjs.framework.validator.custom.HttpUrl;
-import com.ajaxjs.framework.validator.custom.IdCard;
-import com.ajaxjs.framework.validator.custom.Ipv4;
-import com.ajaxjs.framework.validator.custom.MobileNo;
-import com.ajaxjs.framework.validator.custom.Password;
-import com.ajaxjs.framework.validator.custom.Username;
+import com.ajaxjs.framework.validator.annotation.Chinese;
+import com.ajaxjs.framework.validator.annotation.HttpUrl;
+import com.ajaxjs.framework.validator.annotation.IdCard;
+import com.ajaxjs.framework.validator.annotation.Ipv4;
+import com.ajaxjs.framework.validator.annotation.MobileNo;
+import com.ajaxjs.framework.validator.annotation.Password;
+import com.ajaxjs.framework.validator.annotation.Username;
 
 class RegistrationRequest {
     @Username
@@ -234,14 +234,14 @@ class RegistrationController {
 Supported annotations on path variables are applied automatically:
 
 ```java
-import com.ajaxjs.framework.validator.custom.IdCard;
+import com.ajaxjs.framework.validator.annotation.IdCard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @GetMapping("/people/{idCard}")
-String find(@PathVariable("idCard") @IdCard String idCard){
-        return idCard;
-        }
+String find(@PathVariable("idCard") @IdCard String idCard) {
+    return idCard;
+}
 ```
 
 ## Error handling example

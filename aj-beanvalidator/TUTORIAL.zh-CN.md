@@ -5,7 +5,7 @@ AJ Bean Validator 是一个轻量的 Spring MVC 校验 Starter。它的目标很
 它不依赖庞大的 Hibernate Validator，也不使用 `javax.validation` 或 `jakarta.validation` 的标准注解。使用时请只导入本库的注解包：
 
 ```java
-import com.ajaxjs.framework.validator.custom.NotBlank;
+
 ```
 
 本文从“注册一个用户”的接口开始，带你完成一次完整校验。
@@ -45,13 +45,13 @@ ajaxjs:
 假设接口接收用户名、密码、姓名、手机号和邮箱：
 
 ```java
-import com.ajaxjs.framework.validator.custom.Chinese;
-import com.ajaxjs.framework.validator.custom.Email;
-import com.ajaxjs.framework.validator.custom.MobileNo;
-import com.ajaxjs.framework.validator.custom.NotBlank;
-import com.ajaxjs.framework.validator.custom.Password;
-import com.ajaxjs.framework.validator.custom.Size;
-import com.ajaxjs.framework.validator.custom.Username;
+import com.ajaxjs.framework.validator.annotation.Chinese;
+import com.ajaxjs.framework.validator.annotation.Email;
+import com.ajaxjs.framework.validator.annotation.MobileNo;
+import com.ajaxjs.framework.validator.annotation.NotBlank;
+import com.ajaxjs.framework.validator.annotation.Password;
+import com.ajaxjs.framework.validator.annotation.Size;
+import com.ajaxjs.framework.validator.annotation.Username;
 
 class RegistrationRequest {
     @Username(message = "用户名格式不正确")
@@ -244,7 +244,7 @@ class ValidationErrorHandler {
 路径变量也能直接使用业务注解，无需额外配置：
 
 ```java
-import com.ajaxjs.framework.validator.custom.IdCard;
+import com.ajaxjs.framework.validator.annotation.IdCard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -323,11 +323,11 @@ class TenantRequest {
 }
 ```
 
-不要把自己的注解放进 `com.ajaxjs.framework.validator.custom` 包。这个包保留给库内置注解；未知的内置包注解会被当成配置错误。
+不要把自己的注解放进 `com.ajaxjs.framework.validator.annotation` 包。这个包保留给库内置注解；未知的内置包注解会被当成配置错误。
 
 ## 10. 最容易踩的坑
 
-1. 导错包：`@NotBlank` 等必须从 `com.ajaxjs.framework.validator.custom` 导入，而不是 `jakarta.validation.constraints` 或 `javax.validation.constraints`。
+1. 导错包：`@NotBlank` 等必须从 `com.ajaxjs.framework.validator.annotation` 导入，而不是 `jakarta.validation.constraints` 或 `javax.validation.constraints`。
 2. 忘记加 `@Validated`：请求对象的 Controller 参数缺少它时，字段校验不会按预期触发。
 3. 将 `required = false` 理解成完全关闭校验：它只会放过空值，不会放过格式错误的非空值。
 4. 在 `@Min` / `@Max` 上使用字符串：这两个注解只支持 `Number`。

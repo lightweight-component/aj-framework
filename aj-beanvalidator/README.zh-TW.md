@@ -60,7 +60,7 @@ private String idCard;
 ## 驗證範圍
 
 本套件不依賴 `javax.validation`、`jakarta.validation` 或 Hibernate
-Validator。下列全部是本套件自己的註解，請從 `com.ajaxjs.framework.validator.custom` 匯入。
+Validator。下列全部是本套件自己的註解，請從 `com.ajaxjs.framework.validator.annotation` 匯入。
 
 | 註解            | 支援的值                                 | `null` 處理 |
 |---------------|--------------------------------------|-----------|
@@ -75,10 +75,10 @@ Validator。下列全部是本套件自己的註解，請從 `com.ajaxjs.framewo
 Bean Validation 實作。
 
 ```java
-import com.ajaxjs.framework.validator.custom.Email;
-import com.ajaxjs.framework.validator.custom.NotBlank;
-import com.ajaxjs.framework.validator.custom.NotNull;
-import com.ajaxjs.framework.validator.custom.Size;
+import com.ajaxjs.framework.validator.annotation.Email;
+import com.ajaxjs.framework.validator.annotation.NotBlank;
+import com.ajaxjs.framework.validator.annotation.NotNull;
+import com.ajaxjs.framework.validator.annotation.Size;
 
 class ContactRequest {
     @NotNull(message = "身分識別碼必填")
@@ -147,13 +147,13 @@ class TenantCodeRule implements ValidatorRule {
 請求物件範例：
 
 ```java
-import com.ajaxjs.framework.validator.custom.Chinese;
-import com.ajaxjs.framework.validator.custom.HttpUrl;
-import com.ajaxjs.framework.validator.custom.IdCard;
-import com.ajaxjs.framework.validator.custom.Ipv4;
-import com.ajaxjs.framework.validator.custom.MobileNo;
-import com.ajaxjs.framework.validator.custom.Password;
-import com.ajaxjs.framework.validator.custom.Username;
+import com.ajaxjs.framework.validator.annotation.Chinese;
+import com.ajaxjs.framework.validator.annotation.HttpUrl;
+import com.ajaxjs.framework.validator.annotation.IdCard;
+import com.ajaxjs.framework.validator.annotation.Ipv4;
+import com.ajaxjs.framework.validator.annotation.MobileNo;
+import com.ajaxjs.framework.validator.annotation.Password;
+import com.ajaxjs.framework.validator.annotation.Username;
 
 class RegistrationRequest {
     @Username
@@ -212,14 +212,14 @@ class RegistrationController {
 路徑變數上受支援的註解會自動執行：
 
 ```java
-import com.ajaxjs.framework.validator.custom.IdCard;
+import com.ajaxjs.framework.validator.annotation.IdCard;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @GetMapping("/people/{idCard}")
-String find(@PathVariable("idCard") @IdCard String idCard){
-        return idCard;
-        }
+String find(@PathVariable("idCard") @IdCard String idCard) {
+    return idCard;
+}
 ```
 
 ## 錯誤回應範例

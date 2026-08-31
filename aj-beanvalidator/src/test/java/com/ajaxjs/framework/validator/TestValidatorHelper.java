@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.validator.custom.*;
+import com.ajaxjs.framework.validator.annotation.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.DirectFieldBindingResult;
 

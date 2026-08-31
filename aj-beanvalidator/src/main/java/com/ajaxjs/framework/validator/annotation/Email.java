@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.validator.custom;
+package com.ajaxjs.framework.validator.annotation;
 
 import java.lang.annotation.*;
 
