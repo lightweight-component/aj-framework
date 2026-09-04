@@ -13,7 +13,6 @@
         <module>aj-security</module>
         <module>aj-spring-base</module>
         <module>aj-fileupload</module>
-        <module>aj-dataservice</module>
         <module>aj-message</module>
         <module>aj-wechat</module>
         <module>aj-framework2</module>

@@ -1,12 +1,6 @@
 # AJ Bean Validator 入门教程
 
-AJ Bean Validator 是一个轻量的 Spring MVC 校验 Starter。它的目标很简单：给请求对象或路径变量加上注解，在请求进入业务代码前完成基本格式检查。
-
-它不依赖庞大的 Hibernate Validator，也不使用 `javax.validation` 或 `jakarta.validation` 的标准注解。使用时请只导入本库的注解包：
-
-```java
-
-```
+AJ Bean Validator 是一个轻量的 Spring MVC 校验 Starter。它的目标很简单：给请求对象或路径变量加上注解，在请求进入业务代码前完成基本格式检查。它不依赖庞大的 Hibernate Validator，也不使用 `javax.validation` 或 `jakarta.validation` 的标准注解。
 
 本文从“注册一个用户”的接口开始，带你完成一次完整校验。
 
