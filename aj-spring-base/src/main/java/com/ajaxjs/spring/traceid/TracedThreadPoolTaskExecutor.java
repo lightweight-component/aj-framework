@@ -27,7 +27,7 @@ public class TracedThreadPoolTaskExecutor extends ThreadPoolTaskExecutor {
 
     private static void setTraceIdIfAbsent() {
         if (MDC.get(Trace.TRACE_KEY) == null)
-            MDC.put(Trace.TRACE_KEY, RandomTools.uuid().toString());
+            MDC.put(Trace.TRACE_KEY, RandomTools.uuidV7());
     }
 
     /**

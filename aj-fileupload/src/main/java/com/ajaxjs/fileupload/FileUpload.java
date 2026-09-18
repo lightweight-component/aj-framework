@@ -7,7 +7,7 @@ import com.ajaxjs.fileupload.policy.ExtensionCheck;
 import com.ajaxjs.fileupload.policy.NamePolicy;
 import com.ajaxjs.fileupload.policy.ShowUrlPolicy;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.UrlHelper;
+import com.ajaxjs.util.UrlCodec;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -304,8 +304,8 @@ public class FileUpload {
      * @param uploadPath  Upload resource path, e.g. {@code /uploads}
      */
     public void setUrlPrefix(String baseUrl, String contextPath, String uploadPath) {
-        String urlPrefix = UrlHelper.concatUrl(baseUrl, contextPath);
-        urlPrefix = UrlHelper.concatUrl(urlPrefix, uploadPath);
+        String urlPrefix = UrlCodec.concatUrl(baseUrl, contextPath);
+        urlPrefix = UrlCodec.concatUrl(urlPrefix, uploadPath);
 
         config.setUrlPrefix(urlPrefix);
     }

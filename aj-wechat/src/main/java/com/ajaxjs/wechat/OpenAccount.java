@@ -153,7 +153,6 @@ public class OpenAccount {
                 sb.append(k).append("=").append(v.trim()).append(++i < data.size() ? "&" : "");
         }
 
-//        return Digest.getSHA1(sb.toString());
-        return HashHelper.getSHA1(sb.toString());
+        return HashHelper.sha1(sb.toString());
     }
 }

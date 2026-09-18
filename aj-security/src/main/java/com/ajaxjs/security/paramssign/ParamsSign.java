@@ -3,7 +3,7 @@ package com.ajaxjs.security.paramssign;
 import com.ajaxjs.util.HashHelper;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.UrlEncode;
+import com.ajaxjs.util.UrlCodec;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,9 +70,9 @@ public class ParamsSign {
         map.put("timestamp", getTimestamp());
 
         String sortString = sort(paramMap);
-        sortString = new UrlEncode(sortString).encodeQuery();
-        String sign = HashHelper.getHmacMD5(sortString, accessSecret).hashAsBase64();
-        sign = new UrlEncode(sign).encodeQuery(); // needs?
+        sortString = new UrlCodec(sortString).encodeQueryValue();
+        String sign = HashHelper.hmacMD5(sortString, accessSecret).hashAsBase64();
+        sign = new UrlCodec(sign).encodeQueryValue(); // needs?
 
         paramMap.put(SIGN_PARAMS, sign);
         this.paramMap = paramMap;
@@ -160,8 +160,8 @@ public class ParamsSign {
 
         while (it.hasNext()) {
             String key = it.next();
-            String value = new UrlEncode(paras.get(key)).encodeQuery();
-            key = new UrlEncode(key).encodeQuery();
+            String value = new UrlCodec(paras.get(key)).encodeQueryValue();
+            key = new UrlCodec(key).encodeQueryValue();
 
             sb.append("&").append(key).append("=").append(value);
         }

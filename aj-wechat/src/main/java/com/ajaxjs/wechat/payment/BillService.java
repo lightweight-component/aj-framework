@@ -1,7 +1,7 @@
 package com.ajaxjs.wechat.payment;
 
 import com.ajaxjs.util.httpremote.Get;
-import com.ajaxjs.util.httpremote.HttpConstant;
+import com.ajaxjs.util.httpremote.model.HttpConstant;
 import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
 
@@ -77,7 +77,7 @@ public class BillService {
      * @param url 账单 url，由 getBills() 返回
      */
     public void billDownload(String url) {
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.GET, url);
+        HttpRequestWrapper rw = new HttpRequestWrapper("GET", url);
         Map<String, Object> result = Get.api(url, PayUtils.getSetHeadFn(mchCfg, rw));
         // 流数据处理
     }

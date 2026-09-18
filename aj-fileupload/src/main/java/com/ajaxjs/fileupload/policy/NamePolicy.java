@@ -74,7 +74,7 @@ public class NamePolicy {
             case ORIGINAL_RANDOM:
                 return nameOriginalRandom(safeFileName);
             case RANDOM:
-                return RandomTools.uuidStr() + "." + getFileExtension(safeFileName);
+                return RandomTools.uuidV7() + "." + getFileExtension(safeFileName);
             default:
                 throw new IllegalArgumentException("Invalid policy: " + policy);
         }
@@ -152,6 +152,6 @@ public class NamePolicy {
      * @return {@code baseName_UUID.extension}
      */
     public static String nameOriginalRandom(String fileName) {
-        return getBaseName(fileName).trim() + "_" + RandomTools.uuidStr() + "." + getFileExtension(fileName);
+        return getBaseName(fileName).trim() + "_" + RandomTools.uuidV7() + "." + getFileExtension(fileName);
     }
 }
