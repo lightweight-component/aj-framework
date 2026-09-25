@@ -3,9 +3,8 @@ package com.ajaxjs.wechat.merchant;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
-import com.ajaxjs.util.cryptography.rsa.KeyMgr;
+import com.ajaxjs.util.cryptography.rsa.RestoreKey;
 import com.ajaxjs.wechat.WechatBusinessException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +45,7 @@ public class SignerMaker {
         if (ObjectHelper.isEmptyText(privateKeyContent))
             throw new WechatBusinessException("证书为空，请检查路径是否正确");
 
-        return KeyMgr.restorePrivateKey(privateKeyContent);
+        return RestoreKey.restorePrivateKey(privateKeyContent);
     }
 
     /**
@@ -60,7 +59,7 @@ public class SignerMaker {
         long timestamp = System.currentTimeMillis() / 1000;
         String message = buildMessage(request, nonceStr, timestamp);
         log.debug("authorization message=[{}]", message);
-        String signature = new DoSignature(Constant.SHA256_RSA).setPrivateKey(privateKey).setStrData(message).signToString();
+        String signature = new DoSignature(privateKey).signToBase64(message);
 
         // @formatter:off
         String token = "mchid=\"" + cfg.getMchId() + "\","

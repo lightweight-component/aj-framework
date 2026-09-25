@@ -1,13 +1,11 @@
 package com.ajaxjs.wechat;
 
-
-import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
 import com.ajaxjs.wechat.merchant.SignerMaker;
 import org.junit.jupiter.api.Test;
 
-public class TestSignerMaker {
+class TestSignerMaker {
     @Test
     void testRsa() {
         MerchantConfig cfg = new MerchantConfig();
@@ -17,7 +15,7 @@ public class TestSignerMaker {
 
         SignerMaker signerMaker = new SignerMaker(cfg);
 
-        String s2 = new DoSignature(Constant.SHA256_RSA).setPrivateKey(signerMaker.privateKey).setStrData("message").signToString();
+        String s2 = new DoSignature(signerMaker.privateKey).signToBase64("message");
         System.out.println(s2);
     }
 }

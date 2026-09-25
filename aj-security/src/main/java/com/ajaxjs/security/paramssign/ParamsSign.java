@@ -71,7 +71,7 @@ public class ParamsSign {
 
         String sortString = sort(paramMap);
         sortString = new UrlCodec(sortString).encodeQueryValue();
-        String sign = HashHelper.hmacMD5(sortString, accessSecret).hashAsBase64();
+        String sign = HashHelper.hmacMD5(sortString, accessSecret, false);
         sign = new UrlCodec(sign).encodeQueryValue(); // needs?
 
         paramMap.put(SIGN_PARAMS, sign);

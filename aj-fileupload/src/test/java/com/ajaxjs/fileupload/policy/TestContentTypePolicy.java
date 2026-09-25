@@ -3,10 +3,13 @@ package com.ajaxjs.fileupload.policy;
 import com.ajaxjs.fileupload.DetectType;
 import com.ajaxjs.fileupload.FileUploadConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestContentTypePolicy {
 
@@ -100,6 +103,16 @@ class TestContentTypePolicy {
         FileUploadConfig config = new FileUploadConfig();
         MockMultipartFile file = new MockMultipartFile("file", "test.txt", "image/png", new byte[]{1});
         assertThrows(IllegalArgumentException.class, () -> new ContentTypePolicy(file, config).checkMapping());
+    }
+
+    @Test
+    void mappingTreatsWavMimeAliasesAsCompatible() {
+        assertTrue(ContentTypePolicy.isCompatible(MediaType.parseMediaType("audio/wav"),
+                MediaType.parseMediaType("audio/wave")));
+        assertTrue(ContentTypePolicy.isCompatible(MediaType.parseMediaType("audio/x-wav"),
+                MediaType.parseMediaType("audio/vnd.wave")));
+        assertFalse(ContentTypePolicy.isCompatible(MediaType.parseMediaType("audio/wav"),
+                MediaType.parseMediaType("audio/mpeg")));
     }
 
     @Test

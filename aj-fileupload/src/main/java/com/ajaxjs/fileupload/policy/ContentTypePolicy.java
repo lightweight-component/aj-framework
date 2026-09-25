@@ -165,12 +165,26 @@ public class ContentTypePolicy {
             MediaType expected = MediaType.parseMediaType(expectedByExt);
             MediaType actual = MediaType.parseMediaType(contentType);
 
-            if (!expected.getType().equalsIgnoreCase(actual.getType())
-                    || !expected.getSubtype().equalsIgnoreCase(actual.getSubtype()))
+            if (!isCompatible(expected, actual))
                 throw new IllegalArgumentException("The uploaded Content-Type does not match the file extension.");
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);
         }
+    }
+
+    /**
+     * Determines whether a client-declared type is compatible with the type inferred from the filename.
+     * WAV has several commonly used MIME aliases, which must be treated as the same format.
+     */
+    static boolean isCompatible(MediaType expected, MediaType actual) {
+        if (!expected.getType().equalsIgnoreCase(actual.getType()))
+            return false;
+
+        if (expected.getSubtype().equalsIgnoreCase(actual.getSubtype()))
+            return true;
+
+        return WAV_CONTENT_TYPES.contains(expected.getType().toLowerCase() + "/" + expected.getSubtype().toLowerCase())
+                && WAV_CONTENT_TYPES.contains(actual.getType().toLowerCase() + "/" + actual.getSubtype().toLowerCase());
     }
 
     /**
@@ -231,6 +245,17 @@ public class ContentTypePolicy {
             "audio/amr",            // .amr
             "audio/flac",           // .flac
             "audio/x-caf"           // apple audio
+    );
+
+    /**
+     * MIME aliases used by browsers and operating systems for WAV files.
+     */
+    static final Set<String> WAV_CONTENT_TYPES = ObjectHelper.setOf(
+            "audio/x-wav",
+            "audio/wav",
+            "audio/wave",
+            "audio/vnd.wave",
+            "audio/x-pn-wav"
     );
 
     /**

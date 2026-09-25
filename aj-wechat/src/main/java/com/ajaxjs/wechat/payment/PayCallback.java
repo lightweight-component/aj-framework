@@ -3,17 +3,15 @@ package com.ajaxjs.wechat.payment;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.cryptography.CertificateUtils;
-import com.ajaxjs.util.cryptography.Constant;
+import com.ajaxjs.util.cryptography.aes.AesGcm;
 import com.ajaxjs.util.cryptography.rsa.DoVerify;
-import com.ajaxjs.util.cryptography.rsa.KeyMgr;
+import com.ajaxjs.util.cryptography.rsa.RestoreKey;
 import com.ajaxjs.wechat.WechatBusinessException;
 import com.ajaxjs.wechat.payment.model.PayResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.security.PublicKey;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,21 +74,22 @@ public class PayCallback {
     public static String decrypt(Map<String, Object> params, String apiV3Key) {
         @SuppressWarnings("unchecked")
         Map<String, Object> resource = (Map<String, Object>) params.get("resource");
-        log.info(params.get("summary") + String.valueOf(resource));
+        log.info("decrypt {}{}", params.get("summary"), resource);
 
         // 对 resource 对象进行解密
         String ciphertext = resource.get("ciphertext").toString();
         log.info(ciphertext);
 
-        byte[] apiV3KeyByte = apiV3Key.getBytes(StandardCharsets.UTF_8);
+//        byte[] apiV3KeyByte = apiV3Key.getBytes(StandardCharsets.UTF_8);
         String associatedData = resource.get("associated_data").toString();
         String nonce = resource.get("nonce").toString();
 
         // 解密
-        String cert = CertificateUtils.aesDecryptToString(apiV3KeyByte, associatedData, nonce, ciphertext);
-        log.info(cert);
+//        String cert = CertificateUtils.deserializeToCerts(apiV3Key, resource);
+//        String cert = CertificateUtils.aesDecryptToString(apiV3KeyByte, associatedData, nonce, ciphertext);
+//        log.info(cert);
 
-        return cert;
+        return new AesGcm(apiV3Key).decrypt(ciphertext, nonce.getBytes(StandardCharsets.UTF_8), associatedData.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -104,11 +103,7 @@ public class PayCallback {
 
         // 构造待签名字符串
         String message = timestamp + "\n" + nonce + "\n" + requestBody + "\n";
-
-        boolean isValid = new DoVerify(Constant.SHA256_RSA)
-                .setStrData(message)
-                .setSignatureBase64(signature)
-                .setPublicKey(loadPublicKeyFromPem(serial)).verify();
+        boolean isValid = new DoVerify(loadPublicKeyFromPem(serial)).verify(message, signature);
 
         if (isValid)
             log.info("Signature verification passed. Powered by AJAX!");
@@ -131,8 +126,7 @@ public class PayCallback {
         if (ObjectHelper.isEmptyText(pemContent))
             throw new WechatBusinessException("公钥证书为空，请检查路径 " + publicKeyPath + " 是否正确");
 
-        Key _key = KeyMgr.restoreKey(true, pemContent);
-        PublicKey publicKey = (PublicKey) _key;
+        PublicKey publicKey = RestoreKey.restorePublicKey(pemContent);
         WECHAT_PAY_PUBLIC_KEY_MAP.put(key, publicKey);
 
         return publicKey;
