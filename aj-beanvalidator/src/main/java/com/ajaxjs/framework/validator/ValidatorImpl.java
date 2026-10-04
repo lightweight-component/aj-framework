@@ -22,6 +22,7 @@ public class ValidatorImpl implements Validator {
      * Spring 已注册的校验器，存在时先执行。
      */
     private final Validator delegate;
+
     /**
      * 应用注册的扩展校验规则。
      */
@@ -131,6 +132,7 @@ public class ValidatorImpl implements Validator {
      * 本组件内置注解所在的包名前缀。
      */
     private static final String AJ_PACKAGE = "com.ajaxjs.framework.validator.custom";
+
     /**
      * 注解消息配置。
      */
@@ -231,11 +233,13 @@ public class ValidatorImpl implements Validator {
                 int length = getSize(value);
                 int min = ((Integer) AnnotationUtils.getValue(annotation, "min")).intValue();
                 int max = ((Integer) AnnotationUtils.getValue(annotation, "max")).intValue();
+
                 if (length < min || length > max)
                     throw new ValidatorException(errorMessage);
             }
         } else if ("Min".equals(annotationName)) {
             long min = ((Long) AnnotationUtils.getValue(annotation, "value")).longValue();
+
             if (value != null && toBigDecimal(value).compareTo(BigDecimal.valueOf(min)) < 0)
                 throw new ValidatorException(errorMessage);
         } else if ("Max".equals(annotationName)) {
@@ -270,7 +274,7 @@ public class ValidatorImpl implements Validator {
     }
 
     /**
-     * 获取 {@link com.ajaxjs.framework.validator.custom.Pattern} 的正则标志位。
+     * 获取 {@link com.ajaxjs.framework.validator.annotation.Pattern} 的正则标志位。
      *
      * @param annotation Pattern 注解
      * @return 合并后的 {@link java.util.regex.Pattern} 标志位
@@ -282,7 +286,7 @@ public class ValidatorImpl implements Validator {
 
         int value = 0;
         for (Object flag : (Object[]) flags) {
-            value |= ((com.ajaxjs.framework.validator.custom.Pattern.Flag) flag).getValue();
+            value |= ((com.ajaxjs.framework.validator.annotation.Pattern.Flag) flag).getValue();
         }
 
         return value;

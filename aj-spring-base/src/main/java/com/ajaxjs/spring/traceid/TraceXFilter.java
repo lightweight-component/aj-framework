@@ -54,7 +54,7 @@ public class TraceXFilter implements Filter {
         String traceId = req.getHeader(X_TRACE); // let front-end send traceId
 
         if (!StringUtils.hasLength(traceId))
-            traceId = RandomTools.uuid().toString();
+            traceId = RandomTools.uuidV7();
 
         MDC.put(Trace.TRACE_KEY, traceId); // saves traceId
         String contentType = request.getContentType();

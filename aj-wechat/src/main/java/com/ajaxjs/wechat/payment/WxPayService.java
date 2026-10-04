@@ -3,7 +3,6 @@ package com.ajaxjs.wechat.payment;
 import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.RandomTools;
-import com.ajaxjs.util.cryptography.Constant;
 import com.ajaxjs.util.cryptography.rsa.DoSignature;
 import com.ajaxjs.wechat.WechatBusinessException;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
@@ -181,6 +180,6 @@ public class WxPayService {
 
         PrivateKey key = SignerMaker.loadPrivateKeyByPath(privateKey);
 
-        return new DoSignature(Constant.SHA256_RSA).setPrivateKey(key).setStrData(sb).signToString();
+        return new DoSignature(key).signToBase64(sb);
     }
 }

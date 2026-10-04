@@ -5,8 +5,9 @@ import com.ajaxjs.util.JsonUtil;
 import com.ajaxjs.util.RandomTools;
 import com.ajaxjs.util.date.DateTools;
 import com.ajaxjs.util.httpremote.Get;
-import com.ajaxjs.util.httpremote.HttpConstant;
 import com.ajaxjs.util.httpremote.Post;
+import com.ajaxjs.util.httpremote.model.HttpConstant;
+import com.ajaxjs.util.httpremote.model.HttpMethod;
 import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
 import com.ajaxjs.wechat.merchant.SignerMaker;
@@ -87,9 +88,9 @@ public class PayUtils {
 
     public static Map<String, Object> postMap(MerchantConfig mchCfg, String url, Object params) {
         String rawJson = JsonUtil.toJson(params);
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.POST, url, rawJson);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpMethod.POST.name(), url, rawJson);
 
-        log.info(":::请求参数：" + rawJson);
+        log.info(":::请求参数：{}", rawJson);
         Map<String, Object> result = Post.api(API_DOMAIN + url, rawJson, getSetHeadFn(mchCfg, rw));
 
         if (result.containsKey("code ") && result.containsKey("message"))
@@ -113,7 +114,7 @@ public class PayUtils {
 
     @SuppressWarnings("unchecked")
     public static <T> T get(MerchantConfig mchCfg, String url, Class<T> resultClz) {
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstant.GET, url);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpMethod.GET.name(), url);
         Map<String, Object> result = Get.api(API_DOMAIN + url, getSetHeadFn(mchCfg, rw));
 
         if (result.containsKey("code") && result.containsKey("message"))
@@ -148,7 +149,7 @@ public class PayUtils {
             String key = entry.getKey();
             String value = entry.getValue().toString();
 
-            if (queryString.length() > 0)
+            if (!queryString.isEmpty())
                 queryString.append('&');
 
             queryString.append(key).append('=').append(value);

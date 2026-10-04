@@ -2,7 +2,7 @@ package com.ajaxjs.security.timesignature;
 
 import com.ajaxjs.security.InterceptorAction;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.cryptography.Cryptography;
+import com.ajaxjs.util.cryptography.aes.AesLegacy;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -68,7 +68,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
             throw new IllegalArgumentException("The secretKey is not set.");
 
         try {
-            timestampStr = Cryptography.AES_decode(signature, secretKey);
+            timestampStr = new AesLegacy(secretKey).encrypt(signature);
         } catch (Exception e) {
             throw new SecurityException("Invalid time signature.", e);
         }
@@ -130,7 +130,7 @@ public class TimeSignature extends InterceptorAction<TimeSignatureVerify> {
 
         String timestampStr = String.valueOf(timestamp);
 
-        return Cryptography.AES_encode(timestampStr, secretKey);
+        return new AesLegacy(secretKey).decrypt(timestampStr);
     }
 
     /**

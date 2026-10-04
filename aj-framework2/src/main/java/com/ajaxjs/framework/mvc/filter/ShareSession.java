@@ -63,7 +63,7 @@ public class ShareSession implements Filter {
     }
 
     private void setNewSession(HttpServletRequest request, ServletResponse servletResponse) {
-        String sessionId = RandomTools.uuidStr();
+        String sessionId = RandomTools.uuidV7();
         Map<String, Object> attribute = new ConcurrentHashMap<>();
         sessionCache.put(CACHE_PREFIX + sessionId, attribute, SESSION_TIMEOUT);
         request.setAttribute(SHARE_SESSION, attribute);

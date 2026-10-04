@@ -17,7 +17,7 @@ starter; it does not implement Jakarta/Javax Bean Validation and does not requir
   Boot application.
 - Disable the integration, when needed, with `ajaxjs.beanvalidator.enabled: false`.
 - Do not add `javax.validation`, `jakarta.validation`, or Hibernate Validator merely to use this library's annotations.
-  Import every constraint from `com.ajaxjs.framework.validator.custom`.
+  Import every constraint from `com.ajaxjs.framework.validator.annotation`.
 
 ## Choose the right constraint
 
@@ -78,7 +78,7 @@ class TenantCodeRule implements ValidatorRule {
 }
 ```
 
-Do not place application-specific annotations under `com.ajaxjs.framework.validator.custom`: that package is reserved
+Do not place application-specific annotations under `com.ajaxjs.framework.validator.annotation`: that package is reserved
 for built-in constraints, and an unknown annotation there is treated as a configuration error.
 
 ## When changing the library

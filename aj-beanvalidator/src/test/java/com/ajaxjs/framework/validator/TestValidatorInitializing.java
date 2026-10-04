@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.validator;
 
-import com.ajaxjs.framework.validator.custom.IdCard;
+import com.ajaxjs.framework.validator.annotation.IdCard;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Bean;
