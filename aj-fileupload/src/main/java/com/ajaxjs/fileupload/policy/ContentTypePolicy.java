@@ -165,8 +165,7 @@ public class ContentTypePolicy {
             MediaType expected = MediaType.parseMediaType(expectedByExt);
             MediaType actual = MediaType.parseMediaType(contentType);
 
-            if (!expected.getType().equalsIgnoreCase(actual.getType())
-                    || !expected.getSubtype().equalsIgnoreCase(actual.getSubtype()))
+            if (!expected.getType().equalsIgnoreCase(actual.getType()) || !expected.getSubtype().equalsIgnoreCase(actual.getSubtype()))
                 throw new IllegalArgumentException("The uploaded Content-Type does not match the file extension.");
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);

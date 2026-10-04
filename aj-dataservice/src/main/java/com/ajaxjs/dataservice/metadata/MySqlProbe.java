@@ -1,13 +1,12 @@
 package com.ajaxjs.dataservice.metadata;
 
+import com.ajaxjs.dataservice.datasource.DataSourceInfo;
 import com.ajaxjs.dataservice.metadata.model.*;
+import com.ajaxjs.sqlman.JdbcConnection;
 import com.ajaxjs.util.ObjectHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -29,21 +28,60 @@ public class MySqlProbe {
     @Autowired
     DataSource ds;
 
+    /**
+     * 使用了缓存，就不用保持到磁盘
+     */
+    private String jsonPath = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\";
+
+    /**
+     * 生成配置 JSON。这个操作会比较久。这是给多数据源的时候用的。
+     *
+     * @param ds 数据源信息
+     * @return database-doc 配置 JSON
+     * @throws SQLException 异常
+     */
+    @PostMapping("/make_database_doc")
+    public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
+        try (Connection conn = JdbcConnection.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
+//			DataBaseQuery.saveToDiskJson(conn, getJsonPath() + "json.js");
+            DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, null);
+
+            return true;
+        }
+    }
+
+    /**
+     * JSON 缓存
+     */
+    public static String DB_DOC_JSON;
+
+    /**
+     * 生成数据库信息的 JSON，用于显示数据库文档
+     * 获取缓存的数据库结构文档；首次调用会从默认数据源加载。
+     *
+     * @return 包含 {@code DOC_DATA} 变量的数据库文档文本
+     */
+    @GetMapping("/make_database_doc")
+    public String getJson() throws SQLException {
+        if (DB_DOC_JSON == null) // 第一次启动，不管是不是多数据源，先加载当前数据源的
+            try (Connection conn = JdbcConnection.getConnection(ds)) {
+                DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, conn.getCatalog());
+            }
+
+        return DB_DOC_JSON;
+    }
+
     @GetMapping("/test")
-    DataBaseDetail test() {
+    DataBaseDetail test() throws SQLException {
         try (Connection connection = ds.getConnection()) {
             return detail(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @GetMapping("/table_list")
-    List<TableDesc> tableList() {
+    List<TableDesc> tableList() throws SQLException {
         try (Connection connection = ds.getConnection()) {
             return list(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

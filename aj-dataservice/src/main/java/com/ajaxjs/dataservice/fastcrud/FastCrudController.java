@@ -114,7 +114,7 @@ public interface FastCrudController {
      * @param id        实体 id
      * @return 是否成功
      */
-    @DeleteMapping("/{namespace}/logical/{id}")
+    @DeleteMapping("/{namespace}/physical/{id}")
     @BizAction("物理删除实体")
     boolean deletePhysical(@PathVariable String namespace, @PathVariable Long id);
 

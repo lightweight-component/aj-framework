@@ -56,8 +56,7 @@ public class MysqlExport {
     public MysqlExport(Connection conn, String saveFolder) {
         try {
             databaseName = conn.getCatalog();
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
             log.error("Failed tp get the name of database failed, or the statement failed");
             throw new RuntimeException(e);
@@ -226,6 +225,7 @@ public class MysqlExport {
 
         try {
             Files.createDirectories(folder);
+
             try (ZipOutputStream zip = new ZipOutputStream(Files.newOutputStream(folder.resolve(zipFileName)));
                  Writer writer = new BufferedWriter(new OutputStreamWriter(zip, StandardCharsets.UTF_8))) {
                 zip.putNextEntry(new ZipEntry(fileName));
@@ -266,15 +266,23 @@ public class MysqlExport {
         try (ResultSet rows = stmt.executeQuery("SELECT * FROM " + escapeIdentifier(table))) {
             ResultSetMetaData meta = rows.getMetaData();
             int count = meta.getColumnCount();
+
             while (rows.next()) {
                 writer.write("INSERT INTO " + escapeIdentifier(table) + " VALUES (");
+
                 for (int i = 1; i <= count; i++) {
-                    if (i > 1) writer.write(", ");
+                    if (i > 1)
+                        writer.write(", ");
+
                     Object value = rows.getObject(i);
-                    if (value == null) writer.write("NULL");
+
+                    if (value == null)
+                        writer.write("NULL");
                     else if (value instanceof Number || value instanceof Boolean) writer.write(value.toString());
+
                     else writer.write(escapeString(rows.getString(i)));
                 }
+
                 writer.write(");\n");
             }
         }
