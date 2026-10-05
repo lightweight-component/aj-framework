@@ -12,7 +12,7 @@ package com.ajaxjs.message.email;
 
 import com.ajaxjs.util.Base64Utils;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.RegExpUtils;
+import com.ajaxjs.util.RegExpHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -237,7 +237,7 @@ public class Sender extends Socket {
      * @return 是否与之匹配
      */
     private static boolean isOkCode(String str, int code) {
-        int _code = Integer.parseInt(RegExpUtils.regMatch("^\\d+", str));
+        int _code = Integer.parseInt(RegExpHelper.regMatch("^\\d+", str, 0));
 
         return _code == code;
     }

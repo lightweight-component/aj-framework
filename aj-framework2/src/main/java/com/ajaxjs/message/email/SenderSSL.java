@@ -3,7 +3,7 @@ package com.ajaxjs.message.email;
 import com.ajaxjs.util.Base64Utils;
 import com.ajaxjs.util.CommonConstant;
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.RegExpUtils;
+import com.ajaxjs.util.RegExpHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLSocket;
@@ -297,7 +297,7 @@ public class SenderSSL {
         if (str == null)
             return false; // 如果字符串是 null，直接返回 false
 
-        String matchedCodeStr = RegExpUtils.regMatch("^\\d+", str);
+        String matchedCodeStr = RegExpHelper.regMatch("^\\d+", str, 0);
 
         if (matchedCodeStr == null || matchedCodeStr.isEmpty())
             return false; // 没有匹配到数字，返回 false

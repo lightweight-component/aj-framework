@@ -109,7 +109,7 @@ public class DataBaseConnection implements HandlerInterceptor {
             } finally {
                 // 无论是否有事务、是否抛错、是否 rollback 成功，都必须清理
                 GlobalExceptionHandler.EXCEPTION_HOLDER.remove();
-                JdbcConnection.closeDb();
+                JdbcConnection.closeConnection();
             }
         }
 
