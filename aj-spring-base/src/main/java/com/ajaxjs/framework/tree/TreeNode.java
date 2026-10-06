@@ -15,6 +15,10 @@ public interface TreeNode {
         throw new RuntimeException();
     }
 
+    default String getName() {
+        throw new RuntimeException();
+    }
+
     /**
      * 设置是否叶子
      *

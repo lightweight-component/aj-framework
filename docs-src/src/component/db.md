@@ -21,6 +21,46 @@ SqlMan 提供便捷的数据访问，首先是类似 Spring JDBCTemplate 的 CRU
 故而整个数据库操作的内容便交给 SqlMan 处理了，本文就不作过多介绍，大家可以到 SqlMan
 官网了解更多 [sqlman.ajaxjs.com](https://sqlman.ajaxjs.com)。
 
+## SQL 参数绑定
+
+在 SQLMan 2.3 中，SQL 的**数据值**必须通过占位符绑定，不能将请求参数直接拼接到 SQL 字符串中。
+
+### 命名参数 `#{}`
+
+当 SQL 执行时传入参数 Map（例如 DataService 接收的查询字符串、表单或 JSON 请求体）时，使用 `#{字段名}`。SQLMan 会将其转换为 JDBC 的 `?` 占位符并绑定对应值：
+
+```sql
+SELECT * FROM shop_address WHERE id = #{id}
+
+UPDATE shop_address SET name = #{name} WHERE id = #{id}
+
+INSERT INTO shop_address (name, address) VALUES (#{name}, #{address})
+```
+
+例如请求 `GET /address?id=1` 可匹配第一条 SQL；`id` 是数据值，不会被当作 SQL 文本拼接。
+
+### 位置参数 `?`
+
+直接调用 `Action`，或 DataService 将路径变量按顺序传入时，使用 JDBC 位置参数：
+
+```java
+new Action("SELECT * FROM shop_address WHERE id = ?").query(id).one();
+```
+
+```sql
+SELECT * FROM shop_address WHERE id = ?
+```
+
+### 不要将请求值放进 `${}`
+
+`${}` 是 SQL 文本替换语法，适合由后端固定或白名单选择的 SQL 标识符，例如表名或列名；它不应用于 URL、表单和 JSON 中传入的值。下面的写法是错误的：
+
+```sql
+SELECT * FROM shop_address WHERE id = ${id}
+```
+
+数值 `id=1` 会被当成 SQL 标识符而被拒绝。对于普通参数，应改为 `#{id}`。表名、列名、排序字段和排序方向等 SQL 结构也不能作为普通 JDBC 参数绑定，必须在服务端进行固定配置或白名单校验。
+
 ### 数据服务组件
 
 数据服务（DataService）的作用是，只需写 SQL 业务逻辑（甚至零代码不写！），即可快速搭建 CRUD 接口服务
