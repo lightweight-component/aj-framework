@@ -33,15 +33,13 @@ public class MagicNumberImage {
         );
 
         // GIF: GIF87a or GIF89a
-        magicMap.put("gif", bytes ->
-                bytes.length >= 6 &&
+        magicMap.put("gif", bytes -> bytes.length >= 6 &&
                         (bytes[0] == 'G' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == '8' &&
                                 (bytes[4] == '7' || bytes[4] == '9') && bytes[5] == 'a')
         );
 
         // WEBP: RIFF....WEBP
-        magicMap.put("webp", bytes ->
-                bytes.length >= 12 &&
+        magicMap.put("webp", bytes -> bytes.length >= 12 &&
                         bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
                         bytes[8] == 'W' && bytes[9] == 'E' && bytes[10] == 'B' && bytes[11] == 'P'
         );

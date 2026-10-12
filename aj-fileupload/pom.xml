@@ -12,7 +12,7 @@
     <name>aj-fileupload</name>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <description>Minimal requirements for the component of Spring Framework</description>
+    <description>Lightweight File Upload and Download Component based on Spring</description>
     <url>https://aj-docs.ajaxjs.com/</url>
 
     <scm>

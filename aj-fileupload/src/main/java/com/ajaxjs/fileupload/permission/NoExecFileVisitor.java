@@ -70,7 +70,7 @@ public class NoExecFileVisitor extends SimpleFileVisitor<Path> {
                     perms.contains(PosixFilePermission.GROUP_EXECUTE) ||
                     perms.contains(PosixFilePermission.OTHERS_EXECUTE);
         } catch (UnsupportedOperationException e) {
-            System.err.println("不支持 POSIX 权限: " + path); // Theoretically should not happen because we already checked POSIX support
+            System.err.println("Unsupported POSIX permission: " + path); // Theoretically should not happen because we already checked POSIX support
             return false;
         }
     }

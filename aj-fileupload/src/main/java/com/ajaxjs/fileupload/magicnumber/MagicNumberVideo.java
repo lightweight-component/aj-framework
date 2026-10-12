@@ -1,5 +1,7 @@
 package com.ajaxjs.fileupload.magicnumber;
 
+import lombok.RequiredArgsConstructor;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
@@ -139,28 +141,5 @@ public class MagicNumberVideo {
         return new Vint(length, value);
     }
 
-    /**
-     * Represents a parsed EBML variable-length integer (VINT).
-     */
-    static class Vint {
-        /**
-         * The number of bytes consumed by the VINT encoding.
-         */
-        final int length;
-        /**
-         * The decoded integer value.
-         */
-        final long value;
 
-        /**
-         * Construct a VINT with the given length and value.
-         *
-         * @param length Number of bytes consumed
-         * @param value  Decoded integer value
-         */
-        Vint(int length, long value) {
-            this.length = length;
-            this.value = value;
-        }
-    }
 }

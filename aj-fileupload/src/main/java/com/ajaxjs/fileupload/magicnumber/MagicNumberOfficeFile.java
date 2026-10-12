@@ -17,10 +17,12 @@ public class MagicNumberOfficeFile {
      * Maximum number of ZIP entries to process before aborting validation.
      */
     private static final int MAX_ZIP_ENTRIES = 10_000;
+
     /**
      * Maximum cumulative uncompressed bytes to read before aborting validation (100 MiB).
      */
     private static final long MAX_UNCOMPRESSED_BYTES = 100L * 1024 * 1024;
+
     /**
      * Maximum bytes to read from the mimetype entry.
      */
@@ -99,8 +101,7 @@ public class MagicNumberOfficeFile {
                 if (!entry.isDirectory())
                     entries.add(name);
 
-                ByteArrayOutputStream mimetypeContent = "mimetype".equals(name)
-                        ? new ByteArrayOutputStream(MAX_MIMETYPE_BYTES) : null;
+                ByteArrayOutputStream mimetypeContent = "mimetype".equals(name) ? new ByteArrayOutputStream(MAX_MIMETYPE_BYTES) : null;
                 int count;
 
                 while ((count = zip.read(buffer)) != -1) {

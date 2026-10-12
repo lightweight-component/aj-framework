@@ -16,7 +16,7 @@ class TestMagicNumberVideo {
     void readVintSingleByte() {
         byte[] bytes = {(byte) 0x80};
 
-        MagicNumberVideo.Vint v = MagicNumberVideo.readVint(bytes, 0, true);
+        Vint v = MagicNumberVideo.readVint(bytes, 0, true);
         assertNotNull(v);
         assertEquals(1, v.length);
         assertEquals(0, v.value);
@@ -31,7 +31,7 @@ class TestMagicNumberVideo {
     void readVintMultiByte() {
         byte[] bytes = {0x40, 0x01};
 
-        MagicNumberVideo.Vint v = MagicNumberVideo.readVint(bytes, 0, true);
+        Vint v = MagicNumberVideo.readVint(bytes, 0, true);
         assertNotNull(v);
         assertEquals(2, v.length);
         assertEquals(1, v.value);
@@ -46,7 +46,7 @@ class TestMagicNumberVideo {
     void readVintThreeByte() {
         byte[] bytes = {0x20, 0x00, 0x05};
 
-        MagicNumberVideo.Vint v = MagicNumberVideo.readVint(bytes, 0, true);
+        Vint v = MagicNumberVideo.readVint(bytes, 0, true);
         assertNotNull(v);
         assertEquals(3, v.length);
         assertEquals(5, v.value);

@@ -13,7 +13,7 @@ public class NamePolicy {
      */
     public enum Policy {
         /**
-         * Uses the sanitized original filename; may cause name collisions.
+         * Uses the sanitized original filename; may cause to name collisions.
          */
         ORIGINAL,
 

@@ -17,45 +17,32 @@ public class MagicNumberAudio {
     static {
         Map<String, Function<byte[], Boolean>> magicMap = new HashMap<>();
         // MP3: ID3 tag or MPEG frame
-        magicMap.put("mp3", bytes ->
-                bytes.length >= 3 &&
-                        ((bytes[0] == 'I' && bytes[1] == 'D' && bytes[2] == '3') || // ID3v2
-                                ((bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xE0) == 0xE0))  // MPEG frame sync
+        magicMap.put("mp3", bytes -> bytes.length >= 3 &&
+                ((bytes[0] == 'I' && bytes[1] == 'D' && bytes[2] == '3') || // ID3v2
+                        ((bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xE0) == 0xE0))  // MPEG frame sync
         );
 
         // WAV: RIFF....WAVE
-        magicMap.put("wav", bytes ->
-                bytes.length >= 12 &&
-                        bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
-                        bytes[8] == 'W' && bytes[9] == 'A' && bytes[10] == 'V' && bytes[11] == 'E'
+        magicMap.put("wav", bytes -> bytes.length >= 12 &&
+                bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
+                bytes[8] == 'W' && bytes[9] == 'A' && bytes[10] == 'V' && bytes[11] == 'E'
         );
 
         // FLAC: fLaC
-        magicMap.put("flac", bytes ->
-                bytes.length >= 4 &&
-                        bytes[0] == 'f' && bytes[1] == 'L' && bytes[2] == 'a' && bytes[3] == 'C'
-        );
+        magicMap.put("flac", bytes -> bytes.length >= 4 && bytes[0] == 'f' && bytes[1] == 'L' && bytes[2] == 'a' && bytes[3] == 'C');
 
         // AAC: ADTS header (0xFF F1 or 0xFF F9)
-        magicMap.put("aac", bytes ->
-                bytes.length >= 2 &&
-                        (bytes[0] & 0xFF) == 0xFF &&
-                        ((bytes[1] & 0xFF) == 0xF1 || (bytes[1] & 0xFF) == 0xF9)
-        );
+        magicMap.put("aac", bytes -> bytes.length >= 2 && (bytes[0] & 0xFF) == 0xFF && ((bytes[1] & 0xFF) == 0xF1 || (bytes[1] & 0xFF) == 0xF9));
 
         // OGG: OggS
-        magicMap.put("ogg", bytes ->
-                bytes.length >= 4 &&
-                        bytes[0] == 'O' && bytes[1] == 'g' && bytes[2] == 'g' && bytes[3] == 'S'
-        );
+        magicMap.put("ogg", bytes -> bytes.length >= 4 && bytes[0] == 'O' && bytes[1] == 'g' && bytes[2] == 'g' && bytes[3] == 'S');
 
         // M4A (MP4 container): starts with ftypM4A or ftypisom
-        magicMap.put("m4a", bytes ->
-                bytes.length >= 12 &&
-                        bytes[4] == 'f' && bytes[5] == 't' && bytes[6] == 'y' && bytes[7] == 'p' &&
-                        (bytes[8] == 'M' || bytes[8] == 'i') &&
-                        (bytes[9] == '4' || bytes[9] == 's') &&
-                        (bytes[10] == 'A' || bytes[10] == 'o')
+        magicMap.put("m4a", bytes -> bytes.length >= 12 &&
+                bytes[4] == 'f' && bytes[5] == 't' && bytes[6] == 'y' && bytes[7] == 'p' &&
+                (bytes[8] == 'M' || bytes[8] == 'i') &&
+                (bytes[9] == '4' || bytes[9] == 's') &&
+                (bytes[10] == 'A' || bytes[10] == 'o')
         );
         AUDIO_MAGIC_MAP = Collections.unmodifiableMap(magicMap);
     }

@@ -3,7 +3,7 @@ package com.ajaxjs.fileupload.filedownload;
 import java.io.File;
 
 /**
- * Send a stream to browser to let it download file to the user.
+ * Send a stream to the browser to let it download file to the user.
  */
 public class SendDownload {
     /**
