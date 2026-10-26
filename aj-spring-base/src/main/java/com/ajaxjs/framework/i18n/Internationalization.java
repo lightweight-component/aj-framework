@@ -37,6 +37,9 @@ public class Internationalization {
         if (language == null)
             return Language.ZH;
 
+        if(language.equalsIgnoreCase("zh-tw"))
+            return Language.CH;
+
         return Language.valueOf(language.toUpperCase());
     }
 }
