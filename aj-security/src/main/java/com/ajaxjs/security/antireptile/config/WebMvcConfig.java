@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 将反爬拦截器接入 Spring MVC 的配置。
  * <p>注册路径为所有 MVC 路径；是否需要执行反爬规则由拦截器结合配置与方法注解决定。</p>
  */
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
     /**

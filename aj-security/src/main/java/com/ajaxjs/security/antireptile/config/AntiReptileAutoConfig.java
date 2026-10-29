@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
  * 注册验证码 Servlet、工具、服务及拦截器。内置 IP 和 User-Agent 规则默认注册，
  * 可分别通过规则的 {@code enabled} 配置关闭；自定义规则 Bean 也会参与执行。</p>
  */
-@Configuration
-@EnableConfigurationProperties(AntiReptileProperties.class)
-@ConditionalOnProperty(prefix = "anti.reptile.manager", value = "enabled", havingValue = "true")
-@Import(WebMvcConfig.class)
+//@Configuration
+//@EnableConfigurationProperties(AntiReptileProperties.class)
+//@ConditionalOnProperty(prefix = "anti.reptile.manager", value = "enabled", havingValue = "true")
+//@Import(WebMvcConfig.class)
 public class AntiReptileAutoConfig {
     /**
      * 创建组件私有的单机过期缓存，不与宿主其他缓存共享条目。

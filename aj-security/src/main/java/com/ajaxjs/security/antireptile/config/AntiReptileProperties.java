@@ -14,7 +14,7 @@ import java.util.List;
  * URI 列表和方法上的 {@link AntiReptile} 注解共同决定检查范围。</p>
  */
 @Data
-@ConfigurationProperties(prefix = "anti.reptile.manager")
+//@ConfigurationProperties(prefix = "anti.reptile.manager")
 public class AntiReptileProperties {
     /**
      * 组件启用开关，默认 false；只有显式配置为 true 时才加载主自动配置。
