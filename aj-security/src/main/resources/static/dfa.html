@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DFA 敏感词过滤系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.22/dist/vue.global.prod.js"></script>
+    <style>
+        :root {
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            color: #25334a;
+            background: #f4f7fb;
+            font-size: 14px;
+            line-height: 1.6;
+            --blue: #2563eb;
+            --line: #e2e8f0;
+            --muted: #718096
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0
+        }
+
+        header {
+            background: #fff;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .header-inner {
+            max-width: 1150px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px
+        }
+
+        .brand {
+            font-size: 19px;
+            font-weight: 700
+        }
+
+        .brand small {
+            display: block;
+            font-size: 11px;
+            color: var(--blue);
+            letter-spacing: 1.5px
+        }
+
+        main {
+            max-width: 1150px;
+            margin: auto;
+            padding: 30px 24px 50px
+        }
+
+        h1 {
+            font-size: 27px;
+            margin: 0 0 6px
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 0 0 18px
+        }
+
+        h3 {
+            font-size: 14px;
+            margin: 0 0 10px
+        }
+
+        p {
+            margin: 8px 0
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            padding: 25px;
+            margin: 22px 0
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .between {
+            justify-content: space-between
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        .grid .card {
+            margin: 0
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit
+        }
+
+        button {
+            padding: 9px 16px;
+            border: 1px solid #dbe2ed;
+            border-radius: 7px;
+            background: #fff;
+            color: #334155;
+            cursor: pointer
+        }
+
+        button:hover {
+            background: #eff5ff
+        }
+
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+        .primary {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff
+        }
+
+        .primary:hover {
+            background: #1d4ed8
+        }
+
+        .danger {
+            color: #be123c;
+            border-color: #fecdd3
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #526079;
+            margin-bottom: 7px
+        }
+
+        input,
+        textarea {
+            border: 1px solid #d7dfeb;
+            border-radius: 7px;
+            padding: 11px;
+            width: 100%;
+            background: #fff;
+            color: inherit
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #bfdbfe;
+            outline-offset: 1px
+        }
+
+        .replace {
+            width: 95px
+        }
+
+        .toolbar {
+            margin: 16px 0
+        }
+
+        .message {
+            border: 1px solid #fecdd3;
+            background: #fff1f2;
+            color: #9f1239;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .message.success {
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #047857
+        }
+
+        .message.info {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1d4ed8
+        }
+
+        .message button {
+            background: transparent;
+            color: inherit;
+            border: 0;
+            padding: 0 6px
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 18px 0
+        }
+
+        .metric {
+            background: #f6f8fc;
+            border: 1px solid #e9edf4;
+            border-radius: 8px;
+            padding: 15px
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 24px;
+            color: var(--blue)
+        }
+
+        .metric span {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        pre,
+        .text-view {
+            margin: 0;
+            background: #f8fafc;
+            border: 1px solid #edf0f5;
+            padding: 15px;
+            border-radius: 7px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            max-height: 360px;
+            overflow: auto;
+            font: 13px/1.9 Consolas, "Microsoft YaHei", monospace
+        }
+
+        mark {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 3px;
+            padding: 1px 0
+        }
+
+        .table-wrap {
+            overflow: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px
+        }
+
+        td,
+        th {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line);
+            overflow-wrap: anywhere
+        }
+
+        th {
+            color: var(--muted);
+            font-weight: 500
+        }
+
+        .word {
+            font-family: Consolas, monospace;
+            color: #b91c1c
+        }
+
+        .empty {
+            color: var(--muted);
+            padding: 18px;
+            text-align: center
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eef4ff;
+            color: var(--blue);
+            padding: 3px 9px;
+            font-size: 12px;
+            border-radius: 5px
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 12px
+        }
+
+        .status-grid span {
+            color: var(--muted)
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 20px
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px
+        }
+
+        [v-cloak] {
+            display: none
+        }
+
+        @media(max-width:650px) {
+            main {
+                padding: 22px 14px
+            }
+
+            .header-inner {
+                padding: 14px;
+                align-items: flex-start
+            }
+
+            .brand {
+                font-size: 16px
+            }
+
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .card {
+                padding: 18px
+            }
+
+            .metrics {
+                gap: 6px
+            }
+
+            .metric {
+                padding: 10px
+            }
+
+            .metric strong {
+                font-size: 20px
+            }
+
+            .header-inner .row {
+                gap: 8px
+            }
+
+            h1 {
+                font-size: 23px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <header>
+            <div class="header-inner">
+                <div class="brand">DFA 敏感词过滤系统<small>TEXT FILTER WORKSPACE</small></div>
+                <div class="row">
+                    <button @click="loadStatus(true)" :disabled="busy">系统状态</button>
+                    <a href="#about">关于</a>
+                </div>
+            </div>
+        </header>
+        <main :aria-busy="busy">
+            <h1>文本检测工作台</h1>
+            <p class="muted">检测敏感词、过滤文本，并管理你的词库。</p>
+            <div v-if="message" class="message" :class="messageType" role="status"><span>{{ message }}</span>
+                <button @click="message=''" aria-label="关闭提示">×</button>
+            </div>
+            <section class="card">
+                <div class="row between">
+                    <h2>敏感词过滤测试</h2><span class="badge">Trie · DFA</span>
+                </div>
+                <label for="text">待检测文本</label><textarea id="text" v-model="text" rows="6"
+                    placeholder="例如：这是包含 app、orange 和 apple 的测试文本。" :disabled="busy"
+                    @keydown.ctrl.enter.prevent="analyze('filter')"></textarea>
+                <div class="row toolbar"><label for="replacement" style="margin:0">替换字符</label><input id="replacement"
+                        class="replace" v-model="replacement" :disabled="busy">
+                    <button v-for="value in ['*','[屏蔽]','XXX']" :key="value" @click="replacement=value"
+                        :disabled="busy">
+                        {{ value }}
+                    </button>
+                </div>
+                <div class="row">
+                    <button class="primary" @click="analyze('check')" :disabled="busy">检查敏感词</button>
+                    <button class="primary" @click="analyze('filter')" :disabled="busy">过滤文本</button>
+                    <button @click="analyze('find-all')" :disabled="busy">查找所有敏感词</button>
+                    <button @click="clearResult" :disabled="busy">清空结果</button>
+                    <span v-if="busy" class="muted">处理中…</span>
+                </div>
+                <p class="hint">Ctrl + Enter 过滤文本；结果对应提交时的文本。</p>
+            </section>
+            <section v-if="result" class="card" aria-labelledby="result-title">
+                <h2 id="result-title">{{ result.mode==='check'?'检测结果':result.mode==='filter'?'过滤结果':'全部匹配结果'
+                    }}</h2>
+                <div class="metrics">
+                    <div class="metric"><strong>{{ result.hasSensitive?'是':'否' }}</strong><span>是否包含敏感词</span>
+                    </div>
+                    <div class="metric"><strong>{{ result.originalText.length }}</strong><span>原始文本长度</span></div>
+                    <div class="metric"><strong>{{ result.mode==='check'?'—':result.words.length
+                            }}</strong><span>匹配条数（含重叠匹配）</span>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div :style="result.mode!=='filter'?{gridColumn:'1 / -1'}:{}">
+                        <h3>{{ result.mode==='find-all'?'原始文本· 高亮匹配':'原始文本' }}</h3>
+                        <div v-if="result.mode==='find-all'" class="text-view">
+                            <template v-for="(part,index) in highlighted" :key="index">
+                                <mark v-if="part.matched">{{ part.text }}</mark>
+                                <span v-else>{{ part.text }}</span></template>
+                        </div>
+                        <pre v-else>{{ result.originalText }}</pre>
+                    </div>
+                    <div v-if="result.mode==='filter'">
+                        <h3>过滤后文本 · 替换字符 {{ result.replacement }}</h3>
+                        <pre>{{ result.filteredText }}</pre>
+                        <p class="hint">过滤后长度：{{ result.filteredText.length }}</p>
+                    </div>
+                </div>
+                <template v-if="result.mode!=='check'">
+                    <h3 style="margin-top:22px">匹配明细</h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>敏感词</th>
+                                    <th>起始位置</th>
+                                    <th>结束位置</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="!result.words.length">
+                                    <td colspan="4" class="empty">未发现敏感词</td>
+                                </tr>
+                                <tr v-for="(word,index) in result.words" :key="index">
+                                    <td>{{ index+1 }}</td>
+                                    <td class="word">{{ word.word }}</td>
+                                    <td>{{ word.start }}</td>
+                                    <td>{{ word.end }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="hint">位置从 0 开始，结束位置包含在匹配范围内。</p>
+                </template>
+            </section>
+            <div class="grid">
+                <section class="card">
+                    <h2>添加敏感词</h2>
+                    <form @submit.prevent="addWord"><label for="new-word">单个敏感词</label><input id="new-word"
+                            v-model.trim="word" placeholder="输入新的敏感词" :disabled="busy" required>
+                        <button class="primary" style="margin-top:16px" :disabled="busy || !word">添加到词库</button>
+                    </form>
+                    <p class="hint">用于单个词的增量添加，不替换现有词库。</p>
+                </section>
+                <section class="card">
+                    <h2>批量管理词库</h2><label for="words">每行一个，也支持英文或中文逗号分隔</label><textarea id="words" v-model="wordsText"
+                        rows="4" placeholder="apple&#10;orange&#10;app" :disabled="busy"></textarea>
+                    <div class="row toolbar">
+                        <button class="primary" @click="saveWords(false)" :disabled="busy || !parsedWords.length">批量添加
+                        </button>
+                        <button class="danger" @click="saveWords(true)" :disabled="busy || !parsedWords.length">
+                            重新加载词库
+                        </button>
+                    </div>
+                    <p class="hint">共 {{ parsedWords.length }} 个词。重新加载会替换整个词库，操作前需要确认。</p>
+                </section>
+            </div>
+            <section v-if="systemStatus" ref="statusPanel" class="card">
+                <div class="row between">
+                    <h2>系统状态</h2><span class="badge">{{ systemStatus.status==='running'?'运行中':systemStatus.status
+                        }}</span>
+                </div>
+                <div class="status-grid"><span>算法</span>
+                    <div>{{ systemStatus.algorithm }}</div>
+                    <span>数据结构</span>
+                    <div>{{ systemStatus.dataStructure }}</div>
+                    <span>功能特性</span>
+                    <div class="row"><span v-for="feature in systemStatus.features || []" :key="feature"
+                            class="badge">{{ feature }}</span>
+                    </div>
+                </div>
+            </section>
+            <section id="about" class="card">
+                <h2>关于 DFA 敏感词过滤</h2>
+                <p>将词库组织成一棵 Trie
+                    树：相同前缀共用节点。从文本中的每个位置开始，沿着字符对应的节点向下查找，到达词尾节点就表示命中一个敏感词。</p>
+                <p class="muted">例如 app 与 apple 共用 a → p → p
+                    这一段路径。“查找所有敏感词”会保留重叠匹配；高亮展示时合并重叠区间。当前实现逐位置匹配，耗时与文本长度和词的长度有关。</p>
+            </section>
+        </main>
+        <footer>DFA 敏感词过滤系统 · Vue 3</footer>
+    </div>
+
+    <script>
+        if (!window.Vue) {
+            const root = document.getElementById('app');
+            root.removeAttribute('v-cloak');
+            root.textContent = 'Vue CDN 加载失败，请检查网络后刷新页面。';
+        } else {
+            const { createApp, ref, computed, nextTick, onMounted } = Vue;
+
+            createApp({
+                setup() {
+                    // Relative to the static page, preserving the application's servlet context.
+                    const apiBase = new URL('api/sensitive-word/', location.href);
+                    const text = ref(''), replacement = ref('*'), word = ref(''), wordsText = ref('');
+                    const busy = ref(false), result = ref(null), systemStatus = ref(null), statusPanel = ref(null);
+                    const message = ref(''), messageType = ref('info');
+                    const parsedWords = computed(() => wordsText.value.split(/[,，\r\n]+/).map(value => value.trim()).filter(Boolean));
+                    function notify(value, type = 'info') { message.value = value; messageType.value = type; }
+
+                    async function request(endpoint, parameters = {}, post = false) {
+                        const url = new URL(endpoint, apiBase);
+                        const options = { method: post ? 'POST' : 'GET' };
+
+                        if (post) {
+                            options.headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
+                            options.body = new URLSearchParams(parameters);
+                        } else
+                            url.search = new URLSearchParams(parameters).toString();
+
+                        const controller = new AbortController();
+                        options.signal = controller.signal;
+                        const timeout = setTimeout(() => controller.abort(), 15000);
+
+                        try {
+                            const response = await fetch(url, options);
+                            const envelope = await response.json();
+                            if (!response.ok || envelope.status !== 1)
+                                throw new Error(envelope.message || `请求失败（HTTP ${response.status}）`);
+                            return envelope.data;
+                        } catch (error) {
+                            if (error.name === 'AbortError')
+                                throw new Error('请求超时，请稍后重试');
+                            throw error;
+                        } finally {
+                            clearTimeout(timeout);
+                        }
+                    }
+
+                    async function perform(operation) {
+                        if (busy.value)
+                            return;
+
+                        busy.value = true;
+                        message.value = '';
+
+                        try {
+                            await operation();
+                        } catch (error) {
+                            notify(error.message || '请求失败，请检查网络连接', 'error');
+                        }
+
+                        finally { busy.value = false; }
+                    }
+
+                    async function analyze(mode) {
+                        const original = text.value.trim();
+                        if (!original) {
+                            notify('请输入要检测的文本', 'error');
+                            return;
+                        }
+                        await perform(async () => {
+                            const substitute = replacement.value || '*';
+                            const data = await request(mode, mode === 'filter' ? { text: original, replacement: substitute } : { text: original });
+                            if (mode === 'check') {
+                                if (typeof data !== 'boolean')
+                                    throw new Error('检测接口返回的数据类型应为 boolean');
+                                result.value = { mode, originalText: original, hasSensitive: data, words: [] };
+                            } else {
+                                result.value = {
+                                    mode, originalText: mode === 'filter' ? data.originalText : original,
+                                    filteredText: data.filteredText, replacement: substitute,
+                                    hasSensitive: mode === 'filter' ? data.hasSensitive : data.length > 0,
+                                    words: mode === 'filter' ? data.sensitiveWords || [] : data
+                                };
+                            }
+                            notify(result.value.hasSensitive ? '检测完成，发现敏感词' : '检测完成，未发现敏感词', result.value.hasSensitive ? 'info' : 'success');
+                        });
+                    }
+
+                    const highlighted = computed(() => {
+                        if (!result.value)
+                            return [];
+                        const source = result.value.originalText;
+                        const intervals = result.value.words.map(item => [Math.max(0, item.start), Math.min(source.length, item.end + 1)])
+                            .filter(([start, end]) => start < end).sort((a, b) => a[0] - b[0]);
+                        const merged = [];
+                        for (const interval of intervals) {
+                            const last = merged[merged.length - 1];
+                            if (last && interval[0] <= last[1])
+                                last[1] = Math.max(last[1], interval[1]);
+                            else
+                                merged.push([...interval]);
+                        }
+                        const segments = [];
+                        let cursor = 0;
+                        for (const [start, end] of merged) {
+                            if (start > cursor)
+                                segments.push({ text: source.slice(cursor, start), matched: false });
+                            segments.push({ text: source.slice(start, end), matched: true });
+                            cursor = end;
+                        }
+                        if (cursor < source.length)
+                            segments.push({ text: source.slice(cursor), matched: false });
+                        return segments;
+                    });
+
+                    async function addWord() {
+                        const value = word.value.trim();
+                        if (!value)
+                            return;
+                        await perform(async () => {
+                            if (await request('add', { word: value }, true) !== true)
+                                throw new Error('敏感词添加未成功');
+                            word.value = '';
+                            notify(`敏感词“${value}”已添加`, 'success');
+                        });
+                    }
+
+                    async function saveWords(reload) {
+                        if (busy.value || !parsedWords.value.length)
+                            return;
+                        if (reload && !window.confirm('重新加载会用当前列表替换整个敏感词库，确定继续吗？'))
+                            return;
+                        const values = [...parsedWords.value];
+                        await perform(async () => {
+                            if (await request(reload ? 'reload' : 'add-batch', { words: values.join(',') }, true) !== true)
+                                throw new Error('词库更新未成功');
+                            wordsText.value = '';
+                            notify(`已提交 ${values.length} 个敏感词${reload ? '，并替换原词库' : ''}`, 'success');
+                        });
+                    }
+
+                    async function loadStatus(scroll = false) {
+                        await perform(async () => {
+                            systemStatus.value = await request('status');
+                            if (scroll) {
+                                await nextTick();
+                                statusPanel.value?.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        });
+                    }
+
+                    function clearResult() { text.value = ''; result.value = null; message.value = ''; }
+                    
+                    onMounted(() => loadStatus());
+
+                    return {
+                        text, replacement, word, wordsText, busy, result, message, messageType, parsedWords, highlighted,
+                        systemStatus, statusPanel, analyze, addWord, saveWords, loadStatus, clearResult
+                    };
+                }
+            }).mount('#app');
+        }
+    </script>
+</body>
+
+</html>
