@@ -166,7 +166,7 @@ public class ContentTypePolicy {
             MediaType actual = MediaType.parseMediaType(contentType);
 
             if (!isCompatible(expected, actual))
-                throw new IllegalArgumentException("The uploaded Content-Type does not match the file extension.");
+                throw new IllegalArgumentException("The uploaded Content-Type[actual: " + actual + ", expected: " + expected + "] does not match the file extension.");
         } catch (IOException e) {
             throw new UncheckedIOException("checkMapping", e);
         }

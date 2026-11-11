@@ -39,14 +39,12 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
 
         ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) req;
 
-
         try {
             ServletInputStream inputStream = wrapper.getInputStream();
             toByteArray(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
         byte[] buf = wrapper.getContentAsByteArray();
         String body;
@@ -81,7 +79,7 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
     }
 
     /**
-     * Executes the to byte array operation.
+     * Executes the two byte array operation.
      *
      * @param input the input parameter.
      * @return the operation result.
@@ -91,6 +89,7 @@ public class ParamsSignAction extends InterceptorAction<ParamsSignCheck> {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         int nRead;
         byte[] data = new byte[4096];
+
         while ((nRead = input.read(data, 0, data.length)) != -1)
             buffer.write(data, 0, nRead);
 

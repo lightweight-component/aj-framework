@@ -26,7 +26,7 @@ public class ParamsSignResolver implements HandlerMethodArgumentResolver {
     /**
      * Executes the supports parameter operation.
      *
-     * @param parameter the parameter parameter.
+     * @param parameter the parameter.
      * @return the operation result.
      */
     @Override
@@ -37,7 +37,7 @@ public class ParamsSignResolver implements HandlerMethodArgumentResolver {
     /**
      * Executes the resolve argument operation.
      *
-     * @param parameter     the parameter parameter.
+     * @param parameter     the parameter.
      * @param mavContainer  the mav container parameter.
      * @param webRequest    the web request parameter.
      * @param binderFactory the binder factory parameter.
