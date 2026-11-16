@@ -109,6 +109,7 @@ public class ValidatorImpl implements Validator {
             for (Field field : declaredFields) {
                 if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers())) {// isPrivate
                     field.setAccessible(true);
+
                     try {
                         resolveAnnotations(field.getDeclaredAnnotations(), field.get(target), field.getName());
                     } catch (ValidatorConfigurationException e) {
@@ -131,7 +132,7 @@ public class ValidatorImpl implements Validator {
     /**
      * 本组件内置注解所在的包名前缀。
      */
-    private static final String AJ_PACKAGE = "com.ajaxjs.framework.validator.custom";
+    private static final String AJ_PACKAGE = "com.ajaxjs.framework.validator.annotation";
 
     /**
      * 注解消息配置。
@@ -154,17 +155,20 @@ public class ValidatorImpl implements Validator {
 
             if (name.startsWith(AJ_PACKAGE + ".")) {
                 Boolean required = (Boolean) AnnotationUtils.getValue(annotation, "required");
+
                 if (Boolean.FALSE.equals(required) && (value == null || !StringUtils.hasText(value.toString())))
                     continue;
 
                 if (isCommonConstraint(annotationType.getSimpleName())) {
                     String message = getValue(annotation);
+
                     if (!StringUtils.hasText(message))
                         throw new ValidatorConfigurationException("Correctly configure annotation message property");
 
                     validateCommonConstraint(annotation, value, fieldName + " " + message);
                 } else {
                     ValidatorEnum validConstant = ValidatorEnum.getInstance(annotationType.getSimpleName());
+
                     if (validConstant != null) {
                         String message = getValue(annotation);
                         if (!StringUtils.hasText(message))
@@ -176,6 +180,7 @@ public class ValidatorImpl implements Validator {
                 }
             } else {
                 ValidatorRule rule = getRule(annotation);
+
                 if (rule != null)
                     rule.validate(annotation, value, fieldName);
             }

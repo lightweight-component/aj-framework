@@ -1,0 +1,4 @@
+interface:
+  display_name: "aj-framework 请求连接与事务"
+  short_description: "使用 DataBaseConnection 管理请求连接、事务提交回滚及结束清理"
+  default_prompt: "使用 $ajaxjs-database-connection，按框架 DataBaseConnection 的机制调整请求连接生命周期与 EnableTransaction 事务边界。"

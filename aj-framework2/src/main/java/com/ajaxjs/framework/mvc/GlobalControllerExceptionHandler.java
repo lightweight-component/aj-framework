@@ -5,17 +5,39 @@ import com.ajaxjs.framework.mvc.unifiedreturn.ResponseResultWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.stream.Collectors;
 
 import static com.ajaxjs.framework.mvc.GlobalExceptionHandler.EXCEPTION_HOLDER;
 
 @ControllerAdvice
 @Slf4j
 public class GlobalControllerExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseResultWrapper handleValidation(MethodArgumentNotValidException error) {
+        EXCEPTION_HOLDER.set(error);
+        String message = error.getBindingResult().getAllErrors().stream()
+                .map(ObjectError::getDefaultMessage)
+                .filter(StringUtils::hasText)
+                .distinct()
+                .collect(Collectors.joining("；"));
+
+        if (!StringUtils.hasText(message))
+            message = "请求字段校验失败。";
+
+        return new ResponseResultWrapper().setStatus(0).setErrorCode("400").setMessage(message);
+    }
+
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     public Object exceptionHandler(HttpServletRequest request, Exception e) {

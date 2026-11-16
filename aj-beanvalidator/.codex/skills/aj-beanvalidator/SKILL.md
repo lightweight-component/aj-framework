@@ -8,6 +8,29 @@ description: "Use AJ Bean Validator, a lightweight Spring MVC validation starter
 Use this skill for projects that depend on `com.ajaxjs:beanvalidator`. It is a lightweight Spring MVC validation
 starter; it does not implement Jakarta/Javax Bean Validation and does not require Hibernate Validator.
 
+## Source of truth and package compatibility
+
+Use the current project source as the authority; do not treat package names in this skill or an installed JAR as a
+replacement for inspecting the source. Before adding constraints, verify these together:
+
+1. The annotation classes' `package` declarations under `src/main/java/com/ajaxjs/framework/validator`.
+2. `ValidatorImpl.resolveAnnotations`, including its built-in package selector (`AJ_PACKAGE` in the current source),
+   and any annotation-specific casts such as `Pattern.Flag`.
+3. The application-resolved `com.ajaxjs:beanvalidator` version and actual classes in its JAR. A local Maven artifact
+   can lag behind source even when its version number is unchanged.
+
+On 2026-11-13, `ValidatorImpl.AJ_PACKAGE` was corrected from `com.ajaxjs.framework.validator.custom` to
+`com.ajaxjs.framework.validator.annotation`, matching the annotation declarations. The 25 module tests passed,
+including valid and invalid built-in constraints. The locally installed 1.0 JAR previously contained old `custom`
+classes and was not reinstalled as part of that source fix. Verify the resolved artifact before application integration;
+do not change imports back to `custom` to accommodate a stale artifact.
+
+If declarations, recognition logic, and the application dependency disagree, explain the mismatch rather than
+silently selecting one package or adding annotations that will be ignored. When authorized to fix the library,
+align recognition logic with its current annotation declarations, add a failing-input regression test, then build
+and synchronize the artifact used by the application. A skill-only update does not authorize changing Java source,
+publishing artifacts, or changing another project's dependencies.
+
 ## Compatibility and setup
 
 - The library JAR targets Java 8 bytecode. Its supported baseline is Java 8+ and Spring Boot 2.7+.
@@ -17,7 +40,9 @@ starter; it does not implement Jakarta/Javax Bean Validation and does not requir
   Boot application.
 - Disable the integration, when needed, with `ajaxjs.beanvalidator.enabled: false`.
 - Do not add `javax.validation`, `jakarta.validation`, or Hibernate Validator merely to use this library's annotations.
-  Import every constraint from `com.ajaxjs.framework.validator.annotation`.
+  Import the library's own constraints from the package confirmed by the source and dependency checks above.
+  The current annotation declarations use `com.ajaxjs.framework.validator.annotation`; do not assume this package
+  already works with a JAR that only supplies `custom` classes.
 
 ## Choose the right constraint
 
@@ -41,6 +66,8 @@ semantics above are the contract.
 
 - On a request-body DTO, use Spring's `@Validated` together with `@RequestBody`. Constraint failures are collected
   in `BindingResult` / `Errors` and normally surface as `MethodArgumentNotValidException`.
+- Verify at least one invalid request and one valid request through the actual MVC validator integration. Successful
+  compilation or annotations being present does not prove that the validator recognizes and executes them.
 - Supported annotations on `@PathVariable` are validated automatically. A failure throws `ValidatorException`; map it to
   HTTP 400 in the application's exception handler.
 - A `ValidatorConfigurationException` means an application-development configuration problem, such as an unsupported
@@ -78,8 +105,9 @@ class TenantCodeRule implements ValidatorRule {
 }
 ```
 
-Do not place application-specific annotations under `com.ajaxjs.framework.validator.annotation`: that package is reserved
-for built-in constraints, and an unknown annotation there is treated as a configuration error.
+Keep application-specific annotations out of the library's built-in constraint namespaces (`annotation` and legacy
+`custom`). Use an application package and register a `ValidatorRule`; an unknown annotation in the namespace recognized
+as built-in is treated as a configuration error.
 
 ## When changing the library
 
