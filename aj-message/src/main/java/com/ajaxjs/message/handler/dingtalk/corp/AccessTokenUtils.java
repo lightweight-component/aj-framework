@@ -1,6 +1,6 @@
 package com.ajaxjs.message.handler.dingtalk.corp;
 
-import cn.hutool.cache.CacheUtil;
+import cn.hutool.cachey.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;

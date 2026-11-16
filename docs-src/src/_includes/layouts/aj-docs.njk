@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
@@ -24,6 +24,10 @@
               s.parentNode.insertBefore(hm, s);
             })();
         </script>
+        <link rel="stylesheet" href="https://aj-util.ajaxjs.com/asset/static-search.css">
+        <link rel="stylesheet" href="/asset/search.css">
+        <script defer src="https://aj-util.ajaxjs.com/asset/js/static-search.js"></script>
+        <script defer src="/asset/search.js"></script>
     </head>
     <body>
         <nav>
@@ -43,8 +47,9 @@
                 </h3>
             </div>
         </nav>
-        <div>
-            <menu>
+        <div class="docs-layout">
+            <menu class="docs-navigation" aria-label="文档导航">
+                <div data-site-search data-language="zh"><noscript>启用 JavaScript 后可搜索文档。</noscript></div>
                 {# <h3>AJ Framework 简0介</h3> #}
                 <ul>
                     <li class="selected">
@@ -93,7 +98,7 @@
                     <li><a href="/common/contact">联系</a></li>
                 </ul>
             </menu>
-            <article class="aj-text chinese">
+            <article class="aj-text chinese" data-search-document>
                 {{ content | safe }}
             </article>
         </div>
