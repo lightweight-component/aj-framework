@@ -5,7 +5,7 @@ description: "Use AJ Bean Validator, a lightweight Spring MVC validation starter
 
 # AJ Bean Validator
 
-Use this skill for projects that depend on `com.ajaxjs:beanvalidator`. It is a lightweight Spring MVC validation
+Use this skill for projects that depend on `com.ajaxjs:beanvalidator:1.1`. It is a lightweight Spring MVC validation
 starter; it does not implement Jakarta/Javax Bean Validation and does not require Hibernate Validator.
 
 ## Source of truth and package compatibility
@@ -35,7 +35,7 @@ publishing artifacts, or changing another project's dependencies.
 
 - The library JAR targets Java 8 bytecode. Its supported baseline is Java 8+ and Spring Boot 2.7+.
 - Spring Boot 2.7 applications can run on Java 8+. Boot 3 and Boot 4 applications themselves require Java 17+.
-- Add the `com.ajaxjs:beanvalidator` dependency. In Servlet-based Spring MVC, its auto-configuration installs the object
+- Add the `com.ajaxjs:beanvalidator:1.1` dependency. In Servlet-based Spring MVC, its auto-configuration installs the object
   validator and path-variable resolver automatically. Do not manually instantiate `ValidatorInitializing` in an ordinary
   Boot application.
 - Disable the integration, when needed, with `ajaxjs.beanvalidator.enabled: false`.

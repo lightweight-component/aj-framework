@@ -20,7 +20,7 @@ AJ Bean Validator 是一个轻量的 Spring MVC 校验 Starter。它的目标很
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>beanvalidator</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 

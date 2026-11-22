@@ -1,6 +1,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.ajaxjs/aj-security?label=Latest%20Release)](https://central.sonatype.com/artifact/com.ajaxjs/aj-security)
 ![Java Version](https://img.shields.io/badge/Java-8-blue)
-[![Javadoc](https://img.shields.io/badge/javadoc-1.4-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/aj-security )
+[![Javadoc](https://img.shields.io/badge/javadoc-1.5-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/aj-security )
 ![coverage](https://img.shields.io/badge/coverage-80%25-yellowgreen.svg?maxAge=2592000)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lightweight-component/aj-security)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -54,7 +54,7 @@ Runs on Java 8+. Maven:
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 </dependency>
 ```
 

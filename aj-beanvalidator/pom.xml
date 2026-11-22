@@ -3,22 +3,26 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ajaxjs</groupId>
-        <artifactId>ajaxjs-cms</artifactId>
-        <version>1.0.6</version>
-        <relativePath/>
+        <artifactId>ajaxjs-parent</artifactId>
+        <version>1.36</version>
+        <relativePath />
     </parent>
 
     <artifactId>beanvalidator</artifactId>
     <name>aj-beanvalidator</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
-    <description>A Small Bean Validator</description>
+    <description>A small bean validator of Spring framework</description>
     <url>https://aj-docs.ajaxjs.com/</url>
 
     <properties>
-        <maven.compiler.release>8</maven.compiler.release>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>8</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <spring-boot.version>2.7.18</spring-boot.version>
     </properties>
 
     <scm>
@@ -30,6 +34,19 @@
         <system>Github Issues</system>
         <url>https://github.com/lightweight-component/aj-framework/issues</url>
     </issueManagement>
+
+    <!-- Keep Spring dependencies on the Spring Boot 2.7 baseline. -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <!--  Spring  -->
@@ -43,6 +60,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

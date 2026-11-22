@@ -10,7 +10,7 @@
 
     <artifactId>fileupload</artifactId>
     <name>aj-fileupload</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <description>Lightweight File Upload and Download Component based on Spring</description>
     <url>https://aj-docs.ajaxjs.com/</url>

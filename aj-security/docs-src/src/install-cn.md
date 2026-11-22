@@ -18,7 +18,7 @@ layout: layouts/docs-cn.njk
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.3/version>
+    <version>1.5</version>
 </dependency>
 ```
 

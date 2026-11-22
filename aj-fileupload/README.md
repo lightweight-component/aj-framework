@@ -1,3 +1,10 @@
+[![Maven Central](https://img.shields.io/maven-central/v/com.ajaxjs/fileupload?label=Latest%20Release)](https://central.sonatype.com/artifact/com.ajaxjs/fileupload)
+![Java Version](https://img.shields.io/badge/Java-17%2B-blue)
+[![Javadoc](https://img.shields.io/badge/javadoc-1.1-brightgreen.svg?)](https://javadoc.io/doc/com.ajaxjs/fileupload)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lightweight-component/aj-framework)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green.svg?longCache=true&style=flat)](https://www.apache.org/licenses/LICENSE-2.0.txt)
+[![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
+
 # aj-fileupload
 
 基于 Spring MVC `MultipartFile` 的轻量文件上传与下载组件，提供文件大小限制、扩展名和 Content-Type 校验、文件头及部分容器结构检测、文件命名与本地存储，并支持通过回调接入数据库存储。
@@ -14,11 +21,11 @@
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>fileupload</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
-模块依赖 `com.ajaxjs:base:1.4`，Web 依赖采用 `provided` scope，宿主应用需提供 Spring Web 运行环境，例如 `spring-boot-starter-web`。
+模块依赖 `com.ajaxjs:base:1.6`，Web 依赖采用 `provided` scope，宿主应用需提供 Spring Web 运行环境，例如 `spring-boot-starter-web`。
 
 ## 功能
 

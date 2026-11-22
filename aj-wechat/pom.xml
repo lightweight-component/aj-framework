@@ -12,7 +12,7 @@
     <name>aj-wechat</name>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <description>Minimal requirements for the component of Spring Framework</description>
+    <description>Lightweight Spring-based WeChat integration library for WeChat Pay API v3, refunds, profit sharing, messaging, and access token refresh.</description>
     <url>https://aj-docs.ajaxjs.com/</url>
 
     <scm>

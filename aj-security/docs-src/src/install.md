@@ -18,7 +18,7 @@ Spring Boot project. Maven coordinates:
 <dependency>
     <groupId>com.ajaxjs</groupId>
     <artifactId>aj-security</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 </dependency>
 ```
 
