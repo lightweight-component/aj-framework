@@ -17,6 +17,16 @@
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
 
+    <scm>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-project-parent</url>
+        <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
+    </scm>
+
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/lightweight-component/aj-framework/issues</url>
+    </issueManagement>
+
     <profiles>
         <!--开发环境-->
         <profile>

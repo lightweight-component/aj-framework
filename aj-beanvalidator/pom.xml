@@ -26,7 +26,7 @@
     </properties>
 
     <scm>
-        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-spring</url>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-beanvalidator</url>
         <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
     </scm>
 

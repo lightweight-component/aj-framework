@@ -21,21 +21,15 @@
     <version>1.0.3</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <skipTests>false</skipTests>
-    </properties>
+    <scm>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-framework2</url>
+        <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
+    </scm>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/lightweight-component/aj-framework/issues</url>
+    </issueManagement>
 
     <dependencies>
         <dependency>

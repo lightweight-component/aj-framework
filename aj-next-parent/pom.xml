@@ -44,8 +44,14 @@
     </developers>
 
     <scm>
-        <url>https://github.com/lightweight-component</url>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-next-parent</url>
+        <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
     </scm>
+
+    <issueManagement>
+        <system>Github Issues</system>
+        <url>https://github.com/lightweight-component/aj-framework/issues</url>
+    </issueManagement>
 
     <licenses>
         <license>

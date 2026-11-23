@@ -16,7 +16,7 @@
     <url>https://aj-docs.ajaxjs.com/</url>
 
     <scm>
-        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-spring</url>
+        <url>https://github.com/lightweight-component/aj-framework/tree/master/aj-wechat</url>
         <connection>scm:git:https://github.com/lightweight-component/aj-framework.git</connection>
     </scm>
 

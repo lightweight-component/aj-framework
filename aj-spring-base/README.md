@@ -1,0 +1,1 @@
+# Base library for Spring Starters
