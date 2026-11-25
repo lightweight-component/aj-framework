@@ -33,7 +33,7 @@ public class PrintBanner implements ApplicationRunner {
     private boolean isShowBanner;
     private static final String bannerName = " :: framework.ajaxjs.com :: ";
 
-    private String version = "1.0";
+    private String version = "1";
 
     /* Thx to https://manytools.org/hacker-tools/ascii-banner/ */
     private static final String[] BANNER = {
@@ -60,7 +60,8 @@ public class PrintBanner implements ApplicationRunner {
                 for (String s2 : BANNER)
                     printStream.println(s2);
 
-                version = (version != null) ? " (v" + version + ")" : CommonConstant.EMPTY_STRING;
+                version = PrintBanner.class.getPackage().getImplementationVersion();
+                version = version != null ? " (v" + version + ")" : CommonConstant.EMPTY_STRING;
 
                 StringBuilder padding = new StringBuilder();
                 while (padding.length() < 24 - (version.length() + bannerName.length()))

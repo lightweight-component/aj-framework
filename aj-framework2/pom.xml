@@ -18,7 +18,7 @@
         architecture brought about by the large and bloated,
         emphasizing the lightweight, and fast, very suitable for the Internet fast application.
     </description>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <scm>

@@ -148,6 +148,9 @@
                 <version>3.5.0</version>
                 <configuration>
                     <archive>
+                        <manifest><!-- 读取服务端模块的版本 -->
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
                         <addMavenDescriptor>false</addMavenDescriptor><!-- 不让 Maven 打包时生成自己的描述文件 -->
                     </archive>
                 </configuration>
